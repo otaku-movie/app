@@ -1,0 +1,8 @@
+{
+  "movieList_tabBar_currentlyShowing": "上映中",
+  "movieList_tabBar_comingSoon": "近日公開",
+  "movieList_search_placeholder": "ムービー検索",
+  "movieList_button_buy": "チケット購入",
+  "hello": "こんにちは",
+  "welcome": "ようこそflutterへ"
+}

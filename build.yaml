@@ -1,0 +1,12 @@
+targets:
+ $default:
+  builders:
+  # output_dir: "lib/response/generated"
+    json_serializable:
+      options:
+        # 是否要在生成的代码中包含 fromJson 和 toJson 方法的方法签名
+        explicit_to_json: true
+        # 是否要使用下划线命名法
+        field_rename: snake
+      generate_for:
+        - lib/response/**.dart
