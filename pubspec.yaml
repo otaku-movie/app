@@ -32,6 +32,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  card_swiper: ^3.0.1
   # 屏幕适配
   flutter_screenutil: ^5.9.3
   # 网络请求
@@ -42,6 +43,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
+  go_router: ^14.3.0
   fluro: ^2.0.5
   get: ^4.6.6
   # 上拉刷新 下拉加载

@@ -11,10 +11,10 @@ import 'generated/l10n.dart';
 import 'package:get/get.dart';
 
 void main() {
-  final languageController = Get.put(LanguageController());
-  final router = FluroRouter();
-  Routes.configureRoutes(router);
-  Application.router = router;
+  Get.put(LanguageController());
+  // final router = FluroRouter();
+  // Routes.configureRoutes(router);
+  // Application.router = router;
   runApp(MyApp());
 }
 
@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
         return Obx(() {
           final locale = Get.find<LanguageController>().locale.value;
 
-          return MaterialApp(
+          return MaterialApp.router(
+            routerConfig: routerConfig,
             locale: locale,
             localizationsDelegates: const [
               S.delegate,
@@ -38,14 +39,14 @@ class MyApp extends StatelessWidget {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: S.delegate.supportedLocales,
-            onGenerateRoute: Application.router.generator,
+            // onGenerateRoute: Application.router.generator,
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               useMaterial3: true,
             ),
-            home: const Home(),
+            // home: const Home(),
           );
         });
       },

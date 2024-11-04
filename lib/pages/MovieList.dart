@@ -11,6 +11,7 @@ import '../generated/l10n.dart';
 import '../controller/LanguageController.dart';
 import 'package:get/get.dart'; // Ensure this import is present
 import 'package:extended_image/extended_image.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieList extends StatefulWidget {
   const MovieList({super.key});
@@ -292,8 +293,8 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(5))),
                                         onPressed: () {
-                                          getData();
-                                          // GoRouter.of(context).push('/register');
+                                          // getData();
+                                          context.go('/movie/ShowTimeList');
                                         },
                                         child: Text(
                                             S.of(context).movieList_button_buy,
