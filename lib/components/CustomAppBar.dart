@@ -9,7 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextStyle titleTextStyle;
   final TabBar? bottom; // Make it nullable
 
-  CustomAppBar({
+  const CustomAppBar({super.key, 
     required this.title,
     this.actions,
     this.showBackButton = true,

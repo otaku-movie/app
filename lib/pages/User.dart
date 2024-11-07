@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:otaku_movie/components/CustomNavigateTabBar.dart';
 
 import '../components/CustomAppBar.dart';
 

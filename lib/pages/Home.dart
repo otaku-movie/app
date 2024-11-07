@@ -8,7 +8,7 @@ import '../controller/LanguageController.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -43,10 +43,6 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
     print(tab[currentIndex]['title']);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

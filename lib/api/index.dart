@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:otaku_movie/response/response.dart';
 // import 'package:flutter/material.dart';
 
@@ -38,13 +39,25 @@ class ApiRequest {
     );
 
     // 调试用：记录请求和响应
-    _dio.interceptors.add(LogInterceptor(
-      responseBody: true,
-      requestBody: true, // 也可以记录请求体
-    ));
+    // _dio.interceptors.add(LogInterceptor(
+    //   responseBody: true,
+    //   requestBody: true,
+    // ));
+
+    // _dio.interceptors.add(PrettyDioLogger(
+    //     requestHeader: true,
+    //     requestBody: true,
+    //     responseBody: true,
+    //     responseHeader: false,
+    //     error: true,
+    //     compact: true,
+    //     maxWidth: 90,
+    //     enabled: kDebugMode,
+    //   )
+    // );
   }
 
-  Future<T?> request<T>({
+  Future<ApiResponse<T>> request<T>({
     required String path,
     required String method,
     Map<String, dynamic>? data,
@@ -68,9 +81,13 @@ class ApiRequest {
         response.data,
         (json) => fromJsonT(json as Map<String, dynamic>),
       );
-      return apiResponse.data;
+
+      return apiResponse;
     } catch (e) {
+      print('----- api error -----');
       rethrow;
     }
   }
 }
+
+

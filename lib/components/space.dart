@@ -10,7 +10,7 @@ class Space extends StatelessWidget {
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
 
-  Space({
+  const Space({
     super.key,
     required this.children,
     this.direction = 'row',

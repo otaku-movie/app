@@ -19,3 +19,9 @@ samples, guidance on mobile development, and a full API reference.
 ```agsl
 dart pub global run intl_utils:generate
 ```
+
+## json 序列化
+
+```
+dart run build_runner build
+```

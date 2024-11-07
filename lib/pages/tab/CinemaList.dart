@@ -31,28 +31,28 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
   
 
   void getData() {
-    ApiRequest().request<ApiResponse<ApiPaginationResponse<MovieListResponse>>>(
-      path: '/movie/list',
-      method: 'POST',
-      data: {
-        'page': 1,
-        'pageSize': 20,
-      },
-      fromJsonT: (json) {
-        return ApiResponse<ApiPaginationResponse<MovieListResponse>>.fromJson(
-          json,
-          (dataJson) => ApiPaginationResponse<MovieListResponse>.fromJson(
-            dataJson as Map<String, dynamic>,
-            (itemJson) => MovieListResponse.fromJson(itemJson as Map<String, dynamic>),
-          ),
-        );
-      },
-    ).then((res) {
-      print(res);
-    }).catchError((error) {
-      // 处理错误
-      print('发生错误: $error');
-    });
+    // ApiRequest().request<ApiResponse<ApiPaginationResponse<MovieListResponse>>>(
+    //   path: '/movie/list',
+    //   method: 'POST',
+    //   data: {
+    //     'page': 1,
+    //     'pageSize': 20,
+    //   },
+    //   // fromJsonT: (json) {
+    //   //   return ApiResponse<ApiPaginationResponse<MovieListResponse>>.fromJson(
+    //   //     json,
+    //   //     (dataJson) => ApiPaginationResponse<MovieListResponse>.fromJson(
+    //   //       dataJson as Map<String, dynamic>,
+    //   //       (itemJson) => MovieListResponse.fromJson(itemJson as Map<String, dynamic>),
+    //   //     ),
+    //   //   );
+    //   // },
+    // ).then((res) {
+    //   print(res);
+    // }).catchError((error) {
+    //   // 处理错误
+    //   print('发生错误: $error');
+    // });
   }
 
   @override
@@ -144,7 +144,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
             children: List.generate(20, (index) {
               return Container(
                 width: double.infinity,
-                 padding: EdgeInsets.all(10),
+                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
@@ -162,7 +162,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
                           spacing: 4.w,
                           children: [
                             Text('東宝シネマズ　新宿', style: TextStyle(fontSize: 36.sp)),
-                            Icon(Icons.star, color: Color(0xFFebb21b)),
+                            const Icon(Icons.star, color: Color(0xFFebb21b)),
                           ],
                         ),
                         Text('3.7km', style: TextStyle(color: Colors.grey.shade600))

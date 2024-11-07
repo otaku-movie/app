@@ -30,28 +30,28 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   
 
   void getData() {
-    ApiRequest().request<ApiResponse<ApiPaginationResponse<MovieListResponse>>>(
-      path: '/movie/list',
-      method: 'POST',
-      data: {
-        'page': 1,
-        'pageSize': 20,
-      },
-      fromJsonT: (json) {
-        return ApiResponse<ApiPaginationResponse<MovieListResponse>>.fromJson(
-          json,
-          (dataJson) => ApiPaginationResponse<MovieListResponse>.fromJson(
-            dataJson as Map<String, dynamic>,
-            (itemJson) => MovieListResponse.fromJson(itemJson as Map<String, dynamic>),
-          ),
-        );
-      },
-    ).then((res) {
-      print(res);
-    }).catchError((error) {
-      // 处理错误
-      print('发生错误: $error');
-    });
+    // ApiRequest().request<ApiResponse<ApiPaginationResponse<MovieListResponse>>>(
+    //   path: '/movie/list',
+    //   method: 'POST',
+    //   data: {
+    //     'page': 1,
+    //     'pageSize': 20,
+    //   },
+    //   // fromJsonT: (json) {
+    //   //   return ApiResponse<ApiPaginationResponse<MovieListResponse>>.fromJson(
+    //   //     json,
+    //   //     (dataJson) => ApiPaginationResponse<MovieListResponse>.fromJson(
+    //   //       dataJson as Map<String, dynamic>,
+    //   //       (itemJson) => MovieListResponse.fromJson(itemJson as Map<String, dynamic>),
+    //   //     ),
+    //   //   );
+    //   // },
+    // ).then((res) {
+    //   print(res);
+    // }).catchError((error) {
+    //   // 处理错误
+    //   print('发生错误: $error');
+    // });
   }
 
   @override
@@ -114,7 +114,7 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
           onPressed: () {
             getData();
           },
-          child: Icon(Icons.refresh),
+          child: const Icon(Icons.refresh),
         ),
         appBar: AppBar(
           centerTitle: true,

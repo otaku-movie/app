@@ -36,15 +36,15 @@ class _PageState extends State<Setting> {
             Text(S.of(context).hello),
             ElevatedButton(
               onPressed: () => languageController.changeLanguage('en'),
-              child: Text('English'),
+              child: const Text('English'),
             ),
             ElevatedButton(
               onPressed: () => languageController.changeLanguage('zh'),
-              child: Text('中文'),
+              child: const Text('中文'),
             ),
             ElevatedButton(
               onPressed: () => languageController.changeLanguage('ja'),
-              child: Text('日本語'),
+              child: const Text('日本語'),
             ),
           ],
         ),

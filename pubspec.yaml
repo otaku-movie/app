@@ -33,6 +33,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   card_swiper: ^3.0.1
+  # log 日志
+  logger: ^2.4.0
+  pretty_dio_logger: ^1.4.0
   # 屏幕适配
   flutter_screenutil: ^5.9.3
   # 网络请求
@@ -51,6 +54,8 @@ dependencies:
   extended_image: ^8.2.1
   # json 序列化
   json_annotation: ^4.9.0
+  # 处理svg
+  flutter_svg: ^2.0.13
 
 dev_dependencies:
   json_serializable: ^6.8.0

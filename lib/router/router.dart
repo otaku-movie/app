@@ -1,14 +1,10 @@
 import 'package:go_router/go_router.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/pages/MovieList.dart';
-import 'package:otaku_movie/pages/NotFound.dart';
 import 'package:otaku_movie/pages/User.dart';
-import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/movie/SelectSeatPage.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeDetail.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeList.dart';
-import 'package:otaku_movie/pages/setting.dart';
 
 // class Routes {
 //   static FluroRouter router = FluroRouter();

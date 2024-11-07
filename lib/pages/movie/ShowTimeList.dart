@@ -2,17 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otaku_movie/api/index.dart';
-import 'package:otaku_movie/components/space.dart';
-import 'package:otaku_movie/pages/MovieList.dart';
-import 'package:otaku_movie/response/api_pagination_response.dart';
-import 'package:otaku_movie/response/movie/movieList/movie_list.dart';
-import 'package:otaku_movie/response/response.dart';
-import '../../components/Input.dart';
-import '../../generated/l10n.dart';
 import '../../controller/LanguageController.dart';
 import 'package:get/get.dart'; // Ensure this import is present
-import 'package:extended_image/extended_image.dart';
 
 class ShowTimeList extends StatefulWidget {
   const ShowTimeList({super.key});

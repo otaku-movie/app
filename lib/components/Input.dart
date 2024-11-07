@@ -83,7 +83,7 @@ class _InputState extends State<Input> {
           keyboardType: widget.keyboardType,
           obscureText: widget.type == 'password',
           style: widget.textStyle ??
-              TextStyle(
+              const TextStyle(
                   color: Colors.black), // Default text style if not provided
           cursorColor: widget.cursorColor,
           textAlignVertical:
@@ -95,7 +95,7 @@ class _InputState extends State<Input> {
             suffixIconColor: widget.suffixIconColor,
             hintText: widget.placeholder,
             hintStyle: widget.placeholderStyle ??
-                TextStyle(color: Colors.grey), // Apply placeholder styling
+                const TextStyle(color: Colors.grey), // Apply placeholder styling
             enabled: widget.disabled != true,
             disabledBorder: OutlineInputBorder(
               borderRadius: widget.borderRadius ?? BorderRadius.circular(3),
@@ -107,12 +107,12 @@ class _InputState extends State<Input> {
             focusedBorder: OutlineInputBorder(
               borderRadius: widget.borderRadius ?? BorderRadius.circular(3),
               borderSide: widget.border ??
-                  BorderSide(color: Colors.transparent, width: 1),
+                  const BorderSide(color: Colors.transparent, width: 1),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: widget.borderRadius ?? BorderRadius.circular(3),
               borderSide: widget.border ??
-                  BorderSide(color: Colors.transparent, width: 1),
+                  const BorderSide(color: Colors.transparent, width: 1),
             ),
           ),
           onTap: widget.onTap,
