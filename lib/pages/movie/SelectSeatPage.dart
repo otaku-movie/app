@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
+import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/log/index.dart';
 // import 'package:go_router/go_router.dart';
@@ -47,12 +48,14 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
   // 座位大小
   double seatSize = 25;
   // 座位间距
-  double seatGap = 4;
+  double seatGap = 8;
   int rowCount = 25;
   int columnCount = 20;
 
   TheaterSeat data = TheaterSeat();
   List<Seat> seatData = [];
+  Set<int> selectSeatSet = {};
+  List<SeatItem> selectSeatList = [];
   
 
   void getData() {
@@ -147,9 +150,67 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
       "name": '已售出'
     }
   ];
+  
+
+ void selectSeat (SeatItem item) {
+  if (item.seatPositionGroup != null) {
+    item.seatPositionGroup!.split('-').forEach((el) {
+      List<String> position = el.split(',');
+      int x = int.parse(position[0]);
+      int y = int.parse(position[1]);
+
+      
+      // 获取行的index，需要考虑空排
+      int row = seatData.indexWhere((el) => el.rowAxis == x);
+
+      if (row != -1) {
+        SeatItem seat = seatData[row].children!.firstWhere((el) => el.y == y);
+        int indexWhere = selectSeatList.indexWhere((el) => el.id == seat.id);
+
+       if (indexWhere == -1) {
+          selectSeatList.add(seat);
+        } else {
+          selectSeatList.removeWhere((el) => el.id == seat.id);
+        }
+      }
+    });
+
+     setState(() {
+      selectSeatList = selectSeatList;
+      selectSeatSet = selectSeatList.map((el) => el.id!).toSet();
+    });
+  } else {
+    int indexWhere = selectSeatList.indexWhere((el) => el.id == item.id);
+
+    if (indexWhere == -1) {
+      selectSeatList.add(item);
+    } else {
+      selectSeatList.removeWhere((el) => el.id == item.id);
+    }
+
+    setState(() {
+      selectSeatList = selectSeatList;
+      selectSeatSet = selectSeatList.map((el) => el.id!).toSet();
+    });
+  }
+ }
 
   @override
   Widget build(BuildContext context) {
+      Map<String, List<SeatItem>> seatGroups = {};
+
+    seatData.forEach((row) {
+      row.children?.forEach((seat) {
+        if (seat.seatPositionGroup != null) {
+          // 按 seat_position_group 将座位分组
+          if (seatGroups[seat.seatPositionGroup] == null) {
+            seatGroups[seat.seatPositionGroup as String] = [];
+          }
+          seatGroups[seat.seatPositionGroup]?.add(seat);
+        }
+      });
+    });
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: AppBar(
@@ -201,7 +262,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                   spacing: 8,
                   // alignment: WrapAlignment.center,
                   children: [
-                    ...data.area!.map((item) {
+                    ...(data.area ?? []).map((item) {
                       return Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
@@ -258,8 +319,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                               width: seatSize,
                               height: seatSize,
                               alignment: Alignment.center,
-                              margin: EdgeInsets.all(seatGap),
+                              // margin: EdgeInsets.all(seatGap),
+                             
                             ),
+                            // 排号
                             ...seatData.map((row)  {
                               return Container(
                                 width: seatSize,
@@ -285,7 +348,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                   width: seatSize, // 排号区域宽度
                                   height: seatSize,
                                   alignment: Alignment.center,
-                                  margin: EdgeInsets.all(seatGap),
+                                  margin: EdgeInsets.only(right: seatGap),
                                   child: Text(
                                     '${index + 1}',
                                     style: const TextStyle(fontSize: 16, color: Colors.black),
@@ -300,114 +363,121 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                 );
                               } else {
                                 // 否则返回一个普通的 Row，包含座位
-                                int index = 0;
-                                return Row(
+                                int groupIndex = 0;
+
+                                return Container(
+                                  margin: EdgeInsets.only(bottom: seatGap, top: seatGap),
+                                  child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: row.children!.map((children) {
-                                    index++;
+
                                     // 如果是过道，或者座位本身不显示就为空白
                                     if (children.type == SeatType.aisle || !children.show!) {
                                       return Container(
-                                        margin: EdgeInsets.all(seatGap),
+                                        margin: EdgeInsets.only(right: seatGap),
                                         width: seatSize,
                                         height: seatSize,
                                         color: Colors.transparent
                                       );
                                     } else {
-                                      // 如果是普通座位，提供点击事件
-                                      if (children.wheelChair!) {
-                                        return GestureDetector(
-                                          onTap: () {},
-                                          child: Container(
-                                            margin: EdgeInsets.all(seatGap),
-                                            width: seatSize,
-                                            height: seatSize,
-                                            alignment: Alignment.center,
-                                            child:  SvgPicture.asset(
-                                              'assets/icons/wheelChair.svg',
-                                              width: seatSize,
-                                              height: seatSize,
-                                            ),
-                                          ),
-                                        ); 
-                                      }
+                                      BoxDecoration decoration = const BoxDecoration();
+
                                       // 不可选的座位
-                                      if (children.disabled ?? false) {
-                                        return Container(
-                                          margin: EdgeInsets.all(seatGap),  // 座位间的间隙
-                                          width: seatSize,  // 座位的大小
-                                          height: seatSize,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade100,
-                                            borderRadius: BorderRadius.circular(6.0),
-                                            border: Border.all(color: Colors.grey.shade300)
-                                          ),
-                                          alignment: Alignment.center,  // 内容居中
+                                      if (children.disabled!) {
+                                        decoration = BoxDecoration(
+                                          color: Colors.grey.shade100,
+                                          borderRadius: BorderRadius.circular(6.0),
+                                          border: Border.all(color: Colors.grey.shade300)
+                                        );
+                                      } else if (children.selectSeatState != null && children.selectSeatState == SelectSeatState.locked) {
+                                        // 座位已锁定
+                                        decoration = BoxDecoration(
+                                          color: Colors.grey.shade100,
+                                          borderRadius: BorderRadius.circular(6.0),
+                                          border: Border.all(color: Colors.grey.shade300)
+                                        );
+                                      } else if (children.selectSeatState != null && children.selectSeatState == SelectSeatState.sold) {
+                                        // 座位已售出
+                                        decoration = BoxDecoration(
+                                          color: Colors.grey.shade100,
+                                          borderRadius: BorderRadius.circular(6.0),
+                                          border: Border.all(color: Colors.grey.shade300)
+                                        );
+                                      } else if (children.selectSeatState != null && children.selectSeatState == SelectSeatState.available) {
+                                        decoration = BoxDecoration(
+                                          borderRadius: BorderRadius.circular(6.0),
+                                          border: Border.all(color: const Color.fromARGB(255, 6, 130, 239), width: 1.5)
                                         );
                                       }
 
-                                      // 座位已锁定
-                                      if (children.selectSeatState != null && children.selectSeatState == SelectSeatState.locked) {
-                                        return Container(
-                                          margin: EdgeInsets.all(seatGap),  // 座位间的间隙
-                                          width: seatSize,  // 座位的大小
-                                          height: seatSize,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade100,
-                                            borderRadius: BorderRadius.circular(6.0),
-                                            border: Border.all(color: Colors.grey.shade300)
-                                          ),
-                                          alignment: Alignment.center,  // 内容居中
+                                      if (selectSeatSet.contains(children.id)) {
+                                         decoration = BoxDecoration(
+                                          color: const Color.fromARGB(255, 228, 71, 178),
+                                          borderRadius: BorderRadius.circular(6.0),
+                                          border: Border.all(color: const Color.fromARGB(255, 228, 71, 178), width: 1.5)
                                         );
                                       }
-                                      // 座位已售出
-                                      if (children.selectSeatState != null && children.selectSeatState == SelectSeatState.sold) {
-                                        return Container(
-                                          margin: EdgeInsets.all(seatGap),  // 座位间的间隙
-                                          width: seatSize,  // 座位的大小
-                                          height: seatSize,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade100,
-                                            borderRadius: BorderRadius.circular(6.0),
-                                            border: Border.all(color: Colors.grey.shade300)
-                                          ),
-                                          alignment: Alignment.center,  // 内容居中
-                                        );
-                                      }
-                                      // 设置了区域
+                
+                                      SvgPicture? wheelChair = children.wheelChair?? false ? SvgPicture.asset(
+                                        'assets/icons/wheelChair.svg',
+                                        width: seatSize,
+                                        height: seatSize,
+                                      ) : null;
 
-                                      // if (children.area != null) {
-                                      //   return Container(
-                                      //     margin: EdgeInsets.all(seatGap),  // 座位间的间隙
-                                      //     width: seatSize,  // 座位的大小
-                                      //     height: seatSize,
-                                      //     decoration: BoxDecoration(
-                                      //       borderRadius: BorderRadius.circular(4.0),
-                                      //       border: Border.all(color: Colors.grey.shade300)
-                                      //     ),
-                                      //     alignment: Alignment.center,  // 内容居中
-                                      //   );
-                                      // }
-                                      // 普通座位
-                                      return Transform.translate(
-                                        offset: Offset(index % 2 == 0 ? -9 : 0, 0),
-                                          child: GestureDetector(
-                                          onTap: () {},
+                                      if (children.seatPositionGroup != null) {
+                                        // 获取当前座位组
+                                        List<SeatItem> seatGroup = seatGroups[children.seatPositionGroup]!;
+
+                                        // 排序座位组
+                                        seatGroup.sort((a, b) => a.y.compareTo(b.y as num)); // 按 y 坐标升序排列
+
+                                        // 计算座位组内的宽度
+                                        double totalWidth = seatSize * seatGroup.length + seatGap * (seatGroup.length - 1);
+                                        // groupIndex * -seatGap / 1.5
+                                        Widget result = Transform.translate(
+                                          offset: groupIndex == 0 ? const Offset(0, 0) : Offset(groupIndex * -seatGap / 1.5, 0),
+                                          child:  GestureDetector(
+                                            onTap: () {
+                                              selectSeat(children);
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.only(right: seatGap / 2),
+                                              width: totalWidth / seatGroup.length, // 给座位增加边距，避免重叠
+                                              height: seatSize,
+                                              decoration: decoration,
+                                              alignment: Alignment.center,
+                                              child: wheelChair,
+                                            ),
+                                          ),
+                                        );
+
+                                        groupIndex++;
+                                        if (seatGroup.last == children) {
+                                          // 不在组内
+                                          groupIndex = 0;
+                                        }
+
+                                        return result;
+                                      } else {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            selectSeat(children);
+                                          },
                                           child: Container(
-                                            margin: EdgeInsets.all(seatGap),
+                                            margin: EdgeInsets.only(left: 0, right: seatGap),
                                             width: seatSize,
                                             height: seatSize,
-                                            decoration: BoxDecoration(
-                                              // color: Colors.black,
-                                              borderRadius: BorderRadius.circular(6.0),
-                                              border: Border.all(color: const Color.fromARGB(255, 6, 130, 239), width: 1.5)
-                                            ),
+                                            decoration: decoration,
                                             alignment: Alignment.center,
+                                            child: wheelChair,
                                           ),
-                                        ),
-                                      );
+                                        );
+                                        // return
+                                      }
+
                                     }
                                   }).toList(),
+                                ),
                                 );
                               }
                             })
@@ -453,7 +523,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       Wrap(
                         spacing: 20.w,
                         runSpacing: 15.h,
-                        children: ['1排2座', '1排3座', '1排4座', '1排5座', '1排6座','1排7座'].map((item) {
+                        children: selectSeatList.map((item) {
                           return Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 8.w, horizontal: 29.w),
@@ -465,7 +535,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                               crossAxisAlignment: WrapCrossAlignment.center,
                               spacing: 10.w,
                               children: [
-                                Text(item, style: TextStyle(fontSize: 24.sp)),
+                                Text('${item.x}-${item.y}', style: TextStyle(fontSize: 24.sp)),
                                 Icon(Icons.close, color: Colors.grey.shade400, size: 20,)
                               ],
                             )

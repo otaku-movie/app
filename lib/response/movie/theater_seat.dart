@@ -123,9 +123,9 @@ class SeatItem {
     @JsonKey(name: "theater_hall_id")
     final int? theaterHallId;
     @JsonKey(name: "x")
-    final int? x;
+    final int x;
     @JsonKey(name: "y")
-    final int? y;
+    final int y;
     @JsonKey(name: "z")
     final dynamic z;
     @JsonKey(name: "selected")
@@ -147,8 +147,8 @@ class SeatItem {
         this.type,
         this.id,
         this.theaterHallId,
-        this.x,
-        this.y,
+        this.x = 0,
+        this.y = 0,
         this.z,
         this.selected,
         this.show,
