@@ -2,9 +2,11 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/pages/MovieList.dart';
 import 'package:otaku_movie/pages/User.dart';
+import 'package:otaku_movie/pages/movie/SelectMovieTicketPage.dart';
 import 'package:otaku_movie/pages/movie/SelectSeatPage.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeDetail.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeList.dart';
+import 'package:otaku_movie/pages/movie/confirmOrder.dart';
 
 // class Routes {
 //   static FluroRouter router = FluroRouter();
@@ -45,7 +47,7 @@ final GoRouter routerConfig = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return SelectSeatPage();
+        return const ConfirmOrder();
       },
       routes: <RouteBase>[
         GoRoute(
@@ -70,6 +72,18 @@ final GoRouter routerConfig = GoRouter(
           path: '/movie/selectSeat',
           builder: (BuildContext context, GoRouterState state) {
             return SelectSeatPage();
+          },
+        ),
+        GoRoute(
+          path: '/movie/selectMovieTicket',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SelectMovieTicketPage();
+          },
+        ),
+         GoRoute(
+          path: '/movie/confirmOrder',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ConfirmOrder();
           },
         ),
         GoRoute(

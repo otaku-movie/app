@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
+  final Widget title;
   final List<Widget>? actions;
   final bool showBackButton;
   final VoidCallback? onBackButtonPressed;
@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title, style: titleTextStyle),
+      title: this.title,
       leading: showBackButton
           ? IconButton(
               icon: Icon(Icons.arrow_back, color: titleTextStyle.color),
