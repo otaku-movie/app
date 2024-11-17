@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,15 +11,15 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
-class OrderList extends StatefulWidget {
-  const OrderList({super.key});
+class OrderDetail extends StatefulWidget {
+  const OrderDetail({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
   _PageState createState() => _PageState();
 }
 
-class _PageState extends State<OrderList> {
+class _PageState extends State<OrderDetail> {
   @override
   void initState() {
     super.initState();
@@ -35,43 +34,20 @@ class _PageState extends State<OrderList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(
-         title: Text('订单列表', style: TextStyle(color: Colors.white)),
+         title: Text('订单详情', style: TextStyle(color: Colors.white)),
       ),
-      body: EasyRefresh(
-        header: const ClassicHeader(),
-        footer: const ClassicFooter(),
-        // onRefresh: _onRefresh,
-        // onLoad: _onLoad,
-        child: ListView.builder(
-          // physics: physics,
-          shrinkWrap: true,
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                context.goNamed('orderDetail');
-              },
-              child: Container(
-              padding: EdgeInsets.all(20.w),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Colors.grey.shade300)
-                )
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 50.h),
+                alignment: Alignment.center,
+                child: Text('距离开始放映时间还有：4天05小时10分5秒', style: TextStyle(fontSize: 32.sp, color: Colors.red)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('订单号：123456789123456789', style: TextStyle(fontSize: 28.sp)),
-                        const Text('订单已完成')
-                      ],
-                    ),
-                  ),
-                  Row(
+              Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
@@ -192,13 +168,52 @@ class _PageState extends State<OrderList> {
                       ),
                     ],
                   ),
-                ],
+              Center(
+                child: Wrap(
+                  direction: Axis.vertical,
+                  // alignment: WrapAlignment.center,
+                  spacing: 10.h,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    Container(
+                      width: 350.w,
+                      margin: EdgeInsets.only(top: 50.h),
+                      child: PrettyQrView.data(
+                        data: 'https://www.bilibili.com',
+                        decoration: const PrettyQrDecoration(
+                          shape: PrettyQrSmoothSymbol(
+                            roundFactor: 0
+                          ),
+                          // image: PrettyQrDecorationImage(
+                          //   image: AssetImage('image/audio-guide.png'),
+                          // ),
+                        ),
+                      )
+                    ),
+                    Text('6张电影票', style: TextStyle(fontSize: 32.sp, color: Colors.grey.shade500)),
+                    Container(
+                      width: 600.w,
+                      height: 80.h,
+                      // padding: Edge,
+                      margin: EdgeInsets.only(top: 30.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.grey.shade300)
+                      ),
+                      child: Center(child: Text('取票码：1234567890', style: TextStyle(fontSize: 40.sp))) 
+                    ),
+                  ],
+                )
               ),
-            )
-            );
-          },
+              SizedBox(height: 50.h),
+              Text('订单号：XXXXXXXXXXXXX', style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600)),
+              Text('订单创建时间：XXXXXXXXXXXXX', style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600)),
+              Text('支付时间：XXXXXXXXXXXXX', style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600)),
+              Text('邮箱：XXXXXXXXXXXXX', style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600)),
+            ],
+          ),
         ),
-      ),
+      )
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/MovieList.dart';
 import 'package:otaku_movie/pages/User.dart';
 import 'package:otaku_movie/pages/movie/SelectMovieTicketPage.dart';
@@ -9,6 +10,8 @@ import 'package:otaku_movie/pages/movie/ShowTimeList.dart';
 import 'package:otaku_movie/pages/movie/confirmOrder.dart';
 import 'package:otaku_movie/pages/movie/payError.dart';
 import 'package:otaku_movie/pages/movie/paySuccess.dart';
+import 'package:otaku_movie/pages/order/orderDetail.dart';
+import 'package:otaku_movie/pages/order/orderList.dart';
 
 // class Routes {
 //   static FluroRouter router = FluroRouter();
@@ -50,7 +53,7 @@ final GoRouter routerConfig = GoRouter(
       path: '/',
       name: 'home',
       builder: (BuildContext context, GoRouterState state) {
-        return const PayError();
+        return const Home();
       },
       routes: <RouteBase>[
         GoRoute(
@@ -114,6 +117,20 @@ final GoRouter routerConfig = GoRouter(
           name: 'me',
           builder: (BuildContext context, GoRouterState state) {
             return const UserInfo();
+          },
+        ),
+        GoRoute(
+          path: '/me/orderList',
+          name: 'orderList',
+          builder: (BuildContext context, GoRouterState state) {
+            return const OrderList();
+          },
+        ),
+         GoRoute(
+          path: '/me/orderList/orderDetail',
+          name: 'orderDetail',
+          builder: (BuildContext context, GoRouterState state) {
+            return const OrderDetail();
           },
         ),
         GoRoute(

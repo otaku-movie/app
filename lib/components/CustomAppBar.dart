@@ -14,7 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.showBackButton = true,
     this.onBackButtonPressed,
-    this.backgroundColor = Colors.deepPurple,
+    this.backgroundColor = Colors.blue,
     this.titleTextStyle = const TextStyle(color: Colors.white, fontSize: 20),
     this.bottom, // Initialize bottom here
   });
