@@ -7,6 +7,8 @@ import 'package:otaku_movie/pages/movie/SelectSeatPage.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeDetail.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeList.dart';
 import 'package:otaku_movie/pages/movie/confirmOrder.dart';
+import 'package:otaku_movie/pages/movie/payError.dart';
+import 'package:otaku_movie/pages/movie/paySuccess.dart';
 
 // class Routes {
 //   static FluroRouter router = FluroRouter();
@@ -46,54 +48,77 @@ final GoRouter routerConfig = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
+      name: 'home',
       builder: (BuildContext context, GoRouterState state) {
-        return const ConfirmOrder();
+        return const PayError();
       },
       routes: <RouteBase>[
         GoRoute(
           path: '/movie/movieList',
+          name: 'movieList',
           builder: (BuildContext context, GoRouterState state) {
             return const MovieList();
           },
         ),
         GoRoute(
           path: '/movie/showTimeList',
+          name: 'showTimeList',
           builder: (BuildContext context, GoRouterState state) {
             return const ShowTimeList();
           },
         ),
         GoRoute(
           path: '/movie/showTimeList/showTimeDetail',
+          name: 'showTimeDetail',
           builder: (BuildContext context, GoRouterState state) {
             return const ShowTimeDetail();
           },
         ),
         GoRoute(
           path: '/movie/selectSeat',
+          name: 'selectSeat',
           builder: (BuildContext context, GoRouterState state) {
             return SelectSeatPage();
           },
         ),
         GoRoute(
           path: '/movie/selectMovieTicket',
+          name: 'selectMovieTicket',
           builder: (BuildContext context, GoRouterState state) {
             return const SelectMovieTicketPage();
           },
         ),
-         GoRoute(
+        GoRoute(
           path: '/movie/confirmOrder',
+          name: 'confirmOrder',
           builder: (BuildContext context, GoRouterState state) {
             return const ConfirmOrder();
           },
         ),
         GoRoute(
+          path: '/movie/order/success',
+          name: 'paySuccess',
+          builder: (BuildContext context, GoRouterState state) {
+            return const PaySuccess();
+          },
+        ),
+         GoRoute(
+          path: '/movie/order/error',
+          name: 'payError',
+          builder: (BuildContext context, GoRouterState state) {
+            return const PayError();
+          },
+        ),
+        GoRoute(
           path: '/me',
+          name: 'me',
           builder: (BuildContext context, GoRouterState state) {
             return const UserInfo();
           },
         ),
         GoRoute(
           path: '/movie/detail',
+          name: 'movieDetail',
           builder: (BuildContext context, GoRouterState state) {
             return const MovieList();
           },

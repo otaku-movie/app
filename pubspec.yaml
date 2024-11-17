@@ -58,6 +58,8 @@ dependencies:
   flutter_svg: ^2.0.13
   # toast
   fluttertoast: ^8.2.8
+  # 二维码
+  pretty_qr_code: ^3.3.0
 
 dev_dependencies:
   json_serializable: ^6.8.0

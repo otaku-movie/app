@@ -221,7 +221,7 @@ class _PageState extends State<ConfirmOrder> {
                       borderRadius: BorderRadius.all(Radius.circular(50)),
                     ),
                     onPressed: () {
-                      context.go('/movie/confirmOrder');
+                      context.go('/movie/order/success');
                     },
                     child: Text(
                       '确认订单',
