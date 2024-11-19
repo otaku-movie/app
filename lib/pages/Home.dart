@@ -33,7 +33,7 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
     {
       "icon": const Icon(Icons.account_circle),
       "title": '我的',
-      "body": const Setting(),
+      "body": const UserInfo(),
     }
   ];
 

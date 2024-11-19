@@ -175,12 +175,18 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                             children: [
                               Stack(
                                 children: [
-                                  SizedBox(
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.goNamed('movieDetail');
+                                    },
+                                    child:  SizedBox(
                                     child: ExtendedImage.asset(
                                         'assets/image/raligun.webp',
                                         width: 240.w
                                         ),
+                                    ),
                                   ),
+                                 
                                   // Positioned(
                                   //   top: 0,
                                   //   left: 0,
@@ -228,7 +234,13 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                         child: Space(
                                             direction: "column",
                                             children: [
-                                              Text("电影名称", style: TextStyle(fontSize: 36.sp)),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  context.goNamed('movieDetail');
+                                                },
+                                                child: Text("电影名称", style: TextStyle(fontSize: 36.sp))
+                                              ),
+                                              
                                               Text("监督：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
                                               Text("声优：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp,  color: Colors.black38)),
                                               SingleChildScrollView(

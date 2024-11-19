@@ -24,7 +24,7 @@ class _PageState extends State<Setting> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: S.of(context).hello,
+        title: Text(S.of(context).hello),
         showBackButton: false,
         backgroundColor: Colors.blue,
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 44.sp),

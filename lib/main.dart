@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/router/application.dart';
 import 'package:otaku_movie/router/router.dart';
@@ -10,16 +11,22 @@ import 'controller/LanguageController.dart';
 import 'generated/l10n.dart';
 import 'package:get/get.dart';
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
   Get.put(LanguageController());
   // final router = FluroRouter();
   // Routes.configureRoutes(router);
   // Application.router = router;
   runApp(MyApp());
+
+  // FToast fToast = FToast();
+  // fToast.init(navigatorKey.currentContext!);
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +41,8 @@ class MyApp extends StatelessWidget {
           return MaterialApp.router(
             routerConfig: routerConfig,
             locale: locale,
+            
+            builder: FToastBuilder(),
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,
