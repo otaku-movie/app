@@ -9,12 +9,16 @@ class Rate extends StatefulWidget {
   final double maxRating; // 最大评分
   final double starSize; // 星星大小
   final ValueChanged<double> onRatingUpdate; // 评分更新回调
+  final Color color;
+  final Color borderColor;
 
   const Rate({
     super.key,
     this.initialRating = 0.0,
     this.maxRating = 5.0,
     this.starSize = 40.0,
+    this.color = Colors.amber,
+    this.borderColor = Colors.amber,
     required this.onRatingUpdate,
   });
 
@@ -55,6 +59,8 @@ class _CustomPreciseRatingWidgetState extends State<Rate> {
           return CustomPaint(
             size: Size(widget.starSize, widget.starSize),
             painter: _StarPainter(
+              color: widget.color,
+              borderColor: widget.borderColor,
               filledPercent: _calculateStarFill(index + 1),
             ),
           );
@@ -77,13 +83,15 @@ class _CustomPreciseRatingWidgetState extends State<Rate> {
 
 class _StarPainter extends CustomPainter {
   final double filledPercent; // 填充比例 (0.0 ~ 1.0)
+  final Color color;
+  final Color borderColor;
 
-  _StarPainter({required this.filledPercent});
+  _StarPainter({required this.filledPercent, required this.color,required this.borderColor});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.amber
+      ..color = color
       ..style = PaintingStyle.fill;
 
     final starPath = _createStarPath(size);
@@ -106,7 +114,7 @@ class _StarPainter extends CustomPainter {
 
     // 画星星边框
     final borderPaint = Paint()
-      ..color = Colors.amber
+      ..color = borderColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
     canvas.drawPath(starPath, borderPaint);
