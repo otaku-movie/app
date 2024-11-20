@@ -23,15 +23,28 @@ class MovieDetail extends StatefulWidget {
 }
 
 class _PageState extends State<MovieDetail> {
+
+  final ScrollController _scrollController = ScrollController();
+  bool _showTitle = false;
+
+
   @override
   void initState() {
     super.initState();
-    // 隐藏状态栏
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // 设置状态栏背景为透明
-      statusBarIconBrightness: Brightness.light, // 状态栏图标颜色为浅色
-      statusBarBrightness: Brightness.dark, // 状态栏背景为深色
-    ));
+    // 延迟判断滚动距离，动态更新标题状态
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.addListener(() {
+        if (_scrollController.offset > 200 && !_showTitle) {
+          setState(() {
+            _showTitle = true; // 滚动超过 100，显示标题
+          });
+        } else if (_scrollController.offset <= 200 && _showTitle) {
+          setState(() {
+            _showTitle = false; // 滚动小于等于 100，隐藏标题
+          });
+        }
+      });
+    });
   }
 
   @override
@@ -208,225 +221,222 @@ class _PageState extends State<MovieDetail> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(child:  SafeArea(child: Container())),
-                Image.asset('assets/image/kimetsu-movie.jpg', width: double.infinity, height: 480.h, fit: BoxFit.cover),
-                // Image.asset('assets/image/raligun.webp', width: double.infinity, fit: BoxFit.cover),
-                Positioned(
-                  top: 0,
-                  child:  ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 10.0,sigmaY: 10.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.only(
-                          // top: MediaQuery.of(context).padding.top,
-                          left: 10.w,
-                          right: 10.w
+      body: NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          // 返回一个 Sliver 数组给外部可滚动组件。
+          return <Widget>[
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              pinned: true,
+              collapsedHeight: 100.h >= 56.0 ? 100.h : 56.0,
+              expandedHeight: 428.h,
+              backgroundColor: Colors.blue,
+              title: _showTitle
+                    ? const Text(
+                        '鬼灭之刃 无限城篇',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    : null,
+              forceElevated: innerBoxIsScrolled,
+              leading: IconButton(
+                onPressed: () {
+                  GoRouter.of(context).pop();
+                },
+                icon: SvgPicture.asset('assets/icons/back.svg', width: 48.sp),
+              ),
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(child:  SafeArea(child: Container())),
+                  Image.asset('assets/image/kimetsu-movie.jpg', width: double.infinity, height: 480.h, fit: BoxFit.cover),
+                  // Image.asset('assets/image/raligun.webp', width: double.infinity, fit: BoxFit.cover),
+                  Positioned(
+                    top: 0,
+                    child:  ClipRect(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 10.0,sigmaY: 10.0),
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.only(
+                            // top: MediaQuery.of(context).padding.top,
+                            left: 10.w,
+                            right: 10.w
+                          ),
+                          height: 480.h,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Color(0x00000000),
+                                Color(0x90000000),
+                              ],
+                            ),
+                          ),
+                          child: Container()
+                        )),
+                    ),
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).padding.top + 100.h,
+                    left: 20.w,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 20.w),
+                          decoration: BoxDecoration(
+                            // boxShadow: [
+                            //   // 第一层浅阴影
+                            //   BoxShadow(
+                            //     color: Colors.white.withOpacity(0.2),
+                            //     blurRadius: 15,
+                            //     offset: const Offset(5, 5),
+                            //   ),
+                            //   // 第二层更深的阴影
+                            //   BoxShadow(
+                            //     color: Colors.black.withOpacity(0.3),
+                            //     blurRadius: 30,
+                            //     offset: const Offset(10, 10),
+                            //   ),
+                            // ],
+                            borderRadius: BorderRadius.circular(10), // 圆角
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10), // 与 BoxDecoration 的圆角保持一致
+                            child: ExtendedImage.asset(
+                              'assets/image/kimetsu-movie.jpg',
+                              width: 260.w,
+                            ),
+                          ),
                         ),
-                        height: 480.h,
-                        decoration: const BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Color(0x00000000),
-                              Color(0x90000000),
+                        Container(
+                          width: 440.w,
+                          height: 300.h,
+                          // margin: EdgeInsets.only(right: 20.w),
+                          // decoration: BoxDecoration(
+                          //   border: Border.all(color: Colors.red)
+                          // ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Space(
+                                direction: 'column',
+                                bottom: 5.h,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '鬼灭之刃 无限城篇无限城篇无限城篇无限城篇无限城篇无限城篇',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 32.sp, // 调整文字大小以适配设备
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis, // 超出显示省略号
+                                  ),
+                                  Row(
+                                    children: [
+                                      Rate(
+                                        initialRating: 3.5, // 初始评分
+                                        maxRating: 5.0, // 最大评分
+                                        starSize: 35.w, // 星星大小
+                                        onRatingUpdate: (rating) {
+                                          // print("当前评分：$rating");
+                                        },
+                                      ),
+                                      SizedBox(width: 20.w),
+                                      Text('9.8分', style: TextStyle(
+                                        fontSize: 36.sp,
+                                        color: Colors.yellow.shade700
+                                      ),)
+                                    ],
+                                  ),
+                                  const Text('2024年11月15日（一）上映', style: TextStyle(
+                                    // fontSize: 40.sp,
+                                    color: Colors.white
+                                  )),
+                                  // SizedBox(height: 10.h),                           
+                                  Wrap(
+                                    spacing: 20.w,
+                                    children: [
+                                      ExtendedImage.asset('assets/image/audio-guide.png', width: 80.w),
+                                      ExtendedImage.asset('assets/image/sub-guide.png', width: 80.w),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Wrap(
+                                // direction: Axis.vertical,
+                                spacing: 20.w,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 50.w),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(255, 234, 58, 105),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min, // 按内容适配宽度
+                                      children: [
+                                        const Icon(Icons.favorite, color: Colors.white),
+                                        SizedBox(width: 10.w), // 图标和文字间距
+                                        const Text(
+                                          '想看',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 48.w),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(255, 5, 189, 239),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min, // 按内容适配宽度
+                                      children: [
+                                        const Icon(Icons.remove_red_eye, color: Colors.white),
+                                        // const Icon(Icons.star, color: Colors.white),
+                                        SizedBox(width: 10.w), // 图标和文字间距
+                                        const Text(
+                                          '看过',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                            
                             ],
                           ),
                         ),
-                        child: Container()
-                      )),
+                      ],
+                    ),
                   ),
+                ]
                 ),
-
-                Positioned(
-                  top: MediaQuery.of(context).padding.top,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          GoRouter.of(context).pop();
-                        },
-                        icon: SvgPicture.asset('assets/icons/back.svg', width: 48.sp),
-                      ),
-                      // 添加 Expanded 使标题居中，同时避免被其他内容挤压
-                      // Expanded(
-                      //   child: Center(
-                      //     child: Text(
-                      //       '鬼灭之刃 无限城篇',
-                      //       style: TextStyle(
-                      //         color: Colors.white,
-                      //         fontSize: 32.sp,
-                      //         overflow: TextOverflow.ellipsis, // 超出显示省略号
-                      //       ),
-                      //       maxLines: 1, // 限制为单行
-                      //       textAlign: TextAlign.center,
-                      //     ),
-                      //   ),
-                      // ),
-                      // Container()
-                      Padding(
-                        padding: EdgeInsets.only(right: 8.0.w),
-                        child: Container(),
-                      ),
-                    ],
-                  ),
-                ),
-               
-               Positioned(
-                  top: MediaQuery.of(context).padding.top + 100.h,
-                  left: 20.w,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 20.w),
-                        decoration: BoxDecoration(
-                          // boxShadow: [
-                          //   // 第一层浅阴影
-                          //   BoxShadow(
-                          //     color: Colors.white.withOpacity(0.2),
-                          //     blurRadius: 15,
-                          //     offset: const Offset(5, 5),
-                          //   ),
-                          //   // 第二层更深的阴影
-                          //   BoxShadow(
-                          //     color: Colors.black.withOpacity(0.3),
-                          //     blurRadius: 30,
-                          //     offset: const Offset(10, 10),
-                          //   ),
-                          // ],
-                          borderRadius: BorderRadius.circular(10), // 圆角
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10), // 与 BoxDecoration 的圆角保持一致
-                          child: ExtendedImage.asset(
-                            'assets/image/kimetsu-movie.jpg',
-                            width: 260.w,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 440.w,
-                        height: 300.h,
-                        // margin: EdgeInsets.only(right: 20.w),
-                        // decoration: BoxDecoration(
-                        //   border: Border.all(color: Colors.red)
-                        // ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Space(
-                              direction: 'column',
-                              bottom: 5.h,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '鬼灭之刃 无限城篇无限城篇无限城篇无限城篇无限城篇无限城篇',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 32.sp, // 调整文字大小以适配设备
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis, // 超出显示省略号
-                                ),
-                                Row(
-                                  children: [
-                                    Rate(
-                                      initialRating: 3.5, // 初始评分
-                                      maxRating: 5.0, // 最大评分
-                                      starSize: 35.w, // 星星大小
-                                      onRatingUpdate: (rating) {
-                                        // print("当前评分：$rating");
-                                      },
-                                    ),
-                                    SizedBox(width: 20.w),
-                                    Text('9.8分', style: TextStyle(
-                                      fontSize: 36.sp,
-                                      color: Colors.yellow.shade700
-                                    ),)
-                                  ],
-                                ),
-                                const Text('2024年11月15日（一）上映', style: TextStyle(
-                                  // fontSize: 40.sp,
-                                  color: Colors.white
-                                )),
-                                // SizedBox(height: 10.h),                           
-                                Wrap(
-                                  spacing: 20.w,
-                                  children: [
-                                    ExtendedImage.asset('assets/image/audio-guide.png', width: 80.w),
-                                    ExtendedImage.asset('assets/image/sub-guide.png', width: 80.w),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Wrap(
-                              // direction: Axis.vertical,
-                              spacing: 20.w,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 50.w),
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(255, 234, 58, 105),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min, // 按内容适配宽度
-                                    children: [
-                                      const Icon(Icons.favorite, color: Colors.white),
-                                      SizedBox(width: 10.w), // 图标和文字间距
-                                      const Text(
-                                        '想看',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 48.w),
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(255, 5, 189, 239),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min, // 按内容适配宽度
-                                    children: [
-                                      const Icon(Icons.remove_red_eye, color: Colors.white),
-                                      // const Icon(Icons.star, color: Colors.white),
-                                      SizedBox(width: 10.w), // 图标和文字间距
-                                      const Text(
-                                        '看过',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
-                           
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]
               ),
-             
+              actions: [
+                IconButton(
+                  onPressed: () {}, 
+                  icon: const Icon(Icons.share, color: Colors.white)
+                )
+              ],
+            ),
+            // buildSliverList(5), //构建一个 sliverList
+          ];
+        },
+      body: SingleChildScrollView(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [             
               Container(
                 padding: EdgeInsets.only(top: 0.h, left: 20.w, right: 20.w),
                 child: Column(
@@ -728,6 +738,8 @@ class _PageState extends State<MovieDetail> {
             ],
           ),
       )
+      ),
+     
     );
   }
 }
