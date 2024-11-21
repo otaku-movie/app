@@ -13,6 +13,8 @@ import 'package:otaku_movie/pages/movie/payError.dart';
 import 'package:otaku_movie/pages/movie/paySuccess.dart';
 import 'package:otaku_movie/pages/order/orderDetail.dart';
 import 'package:otaku_movie/pages/order/orderList.dart';
+import 'package:otaku_movie/pages/user/login.dart';
+import 'package:otaku_movie/pages/user/register.dart';
 
 // class Routes {
 //   static FluroRouter router = FluroRouter();
@@ -54,9 +56,23 @@ final GoRouter routerConfig = GoRouter(
       path: '/',
       name: 'home',
       builder: (BuildContext context, GoRouterState state) {
-        return const Home();
+        return Home();
       },
       routes: <RouteBase>[
+        GoRoute(
+          path: '/user/login',
+          name: 'login',
+          builder: (BuildContext context, GoRouterState state) {
+            return Login();
+          },
+        ),
+        GoRoute(
+          path: '/user/register',
+          name: 'register',
+          builder: (BuildContext context, GoRouterState state) {
+            return Register();
+          },
+        ),
         GoRoute(
           path: '/movie/movieList',
           name: 'movieList',

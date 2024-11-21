@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otaku_movie/pages/movie/confirmOrder.dart';
-
 import '../components/CustomAppBar.dart';
 
 class UserInfo extends StatefulWidget {
@@ -16,7 +14,7 @@ class _PageState extends State<UserInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(
+      appBar: CustomAppBar(
         title: Text('Home Page', style: TextStyle(color: Colors.white)),
         showBackButton: false,
         backgroundColor: Colors.blue,
@@ -24,197 +22,110 @@ class _PageState extends State<UserInfo> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(0),
+          padding: EdgeInsets.all(16.w), // 统一的内边距
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // direction: Axis.horizontal,
             children: [
-              // 用户信息
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child:  Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Container(
-                      width: 140.w,
-                      height: 140.w,
-                      margin: EdgeInsets.only(right: 20.w),
-                      child:  CircleAvatar(
-                        radius: 50.0, // 半径
+              // 用户信息部分，使用 Card 组件
+              Card(
+                margin: EdgeInsets.only(bottom: 16.h),
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16.w),
+                  child: Row(
+                    children: [
+                      // 用户头像
+                      CircleAvatar(
+                        radius: 60.w, // 根据屏幕调整头像大小
                         backgroundColor: Colors.grey.shade300,
                         backgroundImage: const NetworkImage('https://example.com/image.jpg'),
                       ),
-                    ),
-                    Wrap(
-                      direction: Axis.vertical,
-                      children: [
-                        Text('last order', style: TextStyle(fontSize: 36.sp)),
-                        Text('123456@gmail.com', style: TextStyle(color: Colors.grey.shade500, fontSize: 24.sp))
-                      ],
-                    )
-                  ],
-                ), 
-              ),
-              Padding(
-                padding: const EdgeInsets.all(15),
-                child: GridView.count(
-                  crossAxisCount: 4, // 一行 4 个
-                  crossAxisSpacing: 10, // 列间距
-                  mainAxisSpacing: 10, // 行间距
-                  shrinkWrap: true, // 内容包裹，防止占满父容器
-                  physics: const NeverScrollableScrollPhysics(), // 禁用滚动
-                  children: [
-                    {
-                      "name": "订单数",
-                      "count": "1",
-                      "color": const Color.fromARGB(255, 143, 8, 239),
-                      "onTap": () {
-                        context.goNamed('orderList');
-                      }
-                    },
-                    {
-                      "name": "想看数",
-                      "count": "1",
-                      "color": const Color.fromARGB(255, 143, 8, 239),
-                      "onTap": () {}
-                    },
-                    {
-                      "name": "声优",
-                      "count": "1",
-                      "color": const Color.fromARGB(255, 143, 8, 239),
-                      "onTap": () {}
-                    },
-                    {
-                      "name": "演职员",
-                      "count": "1",
-                      "color": const Color.fromARGB(255, 143, 8, 239),
-                      "onTap": () {}
-                    }
-                  ].map((item) {
-                    return GestureDetector(
-                      onTap: item['onTap'] as GestureTapCallback,
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: item['color'] as Color,
-                          borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Wrap(
-                          direction: Axis.vertical,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            Text(item['name'] as String, style: TextStyle(color: Colors.white, fontSize: 36.sp)),
-                            Text('89', style: TextStyle(color: Colors.white, fontSize: 44.sp))
-                          ],
-                        ),
+                      SizedBox(width: 20.w),
+                      // 用户信息文本
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Last Order', style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 8.h),
+                          Text('123456@gmail.com', style: TextStyle(color: Colors.grey.shade500, fontSize: 20.sp)),
+                        ],
                       ),
-                    );
-                  }).toList(),
-                )
-              ),
-              
-              // Padding(padding: EdgeInsets.only(top: 30.h)),
-              // 一些设置
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // 底部边框
-                  ),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.language, color: Colors.grey.shade500), // 左边图标
-                  title: const Text('语言'), // 标题
-                  trailing: Text('简体中文', style: TextStyle(fontSize: 28.sp),), // 右边箭头
-                  onTap: () {
-                    // print('Tapped!');
-                  },
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // 底部边框
-                  ),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.edit, color: Colors.grey.shade500), // 左边图标
-                  title: const Text('修改用户信息'), // 标题
-                  trailing: Icon(Icons.arrow_forward_ios, size: 32.sp), // 右边箭头
-                  onTap: () {
-                    // print('Tapped!');
-                  },
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // 底部边框
-                  ),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.privacy_tip, color: Colors.grey.shade500), // 左边图标
-                  title: const Text('用户隐私协议'), // 标题
-                  trailing: Icon(Icons.arrow_forward_ios, size: 32.sp), // 右边箭头
-                  onTap: () {
-                    // print('Tapped!');
-                  },
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // 底部边框
-                  ),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.check, color: Colors.grey.shade500), // 左边图标
-                  title: const Text('检查新版本'), // 标题
-                  trailing: Wrap(
-                    // alignment: WrapAlignment.end,
-                    crossAxisAlignment: WrapCrossAlignment.end,
-                    children: [
-                      Text('1.0.0', style: TextStyle(fontSize: 24.sp)),
-                      Icon(Icons.arrow_upward, size: 44.sp),
                     ],
                   ),
-                  onTap: () {
-                    // print('Tapped!');
-                  },
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // 底部边框
-                  ),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.info_outline, color: Colors.grey.shade500), // 左边图标
-                  title: const Text('关于'), // 标题
-                  trailing: Icon(Icons.arrow_forward_ios, size: 32.sp), // 右边箭头
-                  onTap: () {
-                    // print('Tapped!');
-                  },
-                ),
-              ),
-              Container(
-                // decoration: BoxDecoration(
-                //   border: Border(
-                //     bottom: BorderSide(color: Colors.grey.shade300, width: 1.0), // 底部边框
-                //   ),
-                // ),
-                child: ListTile(
-                  leading: Icon(Icons.logout, color: Colors.grey.shade500), // 左边图标
-                  title: const Text('退出登录'), // 标题
-                  onTap: () {
-                    // print('Tapped!');
-                  },
+              // 统计信息部分的网格布局
+              Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: GridView.count(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 16.w,
+                  mainAxisSpacing: 16.h,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _buildStatCard("Orders", "1", Colors.purple, () {
+                      context.goNamed('orderList');
+                    }),
+                    _buildStatCard("To Watch", "1", Colors.orange, () {}),
+                    _buildStatCard("Voice Actors", "1", Colors.blue, () {}),
+                    _buildStatCard("Staff", "1", Colors.green, () {}),
+                  ],
                 ),
               ),
+              // 设置项的列表
+              _buildListTile(Icons.language, 'Language', '简体中文', () {}),
+              _buildListTile(Icons.edit, 'Edit Profile', null, () {}),
+              _buildListTile(Icons.privacy_tip, 'Privacy Agreement', null, () {}),
+              _buildListTile(Icons.check, 'Check for Updates', '1.0.0', () {}),
+              _buildListTile(Icons.info_outline, 'About', null, () {}),
+              _buildListTile(Icons.logout, 'Logout', null, () {}),
             ],
           ),
         ),
-      )
+      ),
+    );
+  }
+
+  // 创建统计卡片的辅助方法
+  Widget _buildStatCard(String title, String count, Color color, GestureTapCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: EdgeInsets.all(8.w),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(title, style: TextStyle(color: Colors.white, fontSize: 24.sp)),
+            Text(count, style: TextStyle(color: Colors.white, fontSize: 28.sp, fontWeight: FontWeight.bold)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 创建 ListTile 的辅助方法
+  Widget _buildListTile(IconData icon, String title, String? trailingText, GestureTapCallback onTap) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey.shade300, width: 1.0)),
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.grey.shade500),
+        title: Text(title, style: TextStyle(fontSize: 24.sp)),
+        trailing: trailingText != null
+            ? Text(trailingText, style: TextStyle(fontSize: 22.sp))
+            : Icon(Icons.arrow_forward_ios, size: 24.sp),
+        onTap: onTap,
+      ),
     );
   }
 }
