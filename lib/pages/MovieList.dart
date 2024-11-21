@@ -64,6 +64,7 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
+    FocusScope.of(context).unfocus();
     super.dispose();
   }
 
@@ -138,7 +139,11 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
           backgroundColor: Colors.blue,
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 44.sp),
         ),
-        body: EasyRefresh.builder(
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: EasyRefresh.builder(
           header: const ClassicHeader(),
           footer: const ClassicFooter(),
           onRefresh: _onRefresh,
@@ -331,26 +336,78 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                     onLoad: _onLoad,
                     child: GridView.builder(
                       physics: physics,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        // childAspectRatio: 6 / 7,
+                        childAspectRatio: 4 / 7, // 可以调整宽高比
                       ),
-                      itemCount: _gridCount,
+                      itemCount: _gridCount, // 显示的电影数量
                       itemBuilder: (context, index) {
-                        // Replace this with your actual grid item widget
-                        return Card(
-                            child: Center(child: Text('Grid Item $index')));
+                        // 获取电影上映日期，这里假设有一个releaseDate字段
+                        // String releaseDate = list[index].releaseDate ?? '日期待定';
+                        
+                        // // 如果没有上映日期，归为“日期待定”组
+                        // if (releaseDate == '日期待定') {
+                        //   releaseDate = '日期待定';
+                        // }
+
+                        // // 获取电影名称和其他信息
+                        String movieName =  '电影名称';
+                        // String director = list[index].director ?? '未知导演';
+
+                        return GestureDetector(
+                          onTap: () {
+                            // 跳转到电影详情页面
+                            context.goNamed('movieDetail');
+                          },
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // 显示电影封面图
+                                ExtendedImage.asset(
+                                  'assets/image/raligun.webp', // 替换为实际电影封面路径
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  // height: 120.h,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    movieName, // 电影名称
+                                    style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: Text(
+                                    '上映日期: 2024-11-05', // 显示上映日期或“日期待定”
+                                    style: TextStyle(fontSize: 16.sp, color: Colors.black54),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
+
+
                 ],
               ),
             );
           },
         ),
+        )
+        
       ),
     );
   }

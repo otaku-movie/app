@@ -62,6 +62,13 @@ class _InputState extends State<Input> {
     _controller = TextEditingController();
   }
 
+  
+  @override
+  void dispose() {
+    FocusScope.of(context).unfocus();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = widget.height ?? 60.0; // Default height if not provided
