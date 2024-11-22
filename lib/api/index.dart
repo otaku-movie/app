@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/response.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 // import 'package:flutter/material.dart';
 
 class ApiRequest {
@@ -10,9 +12,9 @@ class ApiRequest {
   ApiRequest() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://test-api.otaku-movie.com/api', // 确保baseUrl格式正确
-        connectTimeout: const Duration(seconds: 5), // 连接超时
-        receiveTimeout: const Duration(seconds: 5), // 接收超时
+        baseUrl: 'http://192.168.1.7:8080/api', // 确保baseUrl格式正确
+        connectTimeout: const Duration(seconds: 50), // 连接超时
+        receiveTimeout: const Duration(seconds: 50), // 接收超时
       ),
     );
 
@@ -39,22 +41,22 @@ class ApiRequest {
     );
 
     // 调试用：记录请求和响应
-    // _dio.interceptors.add(LogInterceptor(
-    //   responseBody: true,
-    //   requestBody: true,
-    // ));
+    _dio.interceptors.add(LogInterceptor(
+      responseBody: true,
+      requestBody: true,
+    ));
 
-    // _dio.interceptors.add(PrettyDioLogger(
-    //     requestHeader: true,
-    //     requestBody: true,
-    //     responseBody: true,
-    //     responseHeader: false,
-    //     error: true,
-    //     compact: true,
-    //     maxWidth: 90,
-    //     enabled: kDebugMode,
-    //   )
-    // );
+    _dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: false,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 500,
+        enabled: kDebugMode,
+      )
+    );
   }
 
   Future<ApiResponse<T>> request<T>({
@@ -77,6 +79,7 @@ class ApiRequest {
         queryParameters: queryParameters,
         options: options,
       );
+      
       ApiResponse<T> apiResponse = ApiResponse<T>.fromJson(
         response.data,
         (json) => fromJsonT(json as Map<String, dynamic>),
@@ -85,6 +88,7 @@ class ApiRequest {
       return apiResponse;
     } catch (e) {
       print('----- api error -----');
+      log.e(e);
       rethrow;
     }
   }

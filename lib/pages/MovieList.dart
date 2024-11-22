@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/space.dart';
+import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_list.dart';
 import 'package:otaku_movie/response/response.dart';
@@ -26,32 +27,30 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   int _gridCount = 20;
   int _listCount = 0;
 
-  List<MovieListResponse> list = [];
+  List<MovieListResponse> data = [];
   
 
   void getData() {
-    // ApiRequest().request<ApiResponse<ApiPaginationResponse<MovieListResponse>>>(
-    //   path: '/movie/list',
-    //   method: 'POST',
-    //   data: {
-    //     'page': 1,
-    //     'pageSize': 20,
-    //   },
-    //   // fromJsonT: (json) {
-    //   //   return ApiResponse<ApiPaginationResponse<MovieListResponse>>.fromJson(
-    //   //     json,
-    //   //     (dataJson) => ApiPaginationResponse<MovieListResponse>.fromJson(
-    //   //       dataJson as Map<String, dynamic>,
-    //   //       (itemJson) => MovieListResponse.fromJson(itemJson as Map<String, dynamic>),
-    //   //     ),
-    //   //   );
-    //   // },
-    // ).then((res) {
-    //   print(res);
-    // }).catchError((error) {
-    //   // 处理错误
-    //   print('发生错误: $error');
-    // });
+    ApiRequest().request(
+      path: '/app/movie/list',
+      method: 'GET',
+      queryParameters: {
+        "page": 1,
+        "pageSize": 10
+      },
+      fromJsonT: (json) {
+        return ApiPaginationResponse<MovieListResponse>.fromJson(json, (data) {
+          return MovieListResponse.fromJson(data as Map<String, dynamic>);  // 解析每个元素
+        });
+        
+      },
+    ).then((res) {
+      print('--- api response ----');
+      
+      setState(() {
+        data = res.data?.list ?? [];
+      });
+    });
   }
 
   @override
@@ -69,31 +68,32 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _onRefresh() async {
-    await Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        setState(() {
-          if (_tabController.index == 0) {
-            _listCount = 20;
-          } else {
-            _gridCount = 20;
-          }
-        });
-      }
-    });
+    getData();
+    // await Future.delayed(const Duration(seconds: 2), () {
+    //   if (mounted) {
+    //     setState(() {
+    //       if (_tabController.index == 0) {
+    //         _listCount = 20;
+    //       } else {
+    //         _gridCount = 20;
+    //       }
+    //     });
+    //   }
+    // });
   }
 
   Future<void> _onLoad() async {
-    await Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {
-        setState(() {
-          if (_tabController.index == 0) {
-            _listCount += 10;
-          } else {
-            _gridCount += 10;
-          }
-        });
-      }
-    });
+    // await Future.delayed(const Duration(seconds: 2), () {
+    //   if (mounted) {
+    //     setState(() {
+    //       if (_tabController.index == 0) {
+    //         _listCount += 10;
+    //       } else {
+    //         _gridCount += 10;
+    //       }
+    //     });
+    //   }
+    // });
   }
 
   @override
@@ -111,12 +111,13 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
       initialIndex: 0,
       length: tabs.length,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            getData();
-          },
-          child: const Icon(Icons.refresh),
-        ),
+        backgroundColor: Colors.white,
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     getData();
+        //   },
+        //   child: const Icon(Icons.refresh),
+        // ),
         appBar: AppBar(
           centerTitle: true,
           title: Input(
@@ -159,11 +160,13 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                     footer: const ClassicFooter(),
                     onRefresh: _onRefresh,
                     onLoad: _onLoad,
-                    child: ListView.builder(
+                    child: data.isNotEmpty ? ListView.builder(
                       physics: physics,
-                      itemCount: 20,
+                      itemCount: data.length,
                       itemBuilder: (context, index) {
                         // Replace this with your actual list item widget
+                        MovieListResponse item = data[index];
+
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
@@ -184,12 +187,34 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                     onTap: () {
                                       context.goNamed('movieDetail');
                                     },
-                                    child:  SizedBox(
-                                    child: ExtendedImage.asset(
-                                        'assets/image/raligun.webp',
-                                        width: 240.w
-                                        ),
-                                    ),
+                                    child:  Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(4)
+                                      ),
+                                      height: 280.h,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(4),
+                                        child: ExtendedImage.network(
+                                          '${item.cover}',
+                                            width: 240.w,
+                                            fit: BoxFit.cover,
+                                            printError: false,
+                                            loadStateChanged: (ExtendedImageState state) {
+                                              switch (state.extendedImageLoadState) {
+                                                case LoadState.failed:
+                                                  return Container(); // 你也可以返回其他占位内容
+                                                case LoadState.loading:
+                                                  // TODO: Handle this case.
+                                                case LoadState.completed:
+                                                  // TODO: Handle this case.
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                        )
+                                      )
+                                      
                                   ),
                                  
                                   // Positioned(
@@ -243,16 +268,17 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                                 onTap: () {
                                                   context.goNamed('movieDetail');
                                                 },
-                                                child: Text("电影名称", style: TextStyle(fontSize: 36.sp))
+                                                child: Text("${item.name}", style: TextStyle(fontSize: 36.sp))
                                               ),
                                               
                                               Text("监督：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
                                               Text("声优：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp,  color: Colors.black38)),
+                                              Text('映倫：${item.levelName}', style: TextStyle(fontSize: 24.sp,  color: Colors.black38)),
                                               SingleChildScrollView(
                                                 scrollDirection: Axis.horizontal,
                                                 child: Wrap(
                                                   spacing: 6,
-                                                  children: ['IMAX', '4DX', '3D', 'DOLBY CINEMA'].map((item) {
+                                                  children: item.spec != null ? item.spec!.map((spec) {
                                                     return ElevatedButton(
                                                       style: ButtonStyle(
                                                         minimumSize: WidgetStateProperty.all(Size(0, 50.h)),
@@ -267,9 +293,9 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                                       ),
                                                       
                                                       onPressed: () {},
-                                                      child: Text(item),
+                                                      child: Text('${spec.name}'),
                                                     );
-                                                  }).toList(),
+                                                  }).toList() : [],
                                                 ),
                                               )
                                               
@@ -281,9 +307,9 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                         right: 15,
                                         children: [
                                           MaterialButton(
-                                            color: const Color.fromARGB(255, 240, 6, 127), // 按钮颜色
+                                            color: const Color.fromARGB(255, 6, 158, 240), // 按钮颜色
                                             shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(Radius.circular(5)), // 按钮圆角
+                                              borderRadius: BorderRadius.all(Radius.circular(4)), // 按钮圆角
                                             ),
                                             onPressed: () {
                                               getData();
@@ -292,8 +318,8 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min, // 让按钮根据内容自适应宽度
                                               children: [
-                                                const Icon(Icons.favorite, color: Colors.white, size: 24), // 添加的图标
-                                                const SizedBox(width: 8), // 图标和文字之间的间距
+                                                // const Icon(Icons.favorite, color: Colors.white, size: 24), // 添加的图标
+                                                // const SizedBox(width: 8), // 图标和文字之间的间距
                                                 Text(
                                                   S.of(context).movieList_button_buy,
                                                   style: TextStyle(
@@ -304,21 +330,21 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                                               ],
                                             ),
                                           ),
-                                        MaterialButton(
-                                        color: Theme.of(context).primaryColor,
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5))),
-                                        onPressed: () {
-                                          // getData();
-                                          context.go('/movie/ShowTimeList');
-                                        },
-                                        child: Text(
-                                            S.of(context).movieList_button_buy,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 32.sp)),
-                                      )
+                                      //   MaterialButton(
+                                      //   color: Theme.of(context).primaryColor,
+                                      //   shape: const RoundedRectangleBorder(
+                                      //       borderRadius: BorderRadius.all(
+                                      //           Radius.circular(5))),
+                                      //   onPressed: () {
+                                      //     // getData();
+                                      //     context.go('/movie/ShowTimeList');
+                                      //   },
+                                      //   child: Text(
+                                      //       S.of(context).movieList_button_buy,
+                                      //       style: TextStyle(
+                                      //           color: Colors.white,
+                                      //           fontSize: 32.sp)),
+                                      // )
                                       ])
                                     ],
                                   ),
@@ -327,7 +353,7 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                           )
                         );
                       },
-                    ),
+                    ) : const Center(child: CircularProgressIndicator()),
                   ),
                   EasyRefresh(
                     header: const ClassicHeader(),

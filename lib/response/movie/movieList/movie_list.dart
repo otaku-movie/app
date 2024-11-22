@@ -1,109 +1,57 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:otaku_movie/response/hello_movie.dart';
 
 part 'movie_list.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class MovieListResponse {
-  int? id;
-  String? cover;
-  String? name;
-  String? originalName;
-  String? description;
-  String? homePage; // 改为 String? 类型
-  String? startDate;
-  DateTime? endDate;
-  int? status;
-  String? time; // 改为 String? 类型
-  int? cinemaCount;
-  int? theaterCount;
-  int? commentCount;
-  int? watchedCount;
-  int? wantToSeeCount; // 改为 int? 类型
-  String? createTime; // 改为 String? 类型
-  String? updateTime; // 改为 String? 类型
-  List<Spec>? spec;
-  List<HelloMovie>? helloMovie;
-  List<Tag>? tags;
-  int? levelId;
-  String? levelName;
+    @JsonKey(name: "id")
+    final int? id;
+    @JsonKey(name: "name")
+    final String? name;
+    @JsonKey(name: "cover")
+    final String? cover;
+    @JsonKey(name: "spec")
+    final List<Cast>? spec;
+    @JsonKey(name: "level_name")
+    final String? levelName;
+    @JsonKey(name: "cast")
+    final List<Cast>? cast;
+    @JsonKey(name: "hello_movie")
+    final List<HelloMovie>? helloMovie;
+    @JsonKey(name: "start_date")
+    final DateTime? startDate;
 
-  MovieListResponse({
-    this.id,
-    this.cover,
-    this.name,
-    this.originalName,
-    this.description,
-    this.homePage,
-    this.startDate,
-    this.endDate,
-    this.status,
-    this.time,
-    this.cinemaCount,
-    this.theaterCount,
-    this.commentCount,
-    this.watchedCount,
-    this.wantToSeeCount,
-    this.createTime,
-    this.updateTime,
-    this.spec,
-    this.helloMovie,
-    this.tags,
-    this.levelId,
-    this.levelName,
-  });
+    MovieListResponse({
+        this.id,
+        this.name,
+        this.cover,
+        this.spec,
+        this.levelName,
+        this.cast,
+        this.helloMovie,
+        this.startDate,
+    });
 
-  factory MovieListResponse.fromJson(Map<String, dynamic> json) =>
-      _$MovieListResponseFromJson(json);
+    factory MovieListResponse.fromJson(Map<String, dynamic> json) => _$MovieListResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$MovieListResponseToJson(this);
+    Map<String, dynamic> toJson() => _$MovieListResponseToJson(this);
 }
 
 @JsonSerializable()
-class HelloMovie {
-  int? id;
-  int? code;
-  DateTime? date;
+class Cast {
+    @JsonKey(name: "id")
+    final int? id;
+    @JsonKey(name: "name")
+    final String? name;
 
-  HelloMovie({
-    this.id,
-    this.code,
-    this.date,
-  });
+    Cast({
+        this.id,
+        this.name,
+    });
 
-  factory HelloMovie.fromJson(Map<String, dynamic> json) =>
-      _$HelloMovieFromJson(json);
+    factory Cast.fromJson(Map<String, dynamic> json) => _$CastFromJson(json);
 
-  Map<String, dynamic> toJson() => _$HelloMovieToJson(this);
+    Map<String, dynamic> toJson() => _$CastToJson(this);
 }
 
-@JsonSerializable()
-class Spec {
-  int? id;
-  String? name;
-  String? description;
-
-  Spec({
-    this.id,
-    this.name,
-    this.description,
-  });
-
-  factory Spec.fromJson(Map<String, dynamic> json) => _$SpecFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SpecToJson(this);
-}
-
-@JsonSerializable()
-class Tag {
-  int? id;
-  String? name;
-
-  Tag({
-    this.id,
-    this.name,
-  });
-
-  factory Tag.fromJson(Map<String, dynamic> json) => _$TagFromJson(json);
-
-  Map<String, dynamic> toJson() => _$TagToJson(this);
-}

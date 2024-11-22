@@ -16,9 +16,10 @@ class ApiPaginationResponse<T> {
     required this.list,
   });
 
+  // Adjusting fromJson to accept Object? instead of Map<String, dynamic>
   factory ApiPaginationResponse.fromJson(
     Map<String, dynamic> json,
-    T Function(Object? json) fromJsonT,
+    T Function(Object? json) fromJsonT,  // Change here to accept Object? instead of Map<String, dynamic>
   ) =>
       _$ApiPaginationResponseFromJson(json, fromJsonT);
 
