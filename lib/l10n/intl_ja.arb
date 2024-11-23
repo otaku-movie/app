@@ -1,10 +1,16 @@
 {
-  "@@locale": "ja_JP",
-  "home_home": "",
-  "home_cinema": "",
-  "home_me": "",
+  "@@locale": "ja",
+  "home_home": "ホーム",
+  "home_cinema": "映画館",
+  "home_me": "マイページ",
   "movieList_tabBar_currentlyShowing": "現在上映中",
   "movieList_tabBar_comingSoon": "近日公開",
   "movieList_placeholder": "",
-  "movieList_button_buy": ""
+  "movieList_button_buy": "",
+  "user_language": "言語",
+  "user_editProfile": "",
+  "user_privateAgreement": "",
+  "user_checkUpdate": "",
+  "user_about": "",
+  "user_logout": ""
 }

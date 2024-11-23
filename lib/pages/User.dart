@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/controller/LanguageController.dart';
+import 'package:otaku_movie/generated/l10n.dart';
 import '../components/CustomAppBar.dart';
 
 class UserInfo extends StatefulWidget {
@@ -11,9 +14,55 @@ class UserInfo extends StatefulWidget {
 }
 
 class _PageState extends State<UserInfo> {
+  final LanguageController languageController = Get.find();
+  String langName = '简体中文';
+  
+  void updateLangName () {
+    Map<String, String> lang = languageController.lang.firstWhere(
+      (el) => el['code'] == languageController.locale.value.languageCode,
+      orElse: () => {'code': 'zh', 'name': '简体中文'});
+
+    setState(() {
+      langName = '${lang['name']}';
+    });
+  }
+
+  void _showActionSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: languageController.lang.map((el) {
+            return ListTile(
+              title: Center(
+                child: Text('${el['name']}'),
+              ),
+              onTap: () {
+                print(S.of(context));
+                Navigator.pop(context);
+                languageController.changeLanguage(el['code'] as String);
+                updateLangName();
+                // Implement your action here
+              },
+            );
+          }).toList()
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    
+    @override
+    void initState() {
+      super.initState();
+      // 初始化时设置当前语言名称
+      updateLangName();
+    }
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: Text('Home Page', style: TextStyle(color: Colors.white)),
         showBackButton: false,
@@ -26,6 +75,7 @@ class _PageState extends State<UserInfo> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              
               // 用户信息部分，使用 Card 组件
               Card(
                 margin: EdgeInsets.only(bottom: 16.h),
@@ -77,12 +127,14 @@ class _PageState extends State<UserInfo> {
                 ),
               ),
               // 设置项的列表
-              _buildListTile(Icons.language, 'Language', '简体中文', () {}),
-              _buildListTile(Icons.edit, 'Edit Profile', null, () {}),
-              _buildListTile(Icons.privacy_tip, 'Privacy Agreement', null, () {}),
-              _buildListTile(Icons.check, 'Check for Updates', '1.0.0', () {}),
-              _buildListTile(Icons.info_outline, 'About', null, () {}),
-              _buildListTile(Icons.logout, 'Logout', null, () {}),
+              _buildListTile(Icons.language, S.of(context).user_language, langName, () {
+                 _showActionSheet(context);
+              }),
+              _buildListTile(Icons.edit, S.of(context).user_editProfile, null, () {}),
+              _buildListTile(Icons.privacy_tip, S.of(context).user_privateAgreement, null, () {}),
+              _buildListTile(Icons.check, S.of(context).user_checkUpdate, '1.0.0', () {}),
+              _buildListTile(Icons.info_outline, S.of(context).user_about, null, () {}),
+              _buildListTile(Icons.logout, S.of(context).user_logout, null, () {}),
             ],
           ),
         ),

@@ -6,5 +6,11 @@
   "movieList_tabBar_currentlyShowing": "上映中",
   "movieList_tabBar_comingSoon": "即将上映",
   "movieList_placeholder": "搜索全部电影",
-  "movieList_button_buy": "购票"
+  "movieList_button_buy": "购票",
+  "user_language": "语言",
+  "user_editProfile": "编辑个人信息",
+  "user_privateAgreement": "隐私协议",
+  "user_checkUpdate": "检查更新",
+  "user_about": "关于",
+  "user_logout": "退出登录"
 }

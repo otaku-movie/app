@@ -30,6 +30,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("即将上映"),
         "movieList_tabBar_currentlyShowing":
-            MessageLookupByLibrary.simpleMessage("上映中")
+            MessageLookupByLibrary.simpleMessage("上映中"),
+        "user_about": MessageLookupByLibrary.simpleMessage("关于"),
+        "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
+        "user_editProfile": MessageLookupByLibrary.simpleMessage("编辑个人信息"),
+        "user_language": MessageLookupByLibrary.simpleMessage("语言"),
+        "user_logout": MessageLookupByLibrary.simpleMessage("退出登录"),
+        "user_privateAgreement": MessageLookupByLibrary.simpleMessage("隐私协议")
       };
 }

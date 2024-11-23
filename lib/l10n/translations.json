@@ -2,18 +2,18 @@
   "home": {
     "home": {
       "zh": "首页",
-      "ja": "",
-      "en": ""
+      "ja": "ホーム",
+      "en": "home"
     },
     "cinema": {
       "zh": "电影院",
-      "ja": "",
-      "en": ""
+      "ja": "映画館",
+      "en": "cinema"
     },
     "me": {
       "zh": "我的",
-      "ja": "",
-      "en": ""
+      "ja": "マイページ",
+      "en": "my page"
     }
   },
   "movieList": {
@@ -40,6 +40,38 @@
         "ja": "",
         "en": ""
       }
+    }
+  },
+  "user": {
+    "language": {
+      "zh": "语言",
+      "ja": "言語",
+      "en": "Language"
+    },
+    "editProfile": {
+      "zh": "编辑个人信息",
+      "ja": "",
+      "en": ""
+    },
+    "privateAgreement": {
+      "zh": "隐私协议",
+      "ja": "",
+      "en": ""
+    },
+    "checkUpdate": {
+      "zh": "检查更新",
+      "ja": "",
+      "en": ""
+    },
+    "about": {
+      "zh": "关于",
+      "ja": "",
+      "en": ""
+    },
+    "logout": {
+      "zh": "退出登录",
+      "ja": "",
+      "en": ""
     }
   }
 }

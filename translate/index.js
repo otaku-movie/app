@@ -92,11 +92,11 @@ const generateArbFiles = async () => {
     };
     // 日文 ARB 文件内容
     const jaArbContent = {
-      "@@locale": "ja_JP",
+      "@@locale": "ja",
     };
     // 英文 ARB 文件内容
     const enArbContent = {
-      "@@locale": "en_US",
+      "@@locale": "en",
     };
 
     // Object.keys(flattenedData) {}

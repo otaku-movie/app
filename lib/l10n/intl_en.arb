@@ -1,10 +1,16 @@
 {
-  "@@locale": "en_US",
-  "home_home": "",
-  "home_cinema": "",
-  "home_me": "",
+  "@@locale": "en",
+  "home_home": "home",
+  "home_cinema": "cinema",
+  "home_me": "my page",
   "movieList_tabBar_currentlyShowing": "Currently Showing",
   "movieList_tabBar_comingSoon": "Coming Soon",
   "movieList_placeholder": "",
-  "movieList_button_buy": ""
+  "movieList_button_buy": "",
+  "user_language": "Language",
+  "user_editProfile": "",
+  "user_privateAgreement": "",
+  "user_checkUpdate": "",
+  "user_about": "",
+  "user_logout": ""
 }

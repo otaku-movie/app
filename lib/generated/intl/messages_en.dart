@@ -22,14 +22,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "hello": MessageLookupByLibrary.simpleMessage("Hello"),
-        "movieList_button_buy": MessageLookupByLibrary.simpleMessage("Buy"),
-        "movieList_search_placeholder":
-            MessageLookupByLibrary.simpleMessage("Search Movies"),
+        "home_cinema": MessageLookupByLibrary.simpleMessage("cinema"),
+        "home_home": MessageLookupByLibrary.simpleMessage("home"),
+        "home_me": MessageLookupByLibrary.simpleMessage("my page"),
+        "movieList_button_buy": MessageLookupByLibrary.simpleMessage(""),
+        "movieList_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "movieList_tabBar_comingSoon":
-            MessageLookupByLibrary.simpleMessage("Coming soon"),
+            MessageLookupByLibrary.simpleMessage("Coming Soon"),
         "movieList_tabBar_currentlyShowing":
-            MessageLookupByLibrary.simpleMessage("Currently showing"),
-        "welcome": MessageLookupByLibrary.simpleMessage("Welcome to Flutter")
+            MessageLookupByLibrary.simpleMessage("Currently Showing"),
+        "user_about": MessageLookupByLibrary.simpleMessage(""),
+        "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
+        "user_editProfile": MessageLookupByLibrary.simpleMessage(""),
+        "user_language": MessageLookupByLibrary.simpleMessage("Language"),
+        "user_logout": MessageLookupByLibrary.simpleMessage(""),
+        "user_privateAgreement": MessageLookupByLibrary.simpleMessage("")
       };
 }

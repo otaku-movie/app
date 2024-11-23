@@ -22,14 +22,20 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "hello": MessageLookupByLibrary.simpleMessage("こんにちは"),
-        "movieList_button_buy": MessageLookupByLibrary.simpleMessage("チケット購入"),
-        "movieList_search_placeholder":
-            MessageLookupByLibrary.simpleMessage("ムービー検索"),
+        "home_cinema": MessageLookupByLibrary.simpleMessage("映画館"),
+        "home_home": MessageLookupByLibrary.simpleMessage("ホーム"),
+        "home_me": MessageLookupByLibrary.simpleMessage("マイページ"),
+        "movieList_button_buy": MessageLookupByLibrary.simpleMessage(""),
+        "movieList_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("近日公開"),
         "movieList_tabBar_currentlyShowing":
-            MessageLookupByLibrary.simpleMessage("上映中"),
-        "welcome": MessageLookupByLibrary.simpleMessage("ようこそflutterへ")
+            MessageLookupByLibrary.simpleMessage("現在上映中"),
+        "user_about": MessageLookupByLibrary.simpleMessage(""),
+        "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
+        "user_editProfile": MessageLookupByLibrary.simpleMessage(""),
+        "user_language": MessageLookupByLibrary.simpleMessage("言語"),
+        "user_logout": MessageLookupByLibrary.simpleMessage(""),
+        "user_privateAgreement": MessageLookupByLibrary.simpleMessage("")
       };
 }

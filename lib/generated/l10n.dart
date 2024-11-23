@@ -50,30 +50,30 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// ``
+  /// `home`
   String get home_home {
     return Intl.message(
-      '',
+      'home',
       name: 'home_home',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `cinema`
   String get home_cinema {
     return Intl.message(
-      '',
+      'cinema',
       name: 'home_cinema',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `my page`
   String get home_me {
     return Intl.message(
-      '',
+      'my page',
       name: 'home_me',
       desc: '',
       args: [],
@@ -115,6 +115,66 @@ class S {
     return Intl.message(
       '',
       name: 'movieList_button_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get user_language {
+    return Intl.message(
+      'Language',
+      name: 'user_language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_editProfile {
+    return Intl.message(
+      '',
+      name: 'user_editProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_privateAgreement {
+    return Intl.message(
+      '',
+      name: 'user_privateAgreement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_checkUpdate {
+    return Intl.message(
+      '',
+      name: 'user_checkUpdate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_about {
+    return Intl.message(
+      '',
+      name: 'user_about',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_logout {
+    return Intl.message(
+      '',
+      name: 'user_logout',
       desc: '',
       args: [],
     );
