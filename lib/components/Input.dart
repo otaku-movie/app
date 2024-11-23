@@ -62,10 +62,13 @@ class _InputState extends State<Input> {
     _controller = TextEditingController();
   }
 
-  
+  @override
+
   @override
   void dispose() {
-    FocusScope.of(context).unfocus();
+    // if (mounted) {
+    //   FocusScope.of(context).unfocus();
+    // }
     super.dispose();
   }
 

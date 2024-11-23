@@ -50,61 +50,71 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Currently showing`
+  /// ``
+  String get home_home {
+    return Intl.message(
+      '',
+      name: 'home_home',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get home_cinema {
+    return Intl.message(
+      '',
+      name: 'home_cinema',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get home_me {
+    return Intl.message(
+      '',
+      name: 'home_me',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Currently Showing`
   String get movieList_tabBar_currentlyShowing {
     return Intl.message(
-      'Currently showing',
+      'Currently Showing',
       name: 'movieList_tabBar_currentlyShowing',
       desc: '',
       args: [],
     );
   }
 
-  /// `Coming soon`
+  /// `Coming Soon`
   String get movieList_tabBar_comingSoon {
     return Intl.message(
-      'Coming soon',
+      'Coming Soon',
       name: 'movieList_tabBar_comingSoon',
       desc: '',
       args: [],
     );
   }
 
-  /// `Search Movies`
-  String get movieList_search_placeholder {
+  /// ``
+  String get movieList_placeholder {
     return Intl.message(
-      'Search Movies',
-      name: 'movieList_search_placeholder',
+      '',
+      name: 'movieList_placeholder',
       desc: '',
       args: [],
     );
   }
 
-  /// `Buy`
+  /// ``
   String get movieList_button_buy {
     return Intl.message(
-      'Buy',
+      '',
       name: 'movieList_button_buy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Hello`
-  String get hello {
-    return Intl.message(
-      'Hello',
-      name: 'hello',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Welcome to Flutter`
-  String get welcome {
-    return Intl.message(
-      'Welcome to Flutter',
-      name: 'welcome',
       desc: '',
       args: [],
     );
@@ -118,7 +128,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
       Locale.fromSubtags(languageCode: 'ja'),
-      Locale.fromSubtags(languageCode: 'zh', countryCode: 'CN'),
+      Locale.fromSubtags(languageCode: 'zh'),
     ];
   }
 

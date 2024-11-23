@@ -119,7 +119,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
             SizedBox(width: 20.w),
             Expanded(
               child: Input(
-              placeholder: S.of(context).movieList_search_placeholder,
+              placeholder: S.of(context).movieList_placeholder,
               placeholderStyle: const TextStyle(color: Colors.black26),
               textStyle: const TextStyle(color: Colors.white),
               height: ScreenUtil().setHeight(60),

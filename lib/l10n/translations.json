@@ -1,0 +1,45 @@
+{
+  "home": {
+    "home": {
+      "zh": "首页",
+      "ja": "",
+      "en": ""
+    },
+    "cinema": {
+      "zh": "电影院",
+      "ja": "",
+      "en": ""
+    },
+    "me": {
+      "zh": "我的",
+      "ja": "",
+      "en": ""
+    }
+  },
+  "movieList": {
+    "tabBar": {
+      "currentlyShowing": {
+        "zh": "上映中",
+        "ja": "現在上映中",
+        "en": "Currently Showing"
+      },
+      "comingSoon": {
+        "zh": "即将上映",
+        "ja": "近日公開",
+        "en": "Coming Soon"
+      }
+    },
+    "placeholder": {
+      "zh": "搜索全部电影",
+      "ja": "",
+      "en": ""
+    },
+    "button": {
+      "buy": {
+        "zh": "购票",
+        "ja": "",
+        "en": ""
+      }
+    }
+  }
+}

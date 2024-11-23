@@ -12,9 +12,9 @@ class ApiRequest {
   ApiRequest() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'http://192.168.1.7:8080/api', // 确保baseUrl格式正确
-        connectTimeout: const Duration(seconds: 50), // 连接超时
-        receiveTimeout: const Duration(seconds: 50), // 接收超时
+        baseUrl: 'http://192.168.1.7:8080/api', // 确1保baseUrl格式正确
+        connectTimeout: const Duration(seconds: 60 * 5), // 连接超时
+        receiveTimeout: const Duration(seconds: 60 * 5), // 接收超时
       ),
     );
 

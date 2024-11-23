@@ -1,8 +1,10 @@
 {
-  "movieList_tabBar_currentlyShowing": "Currently showing",
-  "movieList_tabBar_comingSoon": "Coming soon",
-  "movieList_search_placeholder": "Search Movies",
-  "movieList_button_buy":"Buy",
-  "hello": "Hello",
-  "welcome": "Welcome to Flutter"
+  "@@locale": "en_US",
+  "home_home": "",
+  "home_cinema": "",
+  "home_me": "",
+  "movieList_tabBar_currentlyShowing": "Currently Showing",
+  "movieList_tabBar_comingSoon": "Coming Soon",
+  "movieList_placeholder": "",
+  "movieList_button_buy": ""
 }

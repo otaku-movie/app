@@ -45,8 +45,6 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
         
       },
     ).then((res) {
-      print('--- api response ----');
-      
       setState(() {
         data = res.data?.list ?? [];
       });
@@ -63,7 +61,6 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     _tabController.dispose();
-    FocusScope.of(context).unfocus();
     super.dispose();
   }
 
@@ -120,16 +117,29 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
         // ),
         appBar: AppBar(
           centerTitle: true,
-          title: Input(
-            placeholder: S.of(context).movieList_search_placeholder,
-            placeholderStyle: const TextStyle(color: Colors.black26),
-            textStyle: const TextStyle(color: Colors.white),
-            height: ScreenUtil().setHeight(60),
-            backgroundColor: const Color.fromRGBO(255, 255, 255, 0.1),
-            borderRadius: BorderRadius.circular(15),
-            suffixIcon: const Icon(Icons.search_outlined,
-                color: Color.fromRGBO(255, 255, 255, 0.6)),
-            cursorColor: Colors.white,
+          title: GestureDetector(
+            onTap: () {
+              context.goNamed('search');
+            },
+            child:  Container(
+              padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 30.w),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color.fromARGB(255, 244, 243, 243)),
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.shade100,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('搜索全部电影', style: TextStyle(
+                    fontSize: 28.sp,
+                    color: Colors.grey.shade500
+                  ),),
+                  Icon(Icons.search_outlined,
+                  color: Colors.grey.shade500)
+                ],
+              ),
+            ),
           ),
           bottom: TabBar(
             controller: _tabController,
@@ -425,8 +435,6 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
                       },
                     ),
                   ),
-
-
                 ],
               ),
             );

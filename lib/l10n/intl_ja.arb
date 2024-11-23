@@ -1,8 +1,10 @@
 {
-  "movieList_tabBar_currentlyShowing": "上映中",
+  "@@locale": "ja_JP",
+  "home_home": "",
+  "home_cinema": "",
+  "home_me": "",
+  "movieList_tabBar_currentlyShowing": "現在上映中",
   "movieList_tabBar_comingSoon": "近日公開",
-  "movieList_search_placeholder": "ムービー検索",
-  "movieList_button_buy": "チケット購入",
-  "hello": "こんにちは",
-  "welcome": "ようこそflutterへ"
+  "movieList_placeholder": "",
+  "movieList_button_buy": ""
 }

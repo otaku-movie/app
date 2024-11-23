@@ -1,0 +1,10 @@
+{
+  "@@locale": "zh",
+  "home_home": "首页",
+  "home_cinema": "电影院",
+  "home_me": "我的",
+  "movieList_tabBar_currentlyShowing": "上映中",
+  "movieList_tabBar_comingSoon": "即将上映",
+  "movieList_placeholder": "搜索全部电影",
+  "movieList_button_buy": "购票"
+}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/pages/MovieList.dart';
 import 'package:otaku_movie/pages/tab/CinemaList.dart';
 import 'package:otaku_movie/pages/User.dart';
@@ -16,37 +17,36 @@ class Home extends StatefulWidget {
 
 class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
   int currentIndex = 0;
-
-  final List<Map<String, dynamic>> tab = [
-    {
-      "icon": const Icon(Icons.movie),
-      "title": '首页',
-      // "body": const Setting(),
-      "body": const MovieList(),
-    },
-    {
-      "icon": const Icon(Icons.theaters_sharp),
-      "title": '电影院',
-      // "body": const Setting(),
-      "body": const CinemaList(),
-    },
-    {
-      "icon": const Icon(Icons.account_circle),
-      "title": '我的',
-      "body": const UserInfo(),
-    }
-  ];
-
+  
   @override
   void initState() {
     super.initState();
-    print(tab[currentIndex]['title']);
   }
 
 
   @override
   Widget build(BuildContext context) {
     final LanguageController languageController = Get.find();
+
+    List<Map<String, dynamic>> tab = [
+    {
+      "icon": const Icon(Icons.movie),
+      "title": S.of(context).home_home,
+      // "body": const Setting(),
+      "body": const MovieList(),
+    },
+    {
+      "icon": const Icon(Icons.theaters_sharp),
+      "title": S.of(context).home_cinema,
+      // "body": const Setting(),
+      "body": const CinemaList(),
+    },
+    {
+      "icon": const Icon(Icons.account_circle),
+      "title": S.of(context).home_me,
+      "body": const UserInfo(),
+    }
+  ];
 
     return Scaffold(
       backgroundColor: Colors.white,

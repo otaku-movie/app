@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a zh_CN locale. All the
+// This is a library that provides messages for a zh locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -18,18 +18,18 @@ final messages = new MessageLookup();
 typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  String get localeName => 'zh_CN';
+  String get localeName => 'zh';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "hello": MessageLookupByLibrary.simpleMessage("你好"),
+        "home_cinema": MessageLookupByLibrary.simpleMessage("电影院"),
+        "home_home": MessageLookupByLibrary.simpleMessage("首页"),
+        "home_me": MessageLookupByLibrary.simpleMessage("我的"),
         "movieList_button_buy": MessageLookupByLibrary.simpleMessage("购票"),
-        "movieList_search_placeholder":
-            MessageLookupByLibrary.simpleMessage("搜索全部电影"),
+        "movieList_placeholder": MessageLookupByLibrary.simpleMessage("搜索全部电影"),
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("即将上映"),
         "movieList_tabBar_currentlyShowing":
-            MessageLookupByLibrary.simpleMessage("上映中"),
-        "welcome": MessageLookupByLibrary.simpleMessage("欢迎使用 Flutter")
+            MessageLookupByLibrary.simpleMessage("上映中")
       };
 }

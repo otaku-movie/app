@@ -1,8 +1,0 @@
-{
-  "movieList_tabBar_currentlyShowing": "上映中",
-  "movieList_tabBar_comingSoon": "即将上映",
-  "movieList_search_placeholder": "搜索全部电影",
-  "movieList_button_buy": "购票",
-  "hello": "你好",
-  "welcome": "欢迎使用 Flutter"
-}
