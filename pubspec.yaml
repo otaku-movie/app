@@ -63,6 +63,10 @@ dependencies:
   # 打开链接
   url_launcher: ^6.3.1
   flutter_sticky_header: ^0.7.0
+  # 获取当前所在位置
+  geolocator: ^13.0.2
+  # 根据经纬度拿到地理位置
+  geocoding: ^3.0.0
 
 dev_dependencies:
   json_serializable: ^6.8.0

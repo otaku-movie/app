@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
-  int currentIndex = 0;
+  int currentIndex = 1;
   
   @override
   void initState() {
