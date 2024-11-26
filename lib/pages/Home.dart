@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/generated/l10n.dart';
-import 'package:otaku_movie/pages/MovieList.dart';
+import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/tab/CinemaList.dart';
 import 'package:otaku_movie/pages/User.dart';
 import 'package:otaku_movie/pages/setting.dart';

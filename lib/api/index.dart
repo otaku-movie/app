@@ -59,6 +59,12 @@ class ApiRequest {
     );
   }
 
+  String snakeToCamel(String input) {
+    return input.replaceAllMapped(RegExp('_(.)'), (match) {
+      return match.group(1)!.toUpperCase();
+    });
+  }
+
   Future<ApiResponse<T>> request<T>({
     required String path,
     required String method,
@@ -80,6 +86,8 @@ class ApiRequest {
         options: options,
       );
       
+      // Map<String, dynamic> responseData = _convertToCamelCase(response.data);
+
       ApiResponse<T> apiResponse = ApiResponse<T>.fromJson(
         response.data,
         (json) => fromJsonT(json as Map<String, dynamic>),
@@ -91,6 +99,26 @@ class ApiRequest {
       log.e(e);
       rethrow;
     }
+  }
+  
+  // 将字段名从蛇形命名转换为驼峰命名
+  Map<String, dynamic> _convertToCamelCase(Map<String, dynamic> json) {
+    final Map<String, dynamic> convertedJson = {};
+    
+    json.forEach((key, value) {
+      // 如果是 List 类型，递归转换
+      if (value is List) {
+        convertedJson[snakeToCamel(key)] = value.map((item) {
+          return item is Map<String, dynamic> ? _convertToCamelCase(item) : item;
+        }).toList();
+      } else if (value is Map) {
+        convertedJson[snakeToCamel(key)] = _convertToCamelCase(value as Map<String, dynamic>);
+      } else {
+        convertedJson[snakeToCamel(key)] = value;
+      }
+    });
+
+    return convertedJson;
   }
 }
 

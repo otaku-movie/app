@@ -11,13 +11,10 @@ ApiPaginationResponse<T> _$ApiPaginationResponseFromJson<T>(
   T Function(Object? json) fromJsonT,
 ) =>
     ApiPaginationResponse<T>(
-      page: (json['page'] as num?)?.toInt() ?? 1, // 处理 null 值
-      total: (json['total'] as num?)?.toInt() ?? 0, // 处理 null 值
-      pageSize: (json['page_size'] as num?)?.toInt() ?? 10, // 处理 null 值
-      list: (json['list'] as List<dynamic>?)
-              ?.map((e) => fromJsonT(e)) // 防止 list 为 null
-              .toList() ??
-          [], // 处理 null 值
+      page: (json['page'] as num?)?.toInt(),
+      total: (json['total'] as num?)?.toInt(),
+      pageSize: (json['page_size'] as num?)?.toInt(),
+      list: (json['list'] as List<dynamic>?)?.map(fromJsonT).toList(),
     );
 
 Map<String, dynamic> _$ApiPaginationResponseToJson<T>(
@@ -28,7 +25,5 @@ Map<String, dynamic> _$ApiPaginationResponseToJson<T>(
       'page': instance.page,
       'total': instance.total,
       'page_size': instance.pageSize,
-      'list': instance.list.isNotEmpty
-          ? instance.list.map((e) => toJsonT(e)).toList()
-          : [], // 如果 list 为空，则转换为空列表
+      'list': instance.list?.map(toJsonT).toList(),
     };

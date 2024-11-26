@@ -6,7 +6,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
-import 'package:otaku_movie/response/movie/movieList/movie_list.dart';
+import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
 import 'package:otaku_movie/response/response.dart';
 import '../../components/Input.dart';
 import '../../generated/l10n.dart';
@@ -27,11 +27,11 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
   int _gridCount = 20;
   int _listCount = 0;
 
-  List<MovieListResponse> list = [];
+  List<MovieNowShowingResponse> list = [];
   
 
   void getData() {
-    // ApiRequest().request<ApiResponse<ApiPaginationResponse<MovieListResponse>>>(
+    // ApiRequest().request<ApiResponse<ApiPaginationResponse<MovieNowShowingResponse>>>(
     //   path: '/movie/list',
     //   method: 'POST',
     //   data: {
@@ -39,11 +39,11 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
     //     'pageSize': 20,
     //   },
     //   // fromJsonT: (json) {
-    //   //   return ApiResponse<ApiPaginationResponse<MovieListResponse>>.fromJson(
+    //   //   return ApiResponse<ApiPaginationResponse<MovieNowShowingResponse>>.fromJson(
     //   //     json,
-    //   //     (dataJson) => ApiPaginationResponse<MovieListResponse>.fromJson(
+    //   //     (dataJson) => ApiPaginationResponse<MovieNowShowingResponse>.fromJson(
     //   //       dataJson as Map<String, dynamic>,
-    //   //       (itemJson) => MovieListResponse.fromJson(itemJson as Map<String, dynamic>),
+    //   //       (itemJson) => MovieNowShowingResponse.fromJson(itemJson as Map<String, dynamic>),
     //   //     ),
     //   //   );
     //   // },

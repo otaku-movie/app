@@ -84,7 +84,7 @@ class _PageState extends State<MovieDetail> {
               direction: Axis.vertical,
               spacing: 2.h,
               children: [
-                 Container(
+                Container(
                   width: 600.w,
                   padding: EdgeInsets.symmetric(vertical: 4.h),
                   child: Row(

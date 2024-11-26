@@ -4,10 +4,10 @@ part 'api_pagination_response.g.dart';
 
 @JsonSerializable(genericArgumentFactories: true)
 class ApiPaginationResponse<T> {
-  final int page;
-  final int total;
-  final int pageSize;
-  final List<T> list;
+  final int? page;
+  final int? total;
+  final int? pageSize;
+  final List<T>? list;
 
   ApiPaginationResponse({
     required this.page,

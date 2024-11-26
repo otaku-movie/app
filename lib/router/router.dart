@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/pages/Home.dart';
-import 'package:otaku_movie/pages/MovieList.dart';
+import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/User.dart';
 import 'package:otaku_movie/pages/movie/SelectMovieTicketPage.dart';
 import 'package:otaku_movie/pages/movie/SelectSeatPage.dart';
