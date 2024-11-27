@@ -9,7 +9,7 @@ class HelloMovie {
     @JsonKey(name: "code")
     final int? code;
     @JsonKey(name: "date")
-    final DateTime? date;
+    final String? date;
 
     HelloMovie({
         this.id,

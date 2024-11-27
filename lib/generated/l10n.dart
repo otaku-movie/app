@@ -120,6 +120,176 @@ class S {
     );
   }
 
+  /// ``
+  String get cinemaList_address {
+    return Intl.message(
+      '',
+      name: 'cinemaList_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_button_want {
+    return Intl.message(
+      '',
+      name: 'movieDetail_button_want',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_button_saw {
+    return Intl.message(
+      '',
+      name: 'movieDetail_button_saw',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_button_buy {
+    return Intl.message(
+      '',
+      name: 'movieDetail_button_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `reply`
+  String get movieDetail_comment_reply {
+    return Intl.message(
+      'reply',
+      name: 'movieDetail_comment_reply',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_noDate {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_noDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_basicMessage {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_basicMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_originalName {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_originalName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_time {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_spec {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_spec',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_tags {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_homepage {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_homepage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_state {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_state',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_level {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_level',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_staff {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_staff',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_character {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_character',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieDetail_detail_comment {
+    return Intl.message(
+      '',
+      name: 'movieDetail_detail_comment',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Language`
   String get user_language {
     return Intl.message(

@@ -19,9 +19,10 @@ class ApiResponse<T> {
     Map<String, dynamic> json,
     T Function(Object? json) fromJsonT,
   ) {
+
     return ApiResponse<T>(
       code: json['code'] as int?, // 处理可能的 null 值
-      data: json['data'] != null ? fromJsonT(json['data']) : null, // 处理 data 可能的 null 值
+      data: json['data'] != null ?  fromJsonT(json['data']) : null, // 处理 data 可能的 null 值
       message: json['message'] as String?, // 处理可能的 null 值
     );
   }

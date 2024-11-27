@@ -42,6 +42,101 @@
       }
     }
   },
+  "cinemaList": {
+    "address": {
+      "zh": "正在获取当前位置",
+      "ja": "",
+      "en": ""
+    }
+  },
+  "movieDetail": {
+    "button": {
+      "want": {
+        "zh": "想看",
+        "ja": "",
+        "en": ""
+      },
+      "saw": {
+        "zh": "看过",
+        "ja": "",
+        "en": ""
+      },
+      "buy": {
+        "zh": "购票",
+        "ja": "",
+        "en": ""
+      }
+    },
+    "comment": {
+      "reply": {
+        "zh": "回复",
+        "ja": "",
+        "en": "reply"
+      }
+    },
+    "detail": {
+      "noDate": {
+        "zh": "上映日期待定",
+        "ja": "",
+        "en": ""
+      },
+      "basicMessage": {
+        "zh": "基本信息",
+        "ja": "",
+        "en": ""
+      },
+      "originalName": {
+        "zh": "原名",
+        "ja": "",
+        "en": ""
+      },
+      "time": {
+        "zh": "时长",
+        "ja": "",
+        "en": ""
+      },
+      "spec": {
+        "zh": "上映规格",
+        "ja": "",
+        "en": ""
+      },
+      "tags": {
+        "zh": "标签",
+        "ja": "",
+        "en": ""
+      },
+      "homepage": {
+        "zh": "官网",
+        "ja": "",
+        "en": ""
+      },
+      "state": {
+        "zh": "上映状态",
+        "ja": "",
+        "en": ""
+      },
+      "level": {
+        "zh": "分级",
+        "ja": "",
+        "en": ""
+      },
+      "staff": {
+        "zh": "工作人员",
+        "ja": "",
+        "en": ""
+      },
+      "character": {
+        "zh": "角色",
+        "ja": "",
+        "en": ""
+      },
+      "comment": {
+        "zh": "评论",
+        "ja": "",
+        "en": ""
+      }
+    }
+  },
   "user": {
     "language": {
       "zh": "语言",

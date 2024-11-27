@@ -107,7 +107,10 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         children: [
           GestureDetector(
             onTap: () {
-              context.goNamed('movieDetail');
+              context.goNamed('movieDetail',
+                pathParameters: {
+                "id": '${item.id}'
+              });
             },
             child: Stack(
               children: [
@@ -178,7 +181,10 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         children: [
           GestureDetector(
             onTap: () {
-              context.goNamed('movieDetail');
+              context.goNamed('movieDetail',
+                pathParameters: {
+                "id": '${item.id}'
+              });
             },
             child: Text(item.name ?? '', style: TextStyle(fontSize: 36.sp)),
           ),

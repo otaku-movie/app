@@ -63,10 +63,6 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
         movie = movie;
         data = groupMovie;
       });
-    }).catchError((err) {
-      setState(() {
-        error = true;
-      });
     }).whenComplete(() {
       setState(() {
         loading = false;
@@ -187,7 +183,10 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                         children: [
                           GestureDetector(
                             onTap: () {
-                              context.goNamed('movieDetail');
+                              context.goNamed('movieDetail',
+                                pathParameters: {
+                                "id": '${item?.id}'
+                              });
                             },
                             child: Stack(
                               children: [

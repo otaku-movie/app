@@ -22,9 +22,34 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cinemaList_address": MessageLookupByLibrary.simpleMessage("正在获取当前位置"),
         "home_cinema": MessageLookupByLibrary.simpleMessage("电影院"),
         "home_home": MessageLookupByLibrary.simpleMessage("首页"),
         "home_me": MessageLookupByLibrary.simpleMessage("我的"),
+        "movieDetail_button_buy": MessageLookupByLibrary.simpleMessage("购票"),
+        "movieDetail_button_saw": MessageLookupByLibrary.simpleMessage("看过"),
+        "movieDetail_button_want": MessageLookupByLibrary.simpleMessage("想看"),
+        "movieDetail_comment_reply": MessageLookupByLibrary.simpleMessage("回复"),
+        "movieDetail_detail_basicMessage":
+            MessageLookupByLibrary.simpleMessage("基本信息"),
+        "movieDetail_detail_character":
+            MessageLookupByLibrary.simpleMessage("角色"),
+        "movieDetail_detail_comment":
+            MessageLookupByLibrary.simpleMessage("评论"),
+        "movieDetail_detail_homepage":
+            MessageLookupByLibrary.simpleMessage("官网"),
+        "movieDetail_detail_level": MessageLookupByLibrary.simpleMessage("分级"),
+        "movieDetail_detail_noDate":
+            MessageLookupByLibrary.simpleMessage("上映日期待定"),
+        "movieDetail_detail_originalName":
+            MessageLookupByLibrary.simpleMessage("原名"),
+        "movieDetail_detail_spec": MessageLookupByLibrary.simpleMessage("上映规格"),
+        "movieDetail_detail_staff":
+            MessageLookupByLibrary.simpleMessage("工作人员"),
+        "movieDetail_detail_state":
+            MessageLookupByLibrary.simpleMessage("上映状态"),
+        "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("标签"),
+        "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage("时长"),
         "movieList_button_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage("搜索全部电影"),
         "movieList_tabBar_comingSoon":

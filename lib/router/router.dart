@@ -89,10 +89,10 @@ final GoRouter routerConfig = GoRouter(
           },
         ),
         GoRoute(
-          path: '/movie/detail',
+          path: '/movie/detail/:id',
           name: 'movieDetail',
           builder: (BuildContext context, GoRouterState state) {
-            return const MovieDetail();
+            return MovieDetail(id: state.pathParameters['id']);
           },
         ),
         GoRoute(

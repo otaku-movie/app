@@ -6,9 +6,6 @@ part 'movie_now_showing.g.dart';
 
 @JsonSerializable()
 class MovieNowShowingResponse extends MovieResponse {
-  @JsonKey(name: "spec")
-  final List<Cast>? spec;
-
   @JsonKey(name: "cast")
   final List<Cast>? cast;
   
@@ -19,7 +16,6 @@ class MovieNowShowingResponse extends MovieResponse {
     super.id,
     super.name,
     super.cover,
-    this.spec,
     this.cast,
     this.helloMovie,
     super.startDate,

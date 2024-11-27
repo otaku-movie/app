@@ -6,16 +6,24 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/rate.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/response/api_pagination_response.dart';
+import 'package:otaku_movie/response/movie/movieList/character.dart';
+import 'package:otaku_movie/response/movie/movieList/comment/comment.dart';
+import 'package:otaku_movie/response/movie/movieList/movie.dart';
+import 'package:otaku_movie/response/response.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetail extends StatefulWidget {
-  const MovieDetail({super.key});
+  final String? id;
+
+  const MovieDetail({super.key, this.id});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -26,11 +34,92 @@ class _PageState extends State<MovieDetail> {
 
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
+  MovieResponse data = MovieResponse();
+  List<CharacterResponse> characterData = [];
+  List<CommentResponse> commentListData = [];
 
+
+  getData () {
+    ApiRequest().request(
+      path: '/movie/detail',
+      method: 'GET',
+      queryParameters: {
+        "id": widget.id
+      },
+      fromJsonT: (json) {
+        return MovieResponse.fromJson(json);
+      },
+    ).then((res) {
+      setState(() {
+        data = res.data!;
+      });
+    }).catchError((err) {
+      // setState(() {
+      //   error = true;
+      // });
+    }).whenComplete(() {
+      // setState(() {
+      //   loading = false;
+      // });
+    });
+  }
+
+  getCharacterData () {
+    ApiRequest().request(
+      path: '/movie/character',
+      method: 'GET',
+      queryParameters: {
+        "id": widget.id
+      },
+      fromJsonT: (json) {
+        if (json is List<dynamic>) {
+          return json.map((item) {
+            return CharacterResponse.fromJson(item);
+          }).toList();
+        }
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          characterData = res.data!;
+        });
+      }
+    });
+  }
+
+  void getCommentData({page = 1}) {
+    ApiRequest().request(
+      path: '/movie/comment/list',
+      method: 'POST',
+      data: {
+        "movieId": int.parse(widget.id ?? ''),
+        "page": page,
+        "pageSize": 20,
+      },
+      fromJsonT: (json) {
+        return ApiPaginationResponse<CommentResponse>.fromJson(
+          json,
+          (data) => CommentResponse.fromJson(data as Map<String, dynamic>),
+        );
+      },
+    ).then((res) async {
+      List<CommentResponse> list = res.data?.list ?? [];
+
+      setState(() {
+        commentListData = list;
+      });
+    });
+  }
+
+  
 
   @override
   void initState() {
     super.initState();
+    getData();
+    getCharacterData();
+    getCommentData();
+
     // 延迟判断滚动距离，动态更新标题状态
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.addListener(() {
@@ -54,7 +143,7 @@ class _PageState extends State<MovieDetail> {
   }
 
   List<Widget> generateComment() {
-    return List.generate(10, (index) {
+    return commentListData.map((comment) {
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20.w),
         decoration: BoxDecoration(
@@ -72,7 +161,7 @@ class _PageState extends State<MovieDetail> {
             child:  CircleAvatar(
               radius: 50.0, // 半径
               backgroundColor: Colors.grey.shade300,
-              backgroundImage: const NetworkImage('https://example.com/image.jpg'),
+              backgroundImage: NetworkImage(comment.commentUserAvatar ?? ''),
             ),
           ),
           Container(
@@ -91,7 +180,7 @@ class _PageState extends State<MovieDetail> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('last order', style: TextStyle(
+                    Text(comment.commentUserName ?? '', style: TextStyle(
                       fontSize: 32.sp
                     ),),
                     Row(
@@ -123,18 +212,18 @@ class _PageState extends State<MovieDetail> {
                 Container(
                   width: 600.w,
                   padding: EdgeInsets.symmetric(vertical: 4.h),
-                  child: Text('这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容', maxLines: 5, overflow: TextOverflow.ellipsis,),
+                  child: Text(comment.content ?? '', maxLines: 5, overflow: TextOverflow.ellipsis),
                 ),
                 // SizedBox(height: 5.h),
                 Wrap(
                   spacing: 10.w,
                   children: [
                     Icon(Icons.thumb_up, color: Colors.grey.shade400, size: 36.sp),
-                    Text('15888'),
+                    Text('${comment.likeCount}'),
                     Icon(Icons.thumb_down, color: Colors.grey.shade400, size: 36.sp),
-                    Text('15888'),
+                    Text('${comment.unlikeCount}'),
                     Icon(Icons.comment, color: Colors.grey.shade400, size: 36.sp),
-                    Text('回复'),
+                    Text(S.of(context).movieDetail_comment_reply),
                     Icon(Icons.translate,  color: Colors.grey.shade400, size: 36.sp),
                     Text('翻译为日语')
                   ],
@@ -158,7 +247,6 @@ class _PageState extends State<MovieDetail> {
                           color: Colors.grey.shade700
                         ),),
                       )
-                     
                     ],
                   ),
                 )
@@ -167,10 +255,34 @@ class _PageState extends State<MovieDetail> {
             ),
           )
           
-        ],
+        ]
       ),
       );
-    });
+    }).toList();
+  }
+
+  bool isValidDate(String date) {
+    RegExp regExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+    
+    return regExp.hasMatch(date);
+  }
+
+  getWeekday (String date) {
+    try {
+      // 尝试解析日期字符串
+      DateTime parsedDate = DateTime.parse(date);
+      
+      // 检查是否是有效的 yyyy-MM-dd 格式
+      parsedDate.toString().startsWith(date);
+
+      List<String> weekDays = [
+        'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
+      ];
+
+     return weekDays[parsedDate.weekday - 1];
+    } catch (e) {
+      return '';  // 解析失败，说明无效
+    }
   }
 
   @override
@@ -234,9 +346,9 @@ class _PageState extends State<MovieDetail> {
               expandedHeight: 428.h,
               backgroundColor: Colors.blue,
               title: _showTitle
-                    ? const Text(
-                        '鬼灭之刃 无限城篇',
-                        style: TextStyle(color: Colors.white),
+                    ? Text(
+                        data.name ?? '',
+                        style: const TextStyle(color: Colors.white),
                       )
                     : null,
               forceElevated: innerBoxIsScrolled,
@@ -251,7 +363,7 @@ class _PageState extends State<MovieDetail> {
                 clipBehavior: Clip.none,
                 children: [
                   Positioned(child:  SafeArea(child: Container())),
-                  Image.asset('assets/image/kimetsu-movie.jpg', width: double.infinity, height: 480.h, fit: BoxFit.cover),
+                  ExtendedImage.network(data.cover ?? '', width: double.infinity, fit: BoxFit.cover),
                   // Image.asset('assets/image/raligun.webp', width: double.infinity, fit: BoxFit.cover),
                   Positioned(
                     top: 0,
@@ -306,15 +418,23 @@ class _PageState extends State<MovieDetail> {
                             // ],
                             borderRadius: BorderRadius.circular(10), // 圆角
                           ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10), // 与 BoxDecoration 的圆角保持一致
-                            child: ExtendedImage.asset(
-                              'assets/image/kimetsu-movie.jpg',
-                              width: 260.w,
+                          child: Container(
+                            height: 300.h,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey.shade200,
                             ),
-                          ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10), // 与 BoxDecoration 的圆角保持一致
+                              child: ExtendedImage.network(
+                                data.cover ?? '',
+                                width: 260.w,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ) ,
                         ),
-                        Container(
+                        SizedBox(
                           width: 440.w,
                           height: 300.h,
                           // margin: EdgeInsets.only(right: 20.w),
@@ -331,7 +451,7 @@ class _PageState extends State<MovieDetail> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '鬼灭之刃 无限城篇无限城篇无限城篇无限城篇无限城篇无限城篇',
+                                    data.name ?? '',
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 32.sp, // 调整文字大小以适配设备
@@ -356,10 +476,16 @@ class _PageState extends State<MovieDetail> {
                                       ),)
                                     ],
                                   ),
-                                  const Text('2024年11月15日（一）上映', style: TextStyle(
-                                    // fontSize: 40.sp,
-                                    color: Colors.white
-                                  )),
+                                  Text(
+                                    data.startDate == null
+                                      ? S.of(context).movieDetail_detail_noDate  // 如果 startDate 为 null，显示 "没有日期"
+                                      : isValidDate(data.startDate ?? '') 
+                                          ? '${data.startDate ?? ''} (${getWeekday(data.startDate ?? '')})'  // 如果是有效日期格式，显示日期和星期几
+                                          : data.startDate ?? '',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                   // SizedBox(height: 10.h),                           
                                   Wrap(
                                     spacing: 20.w,
@@ -440,10 +566,11 @@ class _PageState extends State<MovieDetail> {
               Container(
                 padding: EdgeInsets.only(top: 0.h, left: 20.w, right: 20.w),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(bottom: 10.h, top: 20.h, right: 0.w),
-                        child:  Text('描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述', style: TextStyle(
+                        child:  Text(data.description ?? '', style: TextStyle(
                         color: Colors.grey.shade700,
                         fontSize: 29.sp
                       ), textAlign: TextAlign.justify,),
@@ -454,7 +581,7 @@ class _PageState extends State<MovieDetail> {
                       child:  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('基本信息', style: TextStyle(
+                        Text(S.of(context).movieDetail_detail_basicMessage, style: TextStyle(
                           // color: Colors.grey.shade700,
                           fontSize: 36.sp,
                           fontWeight: FontWeight.bold
@@ -470,7 +597,7 @@ class _PageState extends State<MovieDetail> {
                           children: [
                             Expanded( // 确保文本能够适配父级布局
                               child: Text(
-                                '外文名：鬼灭之刃 无限城篇无限城篇无限城篇无限城篇无限城篇无限城篇无限城篇无限城篇',
+                                '${S.of(context).movieDetail_detail_originalName}：${data.originalName ?? ''}',
                                 style: TextStyle(
                                   fontSize: 28.sp,
                                   color: Colors.grey.shade600,
@@ -483,7 +610,7 @@ class _PageState extends State<MovieDetail> {
                           ],
                         ),
                         Row(children: [
-                            Text('片长：119分钟', style: TextStyle(
+                            Text('${S.of(context).movieDetail_detail_time}：${data.time ?? ''}', style: TextStyle(
                               fontSize: 28.sp,
                               color: Colors.grey.shade600
                             ))
@@ -491,7 +618,7 @@ class _PageState extends State<MovieDetail> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                          Text('上映规格：', style: TextStyle(
+                          Text('${S.of(context).movieDetail_detail_spec}：', style: TextStyle(
                             fontSize: 28.sp,
                             color: Colors.grey.shade600
                           ),),
@@ -500,7 +627,7 @@ class _PageState extends State<MovieDetail> {
                               scrollDirection: Axis.horizontal,
                               child: Wrap(
                                 spacing: 6,
-                                children: ['IMAX', '3D', 'DOLBY CINEMA', 'DOLBY ATOMS'].map((item) {
+                                children: data.spec == null ? [] : data.spec!.map((item) {
                                   return Container(
                                     padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
                                     decoration: BoxDecoration(
@@ -508,7 +635,7 @@ class _PageState extends State<MovieDetail> {
                                       borderRadius: BorderRadius.circular(50)
                                     ),
                                     alignment: Alignment.center,
-                                    child: Text(item, style: TextStyle(fontSize: 24.sp, color: Colors.white)),
+                                    child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
                                   );
                                 }).toList(),
                               )
@@ -517,7 +644,7 @@ class _PageState extends State<MovieDetail> {
                           
                         ]),
                         Row(children: [
-                          Text('标签：', style: TextStyle(
+                          Text('${S.of(context).movieDetail_detail_tags}：', style: TextStyle(
                             fontSize: 28.sp,
                             color: Colors.grey.shade600
                           )),
@@ -526,7 +653,7 @@ class _PageState extends State<MovieDetail> {
                               scrollDirection: Axis.horizontal,
                               child: Wrap(
                                 spacing: 6,
-                                children: ['アニメ', '運動'].map((item) {
+                                children: data.tags == null ? [] : data.tags!.map((item) {
                                   return Container(
                                     padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
                                     decoration: BoxDecoration(
@@ -534,7 +661,7 @@ class _PageState extends State<MovieDetail> {
                                       borderRadius: BorderRadius.circular(50)
                                     ),
                                     alignment: Alignment.center,
-                                    child: Text(item, style: TextStyle(fontSize: 24.sp, color: Colors.white)),
+                                    child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
                                   );
                                 }).toList(),
                               )
@@ -542,13 +669,13 @@ class _PageState extends State<MovieDetail> {
                           )
                         ]),
                         Row(children: [
-                          Text('官网：', style: TextStyle(
+                          Text('${S.of(context).movieDetail_detail_homepage}：', style: TextStyle(
                             fontSize: 28.sp,
                             color: Colors.grey.shade600
                           )),
                           GestureDetector(
                             onTap: () async {
-                              const String url = 'https://www.bilibili.com';
+                              String url = data.homePage ?? '';
 
                               if (await canLaunchUrl(Uri.parse(url))) {
                                 await launchUrl(
@@ -561,183 +688,172 @@ class _PageState extends State<MovieDetail> {
                                 // );
                               }
                             },
-                            child: Text('https://www.bilibili.com', style: TextStyle(
-                              color: const Color.fromARGB(255, 5, 32, 239)
+                            child: Text(data.homePage ?? '', style: const TextStyle(
+                              color: Color.fromARGB(255, 5, 32, 239)
                             ),),
                           )
                         ]),
                         Row(children: [
-                          Text('当前状态：未上映', style: TextStyle(
+                          Text('${S.of(context).movieDetail_detail_state}：未上映', style: TextStyle(
                             fontSize: 28.sp,
                             color: Colors.grey.shade600
                           ))
                         ]),
+                        Container(
+                          child:  Wrap(children: [
+                            Text('${S.of(context).movieDetail_detail_level}：', softWrap: true, style: TextStyle(
+                              fontSize: 28.sp,
+                              color: Colors.grey.shade600
+                            )),
+                            Text('${data.levelName}（${data.levelDescription}）',softWrap: true, style: TextStyle(
+                              fontSize: 28.sp
+                            ))
+                        ]),
+                        )
                        
-                        Row(children: [
-                          Text('映倫：', style: TextStyle(
-                            fontSize: 28.sp,
-                            color: Colors.grey.shade600
+                      ],
+                    ),
+                    ...characterData.isEmpty ? [] : [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
+                        child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${S.of(context).movieDetail_detail_staff}（100）', style: TextStyle(
+                            // color: Colors.grey.shade700,
+                            fontSize: 36.sp,
+                            fontWeight: FontWeight.bold
                           )),
-                          Text('G（所有人都可以观看）', style: TextStyle(
-                            fontSize: 28.sp
-                          ))
-                        ])
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
-                      child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('工作人员（100）', style: TextStyle(
-                          // color: Colors.grey.shade700,
-                          fontSize: 36.sp,
-                          fontWeight: FontWeight.bold
-                        )),
-                        Icon(Icons.arrow_forward_ios, size: 36.sp)
-                      ],
-                    )
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child:  Wrap(
-                        spacing: 20.w,
-                        children: List.generate(10, (index) {
-                          return SizedBox(
-                            width: 163.w, // 设置容器宽度
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 163.w,
-                                  // height: 280.h,
-                                  color: Colors.grey.shade300,
-                                  child: ExtendedImage.asset(
-                                    'assets/image/raligun.webp',
-                                    fit: BoxFit.cover, // 确保图片填满容器
-                                  ),
-                                ),
-                                SizedBox(height: 10.w), // 为文本和图片之间添加间距
-                                Text(
-                                  '山本xxxx',
-                                  style: TextStyle(fontSize: 30.sp),
-                                  maxLines: 1, // 限制为一行
-                                  overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                ),
-                                Text(
-                                  '监督',
-                                  style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
-                                  maxLines: 1, // 限制为一行
-                                  overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
+                          Icon(Icons.arrow_forward_ios, size: 36.sp)
+                        ],
+                      )
                       ),
-                    ),
-                   
-                  //  Container(
-                  //   decoration: BoxDecoration(
-                  //     // color: Color(0xffe6e6e6),
-                  //     // border: Border.all(color: Colors.red)
-                  //   ),
-                  //   padding: EdgeInsets.symmetric(vertical: 20.h),
-                  //   child: Row(
-                  //     children: [
-                  //       Text('详细信息', style: TextStyle(
-                  //         fontSize: 32.sp
-                  //       ),),
-                  //       Text('评论（1888）', style: TextStyle(
-                  //         fontSize: 32.sp
-                  //       )),
-                  //     ].map((item) {
-                  //       return  Container(
-                  //         padding: EdgeInsets.symmetric(vertical: 15.w),
-                  //         margin: EdgeInsets.only(right: 20.w),
-                  //         decoration: const BoxDecoration(
-                  //           // border: Border(
-                  //           //   bottom: BorderSide(color: Colors.black)
-                  //           // )
-                  //         ),
-                  //         child: item,
-                  //       );
-                  //     }).toList()
-                  //   ),
-                  //  ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                      child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('角色（100）', style: TextStyle(
-                          // color: Colors.grey.shade700,
-                          fontSize: 36.sp,
-                          fontWeight: FontWeight.bold
-                        )),
-                        Icon(Icons.arrow_forward_ios, size: 36.sp)
-                      ],
-                    )
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child:  Wrap(
-                        spacing: 20.w,
-                        children: List.generate(10, (index) {
-                          return SizedBox(
-                            width: 163.w, // 设置容器宽度
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 163.w,
-                                  // height: 280.h,
-                                  color: Colors.grey.shade300,
-                                  child: ExtendedImage.asset(
-                                    'assets/image/raligun.webp',
-                                    fit: BoxFit.cover, // 确保图片填满容器
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child:  Wrap(
+                          spacing: 20.w,
+                          children: characterData.map((item) {
+                            return SizedBox(
+                              width: 163.w, // 设置容器宽度
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 163.w,
+                                    height: 200.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(8)
+                                    ),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: ExtendedImage.network(
+                                      item.cover ?? '',
+                                      fit: BoxFit.cover, // 确保图片填满容器
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 10.w), // 为文本和图片之间添加间距
-                                Text(
-                                  '山本xxxx',
-                                  style: TextStyle(fontSize: 30.sp),
-                                  maxLines: 1, // 限制为一行
-                                  overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                ),
-                                Text(
-                                  '监督',
-                                  style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
-                                  maxLines: 1, // 限制为一行
-                                  overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
+                                  SizedBox(height: 10.w), // 为文本和图片之间添加间距
+                                  Text(
+                                    item.name ?? '',
+                                    style: TextStyle(fontSize: 30.sp),
+                                    maxLines: 1, // 限制为一行
+                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                  ),
+                                  Text(
+                                    item.staff!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
+                                    style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
+                                    maxLines: 1, // 限制为一行
+                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                  )
+                                ],
+                              ),
+                            );
+                          }).toList()
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
-                      child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('评论（19588）', style: TextStyle(
-                          // color: Colors.grey.shade700,
-                          fontSize: 36.sp,
-                          fontWeight: FontWeight.bold
-                        )),
-                        // Icon(Icons.arrow_forward_ios, size: 36.sp)
-                      ],
-                    )
-                    ),
-                    ...generateComment()
+                    ],
+                    
+
+...characterData.isEmpty ? [] : [
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
+                        child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${S.of(context).movieDetail_detail_staff}（100）', style: TextStyle(
+                            // color: Colors.grey.shade700,
+                            fontSize: 36.sp,
+                            fontWeight: FontWeight.bold
+                          )),
+                          Icon(Icons.arrow_forward_ios, size: 36.sp)
+                        ],
+                      )
+                      ),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child:  Wrap(
+                          spacing: 20.w,
+                          children: characterData.map((item) {
+                            return SizedBox(
+                              width: 163.w, // 设置容器宽度
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 163.w,
+                                    height: 200.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(8)
+                                    ),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: ExtendedImage.network(
+                                      item.cover ?? '',
+                                      fit: BoxFit.cover, // 确保图片填满容器
+                                    ),
+                                  ),
+                                  SizedBox(height: 10.w), // 为文本和图片之间添加间距
+                                  Text(
+                                    item.name ?? '',
+                                    style: TextStyle(fontSize: 30.sp),
+                                    maxLines: 1, // 限制为一行
+                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                  ),
+                                  Text(
+                                    item.staff!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
+                                    style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
+                                    maxLines: 1, // 限制为一行
+                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                  )
+                                ],
+                              ),
+                            );
+                          }).toList()
+                        ),
+                      ),
+                    ],
+                    ...commentListData.isEmpty ? [] : [
+                      Padding(
+                        padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
+                        child:  Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('${S.of(context).movieDetail_detail_comment}（${commentListData.length}）', style: TextStyle(
+                            // color: Colors.grey.shade700,
+                            fontSize: 36.sp,
+                            fontWeight: FontWeight.bold
+                          )),
+                          // Icon(Icons.arrow_forward_ios, size: 36.sp)
+                        ],
+                      )
+                      ),
+                      ...generateComment()
+                    ]
                   ]
                 ),
               )              
             ],
           ),
-      )
+        )
       ),
      
     );

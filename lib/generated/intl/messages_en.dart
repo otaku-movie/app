@@ -22,9 +22,30 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
         "home_cinema": MessageLookupByLibrary.simpleMessage("cinema"),
         "home_home": MessageLookupByLibrary.simpleMessage("home"),
         "home_me": MessageLookupByLibrary.simpleMessage("my page"),
+        "movieDetail_button_buy": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_button_saw": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_button_want": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_comment_reply":
+            MessageLookupByLibrary.simpleMessage("reply"),
+        "movieDetail_detail_basicMessage":
+            MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_character":
+            MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_comment": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_homepage": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_level": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_noDate": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_originalName":
+            MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_spec": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_staff": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_state": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage(""),
         "movieList_button_buy": MessageLookupByLibrary.simpleMessage(""),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "movieList_tabBar_comingSoon":

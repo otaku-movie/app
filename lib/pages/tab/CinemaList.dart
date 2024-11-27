@@ -32,7 +32,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
   int currentPage = 1;
 
   List<CinemaListResponse> data = [];
-  String location = '';
+  Placemark location = Placemark();
   
 
   void getData({page = 1}) {
@@ -137,7 +137,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
     // 使用 Future.wait 来并发地处理所有的异步操作
     List<Future<CinemaListResponse>> futures = data.map((item) async {
       // 使用 Geocoding 插件获取地址的经纬度
-      List<Location> locations = await locationFromAddress('Shinjuku Toho Building 3F, 1-19-1 Kabukicho, Shinjuku-ku, Tokyo');
+      List<Location> locations = await locationFromAddress('Shinjuku Toho Building 3F, 1-19-1 Kabukicho, Shinjuku-ku, Tokyo, Japan');
 
       if (locations.isNotEmpty) {
         // 获取第一个匹配的经纬度
@@ -183,7 +183,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
 
         if (placemarks.isNotEmpty) {
           setState(() {
-            location = placemarks[0].street!;
+            location = placemarks[0];
           });
         }
         
@@ -198,11 +198,6 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> _onRefresh() async {
   }
 
@@ -211,8 +206,6 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final LanguageController languageController = Get.find();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -223,7 +216,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
           // direction: Axis.horizontal,
           // crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Text('东京都', style: TextStyle(fontSize: 32.sp)),
+            Text(location.subLocality ?? '', style: TextStyle(fontSize: 32.sp)),
             SizedBox(width: 20.w),
             Expanded(
               child: Input(
@@ -255,7 +248,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
             SizedBox(
               width: 650.w,
               child: Text(
-                location, // 显示文本
+                location.street ?? S.of(context).cinemaList_address, // 显示文本
                 softWrap: true, // 自动换行
                 overflow: TextOverflow.ellipsis, // 超出部分使用省略号
                 style: TextStyle(fontSize: 28.sp),

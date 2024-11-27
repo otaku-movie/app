@@ -71,7 +71,7 @@ class ApiRequest {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-    required T Function(Map<String, dynamic>) fromJsonT,
+    required T Function(dynamic) fromJsonT,
   }) async {
     try {
       Options options = Options(
@@ -81,45 +81,56 @@ class ApiRequest {
 
       Response response = await _dio.request(
         path,
-        data: data,
-        queryParameters: queryParameters,
+        data: _convertToSnakeCase(data),
+        queryParameters: _convertToSnakeCase(queryParameters),
         options: options,
       );
-      
-      // Map<String, dynamic> responseData = _convertToCamelCase(response.data);
 
       ApiResponse<T> apiResponse = ApiResponse<T>.fromJson(
         response.data,
-        (json) => fromJsonT(json as Map<String, dynamic>),
+        (json) => fromJsonT(json),
       );
 
       return apiResponse;
     } catch (e) {
       print('----- api error -----');
       log.e(e);
-      rethrow;
+    rethrow;
     }
   }
-  
-  // 将字段名从蛇形命名转换为驼峰命名
-  Map<String, dynamic> _convertToCamelCase(Map<String, dynamic> json) {
-    final Map<String, dynamic> convertedJson = {};
     
-    json.forEach((key, value) {
-      // 如果是 List 类型，递归转换
-      if (value is List) {
-        convertedJson[snakeToCamel(key)] = value.map((item) {
-          return item is Map<String, dynamic> ? _convertToCamelCase(item) : item;
-        }).toList();
-      } else if (value is Map) {
-        convertedJson[snakeToCamel(key)] = _convertToCamelCase(value as Map<String, dynamic>);
-      } else {
-        convertedJson[snakeToCamel(key)] = value;
-      }
-    });
-
-    return convertedJson;
+  /// 将驼峰命名转为下划线命名
+  String camelToSnake(String text) {
+    // 匹配大写字母并在前面加下划线
+    return text.replaceAllMapped(RegExp(r'([a-z0-9])([A-Z])'), (match) {
+      return '${match.group(1)}_${match.group(2)?.toLowerCase()}';
+    }).toLowerCase();
   }
+
+  Map<String, dynamic> _convertToSnakeCase(Map<String, dynamic>? json) {
+  if (json == null) return {};
+
+  final Map<String, dynamic> convertedJson = {};
+
+  json.forEach((key, value) {
+    // 将驼峰命名转换为下划线命名
+    final newKey = camelToSnake(key);
+
+    // 如果是 List 类型，递归转换
+    if (value is List) {
+      convertedJson[newKey] = value.map((item) {
+        return item is Map<String, dynamic> ? _convertToSnakeCase(item) : item;
+      }).toList();
+    } else if (value is Map) {
+      convertedJson[newKey] = _convertToSnakeCase(value as Map<String, dynamic>);
+    } else {
+      convertedJson[newKey] = value;
+    }
+  });
+
+  return convertedJson;
+}
+
 }
 
 
