@@ -79,12 +79,20 @@ class ApiRequest {
         headers: headers,
       );
 
+      // Response response = await _dio.request(
+      //   path,
+      //   data: _convertToSnakeCase(data),
+      //   queryParameters: _convertToSnakeCase(queryParameters),
+      //   options: options,
+      // );
+
       Response response = await _dio.request(
         path,
-        data: _convertToSnakeCase(data),
-        queryParameters: _convertToSnakeCase(queryParameters),
+        data: data,
+        queryParameters: queryParameters,
         options: options,
       );
+
 
       ApiResponse<T> apiResponse = ApiResponse<T>.fromJson(
         response.data,

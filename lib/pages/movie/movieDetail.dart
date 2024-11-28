@@ -15,6 +15,7 @@ import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/character.dart';
 import 'package:otaku_movie/response/movie/movieList/comment/comment.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
+import 'package:otaku_movie/response/movie/movie_staff.dart';
 import 'package:otaku_movie/response/response.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -36,6 +37,7 @@ class _PageState extends State<MovieDetail> {
   bool _showTitle = false;
   MovieResponse data = MovieResponse();
   List<CharacterResponse> characterData = [];
+  List<MovieStaffResponse> staffListData = [];
   List<CommentResponse> commentListData = [];
 
 
@@ -69,7 +71,7 @@ class _PageState extends State<MovieDetail> {
       path: '/movie/character',
       method: 'GET',
       queryParameters: {
-        "id": widget.id
+        "id": int.parse(widget.id!)
       },
       fromJsonT: (json) {
         if (json is List<dynamic>) {
@@ -82,6 +84,29 @@ class _PageState extends State<MovieDetail> {
       if (res.data != null) {
         setState(() {
           characterData = res.data!;
+        });
+      }
+    });
+  }
+
+  getStaffData () {
+    ApiRequest().request(
+      path: '/app/movie/staff',
+      method: 'GET',
+      queryParameters: {
+        "movieId": widget.id
+      },
+      fromJsonT: (json) {
+        if (json is List<dynamic>) {
+          return json.map((item) {
+            return MovieStaffResponse.fromJson(item);
+          }).toList();
+        }
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          staffListData = res.data!;
         });
       }
     });
@@ -118,6 +143,7 @@ class _PageState extends State<MovieDetail> {
     super.initState();
     getData();
     getCharacterData();
+    getStaffData();
     getCommentData();
 
     // 延迟判断滚动距离，动态更新标题状态
@@ -700,26 +726,37 @@ class _PageState extends State<MovieDetail> {
                           ))
                         ]),
                         Container(
-                          child:  Wrap(children: [
-                            Text('${S.of(context).movieDetail_detail_level}：', softWrap: true, style: TextStyle(
-                              fontSize: 28.sp,
-                              color: Colors.grey.shade600
-                            )),
-                            Text('${data.levelName}（${data.levelDescription}）',softWrap: true, style: TextStyle(
-                              fontSize: 28.sp
-                            ))
-                        ]),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${S.of(context).movieDetail_detail_level}：', // 显示电影级别的标题
+                                  style: TextStyle(
+                                    fontSize: 28.sp,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '${data.levelName}（${data.levelDescription}）', // 显示电影级别的名字和描述
+                                  style: TextStyle(
+                                    fontSize: 28.sp,
+                                    color: Colors.black, // 你可以根据需要调整颜色
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         )
                        
                       ],
                     ),
-                    ...characterData.isEmpty ? [] : [
+                    ...staffListData.isEmpty ? [] : [
                       Padding(
                         padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
                         child:  Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${S.of(context).movieDetail_detail_staff}（100）', style: TextStyle(
+                          Text('${S.of(context).movieDetail_detail_staff}（${staffListData.length}）', style: TextStyle(
                             // color: Colors.grey.shade700,
                             fontSize: 36.sp,
                             fontWeight: FontWeight.bold
@@ -732,7 +769,7 @@ class _PageState extends State<MovieDetail> {
                         scrollDirection: Axis.horizontal,
                         child:  Wrap(
                           spacing: 20.w,
-                          children: characterData.map((item) {
+                          children: staffListData.map((item) {
                             return SizedBox(
                               width: 163.w, // 设置容器宽度
                               child: Column(
@@ -747,7 +784,7 @@ class _PageState extends State<MovieDetail> {
                                     ),
                                     clipBehavior: Clip.antiAlias,
                                     child: ExtendedImage.network(
-                                      item.cover ?? '',
+                                      item.avatar ?? '',
                                       fit: BoxFit.cover, // 确保图片填满容器
                                     ),
                                   ),
@@ -759,7 +796,7 @@ class _PageState extends State<MovieDetail> {
                                     overflow: TextOverflow.ellipsis, // 超出部分显示省略号
                                   ),
                                   Text(
-                                    item.staff!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
+                                    item.position!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
                                     style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
                                     maxLines: 1, // 限制为一行
                                     overflow: TextOverflow.ellipsis, // 超出部分显示省略号
@@ -772,14 +809,13 @@ class _PageState extends State<MovieDetail> {
                       ),
                     ],
                     
-
-...characterData.isEmpty ? [] : [
+                    ...characterData.isEmpty ? [] : [
                       Padding(
                         padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
                         child:  Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${S.of(context).movieDetail_detail_staff}（100）', style: TextStyle(
+                          Text('${S.of(context).movieDetail_detail_staff}（${characterData.length}）', style: TextStyle(
                             // color: Colors.grey.shade700,
                             fontSize: 36.sp,
                             fontWeight: FontWeight.bold
