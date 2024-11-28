@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/rate.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -319,7 +320,6 @@ class _PageState extends State<MovieDetail> {
       //    title: Text('鬼灭之刃 无限城篇', style: TextStyle(color: Colors.white)),
       // ),
       bottomNavigationBar: Container(
-        
         padding: EdgeInsets.all(20.h), // 内边距
         decoration: BoxDecoration(
           color: Colors.white, // 背景色
@@ -359,7 +359,8 @@ class _PageState extends State<MovieDetail> {
           ),
         ),
       ),
-      body: NestedScrollView(
+      body: AppErrorWidget(
+        child: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           // 返回一个 Sliver 数组给外部可滚动组件。
@@ -585,295 +586,29 @@ class _PageState extends State<MovieDetail> {
             // buildSliverList(5), //构建一个 sliverList
           ];
         },
-      body: SingleChildScrollView(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [             
-              Container(
-                padding: EdgeInsets.only(top: 0.h, left: 20.w, right: 20.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10.h, top: 20.h, right: 0.w),
-                        child:  Text(data.description ?? '', style: TextStyle(
-                        color: Colors.grey.shade700,
-                        fontSize: 29.sp
-                      ), textAlign: TextAlign.justify,),
-                    ),
-                    
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 5.h),
-                      child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(S.of(context).movieDetail_detail_basicMessage, style: TextStyle(
-                          // color: Colors.grey.shade700,
-                          fontSize: 36.sp,
-                          fontWeight: FontWeight.bold
-                        )),
-                        // Icon(Icons.arrow_forward_ios, size: 36.sp)
-                      ],
-                    )
-                    ),
-                    Wrap(
-                      runSpacing: 10.h,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded( // 确保文本能够适配父级布局
-                              child: Text(
-                                '${S.of(context).movieDetail_detail_originalName}：${data.originalName ?? ''}',
-                                style: TextStyle(
-                                  fontSize: 28.sp,
-                                  color: Colors.grey.shade600,
-                                ),
-                                overflow: TextOverflow.ellipsis, // 设置溢出显示省略号
-                                maxLines: 2, // 限制为单行
-                                textAlign: TextAlign.justify,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(children: [
-                            Text('${S.of(context).movieDetail_detail_time}：${data.time ?? ''}', style: TextStyle(
-                              fontSize: 28.sp,
-                              color: Colors.grey.shade600
-                            ))
-                          ]),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                          Text('${S.of(context).movieDetail_detail_spec}：', style: TextStyle(
-                            fontSize: 28.sp,
-                            color: Colors.grey.shade600
-                          ),),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Wrap(
-                                spacing: 6,
-                                children: data.spec == null ? [] : data.spec!.map((item) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromARGB(255, 193, 196, 202),
-                                      borderRadius: BorderRadius.circular(50)
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
-                                  );
-                                }).toList(),
-                              )
-                            ),
-                          )
-                          
-                        ]),
-                        Row(children: [
-                          Text('${S.of(context).movieDetail_detail_tags}：', style: TextStyle(
-                            fontSize: 28.sp,
-                            color: Colors.grey.shade600
-                          )),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Wrap(
-                                spacing: 6,
-                                children: data.tags == null ? [] : data.tags!.map((item) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromARGB(255, 193, 196, 202),
-                                      borderRadius: BorderRadius.circular(50)
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
-                                  );
-                                }).toList(),
-                              )
-                            ),
-                          )
-                        ]),
-                        Row(children: [
-                          Text('${S.of(context).movieDetail_detail_homepage}：', style: TextStyle(
-                            fontSize: 28.sp,
-                            color: Colors.grey.shade600
-                          )),
-                          GestureDetector(
-                            onTap: () async {
-                              String url = data.homePage ?? '';
-
-                              if (await canLaunchUrl(Uri.parse(url))) {
-                                await launchUrl(
-                                  Uri.parse(url),
-                                  mode: LaunchMode.externalApplication, // 打开外部浏览器
-                                );
-                              } else {
-                                // ScaffoldMessenger.of(context).showSnackBar(
-                                //   SnackBar(content: Text('无法打开链接: $url')),
-                                // );
-                              }
-                            },
-                            child: Text(data.homePage ?? '', style: const TextStyle(
-                              color: Color.fromARGB(255, 5, 32, 239)
-                            ),),
-                          )
-                        ]),
-                        Row(children: [
-                          Text('${S.of(context).movieDetail_detail_state}：未上映', style: TextStyle(
-                            fontSize: 28.sp,
-                            color: Colors.grey.shade600
-                          ))
-                        ]),
-                        Container(
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${S.of(context).movieDetail_detail_level}：', // 显示电影级别的标题
-                                  style: TextStyle(
-                                    fontSize: 28.sp,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '${data.levelName}（${data.levelDescription}）', // 显示电影级别的名字和描述
-                                  style: TextStyle(
-                                    fontSize: 28.sp,
-                                    color: Colors.black, // 你可以根据需要调整颜色
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                       
-                      ],
-                    ),
-                    ...staffListData.isEmpty ? [] : [
+        body: SingleChildScrollView(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [             
+                Container(
+                  padding: EdgeInsets.only(top: 0.h, left: 20.w, right: 20.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Padding(
-                        padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
+                        padding: EdgeInsets.only(bottom: 10.h, top: 20.h, right: 0.w),
+                          child:  Text(data.description ?? '', style: TextStyle(
+                          color: Colors.grey.shade700,
+                          fontSize: 29.sp
+                        ), textAlign: TextAlign.justify,),
+                      ),
+                      
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 5.h),
                         child:  Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('${S.of(context).movieDetail_detail_staff}（${staffListData.length}）', style: TextStyle(
-                            // color: Colors.grey.shade700,
-                            fontSize: 36.sp,
-                            fontWeight: FontWeight.bold
-                          )),
-                          Icon(Icons.arrow_forward_ios, size: 36.sp)
-                        ],
-                      )
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child:  Wrap(
-                          spacing: 20.w,
-                          children: staffListData.map((item) {
-                            return SizedBox(
-                              width: 163.w, // 设置容器宽度
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 163.w,
-                                    height: 200.h,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(8)
-                                    ),
-                                    clipBehavior: Clip.antiAlias,
-                                    child: ExtendedImage.network(
-                                      item.avatar ?? '',
-                                      fit: BoxFit.cover, // 确保图片填满容器
-                                    ),
-                                  ),
-                                  SizedBox(height: 10.w), // 为文本和图片之间添加间距
-                                  Text(
-                                    item.name ?? '',
-                                    style: TextStyle(fontSize: 30.sp),
-                                    maxLines: 1, // 限制为一行
-                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                  ),
-                                  Text(
-                                    item.position!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
-                                    style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
-                                    maxLines: 1, // 限制为一行
-                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                  )
-                                ],
-                              ),
-                            );
-                          }).toList()
-                        ),
-                      ),
-                    ],
-                    
-                    ...characterData.isEmpty ? [] : [
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
-                        child:  Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('${S.of(context).movieDetail_detail_staff}（${characterData.length}）', style: TextStyle(
-                            // color: Colors.grey.shade700,
-                            fontSize: 36.sp,
-                            fontWeight: FontWeight.bold
-                          )),
-                          Icon(Icons.arrow_forward_ios, size: 36.sp)
-                        ],
-                      )
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child:  Wrap(
-                          spacing: 20.w,
-                          children: characterData.map((item) {
-                            return SizedBox(
-                              width: 163.w, // 设置容器宽度
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 163.w,
-                                    height: 200.h,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade300,
-                                      borderRadius: BorderRadius.circular(8)
-                                    ),
-                                    clipBehavior: Clip.antiAlias,
-                                    child: ExtendedImage.network(
-                                      item.cover ?? '',
-                                      fit: BoxFit.cover, // 确保图片填满容器
-                                    ),
-                                  ),
-                                  SizedBox(height: 10.w), // 为文本和图片之间添加间距
-                                  Text(
-                                    item.name ?? '',
-                                    style: TextStyle(fontSize: 30.sp),
-                                    maxLines: 1, // 限制为一行
-                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                  ),
-                                  Text(
-                                    item.staff!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
-                                    style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
-                                    maxLines: 1, // 限制为一行
-                                    overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                  )
-                                ],
-                              ),
-                            );
-                          }).toList()
-                        ),
-                      ),
-                    ],
-                    ...commentListData.isEmpty ? [] : [
-                      Padding(
-                        padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
-                        child:  Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('${S.of(context).movieDetail_detail_comment}（${commentListData.length}）', style: TextStyle(
+                          Text(S.of(context).movieDetail_detail_basicMessage, style: TextStyle(
                             // color: Colors.grey.shade700,
                             fontSize: 36.sp,
                             fontWeight: FontWeight.bold
@@ -882,16 +617,282 @@ class _PageState extends State<MovieDetail> {
                         ],
                       )
                       ),
-                      ...generateComment()
+                      Wrap(
+                        runSpacing: 10.h,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded( // 确保文本能够适配父级布局
+                                child: Text(
+                                  '${S.of(context).movieDetail_detail_originalName}：${data.originalName ?? ''}',
+                                  style: TextStyle(
+                                    fontSize: 28.sp,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                  overflow: TextOverflow.ellipsis, // 设置溢出显示省略号
+                                  maxLines: 2, // 限制为单行
+                                  textAlign: TextAlign.justify,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(children: [
+                              Text('${S.of(context).movieDetail_detail_time}：${data.time ?? ''}', style: TextStyle(
+                                fontSize: 28.sp,
+                                color: Colors.grey.shade600
+                              ))
+                            ]),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                            Text('${S.of(context).movieDetail_detail_spec}：', style: TextStyle(
+                              fontSize: 28.sp,
+                              color: Colors.grey.shade600
+                            ),),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Wrap(
+                                  spacing: 6,
+                                  children: data.spec == null ? [] : data.spec!.map((item) {
+                                    return Container(
+                                      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(255, 193, 196, 202),
+                                        borderRadius: BorderRadius.circular(50)
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
+                                    );
+                                  }).toList(),
+                                )
+                              ),
+                            )
+                            
+                          ]),
+                          Row(children: [
+                            Text('${S.of(context).movieDetail_detail_tags}：', style: TextStyle(
+                              fontSize: 28.sp,
+                              color: Colors.grey.shade600
+                            )),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Wrap(
+                                  spacing: 6,
+                                  children: data.tags == null ? [] : data.tags!.map((item) {
+                                    return Container(
+                                      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(255, 193, 196, 202),
+                                        borderRadius: BorderRadius.circular(50)
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
+                                    );
+                                  }).toList(),
+                                )
+                              ),
+                            )
+                          ]),
+                          Row(children: [
+                            Text('${S.of(context).movieDetail_detail_homepage}：', style: TextStyle(
+                              fontSize: 28.sp,
+                              color: Colors.grey.shade600
+                            )),
+                            GestureDetector(
+                              onTap: () async {
+                                String url = data.homePage ?? '';
+
+                                if (await canLaunchUrl(Uri.parse(url))) {
+                                  await launchUrl(
+                                    Uri.parse(url),
+                                    mode: LaunchMode.externalApplication, // 打开外部浏览器
+                                  );
+                                } else {
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   SnackBar(content: Text('无法打开链接: $url')),
+                                  // );
+                                }
+                              },
+                              child: Text(data.homePage ?? '', style: const TextStyle(
+                                color: Color.fromARGB(255, 5, 32, 239)
+                              ),),
+                            )
+                          ]),
+                          Row(children: [
+                            Text('${S.of(context).movieDetail_detail_state}：未上映', style: TextStyle(
+                              fontSize: 28.sp,
+                              color: Colors.grey.shade600
+                            ))
+                          ]),
+                          Container(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '${S.of(context).movieDetail_detail_level}：', // 显示电影级别的标题
+                                    style: TextStyle(
+                                      fontSize: 28.sp,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '${data.levelName}（${data.levelDescription}）', // 显示电影级别的名字和描述
+                                    style: TextStyle(
+                                      fontSize: 28.sp,
+                                      color: Colors.black, // 你可以根据需要调整颜色
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        
+                        ],
+                      ),
+                      ...staffListData.isEmpty ? [] : [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
+                          child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${S.of(context).movieDetail_detail_staff}（${staffListData.length}）', style: TextStyle(
+                              // color: Colors.grey.shade700,
+                              fontSize: 36.sp,
+                              fontWeight: FontWeight.bold
+                            )),
+                            Icon(Icons.arrow_forward_ios, size: 36.sp)
+                          ],
+                        )
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child:  Wrap(
+                            spacing: 20.w,
+                            children: staffListData.map((item) {
+                              return SizedBox(
+                                width: 163.w, // 设置容器宽度
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 163.w,
+                                      height: 200.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade300,
+                                        borderRadius: BorderRadius.circular(8)
+                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: ExtendedImage.network(
+                                        item.avatar ?? '',
+                                        fit: BoxFit.cover, // 确保图片填满容器
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.w), // 为文本和图片之间添加间距
+                                    Text(
+                                      item.name ?? '',
+                                      style: TextStyle(fontSize: 30.sp),
+                                      maxLines: 1, // 限制为一行
+                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                    ),
+                                    Text(
+                                      item.position!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
+                                      style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
+                                      maxLines: 1, // 限制为一行
+                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                    )
+                                  ],
+                                ),
+                              );
+                            }).toList()
+                          ),
+                        ),
+                      ],
+                      
+                      ...characterData.isEmpty ? [] : [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
+                          child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${S.of(context).movieDetail_detail_staff}（${characterData.length}）', style: TextStyle(
+                              // color: Colors.grey.shade700,
+                              fontSize: 36.sp,
+                              fontWeight: FontWeight.bold
+                            )),
+                            Icon(Icons.arrow_forward_ios, size: 36.sp)
+                          ],
+                        )
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child:  Wrap(
+                            spacing: 20.w,
+                            children: characterData.map((item) {
+                              return SizedBox(
+                                width: 163.w, // 设置容器宽度
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 163.w,
+                                      height: 200.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade300,
+                                        borderRadius: BorderRadius.circular(8)
+                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: ExtendedImage.network(
+                                        item.cover ?? '',
+                                        fit: BoxFit.cover, // 确保图片填满容器
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.w), // 为文本和图片之间添加间距
+                                    Text(
+                                      item.name ?? '',
+                                      style: TextStyle(fontSize: 30.sp),
+                                      maxLines: 1, // 限制为一行
+                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                    ),
+                                    Text(
+                                      item.staff!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
+                                      style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
+                                      maxLines: 1, // 限制为一行
+                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                    )
+                                  ],
+                                ),
+                              );
+                            }).toList()
+                          ),
+                        ),
+                      ],
+                      ...commentListData.isEmpty ? [] : [
+                        Padding(
+                          padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
+                          child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${S.of(context).movieDetail_detail_comment}（${commentListData.length}）', style: TextStyle(
+                              // color: Colors.grey.shade700,
+                              fontSize: 36.sp,
+                              fontWeight: FontWeight.bold
+                            )),
+                            // Icon(Icons.arrow_forward_ios, size: 36.sp)
+                          ],
+                        )
+                        ),
+                        ...generateComment()
+                      ]
                     ]
-                  ]
-                ),
-              )              
-            ],
-          ),
+                  ),
+                )              
+              ],
+            ),
+          )
         )
-      ),
-     
+      )
     );
   }
 }

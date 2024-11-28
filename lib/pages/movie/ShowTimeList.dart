@@ -6,7 +6,9 @@ import '../../controller/LanguageController.dart';
 import 'package:get/get.dart'; // Ensure this import is present
 
 class ShowTimeList extends StatefulWidget {
-  const ShowTimeList({super.key});
+  final String? id;
+
+  const ShowTimeList({super.key, this.id});
 
   @override
   State<ShowTimeList> createState() => _PageState();

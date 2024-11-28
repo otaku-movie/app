@@ -27,38 +27,13 @@ class MovieList extends StatefulWidget {
 class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   
-  int _gridCount = 20;
-  int _listCount = 0;
-
   List<MovieNowShowingResponse> data = [];
   
-
-  void getData() {
-    ApiRequest().request(
-      path: '/app/movie/list',
-      method: 'GET',
-      queryParameters: {
-        "page": 1,
-        "pageSize": 10
-      },
-      fromJsonT: (json) {
-        return ApiPaginationResponse<MovieNowShowingResponse>.fromJson(json, (data) {
-          return MovieNowShowingResponse.fromJson(data as Map<String, dynamic>);  // 解析每个元素
-        });
-        
-      },
-    ).then((res) {
-      setState(() {
-        data = res.data?.list ?? [];
-      });
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    getData();
-    _tabController = TabController(length: 2, initialIndex: 1, vsync: this);
+    _tabController = TabController(length: 2, initialIndex: 0, vsync: this);
   }
 
   @override
@@ -68,18 +43,6 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _onRefresh() async {
-    getData();
-    // await Future.delayed(const Duration(seconds: 2), () {
-    //   if (mounted) {
-    //     setState(() {
-    //       if (_tabController.index == 0) {
-    //         _listCount = 20;
-    //       } else {
-    //         _gridCount = 20;
-    //       }
-    //     });
-    //   }
-    // });
   }
 
   Future<void> _onLoad() async {
@@ -98,8 +61,6 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final LanguageController languageController = Get.find();
-
     final tabs = <Widget>[
       Text(S.of(context).movieList_tabBar_currentlyShowing,
           style: TextStyle(color: Colors.white, fontSize: 32.sp)),

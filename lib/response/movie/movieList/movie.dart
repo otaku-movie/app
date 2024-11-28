@@ -2,79 +2,58 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'movie.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class MovieResponse {
-    @JsonKey(name: "id")
-    final int? id;
-    @JsonKey(name: "cover")
-    final String? cover;
-    @JsonKey(name: "name")
-    final String? name;
-    @JsonKey(name: "original_name")
-    final String? originalName;
-    @JsonKey(name: "description")
-    final String? description;
-    @JsonKey(name: "home_page")
-    final String? homePage;
-    @JsonKey(name: "start_date")
-    final String? startDate;
-    @JsonKey(name: "end_date")
-    final String? endDate;
-    @JsonKey(name: "status")
-    final int? status;
-    @JsonKey(name: "time")
-    final int? time;
-    @JsonKey(name: "cinema_count")
-    final int? cinemaCount;
-    @JsonKey(name: "theater_count")
-    final int? theaterCount;
-    @JsonKey(name: "comment_count")
-    final int? commentCount;
-    @JsonKey(name: "watched_count")
-    final int? watchedCount;
-    @JsonKey(name: "want_to_see_count")
-    final int? wantToSeeCount;
-    @JsonKey(name: "spec")
-    final List<Spec>? spec;
-    @JsonKey(name: "hello_movie")
-    final List<dynamic>? helloMovie;
-    @JsonKey(name: "tags")
-    final List<Tag>? tags;
-    @JsonKey(name: "level_id")
-    final int? levelId;
-    @JsonKey(name: "level_name")
-    final String? levelName;
-    
-    @JsonKey(name: "level_description")
-    final String? levelDescription;
+  final int? id;
+  final String? cover;
+  final String? name;
+  final String? originalName;
+  final String? description;
+  final String? homePage;
+  final String? startDate;
+  final String? endDate;
+  final int? status;
+  final int? time;
+  final int? cinemaCount;
+  final int? theaterCount;
+  final int? commentCount;
+  final int? watchedCount;
+  final int? wantToSeeCount;
+  final List<Spec>? spec;
+  final List<dynamic>? helloMovie;
+  final List<Tag>? tags;
+  final int? levelId;
+  final String? levelName;
+  final String? levelDescription;
 
-    MovieResponse({
-        this.id,
-        this.cover,
-        this.name,
-        this.originalName,
-        this.description,
-        this.homePage,
-        this.startDate,
-        this.endDate,
-        this.status,
-        this.time,
-        this.cinemaCount,
-        this.theaterCount,
-        this.commentCount,
-        this.watchedCount,
-        this.wantToSeeCount,
-        this.spec,
-        this.helloMovie,
-        this.tags,
-        this.levelId,
-        this.levelName,
-        this.levelDescription
-    });
+  MovieResponse({
+    this.id,
+    this.cover,
+    this.name,
+    this.originalName,
+    this.description,
+    this.homePage,
+    this.startDate,
+    this.endDate,
+    this.status,
+    this.time,
+    this.cinemaCount,
+    this.theaterCount,
+    this.commentCount,
+    this.watchedCount,
+    this.wantToSeeCount,
+    this.spec,
+    this.helloMovie,
+    this.tags,
+    this.levelId,
+    this.levelName,
+    this.levelDescription,
+  });
 
-    factory MovieResponse.fromJson(Map<String, dynamic> json) => _$MovieResponseFromJson(json);
+  factory MovieResponse.fromJson(Map<String, dynamic> json) =>
+      _$MovieResponseFromJson(json);
 
-    Map<String, dynamic> toJson() => _$MovieResponseToJson(this);
+  Map<String, dynamic> toJson() => _$MovieResponseToJson(this);
 }
 
 @JsonSerializable()

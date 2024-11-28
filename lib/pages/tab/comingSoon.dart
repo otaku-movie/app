@@ -6,6 +6,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
@@ -145,10 +146,10 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
       footer: const ClassicFooter(),
       onRefresh: _onRefresh,
       onLoad: _onLoad,
-      child: 
-        loading ? const Center(child: Text('loading...')) : 
-        error ? const Center(child: Text('error')) :
-        CustomScrollView(
+      child: AppErrorWidget(
+        loading: loading,
+        error: error,
+        child:  CustomScrollView(
           physics: widget.physics,
           slivers: data.keys.toList().map((section) {
             return SliverStickyHeader(
@@ -168,7 +169,6 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
                     final item = data[section]?[index];
-                    print(item);
 
                     return Container(
                       padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
@@ -239,9 +239,22 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                               bottom: 10.h,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('======${index}======'),
                                 _buildMovieDetails(item!),
-                                _buildBuyButton(context),
+                                MaterialButton(
+                                  color: const Color(0xFF069EF0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  onPressed: () {
+                                    context.goNamed('movieDetail', pathParameters: {
+                                      "id": '${item.id}'
+                                    });
+                                  },
+                                  child: Text(
+                                    '购买票',
+                                    style: TextStyle(color: Colors.white, fontSize: 32.sp),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -255,6 +268,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
             );
           }).toList(),
         ),
+      )
     );
   }
 }

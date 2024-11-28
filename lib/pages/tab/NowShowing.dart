@@ -7,6 +7,7 @@ import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
 import 'package:otaku_movie/response/response.dart';
 import 'package:otaku_movie/components/space.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,7 +30,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
 
   void getData({bool refresh = true}) {
     ApiRequest().request(
-      path: '/app/movie/list',
+      path: '/app/movie/nowShowing',
       method: 'GET',
       queryParameters: {
         "page": refresh ? 1 : currentPage + 1,
@@ -79,16 +80,18 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         footer: const ClassicFooter(),
         onRefresh: _onRefresh,
         onLoad: _onLoad,
-        child: data.isNotEmpty
-            ? ListView.builder(
-                physics: widget.physics,
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  MovieNowShowingResponse item = data[index];
-                  return _buildMovieItem(context, item);
-                },
-              )
-            : const Center(child: CircularProgressIndicator()),
+        child: AppErrorWidget(
+          loading: data.isEmpty,
+          error: data.isEmpty,
+          child: ListView.builder(
+              physics: widget.physics,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                MovieNowShowingResponse item = data[index];
+                return _buildMovieItem(context, item);
+              },
+            ),
+          ),
         )
     );
   }
@@ -164,7 +167,21 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildMovieDetails(item),
-                _buildBuyButton(context),
+                MaterialButton(
+                  color: const Color(0xFF069EF0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  onPressed: () {
+                    context.goNamed('showTimeList', pathParameters: {
+                      "id": '${item.id}'
+                    });
+                  },
+                  child: Text(
+                    '购买票',
+                    style: TextStyle(color: Colors.white, fontSize: 32.sp),
+                  ),
+                ),
               ],
             ),
           ),
@@ -217,19 +234,4 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  Widget _buildBuyButton(BuildContext context) {
-    return MaterialButton(
-      color: const Color(0xFF069EF0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      onPressed: () {
-        context.goNamed('movieDetail');
-      },
-      child: Text(
-        '购买票',
-        style: TextStyle(color: Colors.white, fontSize: 32.sp),
-      ),
-    );
-  }
 }

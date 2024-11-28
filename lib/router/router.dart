@@ -96,10 +96,10 @@ final GoRouter routerConfig = GoRouter(
           },
         ),
         GoRoute(
-          path: '/movie/showTimeList',
+          path: '/movie/showTimeList/:id',
           name: 'showTimeList',
           builder: (BuildContext context, GoRouterState state) {
-            return const ShowTimeList();
+            return ShowTimeList(id: state.pathParameters['id']);
           },
         ),
         GoRoute(
