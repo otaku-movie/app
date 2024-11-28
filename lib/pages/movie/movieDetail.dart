@@ -320,44 +320,52 @@ class _PageState extends State<MovieDetail> {
       //    title: Text('鬼灭之刃 无限城篇', style: TextStyle(color: Colors.white)),
       // ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.all(20.h), // 内边距
-        decoration: BoxDecoration(
-          color: Colors.white, // 背景色
-            boxShadow: [
-              // 第一层浅阴影
-              BoxShadow(
-                color: Colors.white.withOpacity(0.8),
-                blurRadius: 15,
-                offset: const Offset(0, -5),
-              ),
-              BoxShadow(
-                color: Colors.white.withOpacity(0.5),
-                blurRadius: 15,
-                offset: const Offset(0, 0),
-              ),
-            ],
-          ),
-        child: Container(
-          width: double.infinity,
-          height: 70.h,
-          
-          child: MaterialButton(
-            color: Colors.blue,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(100),
+      padding: EdgeInsets.all(20.h), // 内边距
+      decoration: BoxDecoration(
+        color: Colors.white, // 背景色
+          boxShadow: [
+            // 第一层浅阴影
+            BoxShadow(
+              color: Colors.white.withOpacity(0.8),
+              blurRadius: 15,
+              offset: const Offset(0, -5),
             ),
-            onPressed: () {
-              // 购票逻辑
-            },
-            child: Text(
-              '购票（5555场）',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 32.sp,
-              ),
+            BoxShadow(
+              color: Colors.white.withOpacity(0.5),
+              blurRadius: 15,
+              offset: const Offset(0, 0),
             ),
-          ),
+          ],
         ),
+      child: GestureDetector(
+        onTap: () {
+          context.goNamed('showTimeList', pathParameters: {
+            "id": '${widget.id}'
+          });
+        },
+        child: SizedBox(
+            width: double.infinity,
+            height: 70.h,
+            child: MaterialButton(
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+              onPressed: () {
+                context.goNamed('showTimeList', pathParameters: {
+                  "id": '${widget.id}'
+                });
+              },
+              child: Text(
+                '购票（5555场）',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32.sp,
+                ),
+              ),
+            ),
+          ),
+        )
       ),
       body: AppErrorWidget(
         child: NestedScrollView(
