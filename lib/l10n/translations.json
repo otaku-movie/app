@@ -16,6 +16,45 @@
       "en": "my page"
     }
   },
+  "common": {
+    "week": {
+      "monday": {
+        "zh": "一",
+        "ja": "",
+        "en": ""
+      },
+      "tuesday": {
+        "zh": "二",
+        "ja": "",
+        "en": ""
+      },
+      "wednesday": {
+        "zh": "三",
+        "ja": "",
+        "en": ""
+      },
+      "thursday": {
+        "zh": "四",
+        "ja": "",
+        "en": ""
+      },
+      "friday": {
+        "zh": "五",
+        "ja": "",
+        "en": ""
+      },
+      "saturday": {
+        "zh": "六",
+        "ja": "",
+        "en": ""
+      },
+      "sunday": {
+        "zh": "日",
+        "ja": "",
+        "en": ""
+      }
+    }
+  },
   "movieList": {
     "tabBar": {
       "currentlyShowing": {

@@ -80,6 +80,76 @@ class S {
     );
   }
 
+  /// ``
+  String get common_week_monday {
+    return Intl.message(
+      '',
+      name: 'common_week_monday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_week_tuesday {
+    return Intl.message(
+      '',
+      name: 'common_week_tuesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_week_wednesday {
+    return Intl.message(
+      '',
+      name: 'common_week_wednesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_week_thursday {
+    return Intl.message(
+      '',
+      name: 'common_week_thursday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_week_friday {
+    return Intl.message(
+      '',
+      name: 'common_week_friday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_week_saturday {
+    return Intl.message(
+      '',
+      name: 'common_week_saturday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_week_sunday {
+    return Intl.message(
+      '',
+      name: 'common_week_sunday',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Currently Showing`
   String get movieList_tabBar_currentlyShowing {
     return Intl.message(

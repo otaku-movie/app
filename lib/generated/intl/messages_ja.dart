@@ -23,6 +23,13 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_friday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_monday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_saturday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_sunday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_thursday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_tuesday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_wednesday": MessageLookupByLibrary.simpleMessage(""),
         "home_cinema": MessageLookupByLibrary.simpleMessage("映画館"),
         "home_home": MessageLookupByLibrary.simpleMessage("ホーム"),
         "home_me": MessageLookupByLibrary.simpleMessage("マイページ"),

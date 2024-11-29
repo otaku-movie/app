@@ -8,6 +8,7 @@ import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/movie/show_time.dart';
 import '../../controller/LanguageController.dart';
+import 'package:otaku_movie/generated/l10n.dart';
 import 'package:get/get.dart'; // Ensure this import is present
 
 class ShowTimeList extends StatefulWidget {
@@ -53,8 +54,17 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
     });
   }
 
-  List<Widget> getWeek() {
-    List<String> weekList = ['一', '二', '三', '四', '五', '六', '日'];
+  List<Widget> generateTab() {
+    List<String> weekList = [
+      S.of(context).common_week_monday,
+      S.of(context).common_week_tuesday,
+      S.of(context).common_week_wednesday,
+      S.of(context).common_week_thursday,
+      S.of(context).common_week_friday,
+      S.of(context).common_week_saturday,
+      S.of(context).common_week_sunday,
+    ];
+
     return data.map((item) {
       DateTime date = DateTime.parse(item.date!);
       List<String> dateParts = item.date!.split("-");
@@ -77,7 +87,14 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
         ? Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text("东宝シネマズ 新宿", style: TextStyle(fontSize: 33.sp, color: Colors.white)),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white), // 自定义返回按钮图标
+                onPressed: () {
+                  // 使用 Navigator.pop(context) 返回上一级页面
+                  context.pop();
+                },
+              ),
+              title: Text("电影名称", style: TextStyle(fontSize: 33.sp, color: Colors.white)),
               backgroundColor: Colors.blue,
             ),
             body: const Center(child: CircularProgressIndicator()), // 数据未加载时显示加载指示器
@@ -89,13 +106,21 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
               backgroundColor: Colors.white,
               appBar: AppBar(
                 centerTitle: true,
-                title: Text("东宝シネマズ 新宿", style: TextStyle(fontSize: 33.sp)),
-                bottom:TabBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back, color: Colors.white), // 自定义返回按钮图标
+                  onPressed: () {
+                    // 使用 Navigator.pop(context) 返回上一级页面
+                    context.pop();
+                  },
+                ),
+                title: Text("电影名称", style: TextStyle(fontSize: 33.sp)),
+                bottom: TabBar(
                   controller: _tabController,
-                  tabs: getWeek(),
-                  labelPadding: EdgeInsets.only(bottom: 15.h),
+                  tabs: generateTab(),
+                  isScrollable: true,
+                   labelPadding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 0.h),  
                   labelColor: Colors.white, // 设置选中标签的颜色
-                  unselectedLabelColor: Colors.black, // 设置未选中标签的颜色
+                  unselectedLabelColor: Colors.white70, // 设置未选中标签的颜色
                   indicatorColor: Colors.blue, // 设置选中时的指示器颜色
                 ),
                 backgroundColor: Colors.blue,
@@ -116,9 +141,16 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
                         itemCount: item.data?.length,
                         itemBuilder: (context, index) {
                           Cinema children = item.data![index];
+                          
                           return GestureDetector(
+                            onTap: () {
+                              context.goNamed('showTimeDetail', pathParameters: {
+                                "id": widget.id ?? ''
+                              });
+                            },
                             child: Container(
                               width: double.infinity,
+                              // height: 350.h,
                               padding: const EdgeInsets.all(10),
                               decoration: const BoxDecoration(
                                 border: Border(
@@ -174,9 +206,7 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
                                 ],
                               ),
                             ),
-                            onTap: () {
-                              context.goNamed('showTimeDetail');
-                            },
+                            
                           );
                         },
                       );
