@@ -745,7 +745,7 @@ class _PageState extends State<MovieDetail> {
                                       color: Colors.grey.shade600,
                                     ),
                                   ),
-                                  TextSpan(
+                                  data.levelName == null ? const TextSpan() : TextSpan(
                                     text: '${data.levelName}（${data.levelDescription}）', // 显示电影级别的名字和描述
                                     style: TextStyle(
                                       fontSize: 28.sp,

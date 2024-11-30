@@ -67,6 +67,10 @@ dependencies:
   geolocator: ^13.0.2
   # 根据经纬度拿到地理位置
   geocoding: ^3.0.0
+  # dart版 localstorage
+  shared_preferences: ^2.3.3
+  # 加密
+  crypto: ^3.0.6
 
 dev_dependencies:
   json_serializable: ^6.8.0

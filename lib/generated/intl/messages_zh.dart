@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage("正在获取当前位置"),
+        "common_components_sendVerifyCode_send":
+            MessageLookupByLibrary.simpleMessage("发送验证码"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("五"),
         "common_week_monday": MessageLookupByLibrary.simpleMessage("一"),
         "common_week_saturday": MessageLookupByLibrary.simpleMessage("六"),
@@ -33,6 +35,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_cinema": MessageLookupByLibrary.simpleMessage("电影院"),
         "home_home": MessageLookupByLibrary.simpleMessage("首页"),
         "home_me": MessageLookupByLibrary.simpleMessage("我的"),
+        "login_email_text": MessageLookupByLibrary.simpleMessage("邮箱"),
+        "login_email_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("邮箱不合法"),
+        "login_email_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("邮箱不能为空"),
+        "login_loginButton": MessageLookupByLibrary.simpleMessage("登录"),
+        "login_noAccount": MessageLookupByLibrary.simpleMessage("还没有注册账号？"),
+        "login_password_text": MessageLookupByLibrary.simpleMessage("密码"),
+        "login_password_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("密码必须为8-16位，包含数字、字母和下划线"),
+        "login_password_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("密码不能为空"),
+        "login_sendVerifyCodeButton":
+            MessageLookupByLibrary.simpleMessage("发送验证码"),
+        "login_verificationCode": MessageLookupByLibrary.simpleMessage("验证码"),
         "movieDetail_button_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "movieDetail_button_saw": MessageLookupByLibrary.simpleMessage("看过"),
         "movieDetail_button_want": MessageLookupByLibrary.simpleMessage("想看"),
@@ -63,6 +80,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("即将上映"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("上映中"),
+        "register_email": MessageLookupByLibrary.simpleMessage("邮箱"),
+        "register_password": MessageLookupByLibrary.simpleMessage("密码"),
+        "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),
         "user_about": MessageLookupByLibrary.simpleMessage("关于"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "user_editProfile": MessageLookupByLibrary.simpleMessage("编辑个人信息"),

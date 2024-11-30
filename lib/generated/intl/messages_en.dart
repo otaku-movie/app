@@ -23,16 +23,31 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "common_components_sendVerifyCode_send":
+            MessageLookupByLibrary.simpleMessage(""),
         "common_week_friday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_monday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_saturday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_sunday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_saturday": MessageLookupByLibrary.simpleMessage("Sat"),
+        "common_week_sunday": MessageLookupByLibrary.simpleMessage("Sun"),
         "common_week_thursday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage(""),
         "home_cinema": MessageLookupByLibrary.simpleMessage("cinema"),
         "home_home": MessageLookupByLibrary.simpleMessage("home"),
         "home_me": MessageLookupByLibrary.simpleMessage("my page"),
+        "login_email_text": MessageLookupByLibrary.simpleMessage("Email"),
+        "login_email_verify_isValid": MessageLookupByLibrary.simpleMessage(""),
+        "login_email_verify_notNull": MessageLookupByLibrary.simpleMessage(""),
+        "login_loginButton": MessageLookupByLibrary.simpleMessage("Login"),
+        "login_noAccount":
+            MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
+        "login_password_text": MessageLookupByLibrary.simpleMessage("Password"),
+        "login_password_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "login_password_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "login_sendVerifyCodeButton": MessageLookupByLibrary.simpleMessage(""),
+        "login_verificationCode": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_button_buy": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_button_saw": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_button_want": MessageLookupByLibrary.simpleMessage(""),
@@ -59,6 +74,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Coming Soon"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("Currently Showing"),
+        "register_email": MessageLookupByLibrary.simpleMessage("Email"),
+        "register_password": MessageLookupByLibrary.simpleMessage("Password"),
+        "register_registerButton":
+            MessageLookupByLibrary.simpleMessage("Register"),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_editProfile": MessageLookupByLibrary.simpleMessage(""),

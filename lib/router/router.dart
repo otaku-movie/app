@@ -21,7 +21,6 @@ import 'package:otaku_movie/pages/user/register.dart';
 //   static FluroRouter router = FluroRouter();
 //   static String root = '/';
 //   static String setting = '/setting';
-
 //   static void configureRoutes(FluroRouter router) {
 //     router.notFoundHandler = Handler(
 //         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {

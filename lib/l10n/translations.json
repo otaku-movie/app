@@ -17,6 +17,15 @@
     }
   },
   "common": {
+    "components": {
+      "sendVerifyCode": {
+        "send": {
+          "zh": "发送验证码",
+          "ja": "",
+          "en": ""
+        }
+      }
+    },
     "week": {
       "monday": {
         "zh": "一",
@@ -46,13 +55,91 @@
       "saturday": {
         "zh": "六",
         "ja": "",
-        "en": ""
+        "en": "Sat"
       },
       "sunday": {
         "zh": "日",
         "ja": "",
-        "en": ""
+        "en": "Sun"
       }
+    }
+  },
+  "login": {
+    
+    "email": {
+      "text": {
+        "zh": "邮箱",
+        "ja": "メール",
+        "en": "Email"
+      },
+      "verify": {
+        "notNull": {
+          "zh": "邮箱不能为空",
+          "ja": "",
+          "en": ""
+        },
+        "isValid": {
+          "zh": "邮箱不合法",
+          "ja": "",
+          "en": ""
+        }
+      }
+    },
+    "password": {
+      "text": {
+        "zh": "密码",
+        "ja": "パスワード",
+        "en": "Password"
+      },
+      "verify": {
+        "notNull": {
+          "zh": "密码不能为空",
+          "ja": "",
+          "en": ""
+        },
+        "isValid": {
+          "zh": "密码必须为8-16位，包含数字、字母和下划线",
+          "ja": "",
+          "en": ""
+        }
+      }
+    },
+    "loginButton": {
+      "zh": "登录",
+      "ja": "ログイン",
+      "en": "Login"
+    },
+    "verificationCode": {
+      "zh": "验证码",
+      "ja": "",
+      "en": ""
+    },
+    "sendVerifyCodeButton": {
+      "zh": "发送验证码",
+      "ja": "",
+      "en": ""
+    },
+    "noAccount": {
+      "zh": "还没有注册账号？",
+      "ja": "",
+      "en": "Don't have an account?"
+    }
+  },
+  "register": {
+    "email": {
+      "zh": "邮箱",
+      "ja": "",
+      "en": "Email"
+    },
+    "password": {
+      "zh": "密码",
+      "ja": "",
+      "en": "Password"
+    },
+    "registerButton": {
+      "zh": "注册",
+      "ja": "",
+      "en": "Register"
     }
   },
   "movieList": {

@@ -23,6 +23,8 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "common_components_sendVerifyCode_send":
+            MessageLookupByLibrary.simpleMessage(""),
         "common_week_friday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_monday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_saturday": MessageLookupByLibrary.simpleMessage(""),
@@ -33,6 +35,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_cinema": MessageLookupByLibrary.simpleMessage("映画館"),
         "home_home": MessageLookupByLibrary.simpleMessage("ホーム"),
         "home_me": MessageLookupByLibrary.simpleMessage("マイページ"),
+        "login_email_text": MessageLookupByLibrary.simpleMessage("メール"),
+        "login_email_verify_isValid": MessageLookupByLibrary.simpleMessage(""),
+        "login_email_verify_notNull": MessageLookupByLibrary.simpleMessage(""),
+        "login_loginButton": MessageLookupByLibrary.simpleMessage("ログイン"),
+        "login_noAccount": MessageLookupByLibrary.simpleMessage(""),
+        "login_password_text": MessageLookupByLibrary.simpleMessage("パスワード"),
+        "login_password_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "login_password_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "login_sendVerifyCodeButton": MessageLookupByLibrary.simpleMessage(""),
+        "login_verificationCode": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_button_buy": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_button_saw": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_button_want": MessageLookupByLibrary.simpleMessage(""),
@@ -58,6 +72,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("近日公開"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("現在上映中"),
+        "register_email": MessageLookupByLibrary.simpleMessage(""),
+        "register_password": MessageLookupByLibrary.simpleMessage(""),
+        "register_registerButton": MessageLookupByLibrary.simpleMessage(""),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_editProfile": MessageLookupByLibrary.simpleMessage(""),

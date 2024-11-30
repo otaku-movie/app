@@ -14,6 +14,5 @@ class LanguageController extends GetxController {
   // 切换语言
   void changeLanguage(String languageCode) {
     locale.value = Locale(languageCode);
-    
   }
 }

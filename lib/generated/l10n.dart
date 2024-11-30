@@ -81,6 +81,16 @@ class S {
   }
 
   /// ``
+  String get common_components_sendVerifyCode_send {
+    return Intl.message(
+      '',
+      name: 'common_components_sendVerifyCode_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
   String get common_week_monday {
     return Intl.message(
       '',
@@ -130,21 +140,151 @@ class S {
     );
   }
 
-  /// ``
+  /// `Sat`
   String get common_week_saturday {
     return Intl.message(
-      '',
+      'Sat',
       name: 'common_week_saturday',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Sun`
   String get common_week_sunday {
     return Intl.message(
-      '',
+      'Sun',
       name: 'common_week_sunday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get login_email_text {
+    return Intl.message(
+      'Email',
+      name: 'login_email_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get login_email_verify_notNull {
+    return Intl.message(
+      '',
+      name: 'login_email_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get login_email_verify_isValid {
+    return Intl.message(
+      '',
+      name: 'login_email_verify_isValid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get login_password_text {
+    return Intl.message(
+      'Password',
+      name: 'login_password_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get login_password_verify_notNull {
+    return Intl.message(
+      '',
+      name: 'login_password_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get login_password_verify_isValid {
+    return Intl.message(
+      '',
+      name: 'login_password_verify_isValid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login`
+  String get login_loginButton {
+    return Intl.message(
+      'Login',
+      name: 'login_loginButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get login_verificationCode {
+    return Intl.message(
+      '',
+      name: 'login_verificationCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get login_sendVerifyCodeButton {
+    return Intl.message(
+      '',
+      name: 'login_sendVerifyCodeButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don't have an account?`
+  String get login_noAccount {
+    return Intl.message(
+      'Don\'t have an account?',
+      name: 'login_noAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get register_email {
+    return Intl.message(
+      'Email',
+      name: 'register_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get register_password {
+    return Intl.message(
+      'Password',
+      name: 'register_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register`
+  String get register_registerButton {
+    return Intl.message(
+      'Register',
+      name: 'register_registerButton',
       desc: '',
       args: [],
     );
