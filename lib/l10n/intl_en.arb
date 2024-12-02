@@ -1,9 +1,24 @@
 {
   "@@locale": "en",
+  "selectSeat_maxSelectSeatWarn": "",
+  "@selectSeat_maxSelectSeatWarn": {
+    "placeholders": {
+      "maxSeat": {
+        "type": "int"
+      }
+    }
+  },
+  "selectSeat_confirmSelectSeat": "",
   "home_home": "home",
   "home_cinema": "cinema",
   "home_me": "my page",
   "common_components_sendVerifyCode_send": "",
+  "common_enum_seatType_coupleSeat": "",
+  "common_enum_seatType_wheelChair": "",
+  "common_enum_seatType_disabled": "",
+  "common_enum_seatType_selectable": "",
+  "common_enum_seatType_locked": "",
+  "common_enum_seatType_sold": "",
   "common_week_monday": "",
   "common_week_tuesday": "",
   "common_week_wednesday": "",

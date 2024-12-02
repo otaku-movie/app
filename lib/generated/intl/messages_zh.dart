@@ -20,11 +20,25 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh';
 
+  static String m0(maxSeat) => "最大选座数量不能超过${maxSeat}个";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage("正在获取当前位置"),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("发送验证码"),
+        "common_enum_seatType_coupleSeat":
+            MessageLookupByLibrary.simpleMessage("情侣座"),
+        "common_enum_seatType_disabled":
+            MessageLookupByLibrary.simpleMessage("已禁用"),
+        "common_enum_seatType_locked":
+            MessageLookupByLibrary.simpleMessage("已锁定"),
+        "common_enum_seatType_selectable":
+            MessageLookupByLibrary.simpleMessage("可选择"),
+        "common_enum_seatType_sold":
+            MessageLookupByLibrary.simpleMessage("已售出"),
+        "common_enum_seatType_wheelChair":
+            MessageLookupByLibrary.simpleMessage("轮椅座"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("五"),
         "common_week_monday": MessageLookupByLibrary.simpleMessage("一"),
         "common_week_saturday": MessageLookupByLibrary.simpleMessage("六"),
@@ -83,6 +97,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_email": MessageLookupByLibrary.simpleMessage("邮箱"),
         "register_password": MessageLookupByLibrary.simpleMessage("密码"),
         "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),
+        "selectSeat_confirmSelectSeat":
+            MessageLookupByLibrary.simpleMessage("确认选座"),
+        "selectSeat_maxSelectSeatWarn": m0,
         "user_about": MessageLookupByLibrary.simpleMessage("关于"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "user_editProfile": MessageLookupByLibrary.simpleMessage("编辑个人信息"),

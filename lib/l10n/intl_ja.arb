@@ -1,9 +1,24 @@
 {
   "@@locale": "ja",
+  "selectSeat_maxSelectSeatWarn": "座席最大選択可能{maxSeat}个",
+  "@selectSeat_maxSelectSeatWarn": {
+    "placeholders": {
+      "maxSeat": {
+        "type": "int"
+      }
+    }
+  },
+  "selectSeat_confirmSelectSeat": "",
   "home_home": "ホーム",
   "home_cinema": "映画館",
   "home_me": "マイページ",
   "common_components_sendVerifyCode_send": "",
+  "common_enum_seatType_coupleSeat": "",
+  "common_enum_seatType_wheelChair": "",
+  "common_enum_seatType_disabled": "",
+  "common_enum_seatType_selectable": "",
+  "common_enum_seatType_locked": "",
+  "common_enum_seatType_sold": "",
   "common_week_monday": "",
   "common_week_tuesday": "",
   "common_week_wednesday": "",

@@ -1,4 +1,37 @@
 {
+  "selectSeat": {
+    "maxSelectSeatWarn": {
+      "zh": {
+        "text": "最大选座数量不能超过{maxSeat}个",
+        "placeholders": {
+          "maxSeat": {
+            "type": "int"
+          }
+        }
+      },
+      "ja": {
+        "text": "座席最大選択可能{maxSeat}个",
+        "placeholders": {
+          "maxSeat": {
+            "type": "int"
+          }
+        }
+      },
+      "en": {
+        "text": "",
+        "placeholders": {
+          "maxSeat": {
+            "type": "int"
+          }
+        }
+      }
+    },
+    "confirmSelectSeat": {
+      "zh": "确认选座",
+      "ja": "",
+      "en": ""
+    }
+  },
   "home": {
     "home": {
       "zh": "首页",
@@ -21,6 +54,40 @@
       "sendVerifyCode": {
         "send": {
           "zh": "发送验证码",
+          "ja": "",
+          "en": ""
+        }
+      }
+    },
+    "enum": {
+      "seatType": {
+        "coupleSeat": {
+          "zh": "情侣座",
+          "ja": "",
+          "en": ""
+        },
+        "wheelChair": {
+          "zh": "轮椅座",
+          "ja": "",
+          "en": ""
+        },
+        "disabled": {
+          "zh": "已禁用",
+          "ja": "",
+          "en": ""
+        },
+        "selectable": {
+          "zh": "可选择",
+          "ja": "",
+          "en": ""
+        },
+        "locked": {
+          "zh": "已锁定",
+          "ja": "",
+          "en": ""
+        },
+        "sold": {
+          "zh": "已售出",
           "ja": "",
           "en": ""
         }
@@ -65,7 +132,6 @@
     }
   },
   "login": {
-    
     "email": {
       "text": {
         "zh": "邮箱",

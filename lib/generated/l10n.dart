@@ -50,6 +50,26 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// ``
+  String selectSeat_maxSelectSeatWarn(int maxSeat) {
+    return Intl.message(
+      '',
+      name: 'selectSeat_maxSelectSeatWarn',
+      desc: '',
+      args: [maxSeat],
+    );
+  }
+
+  /// ``
+  String get selectSeat_confirmSelectSeat {
+    return Intl.message(
+      '',
+      name: 'selectSeat_confirmSelectSeat',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `home`
   String get home_home {
     return Intl.message(
@@ -85,6 +105,66 @@ class S {
     return Intl.message(
       '',
       name: 'common_components_sendVerifyCode_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_enum_seatType_coupleSeat {
+    return Intl.message(
+      '',
+      name: 'common_enum_seatType_coupleSeat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_enum_seatType_wheelChair {
+    return Intl.message(
+      '',
+      name: 'common_enum_seatType_wheelChair',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_enum_seatType_disabled {
+    return Intl.message(
+      '',
+      name: 'common_enum_seatType_disabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_enum_seatType_selectable {
+    return Intl.message(
+      '',
+      name: 'common_enum_seatType_selectable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_enum_seatType_locked {
+    return Intl.message(
+      '',
+      name: 'common_enum_seatType_locked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_enum_seatType_sold {
+    return Intl.message(
+      '',
+      name: 'common_enum_seatType_sold',
       desc: '',
       args: [],
     );

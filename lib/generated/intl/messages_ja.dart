@@ -20,10 +20,22 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja';
 
+  static String m0(maxSeat) => "座席最大選択可能${maxSeat}个";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
         "common_components_sendVerifyCode_send":
+            MessageLookupByLibrary.simpleMessage(""),
+        "common_enum_seatType_coupleSeat":
+            MessageLookupByLibrary.simpleMessage(""),
+        "common_enum_seatType_disabled":
+            MessageLookupByLibrary.simpleMessage(""),
+        "common_enum_seatType_locked": MessageLookupByLibrary.simpleMessage(""),
+        "common_enum_seatType_selectable":
+            MessageLookupByLibrary.simpleMessage(""),
+        "common_enum_seatType_sold": MessageLookupByLibrary.simpleMessage(""),
+        "common_enum_seatType_wheelChair":
             MessageLookupByLibrary.simpleMessage(""),
         "common_week_friday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_monday": MessageLookupByLibrary.simpleMessage(""),
@@ -75,6 +87,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_email": MessageLookupByLibrary.simpleMessage(""),
         "register_password": MessageLookupByLibrary.simpleMessage(""),
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),
+        "selectSeat_confirmSelectSeat":
+            MessageLookupByLibrary.simpleMessage(""),
+        "selectSeat_maxSelectSeatWarn": m0,
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_editProfile": MessageLookupByLibrary.simpleMessage(""),
