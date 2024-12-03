@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:otaku_movie/generated/l10n.dart';
+
 String formatNumberToTime(int totalMinutes) {
   int hours = totalMinutes ~/ 60;  // 计算小时数
   int minutes = totalMinutes % 60; // 计算剩余的分钟数
@@ -22,4 +25,21 @@ String formatNumberToTime(int totalMinutes) {
     // RegExp passwordRegExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*_).{6,16}$');
     
     return passwordRegExp.hasMatch(password);
+  }
+  String getDay (String date, BuildContext context) {
+    if (date.isEmpty) return '';
+    
+    List<String> weekList = [
+      S.of(context).common_week_monday,
+      S.of(context).common_week_tuesday,
+      S.of(context).common_week_wednesday,
+      S.of(context).common_week_thursday,
+      S.of(context).common_week_friday,
+      S.of(context).common_week_saturday,
+      S.of(context).common_week_sunday,
+    ];
+
+    DateTime datetime = DateTime.parse(date);
+
+    return weekList[datetime.weekday - 1];
   }

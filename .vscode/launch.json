@@ -1,0 +1,40 @@
+{
+  // 使用 IntelliSense 了解相关属性。 
+  // 悬停以查看现有属性的描述。
+  // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "app",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "app (profile mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "app (release mode)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Debug Node.js",
+      "type": "node", // Node.js 调试类型
+      "request": "launch",
+      "program": "${workspaceFolder}/lib/l10n/node/index.js", // 替换为你的 Node.js 主文件路径
+      "outFiles": ["${workspaceFolder}/**/*.js"], // 输出文件匹配规则
+      "cwd": "${workspaceFolder}", // 当前工作目录
+      "console": "integratedTerminal" // 输出显示在 VS Code 的终端中
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Flutter + Node.js",
+      "configurations": ["app", "Debug Node.js"]
+    }
+  ]
+}

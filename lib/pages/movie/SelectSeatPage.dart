@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/enum/index.dart';
+import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/log/index.dart';
+import 'package:otaku_movie/pages/movie/confirmOrder.dart';
+import 'package:otaku_movie/response/movie/movie_show_time_detail.dart';
 // import 'package:go_router/go_router.dart';
 // import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/movie/theater_seat.dart';
 import 'package:otaku_movie/response/response.dart';
+import 'package:otaku_movie/utils/index.dart';
+import 'package:otaku_movie/utils/toast.dart';
 
 import '../../api/index.dart';
 
 class SelectSeatPage extends StatefulWidget {
-  const SelectSeatPage({super.key});
+  String? id;
+  String? theaterHallId;
+  
+  SelectSeatPage({super.key, this.id, this.theaterHallId});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -23,27 +32,6 @@ class SelectSeatPage extends StatefulWidget {
 
 class _SeatSelectionPageState extends State<SelectSeatPage> {
   double _scaleFactor = 1.0;
-  final Set<int> _selectedSeats = {};
-  final Set<int> _coupleSeats = {2, 3, 27, 28, 52, 53}; // 示例情侣座
-
-  void _toggleSeat(int seat) {
-    setState(() {
-      if (_selectedSeats.contains(seat)) {
-        _selectedSeats.remove(seat);
-        if (_coupleSeats.contains(seat)) {
-          int coupleSeat = seat + 1;
-          _selectedSeats.remove(coupleSeat);
-        }
-      } else {
-        _selectedSeats.add(seat);
-        if (_coupleSeats.contains(seat)) {
-          int coupleSeat = seat + 1;
-          _selectedSeats.add(coupleSeat);
-        }
-      }
-    });
-  }
-  
   TransformationController  transformationController = TransformationController();
 
   // 座位大小
@@ -54,26 +42,41 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
   int columnCount = 20;
 
   TheaterSeat data = TheaterSeat();
+  MovieShowTimeDetailResponse _showTimeData = MovieShowTimeDetailResponse();
   List<Seat> seatData = [];
   Set<int> selectSeatSet = {};
   List<SeatItem> selectSeatList = [];
-  
 
   void getData() {
+    ApiRequest().request(
+      path: '/app/movie_show_time/detail',
+      method: 'GET',
+      queryParameters: {
+        'id': widget.id
+      },
+      fromJsonT: (json) {
+        return MovieShowTimeDetailResponse.fromJson(json) ;
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          _showTimeData = res.data!;
+        });
+      }
+    });
+  }
+
+  void getSeatData() {
     ApiRequest().request(
       path: '/theater/hall/seat/detail',
       method: 'GET',
       queryParameters: {
-        'theaterHallId': 34
+        'theaterHallId': widget.theaterHallId
       },
       fromJsonT: (json) {
         return TheaterSeat.fromJson(json) ;
       },
     ).then((res) {
-      print('--- api response ----');
-      log.i(res.data);
-      
-
       if (res.data != null) {
         setState(() {
           seatData = res.data!.seat!;
@@ -127,43 +130,16 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
   void initState() {
     super.initState();
     getData();
+    getSeatData();
   }
 
-  List<Map<String, dynamic>> seatType = [
-    {
-      "icon": SvgPicture.asset(
-        'assets/icons/wheelChair.svg',
-        width: 28.w,
-        height: 28.w,
-      ),
-      "name": '轮椅座',
-    },
-    {
-      "name": '已禁用'
-    },
-    {
-      "name": '可选座'
-    },
-    {
-      "name": '已锁定'
-    },
-    {
-      "name": '已售出'
-    }
-  ];
+ 
   
 
  void selectSeat (SeatItem item) {
-  Fluttertoast.showToast(
-        msg: "This is Center Short Toast",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-    
+  if (selectSeatSet.length >= data.maxSelectSeatCount!) {
+    return ToastService.showWarning(S.of(context).selectSeat_maxSelectSeatWarn(data.maxSelectSeatCount!));
+  }
   if (item.seatPositionGroup != null) {
     item.seatPositionGroup!.split('-').forEach((el) {
       List<String> position = el.split(',');
@@ -208,9 +184,31 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
 
   @override
   Widget build(BuildContext context) {
-      Map<String, List<SeatItem>> seatGroups = {};
+     List<Map<String, dynamic>> seatType = [
+      {
+        "icon": SvgPicture.asset(
+          'assets/icons/wheelChair.svg',
+          width: 28.w,
+          height: 28.w,
+        ),
+        "name": S.of(context).common_enum_seatType_wheelChair,
+      },
+      {
+        "name": S.of(context).common_enum_seatType_disabled,
+      },
+      {
+        "name": S.of(context).common_enum_seatType_selectable,
+      },
+      {
+        "name": S.of(context).common_enum_seatType_locked,
+      },
+      {
+        "name": S.of(context).common_enum_seatType_sold
+      }
+    ];
+    Map<String, List<SeatItem>> seatGroups = {};
 
-    seatData.forEach((row) {
+    for (var row in seatData) {
       row.children?.forEach((seat) {
         if (seat.seatPositionGroup != null) {
           // 按 seat_position_group 将座位分组
@@ -220,15 +218,15 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
           seatGroups[seat.seatPositionGroup]?.add(seat);
         }
       });
-    });
+    }
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: const SizedBox(
+      appBar: CustomAppBar(
+        title: SizedBox(
           width: double.infinity,
           child: Center(
-            child: Text('東宝シネマズ　新宿'),
+            child: Text(_showTimeData.cinemaName ?? '', style: const TextStyle(color: Colors.white)),
           ),
         ),
         bottom: PreferredSize(
@@ -287,7 +285,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                               border: Border.all(color: Colors.red, width: 1.5)
                             )
                           ),
-                          Text('${item.name!}　${item.price}円', style: TextStyle(fontSize: 24.sp))
+                          Text('${item.name!}（${item.price}円）', style: TextStyle(fontSize: 24.sp))
                         ],
                       );
                     }),
@@ -341,7 +339,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                 alignment: Alignment.center,
                                 margin: EdgeInsets.all(seatGap),
                                 child: Text(
-                                  '${row.rowAxis ?? ''}',
+                                  '${row.rowName ?? ''}',
                                   style: const TextStyle(fontSize: 16, color: Colors.black),
                                 )
                               );
@@ -522,12 +520,13 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                   child: Wrap(
                     runSpacing: 10.h,
                     children: [
-                      Text('鬼灭之刃 无限城篇', style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold)),
-                      const Row(
+                      Text(_showTimeData.movieName ?? '', style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold)),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('今天 11月4日（一）10:00 ~ 12:00'),
-                          Text('2D'),
+                     
+                          Text('${_showTimeData.date ?? ''}（${getDay(_showTimeData.date ?? '', context)}）${_showTimeData.startTime} ~ ${_showTimeData.endTime}'),
+                          // Text('2D'),
                         ],
                       ),
                       
@@ -535,20 +534,50 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                         spacing: 20.w,
                         runSpacing: 15.h,
                         children: selectSeatList.map((item) {
-                          return Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8.w, horizontal: 29.w),
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.grey.shade200),
-                                borderRadius: BorderRadius.circular(100)),
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              spacing: 10.w,
-                              children: [
-                                Text('${item.x}-${item.y}', style: TextStyle(fontSize: 24.sp)),
-                                Icon(Icons.close, color: Colors.grey.shade400, size: 20,)
-                              ],
+                          return GestureDetector(
+                            onTap: () {
+                              if (item.seatPositionGroup != null) {
+                                // 情侣座
+                                item.seatPositionGroup!.split('-').forEach((el) {
+                                  List<String> position = el.split(',');
+                                  int x = int.parse(position[0]);
+                                  int y = int.parse(position[1]);
+
+                                  
+                                  // 获取行的index，需要考虑空排
+                                  int row = seatData.indexWhere((el) => el.rowAxis == x);
+
+                                  if (row != -1) {
+                                    SeatItem seat = seatData[row].children!.firstWhere((el) => el.y == y);
+
+                                    selectSeatList.removeWhere((el) => el.id == seat.id);
+                                  }
+                                });
+                              } else {
+                                // 不同座位
+                                selectSeatList.removeWhere((el) => el.id == item.id);
+                              }
+
+                              setState(() {
+                                  selectSeatList = selectSeatList;
+                                  selectSeatSet = selectSeatList.map((el) => el.id!).toSet();
+                                });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8.w, horizontal: 18.w),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey.shade200),
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                spacing: 10.w,
+                                children: [
+                                  Text('${item.seatName}', style: TextStyle(fontSize: 24.sp)),
+                                  Icon(Icons.close, color: Colors.grey.shade400, size: 20)
+                                ],
+                              )
                             )
                           );
                         }).toList()),
@@ -563,11 +592,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       borderRadius: BorderRadius.all(
                           Radius.circular(100))),
                   onPressed: () {
-                    getData();
-                    // context.go('/movie/ShowTimeList');
+                    context.goNamed("selectMovieTicketType");
                   },
                   child: Text(
-                      '确认选座',
+                      S.of(context).selectSeat_confirmSelectSeat,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 32.sp)),

@@ -99,11 +99,14 @@ class Seat {
     final SeatType? type;
     @JsonKey(name: "rowAxis")
     final int? rowAxis;
+    @JsonKey(name: "rowName")
+    final String? rowName;
     @JsonKey(name: "children")
     final List<SeatItem>? children;
 
     Seat({
         this.rowAxis,
+        this.rowName,
         this.children, 
         this.type,
     });
@@ -122,6 +125,10 @@ class SeatItem {
     final int? id;
     @JsonKey(name: "theater_hall_id")
     final int? theaterHallId;
+    @JsonKey(name: "row_name")
+    final String? rowName;
+    @JsonKey(name: "seat_name")
+    final String? seatName;
     @JsonKey(name: "x")
     final int x;
     @JsonKey(name: "y")
@@ -147,6 +154,8 @@ class SeatItem {
         this.type,
         this.id,
         this.theaterHallId,
+        this.rowName,
+        this.seatName,
         this.x = 0,
         this.y = 0,
         this.z,

@@ -10,7 +10,7 @@
         }
       },
       "ja": {
-        "text": "座席最大選択可能{maxSeat}个",
+        "text": "最大{maxSeat}席までお選びいただけます",
         "placeholders": {
           "maxSeat": {
             "type": "int"
@@ -18,7 +18,7 @@
         }
       },
       "en": {
-        "text": "",
+        "text": "A maximum of {maxSeat} seats can be selected",
         "placeholders": {
           "maxSeat": {
             "type": "int"

@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
-import '../components/CustomAppBar.dart';
+import '../../components/CustomAppBar.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
@@ -15,18 +16,19 @@ class UserInfo extends StatefulWidget {
 
 class _PageState extends State<UserInfo> {
   final LanguageController languageController = Get.find();
+  
   String langName = '简体中文';
+  String token = '';
   
   void updateLangName () {
     Map<String, String> lang = languageController.lang.firstWhere(
       (el) => el['code'] == languageController.locale.value.languageCode,
-      orElse: () => {'code': 'zh', 'name': '简体中文'});
+      orElse: () => {'code': 'ja', 'name': '日本語'});
 
     setState(() {
       langName = '${lang['name']}';
     });
   }
-
   void _showActionSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -53,14 +55,6 @@ class _PageState extends State<UserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    
-    @override
-    void initState() {
-      super.initState();
-      // 初始化时设置当前语言名称
-      updateLangName();
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(

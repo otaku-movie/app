@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// ``
+  /// `A maximum of {maxSeat} seats can be selected`
   String selectSeat_maxSelectSeatWarn(int maxSeat) {
     return Intl.message(
-      '',
+      'A maximum of $maxSeat seats can be selected',
       name: 'selectSeat_maxSelectSeatWarn',
       desc: '',
       args: [maxSeat],

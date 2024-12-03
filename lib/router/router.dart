@@ -2,8 +2,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
-import 'package:otaku_movie/pages/User.dart';
-import 'package:otaku_movie/pages/movie/SelectMovieTicketPage.dart';
+import 'package:otaku_movie/pages/user/User.dart';
+import 'package:otaku_movie/pages/movie/SelectMovieTicket.dart';
 import 'package:otaku_movie/pages/movie/SelectSeatPage.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeDetail.dart';
 import 'package:otaku_movie/pages/movie/ShowTimeList.dart';
@@ -54,11 +54,18 @@ final GoRouter routerConfig = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      name: 'home',
+      name: 'root',
       builder: (BuildContext context, GoRouterState state) {
-        return Home();
+        return Login();
       },
       routes: <RouteBase>[
+        GoRoute(
+          path: '/home',
+          name: 'home',
+          builder: (BuildContext context, GoRouterState state) {
+            return Home();
+          },
+        ),
         GoRoute(
           path: '/user/login',
           name: 'login',
@@ -112,14 +119,17 @@ final GoRouter routerConfig = GoRouter(
           path: '/movie/selectSeat',
           name: 'selectSeat',
           builder: (BuildContext context, GoRouterState state) {
-            return SelectSeatPage();
+            return SelectSeatPage(
+              id: state.uri.queryParameters['id'], 
+              theaterHallId: state.uri.queryParameters['theaterHallId']
+            );
           },
         ),
         GoRoute(
-          path: '/movie/selectMovieTicket',
-          name: 'selectMovieTicket',
+          path: '/movie/selectMovieTicketType',
+          name: 'selectMovieTicketType',
           builder: (BuildContext context, GoRouterState state) {
-            return const SelectMovieTicketPage();
+            return const SelectMovieTicketType();
           },
         ),
         GoRoute(

@@ -83,6 +83,7 @@ Map<String, dynamic> _$AreaElementToJson(AreaElement instance) =>
 
 Seat _$SeatFromJson(Map<String, dynamic> json) => Seat(
       rowAxis: (json['rowAxis'] as num?)?.toInt(),
+      rowName: json['rowName'] as String?,
       children: (json['children'] as List<dynamic>?)
           ?.map((e) => SeatItem.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -92,6 +93,7 @@ Seat _$SeatFromJson(Map<String, dynamic> json) => Seat(
 Map<String, dynamic> _$SeatToJson(Seat instance) => <String, dynamic>{
       'type': _$SeatTypeEnumMap[instance.type],
       'rowAxis': instance.rowAxis,
+      'rowName': instance.rowName,
       'children': instance.children?.map((e) => e.toJson()).toList(),
     };
 
@@ -104,6 +106,8 @@ SeatItem _$SeatItemFromJson(Map<String, dynamic> json) => SeatItem(
       type: $enumDecodeNullable(_$SeatTypeEnumMap, json['type']),
       id: (json['id'] as num?)?.toInt(),
       theaterHallId: (json['theater_hall_id'] as num?)?.toInt(),
+      rowName: json['row_name'] as String?,
+      seatName: json['seat_name'] as String?,
       x: (json['x'] as num?)?.toInt() ?? 0,
       y: (json['y'] as num?)?.toInt() ?? 0,
       z: json['z'],
@@ -124,6 +128,8 @@ Map<String, dynamic> _$SeatItemToJson(SeatItem instance) => <String, dynamic>{
       'type': _$SeatTypeEnumMap[instance.type],
       'id': instance.id,
       'theater_hall_id': instance.theaterHallId,
+      'row_name': instance.rowName,
+      'seat_name': instance.seatName,
       'x': instance.x,
       'y': instance.y,
       'z': instance.z,

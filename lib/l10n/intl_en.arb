@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "selectSeat_maxSelectSeatWarn": "",
+  "selectSeat_maxSelectSeatWarn": "A maximum of {maxSeat} seats can be selected",
   "@selectSeat_maxSelectSeatWarn": {
     "placeholders": {
       "maxSeat": {

@@ -97,9 +97,6 @@ class _PageState extends State<ShowTimeDetail>
 
   @override
   Widget build(BuildContext context) {
-    final LanguageController languageController = Get.find();
-     final _tabs = <String>['猜你喜欢', '今日特价', '发现更多'];
-
      if (tabWidget.isEmpty) {
       return const Scaffold(
         // appBar: AppBar(
@@ -215,7 +212,10 @@ class _PageState extends State<ShowTimeDetail>
                                               borderRadius: BorderRadius.all(Radius.circular(50)), // 按钮圆角
                                             ),
                                             onPressed: () {
-                                              context.go("/movie/selectSeat");
+                                              context.goNamed('selectSeat', queryParameters: {
+                                                "id": '${children.id}',
+                                                "theaterHallId": '${children.theaterHallId}'
+                                              });
                                             },
                                             child: Row(
                                               mainAxisSize: MainAxisSize.min, // 让按钮根据内容自适应宽度

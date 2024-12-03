@@ -1,6 +1,6 @@
 {
   "@@locale": "ja",
-  "selectSeat_maxSelectSeatWarn": "座席最大選択可能{maxSeat}个",
+  "selectSeat_maxSelectSeatWarn": "最大{maxSeat}席までお選びいただけます",
   "@selectSeat_maxSelectSeatWarn": {
     "placeholders": {
       "maxSeat": {

@@ -7,7 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBackButtonPressed;
   final Color backgroundColor;
   final TextStyle titleTextStyle;
-  final TabBar? bottom; // Make it nullable
+  final PreferredSizeWidget? bottom; // Make it nullable
 
   const CustomAppBar({super.key, 
     required this.title,
@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: this.title,
+      title: title,
       leading: showBackButton
           ? IconButton(
               icon: Icon(Icons.arrow_back, color: titleTextStyle.color),
@@ -40,13 +40,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize {
-    // Define the height for the TabBar if it's present
     double height = kToolbarHeight;
     if (bottom != null) {
-      // If you want to adjust the TabBar height manually, set it here
-      height +=
-          48.0; // Default TabBar height is around 48 pixels, adjust if needed
+      height += bottom!.preferredSize.height; // 动态获取 bottom 的高度
     }
     return Size.fromHeight(height);
   }
+
 }
