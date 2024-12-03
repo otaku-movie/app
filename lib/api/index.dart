@@ -107,7 +107,7 @@ class ApiRequest {
 
       // 登录过期跳登录
       if (response.statusCode == 401) {
-        routerConfig.goNamed('login');
+        routerConfig.pushNamed('login');
       }
       
       if (response.statusCode == 200 && apiResponse.code == 200) {

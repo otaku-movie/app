@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/pages/tab/NowShowing.dart';
@@ -73,11 +74,10 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
       length: tabs.length,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
+        appBar: CustomAppBar(
           title: GestureDetector(
             onTap: () {
-              context.goNamed('search');
+              context.pushNamed('search');
             },
             child:  Container(
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 30.w),

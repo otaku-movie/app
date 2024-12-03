@@ -223,11 +223,9 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       appBar: CustomAppBar(
-        title: SizedBox(
-          width: double.infinity,
-          child: Center(
-            child: Text(_showTimeData.cinemaName ?? '', style: const TextStyle(color: Colors.white)),
-          ),
+        title: Text(
+          _showTimeData.cinemaName ?? '', 
+          style: TextStyle(color: Colors.white, fontSize: 36.sp)
         ),
         bottom: PreferredSize(
           preferredSize: Size.fromHeight(70.h),
@@ -592,7 +590,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       borderRadius: BorderRadius.all(
                           Radius.circular(100))),
                   onPressed: () {
-                    context.goNamed("selectMovieTicketType");
+                    context.pushNamed("selectMovieTicketType");
                   },
                   child: Text(
                       S.of(context).selectSeat_confirmSelectSeat,

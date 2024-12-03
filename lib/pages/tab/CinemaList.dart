@@ -7,6 +7,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
@@ -208,9 +209,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-
+      appBar:  CustomAppBar(
         title: Row(
           // spacing: 20.w,
           // direction: Axis.horizontal,

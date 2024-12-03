@@ -112,7 +112,7 @@ class _PageState extends State<UserInfo> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     _buildStatCard("Orders", "1", Colors.purple, () {
-                      context.goNamed('orderList');
+                      context.pushNamed('orderList');
                     }),
                     _buildStatCard("To Watch", "1", Colors.orange, () {}),
                     _buildStatCard("Voice Actors", "1", Colors.blue, () {}),

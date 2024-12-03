@@ -107,7 +107,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
         children: [
           GestureDetector(
             onTap: () {
-              context.goNamed('movieDetail');
+              context.pushNamed('movieDetail');
             },
             child: Text(item.name ?? '', style: TextStyle(fontSize: 36.sp)),
           ),
@@ -126,7 +126,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
         borderRadius: BorderRadius.circular(4),
       ),
       onPressed: () {
-        context.goNamed('movieDetail');
+        context.pushNamed('movieDetail');
       },
       child: Text(
         '购买票',
@@ -183,7 +183,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                         children: [
                           GestureDetector(
                             onTap: () {
-                              context.goNamed('movieDetail',
+                              context.pushNamed('movieDetail',
                                 pathParameters: {
                                 "id": '${item?.id}'
                               });
@@ -246,7 +246,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   onPressed: () {
-                                    context.goNamed('movieDetail', pathParameters: {
+                                    context.pushNamed('movieDetail', pathParameters: {
                                       "id": '${item.id}'
                                     });
                                   },

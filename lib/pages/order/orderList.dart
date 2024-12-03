@@ -49,7 +49,7 @@ class _PageState extends State<OrderList> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                context.goNamed('orderDetail');
+                context.pushNamed('orderDetail');
               },
               child: Container(
               padding: EdgeInsets.all(20.w),
@@ -176,7 +176,7 @@ class _PageState extends State<OrderList> {
                                         borderRadius: BorderRadius.all(Radius.circular(50)),
                                       ),
                                       onPressed: () {
-                                        // context.goNamed('commentDetail');
+                                        // context.pushNamed('commentDetail');
                                       },
                                       child: Text(
                                         '评价',

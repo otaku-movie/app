@@ -37,7 +37,7 @@ class _PageState extends State<Search> {
       appBar: CustomAppBar(
          title: GestureDetector(
           onTap: () {
-            context.goNamed('search');
+            context.pushNamed('search');
           },
           child:  Container(
             padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 30.w),

@@ -67,7 +67,7 @@ class _PageState extends State<PayError> {
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                           ),
                           onPressed: () {
-                            context.goNamed('me');
+                            context.pushNamed('me');
                           },
                           child: Text(
                             '返回',

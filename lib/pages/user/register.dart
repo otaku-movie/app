@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/pages/movie/confirmOrder.dart';
 
 class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-        centerTitle: true,
+      appBar:  const CustomAppBar(
+        title: Text('Register',  style: TextStyle(color: Colors.white)),
       ),
       body: GestureDetector(
          onTap: () {
@@ -112,7 +112,7 @@ class Register extends StatelessWidget {
                     const Text('Already have an account?'),
                     TextButton(
                       onPressed: () {
-                        context.goNamed('login');
+                        context.pushNamed('login');
                       },
                       child: const Text('Login here'),
                     ),

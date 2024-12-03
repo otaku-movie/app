@@ -152,7 +152,7 @@ class _PageState extends State<OrderDetail> {
                                         borderRadius: BorderRadius.all(Radius.circular(50)),
                                       ),
                                       onPressed: () {
-                                        // context.goNamed('commentDetail');
+                                        // context.pushNamed('commentDetail');
                                       },
                                       child: Text(
                                         '评价',

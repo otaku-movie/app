@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/sendVerifyCode.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -94,7 +95,7 @@ class _LoginPageState extends State<Login> {
         // 存储用户信息（可以将 Map 转换为 JSON 字符串存储）
         prefs.setString('userInfo', res.data.toString());
 
-        context.goNamed('home');
+        context.pushNamed('home');
       }
     
     }).catchError((err) {
@@ -119,13 +120,13 @@ class _LoginPageState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: CustomAppBar(
         // backgroundColor: Colors.blue,
         title: Row(
           children: [
             Image.asset('assets/image/kimetsu-movie.jpg', height: 30), 
             SizedBox(width: 20.w),
-            Text(S.of(context).login_loginButton),
+            Text(S.of(context).login_loginButton, style: const TextStyle(color: Colors.white)),
           ],
         ),
         actions: [
@@ -133,7 +134,7 @@ class _LoginPageState extends State<Login> {
             value: selectedLanguage,
             items: languageController.lang.map((entry) => DropdownMenuItem<String>(
               value: entry['code'],
-              child: Text(entry['name'] as String),
+              child: Text(entry['name'] as String, style: const TextStyle(color: Colors.white) ),
             )).toList(),
             onChanged: (value) {
               if (value != null) {
@@ -222,7 +223,7 @@ class _LoginPageState extends State<Login> {
                     Text(S.of(context).login_noAccount),
                     TextButton(
                       onPressed: () {
-                        context.goNamed('register');
+                        context.pushNamed('register');
                       },
                       child: Text(S.of(context).register_registerButton, style: const TextStyle(color: Colors.blue)),
                     ),

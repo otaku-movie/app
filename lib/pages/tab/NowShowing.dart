@@ -110,7 +110,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         children: [
           GestureDetector(
             onTap: () {
-              context.goNamed('movieDetail',
+              context.pushNamed('movieDetail',
                 pathParameters: {
                 "id": '${item.id}'
               });
@@ -173,7 +173,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   onPressed: () {
-                    context.goNamed('showTimeList', pathParameters: {
+                    context.pushNamed('showTimeList', pathParameters: {
                       "id": '${item.id}'
                     });
                   },
@@ -198,7 +198,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         children: [
           GestureDetector(
             onTap: () {
-              context.goNamed('movieDetail',
+              context.pushNamed('movieDetail',
                 pathParameters: {
                 "id": '${item.id}'
               });

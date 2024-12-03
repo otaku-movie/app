@@ -339,7 +339,7 @@ class _PageState extends State<MovieDetail> {
         ),
       child: GestureDetector(
         onTap: () {
-          context.goNamed('showTimeList', pathParameters: {
+          context.pushNamed('showTimeList', pathParameters: {
             "id": '${widget.id}'
           });
         },
@@ -352,7 +352,7 @@ class _PageState extends State<MovieDetail> {
                 borderRadius: BorderRadius.circular(100),
               ),
               onPressed: () {
-                context.goNamed('showTimeList', pathParameters: {
+                context.pushNamed('showTimeList', pathParameters: {
                   "id": '${widget.id}'
                 });
               },

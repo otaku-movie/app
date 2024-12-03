@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/movie/show_time.dart';
 import '../../controller/LanguageController.dart';
@@ -84,47 +85,30 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return data.isEmpty
-        ? Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white), // 自定义返回按钮图标
-                onPressed: () {
-                  // 使用 Navigator.pop(context) 返回上一级页面
-                  context.pop();
-                },
-              ),
-              title: Text("电影名称", style: TextStyle(fontSize: 33.sp, color: Colors.white)),
-              backgroundColor: Colors.blue,
+        ? const Scaffold(
+            appBar:  CustomAppBar(
+              title: "电影名称"
             ),
-            body: const Center(child: CircularProgressIndicator()), // 数据未加载时显示加载指示器
+            body: Center(child: CircularProgressIndicator()), // 数据未加载时显示加载指示器
           )
         : DefaultTabController(
             initialIndex: 0,
             length: tabLength,
             child: Scaffold(
               backgroundColor: Colors.white,
-              appBar: AppBar(
-                centerTitle: true,
-                leading: IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Colors.white), // 自定义返回按钮图标
-                  onPressed: () {
-                    // 使用 Navigator.pop(context) 返回上一级页面
-                    context.pop();
-                  },
-                ),
-                title: Text("电影名称", style: TextStyle(fontSize: 33.sp)),
+              appBar: CustomAppBar(
+                title: "电影名称",
                 bottom: TabBar(
                   controller: _tabController,
                   tabs: generateTab(),
                   isScrollable: true,
-                   labelPadding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 0.h),  
+                  labelPadding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 0.h),  
                   labelColor: Colors.white, // 设置选中标签的颜色
                   unselectedLabelColor: Colors.white70, // 设置未选中标签的颜色
                   indicatorColor: Colors.blue, // 设置选中时的指示器颜色
                 ),
                 backgroundColor: Colors.blue,
-                titleTextStyle: TextStyle(color: Colors.white, fontSize: 44.sp),
+                titleTextStyle: TextStyle(color: Colors.white, fontSize: 36.sp),
               ),
               body: EasyRefresh.builder(
                 header: const ClassicHeader(),
@@ -144,7 +128,7 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
                           
                           return GestureDetector(
                             onTap: () {
-                              context.goNamed('showTimeDetail', pathParameters: {
+                              context.pushNamed('showTimeDetail', pathParameters: {
                                 "id": widget.id ?? ''
                               });
                             },

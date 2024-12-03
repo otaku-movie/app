@@ -99,17 +99,6 @@ class _PageState extends State<ShowTimeDetail>
   Widget build(BuildContext context) {
      if (tabWidget.isEmpty) {
       return const Scaffold(
-        // appBar: AppBar(
-        //   leading: IconButton(
-        //     icon: const Icon(Icons.arrow_back, color: Colors.white), // 自定义返回按钮图标
-        //     onPressed: () {
-        //       // 使用 Navigator.pop(context) 返回上一级页面
-        //       context.pop();
-        //     },
-        //   ),
-        //    backgroundColor: Colors.blue,
-        //   title: const Text('加载中...', style: TextStyle(color: Colors.white)),
-        // ),
         body: Center(child: CircularProgressIndicator()),
       );
     }
@@ -131,11 +120,13 @@ class _PageState extends State<ShowTimeDetail>
                   forceElevated: innerBoxIsScrolled,
                   collapsedHeight: 100.h >= 56.0 ? 100.h : 56.0,
                   backgroundColor: Colors.blue,
+                  centerTitle:  true,
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back, color: Colors.white), // 自定义返回按钮图标
                     onPressed: () {
+                      GoRouter.of(context).pop();
                       // 使用 Navigator.pop(context) 返回上一级页面
-                      context.pop();
+                      // context.pop();
                     },
                   ),
                   bottom: TabBar(
@@ -212,7 +203,7 @@ class _PageState extends State<ShowTimeDetail>
                                               borderRadius: BorderRadius.all(Radius.circular(50)), // 按钮圆角
                                             ),
                                             onPressed: () {
-                                              context.goNamed('selectSeat', queryParameters: {
+                                              context.pushNamed('selectSeat', queryParameters: {
                                                 "id": '${children.id}',
                                                 "theaterHallId": '${children.theaterHallId}'
                                               });
