@@ -12,7 +12,9 @@ enum SelectSeatState {
   // 1
   available,
   // 2
-  locked,
+  selected,
   // 3
+  locked,
+  // 4
   sold
 }

@@ -46,6 +46,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_week_thursday": MessageLookupByLibrary.simpleMessage("四"),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage("二"),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage("三"),
+        "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支付"),
+        "confirmOrder_selectPayMethod":
+            MessageLookupByLibrary.simpleMessage("选择支付方式"),
+        "confirmOrder_title": MessageLookupByLibrary.simpleMessage("确认订单"),
+        "confirmOrder_total": MessageLookupByLibrary.simpleMessage("合计"),
         "home_cinema": MessageLookupByLibrary.simpleMessage("电影院"),
         "home_home": MessageLookupByLibrary.simpleMessage("首页"),
         "home_me": MessageLookupByLibrary.simpleMessage("我的"),
@@ -94,6 +99,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("即将上映"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("上映中"),
+        "movieTicketType_confirmOrder":
+            MessageLookupByLibrary.simpleMessage("确认订单"),
+        "movieTicketType_seatNumber":
+            MessageLookupByLibrary.simpleMessage("座位号"),
+        "movieTicketType_selectMovieTicketType":
+            MessageLookupByLibrary.simpleMessage("请选择电影票类型"),
+        "movieTicketType_title":
+            MessageLookupByLibrary.simpleMessage("选择电影票类型"),
+        "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合计"),
         "register_email": MessageLookupByLibrary.simpleMessage("邮箱"),
         "register_password": MessageLookupByLibrary.simpleMessage("密码"),
         "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),

@@ -44,6 +44,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_week_thursday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage(""),
+        "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支払いへ"),
+        "confirmOrder_selectPayMethod":
+            MessageLookupByLibrary.simpleMessage(""),
+        "confirmOrder_title": MessageLookupByLibrary.simpleMessage(""),
+        "confirmOrder_total": MessageLookupByLibrary.simpleMessage("合計"),
         "home_cinema": MessageLookupByLibrary.simpleMessage("映画館"),
         "home_home": MessageLookupByLibrary.simpleMessage("ホーム"),
         "home_me": MessageLookupByLibrary.simpleMessage("マイページ"),
@@ -84,6 +89,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("近日公開"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("現在上映中"),
+        "movieTicketType_confirmOrder":
+            MessageLookupByLibrary.simpleMessage("注文確認"),
+        "movieTicketType_seatNumber": MessageLookupByLibrary.simpleMessage(""),
+        "movieTicketType_selectMovieTicketType":
+            MessageLookupByLibrary.simpleMessage(""),
+        "movieTicketType_title": MessageLookupByLibrary.simpleMessage(""),
+        "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合計"),
         "register_email": MessageLookupByLibrary.simpleMessage(""),
         "register_password": MessageLookupByLibrary.simpleMessage(""),
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),

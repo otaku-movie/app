@@ -329,6 +329,55 @@
       }
     }
   },
+  "movieTicketType": {
+    "total": {
+      "zh": "合计",
+      "ja": "合計",
+      "en": "Total"
+    },
+    "title": {
+      "zh": "选择电影票类型",
+      "ja": "",
+      "en": ""
+    },
+    "seatNumber": {
+      "zh": "座位号",
+      "ja": "",
+      "en": ""
+    },
+    "selectMovieTicketType": {
+      "zh": "请选择电影票类型",
+      "ja": "",
+      "en": ""
+    },
+    "confirmOrder": {
+      "zh": "确认订单",
+      "ja": "注文確認",
+      "en": "Confirm Order"
+    }
+  },
+  "confirmOrder": {
+    "title": {
+      "zh": "确认订单",
+      "ja": "",
+      "en": ""
+    },
+    "total": {
+      "zh": "合计",
+      "ja": "合計",
+      "en": "Total"
+    },
+    "selectPayMethod": {
+      "zh": "选择支付方式",
+      "ja": "",
+      "en": ""
+    },
+    "pay": {
+      "zh": "支付",
+      "ja": "支払いへ",
+      "en": "Buy"
+    }
+  },
   "user": {
     "language": {
       "zh": "语言",

@@ -133,9 +133,6 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     getSeatData();
   }
 
- 
-  
-
  void selectSeat (SeatItem item) {
   if (selectSeatSet.length >= data.maxSelectSeatCount!) {
     return ToastService.showWarning(S.of(context).selectSeat_maxSelectSeatWarn(data.maxSelectSeatCount!));
@@ -590,7 +587,29 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       borderRadius: BorderRadius.all(
                           Radius.circular(100))),
                   onPressed: () {
-                    context.pushNamed("selectMovieTicketType");
+                    print(selectSeatList);
+                    ApiRequest().request(
+                      path: '/movie_show_time/select_seat/save',
+                      method: 'POST',
+                      data: {
+                        'movieShowTimeId': _showTimeData.id,
+                        "theaterHallId":_showTimeData.theaterHallId,
+                        'seatPosition': selectSeatList.map((item) {
+                          return {
+                            "x": item.x,
+                            "y": item.y,
+                            "seatId": item.id
+                          };
+                        }).toList()
+                      },
+                      fromJsonT: (json) {},
+                    ).then((res) {
+                      context.pushNamed("selectMovieTicketType", queryParameters: {
+                        'movieShowTimeId': '${_showTimeData.id}',
+                        'cinemaId': '${_showTimeData.cinemaId}'
+                      });
+                    });
+
                   },
                   child: Text(
                       S.of(context).selectSeat_confirmSelectSeat,
@@ -601,30 +620,6 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
               ],
             )
           )
-          // Positioned(
-          //     top: 0,
-          //     left: 20,
-          //     child: Container(
-          //       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          //       decoration: BoxDecoration(
-          //         color: Color.fromRGBO(0, 0, 0, 0.5),
-          //         borderRadius: BorderRadius.circular(50)
-          //       ),
-          //     child: Wrap(
-          //         direction: Axis.vertical,
-          //         children: List.generate(30, (index) {
-          //           return Container(
-          //               width: seatSize, // 排号区域宽度
-          //               height: seatSize,
-          //               alignment: Alignment.center,
-          //               // color: Colors.red,
-          //               child: Text(
-          //                 '${index + 1}',
-          //                 style: const TextStyle(fontSize: 16, color: Colors.white),
-          //               ));
-          //         })),
-          //   )
-          // ),
         ],
       ),
      

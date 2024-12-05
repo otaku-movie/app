@@ -5,9 +5,22 @@ import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/response/cinema/movie_ticket_type_response.dart';
+import 'package:otaku_movie/response/movie/user_select_seat_data_response.dart';
+import 'package:otaku_movie/utils/toast.dart';
+
+import '../../api/index.dart';
+import '../../utils/index.dart';
 
 class SelectMovieTicketType extends StatefulWidget {
-  const SelectMovieTicketType({super.key});
+  final String? movieShowTimeId;
+  final String? cinemaId;
+
+  const SelectMovieTicketType({
+    super.key,
+    this.movieShowTimeId,
+    this.cinemaId
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -15,30 +28,86 @@ class SelectMovieTicketType extends StatefulWidget {
 }
 
 class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
+  List<MovieTicketTypeResponse> movieTicketTypeData = [];
+  UserSelectSeatDataResponse data = UserSelectSeatDataResponse();
+
+  getMovieTicketType() {
+    ApiRequest().request(
+      path: '/cinema/ticketType/list',
+      method: 'POST',
+      data: {"cinemaId": int.parse(widget.cinemaId!)},
+      fromJsonT: (json) {
+        if (json is List) {
+          return json.map((item) {
+            return MovieTicketTypeResponse.fromJson(item);
+          }).toList();
+        }
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          movieTicketTypeData = res.data!;
+        });
+      }
+    });
+  }
+
+  getData() {
+    ApiRequest().request(
+      path: '/movie_show_time/user_select_seat',
+      method: 'GET', 
+      queryParameters: {"movieShowTimeId": int.parse(widget.movieShowTimeId!)},
+      fromJsonT: (json) {
+        return UserSelectSeatDataResponse.fromJson(json);
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          data = res.data!;
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.cinemaId != null) {
+      getData();
+      getMovieTicketType();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-         title: Text('选择电影票类型', style: TextStyle(color: Colors.white)),
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(
+         title: Text(S.of(context).movieTicketType_title, style: const TextStyle(color: Colors.white)),
       ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.all(10),
+                padding: EdgeInsets.all(20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
                         Container(
+                          color: Colors.grey.shade200,
                           margin: EdgeInsets.only(right: 20.w),
+                          // clipBehavior: Clip.hardEdge,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(4),
-                            child: ExtendedImage.asset(
-                              'assets/image/raligun.webp',
+                            child: ExtendedImage.network(
+                              data.moviePoster ?? '',
                               width: 240.w,
+                              height: 285.h,
+                              fit: BoxFit.cover,
+
                             ),
                           ),
                         ),
@@ -53,28 +122,51 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "鬼灭之刃 无线城篇",
+                                      data.movieName ?? '',
                                       style: TextStyle(
-                                        fontSize: 36.sp,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 40.sp,
+                                        fontWeight: FontWeight.bold
                                       ),
                                     ),
                                     SizedBox(height: 8.h),
-                                    Text(
-                                      "11月16日（土）10：00~14：00 IMAX",
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        color: Colors.black45,
+                                    RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(
+                                          fontSize: 28.sp,
+                                          color: Colors.black54
+                                        ),
+                                        children: [
+                                          // 日期部分
+                                          TextSpan(
+                                            text: data.date ?? '',
+                                          ),
+                                          // 星期几部分
+                                          TextSpan(
+                                            text: '（${getDay(data.date ?? '', context)}）',
+                                          ),
+                                          // 时间段部分
+                                          TextSpan(
+                                            text: ' ${data.startTime} ~ ${data.endTime} ${data.specName}',
+                                          ),
+                                        ],
                                       ),
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
                                     ),
                                   ],
                                 ),
-                                Text(
-                                  "東宝シネマズ　新宿（スクリーン8）",
-                                  style: TextStyle(fontSize: 26.sp),
-                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${data.cinemaName}',
+                                      style: TextStyle(fontSize: 28.sp),
+                                    ),
+                                    Text(
+                                      '${data.theaterHallName}',
+                                      style: TextStyle(fontSize: 26.sp, color: Colors.black45),
+                                    ),
+                                  ],
+                                )
+
                               ],
                             ),
                           ),
@@ -82,188 +174,187 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                       ],
                     ),
                     SizedBox(height: 50.h),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
+                    ...data.seat == null ? [] : data.seat!.map((item) {
+                      return ClipRRect(
                       child: Container(
                         width: double.infinity,
-                        color: Colors.grey.shade200,
-                        padding: const EdgeInsets.all(10),
+                        padding: EdgeInsets.symmetric(vertical:  25.w, horizontal: 20.w),
+                        margin: EdgeInsets.only(bottom: 30.h),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         child: Wrap(
                           runSpacing: 10,
                           children: [
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('座位号：C8'),
-                                Text('A区'),
+                                Text('${S.of(context).movieTicketType_seatNumber}：${item.seatName}'),
+                                item.areaName == null ? const Text('') : Text('${item.areaName ?? ''}（${item.plusPrice ?? ''}）'),
                               ],
                             ),
-                            MaterialButton(
-                              minWidth: double.infinity,
-                              color: Colors.blue,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(50)),
+                            item.movieTicketTypeId == null ? GestureDetector(
+                               onTap: () {
+                                _showActionSheet(context, item);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(vertical: 15.h),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(width: 2, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: Text(S.of(context).movieTicketType_selectMovieTicketType)),
+                              ) : GestureDetector(
+                               onTap: () {
+                                _showActionSheet(context, item);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 25.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(width: 2, color: Colors.white),
+                                  borderRadius: BorderRadius.circular(20)
+                                ),
+                                child: getTicketType(item)
                               ),
-                              onPressed: () {},
-                              child: Text(
-                                '请选择电影票类型',
-                                style: TextStyle(color: Colors.white, fontSize: 32.sp),
-                              ),
-                            ),
-                          ],
+                            )
+                          ]
                         ),
                       ),
-                    ),
+                    );
+                    }).toList(),
+                    
                   ],
                 ),
               ),
             ),
           ),
           Container(
-            padding: EdgeInsets.all(16),
+            height: 120.h,
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(top: BorderSide(color: Colors.grey.shade100, width: 1)),
             ),
-            child: MaterialButton(
-              minWidth: double.infinity,
-              color: Colors.blue,
-              textColor: Colors.white,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(50)),
-              ),
-              onPressed: () {
-                context.go('/movie/confirmOrder');
-              },
-              child: Text(
-                '确认订单',
-                style: TextStyle(color: Colors.white, fontSize: 32.sp),
-              ),
-            )
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text('${S.of(context).movieTicketType_total}：', style: TextStyle(fontSize: 28.sp)),
+                    Text('${getTotalPrice()}円', style: TextStyle(color: Colors.red, fontSize: 48.sp)),
+                    // Text('円', style: TextStyle(color: Colors.red, fontSize: 32.sp))
+                  ],
+                ),
+                SizedBox(width: 16.w),
+                SizedBox(
+                  width: 280.w,
+                  height: 120.h,                  
+                  child: MaterialButton(
+                    color: const Color.fromARGB(255, 2, 162, 255),
+                    textColor: Colors.white,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                    ),
+                    onPressed: () {
+                      bool every =  data.seat!.every((item) => item.movieTicketTypeId != null);
+
+                      if (every) {
+                         ApiRequest().request(
+                          path: '/movieOrder/create',
+                          method: 'POST', 
+                          data: {
+                            "movieShowTimeId": int.parse(widget.movieShowTimeId!),
+                            "seat": data.seat
+                          },
+                          fromJsonT: (json) {
+                            return json;
+                          },
+                        ).then((res) {
+                          // ignore: use_build_context_synchronously
+                          context.pushNamed('confirmOrder', queryParameters: {
+                            'id': '${res.data?['id']}'
+                          });
+                        });
+                      } else {
+                        ToastService.showWarning(S.of(context).movieTicketType_selectMovieTicketType);
+                      }
+                      
+                    },
+                    child: Text(
+                      S.of(context).movieTicketType_confirmOrder,
+                      style: TextStyle(color: Colors.white, fontSize: 32.sp),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
-
-      // body: SingleChildScrollView(
-      //   child: Container(
-      //     // width: double.infinity,
-      //     padding: const EdgeInsets.all(10),
-      //     child: Column(
-      //       children: [
-      //         Stack(
-      //           children: [
-      //             Positioned(
-      //               bottom: 0,
-      //               left: 0,
-      //               child: Container(
-
-      //                   decoration: BoxDecoration(
-      //                   border: Border.all(color: Colors.red),
-      //                 ),
-      //                 child: Row(
-      //                   children: [
-      //                     Text('合计：7500')
-      //                   ],
-      //                 ),
-      //               ),
-      //             )
-      //           ],
-      //         ),
-      //         Row(
-      //           children: [
-      //             Container(
-      //               margin: EdgeInsets.only(right: 20.w),
-      //               child: ClipRRect(
-      //                 borderRadius: BorderRadius.circular(4),
-      //                 child: ExtendedImage.asset(
-      //                   'assets/image/raligun.webp',
-      //                   width: 240.w,
-      //                 ),
-      //               ),
-      //             ),
-      //             Expanded(
-      //               child: SizedBox(
-      //                 height: 285.h,
-      //                 // decoration: BoxDecoration(
-      //                 //   border: Border.all(color: Colors.red),
-      //                 // ),
-      //                 child: Column(
-      //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                   crossAxisAlignment: CrossAxisAlignment.start,
-      //                   children: [
-      //                     Column(
-      //                       crossAxisAlignment: CrossAxisAlignment.start,
-      //                       children: [
-      //                         Text(
-      //                           "鬼灭之刃 无线城篇",
-      //                           style: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.bold),
-      //                         ),
-      //                         SizedBox(height: 8.h), // 增加间距
-      //                         Text(
-      //                           "11月16日（土）10：00~14：00 IMAX",
-      //                           style: TextStyle(fontSize: 28.sp, color: Colors.black45),
-      //                           softWrap: true,
-      //                           overflow: TextOverflow.visible,
-      //                         ),
-      //                       ],
-      //                     ),
-      //                     Text(
-      //                       "東宝シネマズ　新宿（スクリーン8）",
-      //                       style: TextStyle(fontSize: 26.sp),
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //         // Container(
-      //         //   margin: EdgeInsets.symmetric(vertical: 20.h),
-      //         //   child: Text('选择电影票的类型', style: TextStyle(fontSize: 32.sp)),
-      //         // ),
-      //         Padding(padding: EdgeInsets.only(top: 50.h)),
-      //         ClipRRect(
-      //           borderRadius: BorderRadius.circular(4),
-      //           child: Container(
-      //             width: double.infinity,
-      //             color: Colors.grey.shade200,
-      //             padding: const EdgeInsets.all(10),
-      //               child: Wrap(
-      //                 runSpacing: 10,
-      //                 children: [
-      //                   const Row(
-      //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //                     children: [
-      //                       Text('座位号：C8'),
-      //                       Text('A区')
-      //                     ],
-      //                   ),
-      //                   MaterialButton(
-      //                     minWidth: double.infinity,
-      //                     color: Colors.blue,
-      //                     shape: const RoundedRectangleBorder(
-      //                         borderRadius: BorderRadius.all(
-      //                             Radius.circular(50))),
-      //                     onPressed: () {
-      //                     },
-      //                     child: Text(
-      //                         '请选择电影票类型',
-      //                         style: TextStyle(
-      //                             color: Colors.white,
-      //                             fontSize: 32.sp)),
-      //                   )
-      //                 ],
-      //               ),
-      //         ),
-      //         ),
-              
-              
-      //       ],
-      //     )
-
-
-      //   ),
-      // ),
     );
   }
+
+  int getTotalPrice () {
+    if (data.seat == null) return 0;
+    return data.seat!.fold(0, (prev, current) {
+      if (current.movieTicketTypeId != null) {
+        MovieTicketTypeResponse ticketType = movieTicketTypeData.firstWhere((el) => el.id == current.movieTicketTypeId);
+
+        return prev + (ticketType.price ?? 0) + (current.plusPrice ?? 0);
+      }
+
+      return prev;
+    });
+  }
+
+  Widget getTicketType (item) {
+    MovieTicketTypeResponse data = movieTicketTypeData.firstWhere((el) => el.id == item.movieTicketTypeId);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(data.name ?? ''), 
+        Text('${data.price}円', style: const TextStyle(color: Colors.red),)
+      ]);
+  }
+  void _showActionSheet(BuildContext context, Seat seat) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16))
+      ),
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: movieTicketTypeData.map((el) {
+            Color activeColor = el.id == seat.movieTicketTypeId ? Colors.red : Colors.black;
+              
+            return ListTile(
+              title: Text(el.name ?? '', style: TextStyle(
+                color: activeColor
+              ),),
+              trailing: Text('${el.price}円', style: TextStyle(fontSize: 32.sp,  color: activeColor)),
+              onTap: () {
+                seat.movieTicketTypeId = el.id;
+                int index = data.seat!.indexWhere((item) => item.movieTicketTypeId == el.id);
+                
+                setState(() {
+                  data.seat?[index].movieTicketTypeId = el.id;
+                });
+                
+                Navigator.pop(context);
+              },
+            );
+          }).toList()
+        );
+      },
+    );
+  }
+  
 }

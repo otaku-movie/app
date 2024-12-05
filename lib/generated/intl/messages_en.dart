@@ -44,6 +44,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_week_thursday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage(""),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage(""),
+        "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("Buy"),
+        "confirmOrder_selectPayMethod":
+            MessageLookupByLibrary.simpleMessage(""),
+        "confirmOrder_title": MessageLookupByLibrary.simpleMessage(""),
+        "confirmOrder_total": MessageLookupByLibrary.simpleMessage("Total"),
         "home_cinema": MessageLookupByLibrary.simpleMessage("cinema"),
         "home_home": MessageLookupByLibrary.simpleMessage("home"),
         "home_me": MessageLookupByLibrary.simpleMessage("my page"),
@@ -86,6 +91,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Coming Soon"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("Currently Showing"),
+        "movieTicketType_confirmOrder":
+            MessageLookupByLibrary.simpleMessage("Confirm Order"),
+        "movieTicketType_seatNumber": MessageLookupByLibrary.simpleMessage(""),
+        "movieTicketType_selectMovieTicketType":
+            MessageLookupByLibrary.simpleMessage(""),
+        "movieTicketType_title": MessageLookupByLibrary.simpleMessage(""),
+        "movieTicketType_total": MessageLookupByLibrary.simpleMessage("Total"),
         "register_email": MessageLookupByLibrary.simpleMessage("Email"),
         "register_password": MessageLookupByLibrary.simpleMessage("Password"),
         "register_registerButton":

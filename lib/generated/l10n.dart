@@ -580,6 +580,96 @@ class S {
     );
   }
 
+  /// `Total`
+  String get movieTicketType_total {
+    return Intl.message(
+      'Total',
+      name: 'movieTicketType_total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieTicketType_title {
+    return Intl.message(
+      '',
+      name: 'movieTicketType_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieTicketType_seatNumber {
+    return Intl.message(
+      '',
+      name: 'movieTicketType_seatNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieTicketType_selectMovieTicketType {
+    return Intl.message(
+      '',
+      name: 'movieTicketType_selectMovieTicketType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Order`
+  String get movieTicketType_confirmOrder {
+    return Intl.message(
+      'Confirm Order',
+      name: 'movieTicketType_confirmOrder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get confirmOrder_title {
+    return Intl.message(
+      '',
+      name: 'confirmOrder_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total`
+  String get confirmOrder_total {
+    return Intl.message(
+      'Total',
+      name: 'confirmOrder_total',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get confirmOrder_selectPayMethod {
+    return Intl.message(
+      '',
+      name: 'confirmOrder_selectPayMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy`
+  String get confirmOrder_pay {
+    return Intl.message(
+      'Buy',
+      name: 'confirmOrder_pay',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Language`
   String get user_language {
     return Intl.message(

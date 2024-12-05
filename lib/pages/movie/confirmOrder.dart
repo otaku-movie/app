@@ -5,13 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/response/order/order_detail_response.dart';
+import 'package:otaku_movie/response/order/payment_method_response.dart';
 import 'package:otaku_movie/utils/index.dart';
 
 class ConfirmOrder extends StatefulWidget {
-  const ConfirmOrder({super.key});
+  final String? id;
+
+  const ConfirmOrder({super.key, this.id = "29207"});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -19,6 +25,10 @@ class ConfirmOrder extends StatefulWidget {
 }
 
 class _PageState extends State<ConfirmOrder> {
+  OrderDetailResponse data = OrderDetailResponse();
+  List<PaymentMethodResponse> paymentMethodData = [];
+  bool loading = false;
+
   List<Map<String, dynamic>> pay  = [
     {
       "path": 'assets/icons/pay/paypay.svg',
@@ -35,9 +45,62 @@ class _PageState extends State<ConfirmOrder> {
   Timer? _timer;
 
 
+  getData() {
+    setState(() {
+      loading = true;
+    });
+    ApiRequest().request(
+      path: '/movieOrder/detail',
+      method: 'GET', 
+      queryParameters: {
+        "id": int.parse(widget.id!)
+      },
+      fromJsonT: (json) {
+        return OrderDetailResponse.fromJson(json);
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          data = res.data!;
+        });
+      }
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+  getPaymentMethodData() {
+    setState(() {
+      loading = true;
+    });
+    ApiRequest().request(
+      path: '/paymentMethod/list',
+      method: 'GET', 
+      queryParameters: {},
+      fromJsonT: (json) {
+        if (json is List) {
+          return json.map((item) {
+            return PaymentMethodResponse.fromJson(item);
+          }).toList();
+        }
+        
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          paymentMethodData = res.data as List<PaymentMethodResponse>;
+        });
+      }
+     
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getPaymentMethodData();
+    getData();
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countDown <= 0) {
@@ -60,10 +123,13 @@ class _PageState extends State<ConfirmOrder> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-         title: Text('确认订单', style: TextStyle(color: Colors.white)),
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(
+        title: Text(S.of(context).confirmOrder_title, style: const TextStyle(color: Colors.white)),
       ),
-      body: Column(
+      body: AppErrorWidget(
+        loading: loading,
+        child:  Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
@@ -77,11 +143,14 @@ class _PageState extends State<ConfirmOrder> {
                       children: [
                         Container(
                           margin: EdgeInsets.only(right: 20.w),
+                          color: Colors.grey.shade200,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(4),
-                            child: ExtendedImage.asset(
-                              'assets/image/raligun.webp',
-                              width: 200.w,
+                            child: ExtendedImage.network(
+                              data.moviePoster ?? '',
+                              width: 220.w,
+                              height: 260.h,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -98,9 +167,9 @@ class _PageState extends State<ConfirmOrder> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "鬼灭之刃 无线城篇",
+                                          data.movieName ?? '',
                                           style: TextStyle(
-                                            fontSize: 28.sp,
+                                            fontSize: 36.sp,
                                           ),
                                         ),
                                         Row(
@@ -119,27 +188,41 @@ class _PageState extends State<ConfirmOrder> {
                                     ),
                                     
                                     SizedBox(height: 8.h),
-                                    Text(
-                                      "11月16日（土）10：00~14：00 IMAX",
-                                      style: TextStyle(
-                                        fontSize: 30.sp,
-                                        fontWeight: FontWeight.bold
-                                      ),
-                                      softWrap: true,
-                                      overflow: TextOverflow.visible,
-                                    ),
-                                    
+                                    RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(
+                                          fontSize: 28.sp,
+                                          color: Colors.black54
+                                        ),
+                                        children: [
+                                          // 日期部分
+                                          TextSpan(
+                                            text: data.date ?? '',
+                                          ),
+                                          // 星期几部分
+                                          TextSpan(
+                                            text: '（${getDay(data.date ?? '', context)}）',
+                                          ),
+                                          // 时间段部分
+                                          TextSpan(
+                                            text: ' ${data.startTime} ~ ${data.endTime} ${data.theaterHallSpecName}',
+                                          ),
+                                        ],
+                                      )
+                                    )
                                   ],
                                 ),
+                                 SizedBox(height: 4.h),
                                 Text(
-                                  "東宝シネマズ　新宿（スクリーン8）",
+                                  "${data.cinemaName}（${data.theaterHallName}）",
                                   style: TextStyle(fontSize: 24.sp, color: Colors.grey.shade600),
                                 ),
+                                
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Wrap(
                                     spacing: 6,
-                                    children: ['C-1（一般）', 'C-2 （一般）', 'C-3 （一般）'].map((item) {
+                                    children: data.seat == null ? [] : data.seat!.map((item) {
                                       return ElevatedButton(
                                         style: ButtonStyle(
                                           minimumSize: WidgetStateProperty.all(Size(0, 50.h)),
@@ -154,7 +237,7 @@ class _PageState extends State<ConfirmOrder> {
                                         ),
                                         
                                         onPressed: () {},
-                                        child: Text(item),
+                                        child: Text('${item.seatName}（${item.movieTicketTypeName}）'),
                                       );
                                     }).toList(),
                                   ),
@@ -166,11 +249,11 @@ class _PageState extends State<ConfirmOrder> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 20.h, bottom: 30.h),
-                      child: const Text('选择支付方式', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                      padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
+                      child: Text(S.of(context).confirmOrder_selectPayMethod, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     ),
                     
-                    ...pay.map((item) {
+                    ...paymentMethodData.map((item) {
                       return  Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
@@ -182,7 +265,8 @@ class _PageState extends State<ConfirmOrder> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SvgPicture.asset(item['path'], height: 28),
+                            Text(item.name ?? ''),
+                            // SvgPicture.asset(item['path'], height: 28),
                             const Icon(Icons.radio_button_checked, color: Colors.blue)
                           ],
                         ) 
@@ -206,14 +290,15 @@ class _PageState extends State<ConfirmOrder> {
               children: [
                 Row(
                   children: [
-                    Text('合计：', style: TextStyle(fontSize: 28.sp)),
-                    Text('7500円', style: TextStyle(color: Colors.red, fontSize: 48.sp)),
+                    Text('${S.of(context).confirmOrder_total}：', style: TextStyle(fontSize: 28.sp)),
+                    Text('${data.orderTotal}円', style: TextStyle(color: Colors.red, fontSize: 48.sp)),
                     // Text('円', style: TextStyle(color: Colors.red, fontSize: 32.sp))
                   ],
                 ),
                 SizedBox(width: 16.w),
                 SizedBox(
-                  width: 250.w,                  
+                  width: 250.w,
+                  height: 70.h,                 
                   child: MaterialButton(
                     color: const Color.fromARGB(255, 2, 162, 255),
                     textColor: Colors.white,
@@ -224,7 +309,7 @@ class _PageState extends State<ConfirmOrder> {
                       context.go('/movie/order/success');
                     },
                     child: Text(
-                      '确认订单',
+                      S.of(context).confirmOrder_pay,
                       style: TextStyle(color: Colors.white, fontSize: 32.sp),
                     ),
                   ),
@@ -235,6 +320,7 @@ class _PageState extends State<ConfirmOrder> {
 
         ],
       ),
+      )
     );
   }
 }

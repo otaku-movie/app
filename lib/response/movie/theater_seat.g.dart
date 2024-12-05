@@ -144,6 +144,7 @@ Map<String, dynamic> _$SeatItemToJson(SeatItem instance) => <String, dynamic>{
 
 const _$SelectSeatStateEnumMap = {
   SelectSeatState.available: 'available',
+  SelectSeatState.selected: 'selected',
   SelectSeatState.locked: 'locked',
   SelectSeatState.sold: 'sold',
 };

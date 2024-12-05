@@ -126,17 +126,22 @@ final GoRouter routerConfig = GoRouter(
           },
         ),
         GoRoute(
-          path: '/movie/selectMovieTicketType',
+          path: '/cinema/selectMovieTicketType',
           name: 'selectMovieTicketType',
           builder: (BuildContext context, GoRouterState state) {
-            return const SelectMovieTicketType();
+            return SelectMovieTicketType(
+              cinemaId: state.uri.queryParameters['cinemaId'],
+                movieShowTimeId: state.uri.queryParameters['movieShowTimeId']
+            );
           },
         ),
         GoRoute(
           path: '/movie/confirmOrder',
           name: 'confirmOrder',
           builder: (BuildContext context, GoRouterState state) {
-            return const ConfirmOrder();
+            return ConfirmOrder(
+              id: state.uri.queryParameters['id'],
+            );
           },
         ),
         GoRoute(

@@ -45,7 +45,11 @@ class ApiRequest {
           return handler.next(response);
         },
         onError: (DioException error, ErrorInterceptorHandler handler) {
-          return handler.next(error);
+          if (error.response?.statusCode == 401) {
+            routerConfig.pushNamed('login');
+          } else {
+            return handler.next(error);
+          }
         },
       ),
     );
@@ -104,11 +108,6 @@ class ApiRequest {
         response.data,
         (json) => fromJsonT(json),
       );
-
-      // 登录过期跳登录
-      if (response.statusCode == 401) {
-        routerConfig.pushNamed('login');
-      }
       
       if (response.statusCode == 200 && apiResponse.code == 200) {
         return apiResponse;
