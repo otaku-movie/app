@@ -379,6 +379,33 @@
     }
   },
   "user": {
+    "title": {
+      "zh": "我的",
+      "ja": "",
+      "en": ""
+    },
+    "data": {
+      "orderCount": {
+        "zh": "订单数",
+        "ja": "",
+        "en": ""
+      },
+      "wantCount": {
+        "zh": "想看数",
+        "ja": "",
+        "en": ""
+      },
+      "characterCount": {
+        "zh": "演员数",
+        "ja": "",
+        "en": ""
+      },
+      "staffCount": {
+        "zh": "工作人员数",
+        "ja": "",
+        "en": ""
+      }
+    },
     "language": {
       "zh": "语言",
       "ja": "言語",

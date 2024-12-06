@@ -104,9 +104,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectSeat_maxSelectSeatWarn": m0,
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
+        "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),
+        "user_data_orderCount": MessageLookupByLibrary.simpleMessage(""),
+        "user_data_staffCount": MessageLookupByLibrary.simpleMessage(""),
+        "user_data_wantCount": MessageLookupByLibrary.simpleMessage(""),
         "user_editProfile": MessageLookupByLibrary.simpleMessage(""),
         "user_language": MessageLookupByLibrary.simpleMessage("言語"),
         "user_logout": MessageLookupByLibrary.simpleMessage(""),
-        "user_privateAgreement": MessageLookupByLibrary.simpleMessage("")
+        "user_privateAgreement": MessageLookupByLibrary.simpleMessage(""),
+        "user_title": MessageLookupByLibrary.simpleMessage("")
       };
 }

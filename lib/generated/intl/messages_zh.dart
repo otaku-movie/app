@@ -116,9 +116,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectSeat_maxSelectSeatWarn": m0,
         "user_about": MessageLookupByLibrary.simpleMessage("关于"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
+        "user_data_characterCount": MessageLookupByLibrary.simpleMessage("演员数"),
+        "user_data_orderCount": MessageLookupByLibrary.simpleMessage("订单数"),
+        "user_data_staffCount": MessageLookupByLibrary.simpleMessage("工作人员数"),
+        "user_data_wantCount": MessageLookupByLibrary.simpleMessage("想看数"),
         "user_editProfile": MessageLookupByLibrary.simpleMessage("编辑个人信息"),
         "user_language": MessageLookupByLibrary.simpleMessage("语言"),
         "user_logout": MessageLookupByLibrary.simpleMessage("退出登录"),
-        "user_privateAgreement": MessageLookupByLibrary.simpleMessage("隐私协议")
+        "user_privateAgreement": MessageLookupByLibrary.simpleMessage("隐私协议"),
+        "user_title": MessageLookupByLibrary.simpleMessage("我的")
       };
 }

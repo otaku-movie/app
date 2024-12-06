@@ -670,6 +670,56 @@ class S {
     );
   }
 
+  /// ``
+  String get user_title {
+    return Intl.message(
+      '',
+      name: 'user_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_data_orderCount {
+    return Intl.message(
+      '',
+      name: 'user_data_orderCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_data_wantCount {
+    return Intl.message(
+      '',
+      name: 'user_data_wantCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_data_characterCount {
+    return Intl.message(
+      '',
+      name: 'user_data_characterCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get user_data_staffCount {
+    return Intl.message(
+      '',
+      name: 'user_data_staffCount',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Language`
   String get user_language {
     return Intl.message(

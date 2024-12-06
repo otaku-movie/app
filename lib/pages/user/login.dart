@@ -41,6 +41,7 @@ class _LoginPageState extends State<Login> {
   @override
   void initState() {
     super.initState();
+   
     WidgetsBinding.instance.addPostFrameCallback((_) {
       languageController.changeLanguage(selectedLanguage);
     });
@@ -54,7 +55,31 @@ class _LoginPageState extends State<Login> {
     super.dispose();
   }
 
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 点击外部不会关闭弹窗
+      builder: (BuildContext context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent, // 透明背景
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ), // 显示加载动画
+          ),
+        );
+      },
+    );
+  }
+
+  // 关闭加载弹窗
+  void _hideLoadingDialog(BuildContext context) {
+    Navigator.of(context).pop(); // 关闭弹窗
+  }
+
   void handleEmailPasswordLogin() {
+    
+
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
@@ -76,6 +101,7 @@ class _LoginPageState extends State<Login> {
     
     String pwd = md5.convert(utf8.encode(passwordController.text)).toString();
 
+    _showLoadingDialog(context);
     ApiRequest().request(
       path: '/user/login',
       method: 'POST',
@@ -103,6 +129,7 @@ class _LoginPageState extends State<Login> {
       //   error = true;
       // });
     }).whenComplete(() {
+      _hideLoadingDialog(context);
       // setState(() {
       //   loading = false;
       // });
@@ -119,7 +146,10 @@ class _LoginPageState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    // _showLoadingDialog(context);
+
     return Scaffold(
+      
       appBar: CustomAppBar(
         // backgroundColor: Colors.blue,
         title: Row(
@@ -153,6 +183,7 @@ class _LoginPageState extends State<Login> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: 40.h), 
