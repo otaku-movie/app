@@ -98,6 +98,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(""),
         "movieTicketType_title": MessageLookupByLibrary.simpleMessage(""),
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("Total"),
+        "orderList_comment": MessageLookupByLibrary.simpleMessage("comment"),
+        "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
+        "orderList_title": MessageLookupByLibrary.simpleMessage(""),
         "register_email": MessageLookupByLibrary.simpleMessage("Email"),
         "register_password": MessageLookupByLibrary.simpleMessage("Password"),
         "register_registerButton":

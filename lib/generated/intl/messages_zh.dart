@@ -108,6 +108,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieTicketType_title":
             MessageLookupByLibrary.simpleMessage("选择电影票类型"),
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合计"),
+        "orderList_comment": MessageLookupByLibrary.simpleMessage("评论"),
+        "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("订单号"),
+        "orderList_title": MessageLookupByLibrary.simpleMessage("订单列表"),
         "register_email": MessageLookupByLibrary.simpleMessage("邮箱"),
         "register_password": MessageLookupByLibrary.simpleMessage("密码"),
         "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),

@@ -79,5 +79,8 @@
   "user_privateAgreement": "",
   "user_checkUpdate": "",
   "user_about": "",
-  "user_logout": ""
+  "user_logout": "",
+  "orderList_title": "",
+  "orderList_orderNumber": "",
+  "orderList_comment": "comment"
 }

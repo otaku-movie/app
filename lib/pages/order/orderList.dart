@@ -6,9 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/dict.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
+import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/response/api_pagination_response.dart';
+import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
+import 'package:otaku_movie/response/order/order_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
@@ -21,9 +28,48 @@ class OrderList extends StatefulWidget {
 }
 
 class _PageState extends State<OrderList> {
+  List<OrderDetailResponse> data = [];
+  int currentPage = 1;
+  bool loading = false;
+
+  void getData({bool refresh = true}) {
+    setState(() {
+      loading = true;
+    });
+    ApiRequest().request(
+      path: '/user/orderList',
+      method: 'POST',
+      data: {
+        "page": refresh ? 1 : currentPage + 1,
+        "pageSize": 10,
+      },
+      fromJsonT: (json) {
+        return ApiPaginationResponse<OrderDetailResponse>.fromJson(
+          json,
+          (data) => OrderDetailResponse.fromJson(data as Map<String, dynamic>),
+        );
+      },
+    ).then((res) {
+      setState(() {
+        if (refresh) {
+          data = res.data?.list ?? [];
+          currentPage = 1;
+        } else {
+          data.addAll(res.data?.list ?? []);
+          currentPage++;
+        }
+      });
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getData();
   }
 
   @override
@@ -34,10 +80,14 @@ class _PageState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-         title: Text('订单列表', style: TextStyle(color: Colors.white)),
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(
+         title: Text(S.of(context).orderList_title, style: const TextStyle(color: Colors.white)),
       ),
-      body: EasyRefresh(
+      
+      body: AppErrorWidget(
+        loading:  loading,
+        child: EasyRefresh(
         header: const ClassicHeader(),
         footer: const ClassicFooter(),
         // onRefresh: _onRefresh,
@@ -45,8 +95,10 @@ class _PageState extends State<OrderList> {
         child: ListView.builder(
           // physics: physics,
           shrinkWrap: true,
-          itemCount: 10,
+          itemCount: data.length,
           itemBuilder: (context, index) {
+            OrderDetailResponse item = data[index];
+
             return GestureDetector(
               onTap: () {
                 context.pushNamed('orderDetail');
@@ -66,8 +118,11 @@ class _PageState extends State<OrderList> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('订单号：123456789123456789', style: TextStyle(fontSize: 28.sp)),
-                        const Text('订单已完成')
+                        Text('${S.of(context).orderList_orderNumber}：${item.id ?? ''}', style: TextStyle(fontSize: 28.sp)),
+                        Dict(
+                          name: 'orderState',
+                          code: item.orderState,
+                        )
                       ],
                     ),
                   ),
@@ -76,96 +131,107 @@ class _PageState extends State<OrderList> {
                     children: [
                       Container(
                         margin: EdgeInsets.only(right: 20.w),
+                        color: Colors.grey.shade200,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: ExtendedImage.asset(
-                            'assets/image/raligun.webp',
-                            width: 250.w,
+                          child: ExtendedImage.network(
+                            item.moviePoster ?? '',
+                            width: 220.w,
+                            height: 260.h,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       Expanded(
-                        child: Container(
-                          height: 295.h,
-                          // decoration: BoxDecoration(
-                          //   border: Border.all()
-                          // ),
+                        child: SizedBox(
+                          height: 265.h,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
-                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Flexible(
-                                        child: Text(
-                                        "鬼灭之刃 无线城篇",
+                                      Text(
+                                        item.movieName ?? '',
                                         style: TextStyle(
-                                          fontSize: 24.sp,
+                                          fontSize: 36.sp,
                                         ),
-                                        overflow: TextOverflow.ellipsis
                                       ),
-                                      )
-                                      
                                     ],
                                   ),
-                                  
                                   SizedBox(height: 8.h),
-                                  Text(
-                                    "11月16日（土）10：00 ~ 14：00 IMAX",
-                                    style: TextStyle(
-                                      fontSize: 28.sp,
-                                      fontWeight: FontWeight.bold
-                                    )
-                                  ),
-                                  Text(
-                                    "東宝シネマズ　新宿（スクリーン8）",
-                                    style: TextStyle(fontSize: 24.sp, color: Colors.grey.shade600),
-                                  ),
-                                  Wrap(
-                                  spacing: 8.w,
-                                    children: ['C-12', 'C-22 ', 'C-23 ', 'C-23','C-23','C-23'].map((item) {
-                                      return Container(
-                                        // width: double.,
-                                        height: 40.h,
-                                        margin: EdgeInsets.only(top: 10.h),
-                                        // padding: EdgeInsets.only(bottom: 10.h),
-                                        // child: Text(item),
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                            minimumSize: WidgetStateProperty.all(Size(0, 50.h)),
-                                            textStyle: WidgetStateProperty.all(TextStyle(fontSize: 20.sp)),
-                                            side: WidgetStateProperty.all(const BorderSide(width: 2, color: Color(0xffffffff))),
-                                            padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0.0)),
-                                            shape: WidgetStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(20.0), // 调整圆角大小
-                                              ), 
-                                            ),
-                                          ),
-                                          onPressed: () {},
-                                          child: Text(item),
+                                  RichText(
+                                    text: TextSpan(
+                                      style: TextStyle(
+                                        fontSize: 28.sp,
+                                        color: Colors.black54
+                                      ),
+                                      children: [
+                                        // 日期部分
+                                        TextSpan(
+                                          text: item.date ?? '',
                                         ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ],
-                              ),
+                                        // 星期几部分
+                                        TextSpan(
+                                          text: '（${getDay(item.date ?? '', context)}）',
+                                        ),
+                                        // 时间段部分
+                                        TextSpan(
+                                          text: ' ${item.startTime} ~ ${item.endTime} ${item.theaterHallSpecName}',
+                                        )],
+                                      )
+                                    ),
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      "${item.cinemaName}（${item.theaterHallName}）",
+                                      style: TextStyle(fontSize: 24.sp, color: Colors.grey.shade600),
+                                    ),
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Wrap(
+                                        spacing: 6,
+                                        children: item.seat == null ? [] : item.seat!.map((item) {
+                                          return ElevatedButton(
+                                            style: ButtonStyle(
+                                              minimumSize: WidgetStateProperty.all(Size(0, 50.h)),
+                                              textStyle: WidgetStateProperty.all(TextStyle(fontSize: 20.sp)),
+                                              side: WidgetStateProperty.all(const BorderSide(width: 2, color: Color(0xffffffff))),
+                                              padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 15.0, vertical: 0.0)),
+                                              shape: WidgetStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(20.0), // 调整圆角大小
+                                                ), 
+                                              ),
+                                            ),
+                                            
+                                            onPressed: () {},
+                                            child: Text('${item.seatName}（${item.movieTicketTypeName}）'),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                    
+                                  ],
+                                ),
+                                 
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
-                                      Text('7500円', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
+                                      Text('${item.orderTotal}円', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
                                       // Text('円', style: TextStyle(color: Colors.red, fontSize: 32.sp))
                                     ],
                                   ),
                                   SizedBox(width: 16.w),
-                                  SizedBox(
+                                  // ignore: unrelated_type_equality_checks
+                                  item.orderState == OrderState.succeed ? SizedBox(
                                     width: 120.w,
                                     height: 50.h,                  
                                     child: MaterialButton(
@@ -179,11 +245,11 @@ class _PageState extends State<OrderList> {
                                         // context.pushNamed('commentDetail');
                                       },
                                       child: Text(
-                                        '评价',
+                                        S.of(context).orderList_comment,
                                         style: TextStyle(color: Colors.white, fontSize: 28.sp),
                                       ),
                                     ),
-                                  ),
+                                  ) : const SizedBox(),
                                 ],
                               )
                             ],
@@ -198,6 +264,7 @@ class _PageState extends State<OrderList> {
             );
           },
         ),
+      ),
       ),
     );
   }

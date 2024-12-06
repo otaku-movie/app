@@ -436,5 +436,22 @@
       "ja": "",
       "en": ""
     }
+  },
+  "orderList": {
+    "title": {
+      "zh": "订单列表",
+      "ja": "",
+      "en": ""
+    },
+    "orderNumber": {
+      "zh": "订单号",
+      "ja": "",
+      "en": ""
+    },
+    "comment": {
+      "zh": "评论",
+      "ja": "コメント",
+      "en": "comment"
+    }
   }
 }

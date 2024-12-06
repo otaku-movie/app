@@ -317,7 +317,6 @@ class _PageState extends State<ConfirmOrder> {
               ],
             ),
           )
-
         ],
       ),
       )

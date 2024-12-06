@@ -587,7 +587,6 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       borderRadius: BorderRadius.all(
                           Radius.circular(100))),
                   onPressed: () {
-                    print(selectSeatList);
                     ApiRequest().request(
                       path: '/movie_show_time/select_seat/save',
                       method: 'POST',

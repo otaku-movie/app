@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:otaku_movie/controller/DictController.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/router/application.dart';
 import 'package:otaku_movie/router/router.dart';
@@ -18,7 +19,9 @@ void main() {
   // final router = FluroRouter();
   // Routes.configureRoutes(router);
   // Application.router = router;
-  runApp(MyApp());
+  runApp(const MyApp());
+
+  Get.lazyPut(() => DictController());
 
   // FToast fToast = FToast();
   // fToast.init(navigatorKey.currentContext!);
@@ -27,9 +30,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  
 
   @override
   Widget build(BuildContext context) {
+   
+
     return ScreenUtilInit(
       designSize: const Size(750, 1334),
       minTextAdapt: true,

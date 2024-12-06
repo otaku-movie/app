@@ -4,7 +4,7 @@ import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/tab/CinemaList.dart';
 import 'package:otaku_movie/pages/user/User.dart';
 import 'package:otaku_movie/pages/setting.dart';
-
+import 'package:otaku_movie/controller/DictController.dart';
 import '../controller/LanguageController.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +26,9 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final LanguageController languageController = Get.find();
+    final DictController dictController = Get.find();
+
+    Get.put(dictController);
 
     List<Map<String, dynamic>> tab = [
     {

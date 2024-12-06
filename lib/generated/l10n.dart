@@ -779,6 +779,36 @@ class S {
       args: [],
     );
   }
+
+  /// ``
+  String get orderList_title {
+    return Intl.message(
+      '',
+      name: 'orderList_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get orderList_orderNumber {
+    return Intl.message(
+      '',
+      name: 'orderList_orderNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `comment`
+  String get orderList_comment {
+    return Intl.message(
+      'comment',
+      name: 'orderList_comment',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

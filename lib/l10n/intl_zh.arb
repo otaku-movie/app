@@ -79,5 +79,8 @@
   "user_privateAgreement": "隐私协议",
   "user_checkUpdate": "检查更新",
   "user_about": "关于",
-  "user_logout": "退出登录"
+  "user_logout": "退出登录",
+  "orderList_title": "订单列表",
+  "orderList_orderNumber": "订单号",
+  "orderList_comment": "评论"
 }

@@ -20,7 +20,7 @@ class _PageState extends State<UserInfo> {
   final LanguageController languageController = Get.find();
   UserDetailResponse data = UserDetailResponse();
   
-  String langName = '简体中文';
+  String langName = '';
   String token = '';
   
   void updateLangName () {
@@ -73,6 +73,7 @@ class _PageState extends State<UserInfo> {
   void initState() {
     super.initState();
     getData();
+    updateLangName();
   }
 
   @override
