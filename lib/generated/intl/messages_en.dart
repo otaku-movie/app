@@ -20,7 +20,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
+  static String m0(ticketCount) => "";
+
+  static String m1(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -98,6 +100,15 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(""),
         "movieTicketType_title": MessageLookupByLibrary.simpleMessage(""),
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("Total"),
+        "orderDetail_orderCreateTime": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_orderMessage": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_orderNumber": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_orderState": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_payMethod": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_payTime": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_ticketCount": m0,
+        "orderDetail_title": MessageLookupByLibrary.simpleMessage(""),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("comment"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
         "orderList_title": MessageLookupByLibrary.simpleMessage(""),
@@ -107,7 +118,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Register"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage(""),
-        "selectSeat_maxSelectSeatWarn": m0,
+        "selectSeat_maxSelectSeatWarn": m1,
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),

@@ -453,5 +453,73 @@
       "ja": "コメント",
       "en": "comment"
     }
+  },
+  "orderDetail": {
+    "title": {
+      "zh": "订单详情",
+      "ja": "",
+      "en": ""
+    },
+    "ticketCount": {
+      "zh": {
+        "text": "{ticketCount}张电影票",
+        "placeholders": {
+          "ticketCount": {
+            "type": "int"
+          }
+        }
+      },
+      "ja": {
+        "text": "",
+        "placeholders": {
+          "ticketCount": {
+            "type": "int"
+          }
+        }
+      },
+      "en": {
+        "text": "",
+        "placeholders": {
+          "ticketCount": {
+            "type": "int"
+          }
+        }
+      }
+    },
+    "orderNumber": {
+      "zh": "订单号",
+      "ja": "",
+      "en": ""
+    },
+    "orderState": {
+      "zh": "订单状态",
+      "ja": "",
+      "en": ""
+    },
+    "orderCreateTime": {
+      "zh": "订单创建时间",
+      "ja": "",
+      "en": ""
+    },
+    "payTime": {
+      "zh": "支付时间",
+      "ja": "",
+      "en": ""
+    },
+    "payMethod": {
+      "zh": "支付方式",
+      "ja": "",
+      "en": ""
+    },
+    "seatMessage": {
+      "zh": "座位信息",
+      "ja": "",
+      "en": ""
+    },
+    "orderMessage": {
+      "zh": "订单信息",
+      "ja": "",
+      "en": ""
+    }
   }
 }

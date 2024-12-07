@@ -20,7 +20,9 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh';
 
-  static String m0(maxSeat) => "最大选座数量不能超过${maxSeat}个";
+  static String m0(ticketCount) => "${ticketCount}张电影票";
+
+  static String m1(maxSeat) => "最大选座数量不能超过${maxSeat}个";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -108,6 +110,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieTicketType_title":
             MessageLookupByLibrary.simpleMessage("选择电影票类型"),
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合计"),
+        "orderDetail_orderCreateTime":
+            MessageLookupByLibrary.simpleMessage("订单创建时间"),
+        "orderDetail_orderMessage":
+            MessageLookupByLibrary.simpleMessage("订单信息"),
+        "orderDetail_orderNumber": MessageLookupByLibrary.simpleMessage("订单号"),
+        "orderDetail_orderState": MessageLookupByLibrary.simpleMessage("订单状态"),
+        "orderDetail_payMethod": MessageLookupByLibrary.simpleMessage("支付方式"),
+        "orderDetail_payTime": MessageLookupByLibrary.simpleMessage("支付时间"),
+        "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage("座位信息"),
+        "orderDetail_ticketCount": m0,
+        "orderDetail_title": MessageLookupByLibrary.simpleMessage("订单详情"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("评论"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("订单号"),
         "orderList_title": MessageLookupByLibrary.simpleMessage("订单列表"),
@@ -116,7 +129,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
-        "selectSeat_maxSelectSeatWarn": m0,
+        "selectSeat_maxSelectSeatWarn": m1,
         "user_about": MessageLookupByLibrary.simpleMessage("关于"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage("演员数"),

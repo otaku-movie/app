@@ -82,5 +82,21 @@
   "user_logout": "",
   "orderList_title": "",
   "orderList_orderNumber": "",
-  "orderList_comment": "コメント"
+  "orderList_comment": "コメント",
+  "orderDetail_title": "",
+  "orderDetail_ticketCount": "",
+  "@orderDetail_ticketCount": {
+    "placeholders": {
+      "ticketCount": {
+        "type": "int"
+      }
+    }
+  },
+  "orderDetail_orderNumber": "",
+  "orderDetail_orderState": "",
+  "orderDetail_orderCreateTime": "",
+  "orderDetail_payTime": "",
+  "orderDetail_payMethod": "",
+  "orderDetail_seatMessage": "",
+  "orderDetail_orderMessage": ""
 }

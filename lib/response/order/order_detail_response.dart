@@ -12,7 +12,7 @@ class OrderDetailResponse {
     @JsonKey(name: "order_state")
     final int? orderState;
     @JsonKey(name: "pay_method")
-    final int? payMethod;
+    final String? payMethod;
     @JsonKey(name: "pay_number")
     final int? payNumber;
     @JsonKey(name: "pay_state")

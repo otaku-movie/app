@@ -11,7 +11,7 @@ OrderDetailResponse _$OrderDetailResponseFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num?)?.toInt(),
       orderTotal: (json['order_total'] as num?)?.toInt(),
       orderState: (json['order_state'] as num?)?.toInt(),
-      payMethod: (json['pay_method'] as num?)?.toInt(),
+      payMethod: json['pay_method'] as String?,
       payNumber: (json['pay_number'] as num?)?.toInt(),
       payState: (json['pay_state'] as num?)?.toInt(),
       payTotal: (json['pay_total'] as num?)?.toInt(),

@@ -176,7 +176,9 @@ final GoRouter routerConfig = GoRouter(
           path: '/me/orderList/orderDetail',
           name: 'orderDetail',
           builder: (BuildContext context, GoRouterState state) {
-            return const OrderDetail();
+            return OrderDetail(
+              id: state.uri.queryParameters['id'],
+            );
           },
         ),
       ],

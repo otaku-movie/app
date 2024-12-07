@@ -101,7 +101,9 @@ class _PageState extends State<OrderList> {
 
             return GestureDetector(
               onTap: () {
-                context.pushNamed('orderDetail');
+                context.pushNamed('orderDetail', queryParameters: {
+                  'id': '${item.id}'
+                });
               },
               child: Container(
               padding: EdgeInsets.all(20.w),

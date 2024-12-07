@@ -11,6 +11,11 @@
 			<string>http</string>
 			<string>https</string>
 	</array>
+	<!-- 打开电话 -->
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+			<string>tel</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

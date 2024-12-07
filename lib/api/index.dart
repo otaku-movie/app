@@ -83,18 +83,20 @@ class ApiRequest {
     });
   }
 
-  Future<ApiResponse<T>> request<T>({
+  dynamic request<T>({
     required String path,
     required String method,
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
+    ResponseType? responseType,
     required T Function(dynamic) fromJsonT,
   }) async {
     try {
       Options options = Options(
         method: method,
         headers: headers,
+        responseType: responseType ?? ResponseType.json
       );
 
       Response response = await _dio.request(
@@ -104,6 +106,13 @@ class ApiRequest {
         options: options,
       );
 
+      final contentType = response.headers.value('content-type');
+
+      // 检查响应类型
+      if (contentType != null && !contentType.contains('application/json')) {
+        return response.data;
+      }
+      
       ApiResponse<T> apiResponse = ApiResponse<T>.fromJson(
         response.data,
         (json) => fromJsonT(json),

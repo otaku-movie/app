@@ -809,6 +809,96 @@ class S {
       args: [],
     );
   }
+
+  /// ``
+  String get orderDetail_title {
+    return Intl.message(
+      '',
+      name: 'orderDetail_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String orderDetail_ticketCount(int ticketCount) {
+    return Intl.message(
+      '',
+      name: 'orderDetail_ticketCount',
+      desc: '',
+      args: [ticketCount],
+    );
+  }
+
+  /// ``
+  String get orderDetail_orderNumber {
+    return Intl.message(
+      '',
+      name: 'orderDetail_orderNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get orderDetail_orderState {
+    return Intl.message(
+      '',
+      name: 'orderDetail_orderState',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get orderDetail_orderCreateTime {
+    return Intl.message(
+      '',
+      name: 'orderDetail_orderCreateTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get orderDetail_payTime {
+    return Intl.message(
+      '',
+      name: 'orderDetail_payTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get orderDetail_payMethod {
+    return Intl.message(
+      '',
+      name: 'orderDetail_payMethod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get orderDetail_seatMessage {
+    return Intl.message(
+      '',
+      name: 'orderDetail_seatMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get orderDetail_orderMessage {
+    return Intl.message(
+      '',
+      name: 'orderDetail_orderMessage',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

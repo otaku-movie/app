@@ -18,6 +18,9 @@ samples, guidance on mobile development, and a full API reference.
 ## 生成i18n 文件
 ```agsl
 dart pub global run intl_utils:generate
+
+# 国际化json生成arb
+node lib/l10n/node/index.js
 ```
 
 ## json 序列化
