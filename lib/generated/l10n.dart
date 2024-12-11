@@ -60,11 +60,21 @@ class S {
     );
   }
 
-  /// ``
+  /// `Confirm Seat Selection`
   String get selectSeat_confirmSelectSeat {
     return Intl.message(
-      '',
+      'Confirm Seat Selection',
       name: 'selectSeat_confirmSelectSeat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a seat`
+  String get selectSeat_notSelectSeatWarn {
+    return Intl.message(
+      'Please select a seat',
+      name: 'selectSeat_notSelectSeatWarn',
       desc: '',
       args: [],
     );
@@ -100,120 +110,120 @@ class S {
     );
   }
 
-  /// ``
+  /// `Send Verification Code`
   String get common_components_sendVerifyCode_send {
     return Intl.message(
-      '',
+      'Send Verification Code',
       name: 'common_components_sendVerifyCode_send',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Couple Seat`
   String get common_enum_seatType_coupleSeat {
     return Intl.message(
-      '',
+      'Couple Seat',
       name: 'common_enum_seatType_coupleSeat',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Wheelchair Seat`
   String get common_enum_seatType_wheelChair {
     return Intl.message(
-      '',
+      'Wheelchair Seat',
       name: 'common_enum_seatType_wheelChair',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Disabled`
   String get common_enum_seatType_disabled {
     return Intl.message(
-      '',
+      'Disabled',
       name: 'common_enum_seatType_disabled',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
-  String get common_enum_seatType_selectable {
+  /// `Selected`
+  String get common_enum_seatType_selected {
     return Intl.message(
-      '',
-      name: 'common_enum_seatType_selectable',
+      'Selected',
+      name: 'common_enum_seatType_selected',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Locked`
   String get common_enum_seatType_locked {
     return Intl.message(
-      '',
+      'Locked',
       name: 'common_enum_seatType_locked',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Sold`
   String get common_enum_seatType_sold {
     return Intl.message(
-      '',
+      'Sold',
       name: 'common_enum_seatType_sold',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Mon`
   String get common_week_monday {
     return Intl.message(
-      '',
+      'Mon',
       name: 'common_week_monday',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Tue`
   String get common_week_tuesday {
     return Intl.message(
-      '',
+      'Tue',
       name: 'common_week_tuesday',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Wed`
   String get common_week_wednesday {
     return Intl.message(
-      '',
+      'Wed',
       name: 'common_week_wednesday',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Thu`
   String get common_week_thursday {
     return Intl.message(
-      '',
+      'Thu',
       name: 'common_week_thursday',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Fri`
   String get common_week_friday {
     return Intl.message(
-      '',
+      'Fri',
       name: 'common_week_friday',
       desc: '',
       args: [],
@@ -250,20 +260,20 @@ class S {
     );
   }
 
-  /// ``
+  /// `Email cannot be empty`
   String get login_email_verify_notNull {
     return Intl.message(
-      '',
+      'Email cannot be empty',
       name: 'login_email_verify_notNull',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Invalid email address`
   String get login_email_verify_isValid {
     return Intl.message(
-      '',
+      'Invalid email address',
       name: 'login_email_verify_isValid',
       desc: '',
       args: [],

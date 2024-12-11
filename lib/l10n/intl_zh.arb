@@ -9,6 +9,7 @@
     }
   },
   "selectSeat_confirmSelectSeat": "确认选座",
+  "selectSeat_notSelectSeatWarn": "请选择座位",
   "home_home": "首页",
   "home_cinema": "电影院",
   "home_me": "我的",
@@ -16,7 +17,7 @@
   "common_enum_seatType_coupleSeat": "情侣座",
   "common_enum_seatType_wheelChair": "轮椅座",
   "common_enum_seatType_disabled": "已禁用",
-  "common_enum_seatType_selectable": "可选择",
+  "common_enum_seatType_selected": "已选择",
   "common_enum_seatType_locked": "已锁定",
   "common_enum_seatType_sold": "已售出",
   "common_week_monday": "一",

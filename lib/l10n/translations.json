@@ -28,8 +28,13 @@
     },
     "confirmSelectSeat": {
       "zh": "确认选座",
-      "ja": "",
-      "en": ""
+      "ja": "座席を確定する",
+      "en": "Confirm Seat Selection"
+    },
+    "notSelectSeatWarn": {
+      "zh": "请选择座位",
+      "ja": "座席を選択してください",
+      "en": "Please select a seat"
     }
   },
   "home": {
@@ -54,8 +59,8 @@
       "sendVerifyCode": {
         "send": {
           "zh": "发送验证码",
-          "ja": "",
-          "en": ""
+          "ja": "検証コードを送信",
+          "en": "Send Verification Code"
         }
       }
     },
@@ -63,70 +68,70 @@
       "seatType": {
         "coupleSeat": {
           "zh": "情侣座",
-          "ja": "",
-          "en": ""
+          "ja": "カップルシート",
+          "en": "Couple Seat"
         },
         "wheelChair": {
           "zh": "轮椅座",
-          "ja": "",
-          "en": ""
+          "ja": "輪椅シート",
+          "en": "Wheelchair Seat"
         },
         "disabled": {
           "zh": "已禁用",
-          "ja": "",
-          "en": ""
+          "ja": "選択不可",
+          "en": "Disabled"
         },
-        "selectable": {
-          "zh": "可选择",
-          "ja": "",
-          "en": ""
+        "selected": {
+          "zh": "已选择",
+          "ja": "選択済み",
+          "en": "Selected"
         },
         "locked": {
           "zh": "已锁定",
-          "ja": "",
-          "en": ""
+          "ja": "ロック済み",
+          "en": "Locked"
         },
         "sold": {
           "zh": "已售出",
-          "ja": "",
-          "en": ""
+          "ja": "販売済み",
+          "en": "Sold"
         }
       }
     },
     "week": {
       "monday": {
         "zh": "一",
-        "ja": "",
-        "en": ""
+        "ja": "月",
+        "en": "Mon"
       },
       "tuesday": {
         "zh": "二",
-        "ja": "",
-        "en": ""
+        "ja": "火",
+        "en": "Tue"
       },
       "wednesday": {
         "zh": "三",
-        "ja": "",
-        "en": ""
+        "ja": "水",
+        "en": "Wed"
       },
       "thursday": {
         "zh": "四",
-        "ja": "",
-        "en": ""
+        "ja": "木",
+        "en": "Thu"
       },
       "friday": {
         "zh": "五",
-        "ja": "",
-        "en": ""
+        "ja": "金",
+        "en": "Fri"
       },
       "saturday": {
         "zh": "六",
-        "ja": "",
+        "ja": "土",
         "en": "Sat"
       },
       "sunday": {
         "zh": "日",
-        "ja": "",
+        "ja": "日",
         "en": "Sun"
       }
     }
@@ -141,13 +146,13 @@
       "verify": {
         "notNull": {
           "zh": "邮箱不能为空",
-          "ja": "",
-          "en": ""
+          "ja": "メールアドレスを入力してください",
+          "en": "Email cannot be empty"
         },
         "isValid": {
           "zh": "邮箱不合法",
-          "ja": "",
-          "en": ""
+          "ja": "メールアドレスが正しくありません",
+          "en": "Invalid email address"
         }
       }
     },

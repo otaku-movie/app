@@ -35,8 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("已禁用"),
         "common_enum_seatType_locked":
             MessageLookupByLibrary.simpleMessage("已锁定"),
-        "common_enum_seatType_selectable":
-            MessageLookupByLibrary.simpleMessage("可选择"),
+        "common_enum_seatType_selected":
+            MessageLookupByLibrary.simpleMessage("已选择"),
         "common_enum_seatType_sold":
             MessageLookupByLibrary.simpleMessage("已售出"),
         "common_enum_seatType_wheelChair":
@@ -130,6 +130,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
         "selectSeat_maxSelectSeatWarn": m1,
+        "selectSeat_notSelectSeatWarn":
+            MessageLookupByLibrary.simpleMessage("请选择座位"),
         "user_about": MessageLookupByLibrary.simpleMessage("关于"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage("演员数"),

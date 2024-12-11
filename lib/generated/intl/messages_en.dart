@@ -28,24 +28,26 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
         "common_components_sendVerifyCode_send":
-            MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("Send Verification Code"),
         "common_enum_seatType_coupleSeat":
-            MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("Couple Seat"),
         "common_enum_seatType_disabled":
-            MessageLookupByLibrary.simpleMessage(""),
-        "common_enum_seatType_locked": MessageLookupByLibrary.simpleMessage(""),
-        "common_enum_seatType_selectable":
-            MessageLookupByLibrary.simpleMessage(""),
-        "common_enum_seatType_sold": MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("Disabled"),
+        "common_enum_seatType_locked":
+            MessageLookupByLibrary.simpleMessage("Locked"),
+        "common_enum_seatType_selected":
+            MessageLookupByLibrary.simpleMessage("Selected"),
+        "common_enum_seatType_sold":
+            MessageLookupByLibrary.simpleMessage("Sold"),
         "common_enum_seatType_wheelChair":
-            MessageLookupByLibrary.simpleMessage(""),
-        "common_week_friday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_monday": MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("Wheelchair Seat"),
+        "common_week_friday": MessageLookupByLibrary.simpleMessage("Fri"),
+        "common_week_monday": MessageLookupByLibrary.simpleMessage("Mon"),
         "common_week_saturday": MessageLookupByLibrary.simpleMessage("Sat"),
         "common_week_sunday": MessageLookupByLibrary.simpleMessage("Sun"),
-        "common_week_thursday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_tuesday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_wednesday": MessageLookupByLibrary.simpleMessage(""),
+        "common_week_thursday": MessageLookupByLibrary.simpleMessage("Thu"),
+        "common_week_tuesday": MessageLookupByLibrary.simpleMessage("Tue"),
+        "common_week_wednesday": MessageLookupByLibrary.simpleMessage("Wed"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("Buy"),
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage(""),
@@ -55,8 +57,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_home": MessageLookupByLibrary.simpleMessage("home"),
         "home_me": MessageLookupByLibrary.simpleMessage("my page"),
         "login_email_text": MessageLookupByLibrary.simpleMessage("Email"),
-        "login_email_verify_isValid": MessageLookupByLibrary.simpleMessage(""),
-        "login_email_verify_notNull": MessageLookupByLibrary.simpleMessage(""),
+        "login_email_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("Invalid email address"),
+        "login_email_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("Email cannot be empty"),
         "login_loginButton": MessageLookupByLibrary.simpleMessage("Login"),
         "login_noAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
@@ -117,8 +121,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_registerButton":
             MessageLookupByLibrary.simpleMessage("Register"),
         "selectSeat_confirmSelectSeat":
-            MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
         "selectSeat_maxSelectSeatWarn": m1,
+        "selectSeat_notSelectSeatWarn":
+            MessageLookupByLibrary.simpleMessage("Please select a seat"),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),

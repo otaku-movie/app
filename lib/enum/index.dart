@@ -7,17 +7,27 @@ enum AisleType {
   row,
   column
 }
-
 enum SelectSeatState {
-  // 1
-  available,
-  // 2
-  selected,
-  // 3
-  locked,
-  // 4
-  sold
+  available(name: 'available', code: 1),
+  selected(name: 'selected', code: 2),
+  locked(name: 'locked', code: 3),
+  sold(name: 'sold', code: 4);
+
+  const SelectSeatState({required this.name, required this.code});
+
+  final String name;
+  final int code;
 }
+
+// enum SelectSeatState {
+//   available(name: 'available', code: 1),
+
+
+//   available = 1,  // 对应 1
+//   selected = 2,   // 对应 2
+//   locked = 3,     // 对应 3
+//   sold = 4,       // 对应 4
+// }
 
 enum OrderState {
   // 订单已创建 1

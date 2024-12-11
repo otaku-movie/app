@@ -28,24 +28,26 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
         "common_components_sendVerifyCode_send":
-            MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("検証コードを送信"),
         "common_enum_seatType_coupleSeat":
-            MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("カップルシート"),
         "common_enum_seatType_disabled":
-            MessageLookupByLibrary.simpleMessage(""),
-        "common_enum_seatType_locked": MessageLookupByLibrary.simpleMessage(""),
-        "common_enum_seatType_selectable":
-            MessageLookupByLibrary.simpleMessage(""),
-        "common_enum_seatType_sold": MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("選択不可"),
+        "common_enum_seatType_locked":
+            MessageLookupByLibrary.simpleMessage("ロック済み"),
+        "common_enum_seatType_selected":
+            MessageLookupByLibrary.simpleMessage("選択済み"),
+        "common_enum_seatType_sold":
+            MessageLookupByLibrary.simpleMessage("販売済み"),
         "common_enum_seatType_wheelChair":
-            MessageLookupByLibrary.simpleMessage(""),
-        "common_week_friday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_monday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_saturday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_sunday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_thursday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_tuesday": MessageLookupByLibrary.simpleMessage(""),
-        "common_week_wednesday": MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("輪椅シート"),
+        "common_week_friday": MessageLookupByLibrary.simpleMessage("金"),
+        "common_week_monday": MessageLookupByLibrary.simpleMessage("月"),
+        "common_week_saturday": MessageLookupByLibrary.simpleMessage("土"),
+        "common_week_sunday": MessageLookupByLibrary.simpleMessage("日"),
+        "common_week_thursday": MessageLookupByLibrary.simpleMessage("木"),
+        "common_week_tuesday": MessageLookupByLibrary.simpleMessage("火"),
+        "common_week_wednesday": MessageLookupByLibrary.simpleMessage("水"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支払いへ"),
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage(""),
@@ -55,8 +57,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_home": MessageLookupByLibrary.simpleMessage("ホーム"),
         "home_me": MessageLookupByLibrary.simpleMessage("マイページ"),
         "login_email_text": MessageLookupByLibrary.simpleMessage("メール"),
-        "login_email_verify_isValid": MessageLookupByLibrary.simpleMessage(""),
-        "login_email_verify_notNull": MessageLookupByLibrary.simpleMessage(""),
+        "login_email_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("メールアドレスが正しくありません"),
+        "login_email_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("メールアドレスを入力してください"),
         "login_loginButton": MessageLookupByLibrary.simpleMessage("ログイン"),
         "login_noAccount": MessageLookupByLibrary.simpleMessage(""),
         "login_password_text": MessageLookupByLibrary.simpleMessage("パスワード"),
@@ -114,8 +118,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_password": MessageLookupByLibrary.simpleMessage(""),
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),
         "selectSeat_confirmSelectSeat":
-            MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("座席を確定する"),
         "selectSeat_maxSelectSeatWarn": m1,
+        "selectSeat_notSelectSeatWarn":
+            MessageLookupByLibrary.simpleMessage("座席を選択してください"),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),

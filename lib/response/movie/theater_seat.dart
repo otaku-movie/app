@@ -136,11 +136,11 @@ class SeatItem {
     @JsonKey(name: "z")
     final dynamic z;
     @JsonKey(name: "selected")
-    final dynamic selected;
+    final bool selected;
     @JsonKey(name: "show")
     final bool? show;
     @JsonKey(name: "disabled")
-    final bool? disabled;
+    final bool disabled;
     @JsonKey(name: "wheel_chair")
     final bool? wheelChair;
     @JsonKey(name: "seat_position_group")
@@ -148,7 +148,7 @@ class SeatItem {
     @JsonKey(name: "area")
     final SeatArea? area;
     @JsonKey(name: "select_seat_state")
-    final SelectSeatState? selectSeatState;
+    final int? selectSeatState;
 
     SeatItem({
         this.type,
@@ -159,13 +159,13 @@ class SeatItem {
         this.x = 0,
         this.y = 0,
         this.z,
-        this.selected,
+        this.selected = false,
         this.show,
-        this.disabled,
+        this.disabled = false,
         this.wheelChair,
         this.seatPositionGroup,
         this.area,
-        this.selectSeatState = SelectSeatState.available,
+        this.selectSeatState = 1,
     });
 
     factory SeatItem.fromJson(Map<String, dynamic> json) => _$SeatItemFromJson(json);

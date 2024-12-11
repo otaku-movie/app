@@ -111,7 +111,7 @@ SeatItem _$SeatItemFromJson(Map<String, dynamic> json) => SeatItem(
       x: (json['x'] as num?)?.toInt() ?? 0,
       y: (json['y'] as num?)?.toInt() ?? 0,
       z: json['z'],
-      selected: json['selected'],
+      selected: json['selected'] as bool? ?? false,
       show: json['show'] as bool?,
       disabled: json['disabled'] as bool?,
       wheelChair: json['wheel_chair'] as bool?,
@@ -119,9 +119,7 @@ SeatItem _$SeatItemFromJson(Map<String, dynamic> json) => SeatItem(
       area: json['area'] == null
           ? null
           : SeatArea.fromJson(json['area'] as Map<String, dynamic>),
-      selectSeatState: $enumDecodeNullable(
-              _$SelectSeatStateEnumMap, json['select_seat_state']) ??
-          SelectSeatState.available,
+      selectSeatState: (json['select_seat_state'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$SeatItemToJson(SeatItem instance) => <String, dynamic>{
@@ -139,15 +137,8 @@ Map<String, dynamic> _$SeatItemToJson(SeatItem instance) => <String, dynamic>{
       'wheel_chair': instance.wheelChair,
       'seat_position_group': instance.seatPositionGroup,
       'area': instance.area?.toJson(),
-      'select_seat_state': _$SelectSeatStateEnumMap[instance.selectSeatState],
+      'select_seat_state': instance.selectSeatState,
     };
-
-const _$SelectSeatStateEnumMap = {
-  SelectSeatState.available: 'available',
-  SelectSeatState.selected: 'selected',
-  SelectSeatState.locked: 'locked',
-  SelectSeatState.sold: 'sold',
-};
 
 SeatArea _$SeatAreaFromJson(Map<String, dynamic> json) => SeatArea(
       id: (json['id'] as num?)?.toInt(),
