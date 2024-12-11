@@ -166,6 +166,9 @@ class _LoginPageState extends State<Login> {
               value: entry['code'],
               child: Text(entry['name'] as String, style: const TextStyle(color: Colors.white) ),
             )).toList(),
+            dropdownColor: Colors.black,
+            icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+            // style: const TextStyle(color: Colors.red),
             onChanged: (value) {
               if (value != null) {
                 languageController.changeLanguage(value);

@@ -59,6 +59,8 @@ class Seat {
   final int? x;
   @JsonKey(name: "y")
   final int? y;
+  @JsonKey(name: "seatId")
+  final int? seatId;
   @JsonKey(name: "seatName")
   final String? seatName;
   @JsonKey(name: "areaPrice")
@@ -73,6 +75,7 @@ class Seat {
   Seat({
     this.x,
     this.y,
+    this.seatId,
     this.seatName,
     this.areaPrice,
     this.areaName,

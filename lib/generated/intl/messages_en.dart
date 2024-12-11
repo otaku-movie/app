@@ -111,11 +111,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_payMethod": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_payTime": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_ticketCode":
+            MessageLookupByLibrary.simpleMessage("Ticket collection code"),
         "orderDetail_ticketCount": m0,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage(""),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("comment"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
         "orderList_title": MessageLookupByLibrary.simpleMessage(""),
+        "payResult_success": MessageLookupByLibrary.simpleMessage(
+            "Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie."),
+        "payResult_ticketCode":
+            MessageLookupByLibrary.simpleMessage("Ticket collection code"),
+        "payResult_title": MessageLookupByLibrary.simpleMessage("Pay Succeed"),
         "register_email": MessageLookupByLibrary.simpleMessage("Email"),
         "register_password": MessageLookupByLibrary.simpleMessage("Password"),
         "register_registerButton":

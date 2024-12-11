@@ -85,6 +85,7 @@
   "orderList_orderNumber": "",
   "orderList_comment": "comment",
   "orderDetail_title": "",
+  "orderDetail_ticketCode": "Ticket collection code",
   "orderDetail_ticketCount": "",
   "@orderDetail_ticketCount": {
     "placeholders": {
@@ -99,5 +100,8 @@
   "orderDetail_payTime": "",
   "orderDetail_payMethod": "",
   "orderDetail_seatMessage": "",
-  "orderDetail_orderMessage": ""
+  "orderDetail_orderMessage": "",
+  "payResult_title": "Pay Succeed",
+  "payResult_success": "Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie.",
+  "payResult_ticketCode": "Ticket collection code"
 }

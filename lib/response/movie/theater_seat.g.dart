@@ -113,7 +113,7 @@ SeatItem _$SeatItemFromJson(Map<String, dynamic> json) => SeatItem(
       z: json['z'],
       selected: json['selected'] as bool? ?? false,
       show: json['show'] as bool?,
-      disabled: json['disabled'] as bool?,
+      disabled: json['disabled'] as bool? ?? false,
       wheelChair: json['wheel_chair'] as bool?,
       seatPositionGroup: json['seat_position_group'] as String?,
       area: json['area'] == null

@@ -148,10 +148,12 @@ final GoRouter routerConfig = GoRouter(
           path: '/movie/order/success',
           name: 'paySuccess',
           builder: (BuildContext context, GoRouterState state) {
-            return const PaySuccess();
+            return PaySuccess(
+              orderId: state.uri.queryParameters['orderId'], 
+            );
           },
         ),
-         GoRoute(
+        GoRoute(
           path: '/movie/order/error',
           name: 'payError',
           builder: (BuildContext context, GoRouterState state) {

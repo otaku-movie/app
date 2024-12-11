@@ -109,11 +109,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_payMethod": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_payTime": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage(""),
+        "orderDetail_ticketCode":
+            MessageLookupByLibrary.simpleMessage("チケットコード"),
         "orderDetail_ticketCount": m0,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage(""),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("コメント"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
         "orderList_title": MessageLookupByLibrary.simpleMessage(""),
+        "payResult_success": MessageLookupByLibrary.simpleMessage(
+            "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。"),
+        "payResult_ticketCode": MessageLookupByLibrary.simpleMessage("チケットコード"),
+        "payResult_title": MessageLookupByLibrary.simpleMessage("支払い完了"),
         "register_email": MessageLookupByLibrary.simpleMessage(""),
         "register_password": MessageLookupByLibrary.simpleMessage(""),
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),

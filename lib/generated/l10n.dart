@@ -830,6 +830,16 @@ class S {
     );
   }
 
+  /// `Ticket collection code`
+  String get orderDetail_ticketCode {
+    return Intl.message(
+      'Ticket collection code',
+      name: 'orderDetail_ticketCode',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// ``
   String orderDetail_ticketCount(int ticketCount) {
     return Intl.message(
@@ -905,6 +915,36 @@ class S {
     return Intl.message(
       '',
       name: 'orderDetail_orderMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pay Succeed`
+  String get payResult_title {
+    return Intl.message(
+      'Pay Succeed',
+      name: 'payResult_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie.`
+  String get payResult_success {
+    return Intl.message(
+      'Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie.',
+      name: 'payResult_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ticket collection code`
+  String get payResult_ticketCode {
+    return Intl.message(
+      'Ticket collection code',
+      name: 'payResult_ticketCode',
       desc: '',
       args: [],
     );

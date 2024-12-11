@@ -465,6 +465,11 @@
       "ja": "",
       "en": ""
     },
+    "ticketCode": {
+      "zh": "取票码",
+      "ja": "チケットコード",
+      "en": "Ticket collection code"
+    },
     "ticketCount": {
       "zh": {
         "text": "{ticketCount}张电影票",
@@ -525,6 +530,23 @@
       "zh": "订单信息",
       "ja": "",
       "en": ""
+    }
+  },
+  "payResult": {
+    "title":  {
+      "zh": "支付完成",
+      "ja": "支払い完了",
+      "en": "Pay Succeed"
+    },
+    "success": {
+      "zh": "您的订单已经支付完成，请在以下时间之前到达以下地点，祝您观影愉快。",
+      "ja": "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。",
+      "en": "Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie."
+    },
+    "ticketCode": {
+      "zh": "取票码",
+      "ja": "チケットコード",
+      "en": "Ticket collection code"
     }
   }
 }

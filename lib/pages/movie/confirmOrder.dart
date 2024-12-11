@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/error.dart';
@@ -17,7 +18,7 @@ import 'package:otaku_movie/utils/index.dart';
 class ConfirmOrder extends StatefulWidget {
   final String? id;
 
-  const ConfirmOrder({super.key, this.id = "29207"});
+  const ConfirmOrder({super.key, this.id});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -27,6 +28,7 @@ class ConfirmOrder extends StatefulWidget {
 class _PageState extends State<ConfirmOrder> {
   OrderDetailResponse data = OrderDetailResponse();
   List<PaymentMethodResponse> paymentMethodData = [];
+  bool payLoading = false;
   bool loading = false;
 
   List<Map<String, dynamic>> pay  = [
@@ -42,6 +44,7 @@ class _PageState extends State<ConfirmOrder> {
   
   int countDown = 15 * 60;
   int allTime = 15 * 60;
+  int? defaultPay;
   Timer? _timer;
 
 
@@ -90,6 +93,7 @@ class _PageState extends State<ConfirmOrder> {
       if (res.data != null) {
         setState(() {
           paymentMethodData = res.data as List<PaymentMethodResponse>;
+          defaultPay = res.data[0].id;
         });
       }
      
@@ -254,22 +258,32 @@ class _PageState extends State<ConfirmOrder> {
                     ),
                     
                     ...paymentMethodData.map((item) {
-                      return  Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: Colors.grey.shade200)
-                          )
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(item.name ?? ''),
-                            // SvgPicture.asset(item['path'], height: 28),
-                            const Icon(Icons.radio_button_checked, color: Colors.blue)
-                          ],
-                        ) 
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            defaultPay = item.id;
+                          });
+                        },
+                        child:  Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.grey.shade200)
+                            )
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(item.name ?? ''),
+                              // SvgPicture.asset(item['path'], height: 28),
+                              defaultPay == item.id 
+                                ? const Icon(Icons.radio_button_checked, color: Colors.blue)
+                                : const Icon(Icons.radio_button_off, color: Colors.blue)
+                              // const Icon(Icons.radio_button_checked, color: Colors.blue)
+                            ],
+                          ) 
+                        )
                       );
                     }),
                   ],
@@ -300,17 +314,50 @@ class _PageState extends State<ConfirmOrder> {
                   width: 250.w,
                   height: 70.h,                 
                   child: MaterialButton(
-                    color: const Color.fromARGB(255, 2, 162, 255),
+                    color: payLoading ? Colors.blue[200] : const Color.fromARGB(255, 2, 162, 255),
                     textColor: Colors.white,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(50)),
                     ),
-                    onPressed: () {
-                      context.go('/movie/order/success');
+                    elevation: 0,
+                    onPressed: payLoading ? () {} : () {
+                      setState(() {
+                        payLoading = true;
+                      });
+
+                      ApiRequest().request(
+                        path: '/movieOrder/pay',
+                        method: 'POST', 
+                        data: {
+                          'orderId': data.id,
+                          'payId': defaultPay
+                        },
+                        fromJsonT: (json) {},
+                      ).then((res) {
+                        context.pushNamed('paySuccess', queryParameters: {
+                          'orderId': '${data.id}'
+                        });
+                      }).whenComplete(() {
+                          setState(() {
+                            payLoading = false;
+                          });
+                        });
+                      
                     },
-                    child: Text(
-                      S.of(context).confirmOrder_pay,
-                      style: TextStyle(color: Colors.white, fontSize: 32.sp),
+                    child: Space(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      right: 20.w,
+                      children: [
+                        payLoading ? LoadingAnimationWidget.hexagonDots(
+                          color: Colors.white,
+                          size: 50.w,
+                        ) : Container(),
+                        Text(
+                          S.of(context).confirmOrder_pay,
+                          style: TextStyle(color: Colors.white, fontSize: 32.sp),
+                        )
+                      ]
                     ),
                   ),
                 ),

@@ -47,6 +47,7 @@ Map<String, dynamic> _$UserSelectSeatDataResponseToJson(
 Seat _$SeatFromJson(Map<String, dynamic> json) => Seat(
       x: (json['x'] as num?)?.toInt(),
       y: (json['y'] as num?)?.toInt(),
+      seatId: (json['seatId'] as num?)?.toInt(),
       seatName: json['seatName'] as String?,
       areaPrice: (json['areaPrice'] as num?)?.toInt(),
       areaName: json['areaName'] as String?,
@@ -57,6 +58,7 @@ Seat _$SeatFromJson(Map<String, dynamic> json) => Seat(
 Map<String, dynamic> _$SeatToJson(Seat instance) => <String, dynamic>{
       'x': instance.x,
       'y': instance.y,
+      'seatId': instance.seatId,
       'seatName': instance.seatName,
       'areaPrice': instance.areaPrice,
       'areaName': instance.areaName,

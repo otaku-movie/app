@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 String formatNumberToTime(int totalMinutes) {
   int hours = totalMinutes ~/ 60;  // 计算小时数
@@ -42,4 +43,22 @@ String formatNumberToTime(int totalMinutes) {
     DateTime datetime = DateTime.parse(date);
 
     return weekList[datetime.weekday - 1];
+  }
+  callTel (String tel) async {
+    final Uri telUrl = Uri(scheme: 'tel', path: tel);
+                                      
+    if (await canLaunchUrl(telUrl)) {
+      await launchUrl(telUrl);
+    } else {
+      // '无法打开拨号界面';
+    }
+  }
+  callMap (double latitude, double longitude) async {    
+    final Uri googleMapsUrl = Uri.parse('https://www.google.com/maps?q=$latitude,$longitude');
+    
+    if (await canLaunchUrl(googleMapsUrl)) {
+      await launchUrl(googleMapsUrl);
+    } else {
+      // 无法打开应用
+    }
   }

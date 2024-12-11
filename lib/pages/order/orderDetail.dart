@@ -128,7 +128,7 @@ class _PageState extends State<OrderDetail> {
                             GestureDetector(
                               onTap: () {
                                 context.pushNamed('cinemaDetail', queryParameters: {
-                                  'cinemaId': '${data.cinemaId}'
+                                  'id': '${data.cinemaId}'
                                 });
                               },
                               child:  Text(
@@ -140,31 +140,20 @@ class _PageState extends State<OrderDetail> {
                               right: 4.w,
                               children: [
                                 GestureDetector(
-                                  onTap: () async {
-                                    final Uri telUrl = Uri(scheme: 'tel', path: '+81-080-1234-5678');
-                                    
-                                    if (await canLaunchUrl(telUrl)) {
-                                      await launchUrl(telUrl);
-                                    } else {
-                                      // '无法打开拨号界面';
-                                    }
-                                  },
-                                  child: const Icon(Icons.call, color: Colors.blue),
-                                ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    double latitude = 31.2304; // 示例: 上海经度
-                                    double longitude = 121.4737; // 示例: 上海纬度
+                                    onTap: () async {
+                                      await callTel('+81-080-1234-5678');
+                                    },
+                                    child: const Icon(Icons.call, color: Colors.blue),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      double latitude = 31.2304; // 示例: 上海经度
+                                      double longitude = 121.4737; // 示例: 上海纬度
 
-                                    final Uri googleMapsUrl = Uri.parse('https://www.google.com/maps?q=$latitude,$longitude');
-                                    if (await canLaunchUrl(googleMapsUrl)) {
-                                      await launchUrl(googleMapsUrl);
-                                    } else {
-                                      // 无法打开应用
-                                    }
-                                  },
-                                  child: const Icon(Icons.location_on, color: Colors.red),
-                                ),
+                                      await callMap(latitude, longitude);
+                                    },
+                                    child: const Icon(Icons.location_on, color: Colors.red),
+                                  ),
                               ],
                             )
                           ],
@@ -176,16 +165,23 @@ class _PageState extends State<OrderDetail> {
                         // ),
                         child: Space(
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 20.w),
-                            color: Colors.grey.shade200,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(4),
-                              child: ExtendedImage.network(
-                                data.moviePoster ?? '',
-                                width: 200.w,
-                                height: 230.h,
-                                fit: BoxFit.cover,
+                          GestureDetector(
+                            onTap: () {
+                              context.pushNamed('movieDetail', pathParameters: {
+                                'id': '${data.movieId}'
+                              });
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 20.w),
+                              color: Colors.grey.shade200,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: ExtendedImage.network(
+                                  data.moviePoster ?? '',
+                                  width: 200.w,
+                                  height: 230.h,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -343,7 +339,7 @@ class _PageState extends State<OrderDetail> {
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(color: Colors.grey.shade300)
                           ),
-                          child: Center(child: Text('取票码：1234567890', style: TextStyle(fontSize: 40.sp))) 
+                          child: Center(child: Text('${S.of(context).orderDetail_ticketCode}：1234567890', style: TextStyle(fontSize: 40.sp))) 
                         ),
                       ],
                     )

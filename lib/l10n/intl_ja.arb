@@ -85,6 +85,7 @@
   "orderList_orderNumber": "",
   "orderList_comment": "コメント",
   "orderDetail_title": "",
+  "orderDetail_ticketCode": "チケットコード",
   "orderDetail_ticketCount": "",
   "@orderDetail_ticketCount": {
     "placeholders": {
@@ -99,5 +100,8 @@
   "orderDetail_payTime": "",
   "orderDetail_payMethod": "",
   "orderDetail_seatMessage": "",
-  "orderDetail_orderMessage": ""
+  "orderDetail_orderMessage": "",
+  "payResult_title": "支払い完了",
+  "payResult_success": "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。",
+  "payResult_ticketCode": "チケットコード"
 }
