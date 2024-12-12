@@ -20,12 +20,24 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja';
 
-  static String m0(ticketCount) => "";
+  static String m0(seatCount) => "${seatCount}席";
 
-  static String m1(maxSeat) => "最大${maxSeat}席までお選びいただけます";
+  static String m1(ticketCount) => "";
+
+  static String m2(maxSeat) => "最大${maxSeat}席までお選びいただけます";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cinemaDetail_homepage": MessageLookupByLibrary.simpleMessage("ホームページ"),
+        "cinemaDetail_maxSelectSeat":
+            MessageLookupByLibrary.simpleMessage("利用可能な座席数"),
+        "cinemaDetail_seatCount": m0,
+        "cinemaDetail_specialSpecPrice":
+            MessageLookupByLibrary.simpleMessage("特別上映料金"),
+        "cinemaDetail_tel": MessageLookupByLibrary.simpleMessage("連絡先"),
+        "cinemaDetail_theaterSpec": MessageLookupByLibrary.simpleMessage(""),
+        "cinemaDetail_ticketTypePrice":
+            MessageLookupByLibrary.simpleMessage(""),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("検証コードを送信"),
@@ -111,7 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("チケットコード"),
-        "orderDetail_ticketCount": m0,
+        "orderDetail_ticketCount": m1,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage(""),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("コメント"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
@@ -125,7 +137,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("座席を確定する"),
-        "selectSeat_maxSelectSeatWarn": m1,
+        "selectSeat_maxSelectSeatWarn": m2,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
         "user_about": MessageLookupByLibrary.simpleMessage(""),

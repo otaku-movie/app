@@ -1,4 +1,62 @@
 {
+  "cinemaDetail": {
+    "tel": {
+      "zh": "联系方式",
+      "ja": "連絡先",
+      "en": "TEL"
+    },
+    "homepage": {
+      "zh": "官网",
+      "ja": "ホームページ",
+      "en": "WebSite"
+    },
+    "specialSpecPrice": {
+      "zh": "特殊上映价格",
+      "ja": "特別上映料金",
+      "en": ""
+    },
+    "ticketTypePrice": {
+      "zh": "普通影票价格",
+      "ja": "基本料金",
+      "en": ""
+    },
+    "maxSelectSeat": {
+      "zh": "最大可选座位数",
+      "ja": "利用可能な座席数",
+      "en": "Maximum number of available seats"
+    },
+    "theaterSpec": {
+      "zh": "影厅信息",
+      "ja": "",
+      "en": ""
+    },
+    "seatCount": {
+      "zh": {
+        "text": "{seatCount}个座位",
+        "placeholders": {
+          "seatCount": {
+            "type": "int"
+          }
+        }
+      },
+      "ja": {
+        "text": "{seatCount}席",
+        "placeholders": {
+          "seatCount": {
+            "type": "int"
+          }
+        }
+      },
+      "en": {
+        "text": "{seatCount} seats",
+        "placeholders": {
+          "seatCount": {
+            "type": "int"
+          }
+        }
+      }
+    }
+  },
   "selectSeat": {
     "maxSelectSeatWarn": {
       "zh": {

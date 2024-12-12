@@ -1,5 +1,19 @@
 {
   "@@locale": "en",
+  "cinemaDetail_tel": "TEL",
+  "cinemaDetail_homepage": "WebSite",
+  "cinemaDetail_specialSpecPrice": "",
+  "cinemaDetail_ticketTypePrice": "",
+  "cinemaDetail_maxSelectSeat": "Maximum number of available seats",
+  "cinemaDetail_theaterSpec": "",
+  "cinemaDetail_seatCount": "{seatCount} seats",
+  "@cinemaDetail_seatCount": {
+    "placeholders": {
+      "seatCount": {
+        "type": "int"
+      }
+    }
+  },
   "selectSeat_maxSelectSeatWarn": "A maximum of {maxSeat} seats can be selected",
   "@selectSeat_maxSelectSeatWarn": {
     "placeholders": {

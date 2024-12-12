@@ -50,6 +50,76 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `TEL`
+  String get cinemaDetail_tel {
+    return Intl.message(
+      'TEL',
+      name: 'cinemaDetail_tel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `WebSite`
+  String get cinemaDetail_homepage {
+    return Intl.message(
+      'WebSite',
+      name: 'cinemaDetail_homepage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get cinemaDetail_specialSpecPrice {
+    return Intl.message(
+      '',
+      name: 'cinemaDetail_specialSpecPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get cinemaDetail_ticketTypePrice {
+    return Intl.message(
+      '',
+      name: 'cinemaDetail_ticketTypePrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Maximum number of available seats`
+  String get cinemaDetail_maxSelectSeat {
+    return Intl.message(
+      'Maximum number of available seats',
+      name: 'cinemaDetail_maxSelectSeat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get cinemaDetail_theaterSpec {
+    return Intl.message(
+      '',
+      name: 'cinemaDetail_theaterSpec',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{seatCount} seats`
+  String cinemaDetail_seatCount(int seatCount) {
+    return Intl.message(
+      '$seatCount seats',
+      name: 'cinemaDetail_seatCount',
+      desc: '',
+      args: [seatCount],
+    );
+  }
+
   /// `A maximum of {maxSeat} seats can be selected`
   String selectSeat_maxSelectSeatWarn(int maxSeat) {
     return Intl.message(

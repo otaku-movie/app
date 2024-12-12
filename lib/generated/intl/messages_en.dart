@@ -20,12 +20,25 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(ticketCount) => "";
+  static String m0(seatCount) => "${seatCount} seats";
 
-  static String m1(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
+  static String m1(ticketCount) => "";
+
+  static String m2(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cinemaDetail_homepage":
+            MessageLookupByLibrary.simpleMessage("WebSite"),
+        "cinemaDetail_maxSelectSeat": MessageLookupByLibrary.simpleMessage(
+            "Maximum number of available seats"),
+        "cinemaDetail_seatCount": m0,
+        "cinemaDetail_specialSpecPrice":
+            MessageLookupByLibrary.simpleMessage(""),
+        "cinemaDetail_tel": MessageLookupByLibrary.simpleMessage("TEL"),
+        "cinemaDetail_theaterSpec": MessageLookupByLibrary.simpleMessage(""),
+        "cinemaDetail_ticketTypePrice":
+            MessageLookupByLibrary.simpleMessage(""),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("Send Verification Code"),
@@ -113,7 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("Ticket collection code"),
-        "orderDetail_ticketCount": m0,
+        "orderDetail_ticketCount": m1,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage(""),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("comment"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
@@ -129,7 +142,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Register"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
-        "selectSeat_maxSelectSeatWarn": m1,
+        "selectSeat_maxSelectSeatWarn": m2,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("Please select a seat"),
         "user_about": MessageLookupByLibrary.simpleMessage(""),

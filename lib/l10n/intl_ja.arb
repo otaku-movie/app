@@ -1,5 +1,19 @@
 {
   "@@locale": "ja",
+  "cinemaDetail_tel": "連絡先",
+  "cinemaDetail_homepage": "ホームページ",
+  "cinemaDetail_specialSpecPrice": "特別上映料金",
+  "cinemaDetail_ticketTypePrice": "",
+  "cinemaDetail_maxSelectSeat": "利用可能な座席数",
+  "cinemaDetail_theaterSpec": "",
+  "cinemaDetail_seatCount": "{seatCount}席",
+  "@cinemaDetail_seatCount": {
+    "placeholders": {
+      "seatCount": {
+        "type": "int"
+      }
+    }
+  },
   "selectSeat_maxSelectSeatWarn": "最大{maxSeat}席までお選びいただけます",
   "@selectSeat_maxSelectSeatWarn": {
     "placeholders": {

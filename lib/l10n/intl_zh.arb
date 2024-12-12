@@ -1,5 +1,19 @@
 {
   "@@locale": "zh",
+  "cinemaDetail_tel": "联系方式",
+  "cinemaDetail_homepage": "官网",
+  "cinemaDetail_specialSpecPrice": "特殊上映价格",
+  "cinemaDetail_ticketTypePrice": "普通影票价格",
+  "cinemaDetail_maxSelectSeat": "最大可选座位数",
+  "cinemaDetail_theaterSpec": "影厅信息",
+  "cinemaDetail_seatCount": "{seatCount}个座位",
+  "@cinemaDetail_seatCount": {
+    "placeholders": {
+      "seatCount": {
+        "type": "int"
+      }
+    }
+  },
   "selectSeat_maxSelectSeatWarn": "最大选座数量不能超过{maxSeat}个",
   "@selectSeat_maxSelectSeatWarn": {
     "placeholders": {

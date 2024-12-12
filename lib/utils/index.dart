@@ -62,3 +62,16 @@ String formatNumberToTime(int totalMinutes) {
       // 无法打开应用
     }
   }
+  launchURL (String url) async {
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication, // 打开外部浏览器
+      );
+    } else {
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(content: Text('无法打开链接: $url')),
+      // );
+    }
+  }
+  

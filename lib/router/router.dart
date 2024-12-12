@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/pages/Home.dart';
+import 'package:otaku_movie/pages/cinema/cinemaDetail.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/user/User.dart';
 import 'package:otaku_movie/pages/movie/SelectMovieTicket.dart';
@@ -56,7 +57,7 @@ final GoRouter routerConfig = GoRouter(
       path: '/',
       name: 'root',
       builder: (BuildContext context, GoRouterState state) {
-        return Login();
+        return Home();
       },
       routes: <RouteBase>[
         GoRoute(
@@ -78,6 +79,15 @@ final GoRouter routerConfig = GoRouter(
           name: 'register',
           builder: (BuildContext context, GoRouterState state) {
             return Register();
+          },
+        ),
+        GoRoute(
+          path: '/cinema/detail',
+          name: 'cinemaDetail',
+          builder: (BuildContext context, GoRouterState state) {
+            return CinemaDetail(
+              id: state.uri.queryParameters['id']
+            );
           },
         ),
         GoRoute(
