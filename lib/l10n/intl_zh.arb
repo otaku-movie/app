@@ -1,5 +1,11 @@
 {
   "@@locale": "zh",
+  "search_placeholder": "搜索全部电影",
+  "search_history": "搜索历史",
+  "search_removeHistoryConfirm_title": "删除历史记录",
+  "search_removeHistoryConfirm_content": "是否确定要删除历史记录?",
+  "search_removeHistoryConfirm_confirm": "确定",
+  "search_removeHistoryConfirm_cancel": "取消",
   "showTimeDetail_address": "地址",
   "showTimeDetail_buy": "购票",
   "showTimeDetail_time": "分",

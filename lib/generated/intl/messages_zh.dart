@@ -145,6 +145,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_email": MessageLookupByLibrary.simpleMessage("邮箱"),
         "register_password": MessageLookupByLibrary.simpleMessage("密码"),
         "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),
+        "search_history": MessageLookupByLibrary.simpleMessage("搜索历史"),
+        "search_placeholder": MessageLookupByLibrary.simpleMessage("搜索全部电影"),
+        "search_removeHistoryConfirm_cancel":
+            MessageLookupByLibrary.simpleMessage("取消"),
+        "search_removeHistoryConfirm_confirm":
+            MessageLookupByLibrary.simpleMessage("确定"),
+        "search_removeHistoryConfirm_content":
+            MessageLookupByLibrary.simpleMessage("是否确定要删除历史记录?"),
+        "search_removeHistoryConfirm_title":
+            MessageLookupByLibrary.simpleMessage("删除历史记录"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
         "selectSeat_maxSelectSeatWarn": m2,

@@ -50,6 +50,66 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// ``
+  String get search_placeholder {
+    return Intl.message(
+      '',
+      name: 'search_placeholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search History`
+  String get search_history {
+    return Intl.message(
+      'Search History',
+      name: 'search_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get search_removeHistoryConfirm_title {
+    return Intl.message(
+      '',
+      name: 'search_removeHistoryConfirm_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get search_removeHistoryConfirm_content {
+    return Intl.message(
+      '',
+      name: 'search_removeHistoryConfirm_content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get search_removeHistoryConfirm_confirm {
+    return Intl.message(
+      '',
+      name: 'search_removeHistoryConfirm_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get search_removeHistoryConfirm_cancel {
+    return Intl.message(
+      '',
+      name: 'search_removeHistoryConfirm_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Address`
   String get showTimeDetail_address {
     return Intl.message(

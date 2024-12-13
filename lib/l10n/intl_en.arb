@@ -1,5 +1,11 @@
 {
   "@@locale": "en",
+  "search_placeholder": "",
+  "search_history": "Search History",
+  "search_removeHistoryConfirm_title": "",
+  "search_removeHistoryConfirm_content": "",
+  "search_removeHistoryConfirm_confirm": "",
+  "search_removeHistoryConfirm_cancel": "",
   "showTimeDetail_address": "Address",
   "showTimeDetail_buy": "",
   "showTimeDetail_time": "minutes",

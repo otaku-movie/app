@@ -140,6 +140,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_password": MessageLookupByLibrary.simpleMessage("Password"),
         "register_registerButton":
             MessageLookupByLibrary.simpleMessage("Register"),
+        "search_history":
+            MessageLookupByLibrary.simpleMessage("Search History"),
+        "search_placeholder": MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_cancel":
+            MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_confirm":
+            MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_content":
+            MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_title":
+            MessageLookupByLibrary.simpleMessage(""),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
         "selectSeat_maxSelectSeatWarn": m2,

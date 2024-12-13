@@ -19,10 +19,10 @@ class Input extends StatefulWidget {
   final double? width;
   final double? height;
   final TextStyle? textStyle;
-  final EdgeInsetsGeometry? contentPadding;
+  final double? horizontalPadding;
   final bool? disabled;
   final Color? cursorColor;
-  final TextStyle? placeholderStyle; // Add this for placeholder styling
+  final TextStyle? placeholderStyle;
 
   const Input({
     super.key,
@@ -44,10 +44,10 @@ class Input extends StatefulWidget {
     this.width,
     this.height,
     this.textStyle,
-    this.contentPadding,
+    this.horizontalPadding,
     this.disabled,
-    this.placeholderStyle, // Add this parameter
-  }) : super();
+    this.placeholderStyle,
+  });
 
   @override
   _InputState createState() => _InputState();
@@ -63,23 +63,19 @@ class _InputState extends State<Input> {
   }
 
   @override
-
-  @override
   void dispose() {
-    // if (mounted) {
-    //   FocusScope.of(context).unfocus();
-    // }
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    double height = widget.height ?? 60.0; // Default height if not provided
-    double paddingVertical = (height - 20) / 2; // Calculate vertical padding
+    // const double textHeight = 20.0;
+    // double height = widget.height ?? 60.0;
+    // double paddingVertical = (height - textHeight) / 2;
 
-    // Default content padding with additional horizontal and vertical padding
-    EdgeInsetsGeometry defaultContentPadding = widget.contentPadding ??
-        EdgeInsets.symmetric(horizontal: 16.0, vertical: paddingVertical);
+    // EdgeInsetsGeometry defaultContentPadding = widget.contentPadding ??
+    //     EdgeInsets.symmetric(horizontal: 16.0, vertical: paddingVertical);
 
     return Theme(
       data: ThemeData(
@@ -87,17 +83,15 @@ class _InputState extends State<Input> {
       ),
       child: SizedBox(
         width: widget.width,
-        height: height,
+        height: widget.height,
         child: TextField(
           controller: _controller,
           keyboardType: widget.keyboardType,
           obscureText: widget.type == 'password',
           style: widget.textStyle ??
-              const TextStyle(
-                  color: Colors.black), // Default text style if not provided
+              const TextStyle(color: Colors.black), // Default text style
           cursorColor: widget.cursorColor,
-          textAlignVertical:
-              TextAlignVertical.center, // Ensure text is vertically centered
+          textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,
             suffixIcon: widget.suffixIcon,
@@ -105,15 +99,10 @@ class _InputState extends State<Input> {
             suffixIconColor: widget.suffixIconColor,
             hintText: widget.placeholder,
             hintStyle: widget.placeholderStyle ??
-                const TextStyle(color: Colors.grey), // Apply placeholder styling
-            enabled: widget.disabled != true,
-            disabledBorder: OutlineInputBorder(
-              borderRadius: widget.borderRadius ?? BorderRadius.circular(3),
-              borderSide: BorderSide.none,
-            ),
+                const TextStyle(color: Colors.grey),
             filled: widget.backgroundColor != null,
             fillColor: widget.backgroundColor,
-            contentPadding: defaultContentPadding, // Apply content padding
+            contentPadding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding ?? 10.w),
             focusedBorder: OutlineInputBorder(
               borderRadius: widget.borderRadius ?? BorderRadius.circular(3),
               borderSide: widget.border ??
@@ -124,10 +113,15 @@ class _InputState extends State<Input> {
               borderSide: widget.border ??
                   const BorderSide(color: Colors.transparent, width: 1),
             ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: widget.borderRadius ?? BorderRadius.circular(3),
+              borderSide: BorderSide.none,
+            ),
           ),
           onTap: widget.onTap,
           onChanged: widget.onChange,
           onSubmitted: widget.onSubmit,
+          enabled: widget.disabled != true,
         ),
       ),
     );

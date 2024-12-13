@@ -1,4 +1,38 @@
 {
+  "search": {
+    "placeholder": {
+      "zh": "搜索全部电影",
+      "ja": "",
+      "en": ""
+    },
+    "history":  {
+      "zh": "搜索历史",
+      "ja": "検索履歴",
+      "en": "Search History"
+    },
+    "removeHistoryConfirm": {
+      "title": {
+        "zh": "删除历史记录",
+        "ja": "",
+        "en": ""
+      },
+      "content": {
+        "zh": "是否确定要删除历史记录?",
+        "ja": "",
+        "en": ""
+      },
+      "confirm": {
+        "zh": "确定",
+        "ja": "",
+        "en": ""
+      },
+      "cancel": {
+        "zh": "取消",
+        "ja": "",
+        "en": ""
+      }
+    }
+  },
   "showTimeDetail": {
     "address": {
       "zh": "地址",

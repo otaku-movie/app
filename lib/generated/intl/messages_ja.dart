@@ -135,6 +135,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_email": MessageLookupByLibrary.simpleMessage(""),
         "register_password": MessageLookupByLibrary.simpleMessage(""),
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),
+        "search_history": MessageLookupByLibrary.simpleMessage("検索履歴"),
+        "search_placeholder": MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_cancel":
+            MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_confirm":
+            MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_content":
+            MessageLookupByLibrary.simpleMessage(""),
+        "search_removeHistoryConfirm_title":
+            MessageLookupByLibrary.simpleMessage(""),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("座席を確定する"),
         "selectSeat_maxSelectSeatWarn": m2,
