@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
 import 'package:otaku_movie/response/response.dart';
@@ -173,12 +174,18 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   onPressed: () {
-                    context.pushNamed('showTimeList', pathParameters: {
-                      "id": '${item.id}'
-                    });
+                    context.pushNamed(
+                      'showTimeList', 
+                      pathParameters: {
+                        "id": '${item.id}'
+                      }, 
+                      queryParameters: {
+                        'movieName': item.name
+                      }
+                    );
                   },
                   child: Text(
-                    '购买票',
+                    S.of(context).movieList_buy,
                     style: TextStyle(color: Colors.white, fontSize: 32.sp),
                   ),
                 ),

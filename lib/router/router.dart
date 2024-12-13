@@ -115,14 +115,20 @@ final GoRouter routerConfig = GoRouter(
           path: '/movie/showTimeList/:id',
           name: 'showTimeList',
           builder: (BuildContext context, GoRouterState state) {
-            return ShowTimeList(id: state.pathParameters['id']);
+            return ShowTimeList(
+              id: state.pathParameters['id'],
+              movieName: state.uri.queryParameters['movieName']
+            );
           },
         ),
         GoRoute(
           path: '/movie/showTimeList/:id/showTimeDetail',
           name: 'showTimeDetail',
           builder: (BuildContext context, GoRouterState state) {
-            return ShowTimeDetail(id: state.pathParameters['id']);
+            return ShowTimeDetail(
+              movieId: state.uri.queryParameters['movieId'],
+              cinemaId: state.uri.queryParameters['cinemaId']
+            );
           },
         ),
         GoRoute(

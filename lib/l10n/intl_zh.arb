@@ -1,5 +1,8 @@
 {
   "@@locale": "zh",
+  "showTimeDetail_address": "地址",
+  "showTimeDetail_buy": "购票",
+  "showTimeDetail_time": "分",
   "cinemaDetail_tel": "联系方式",
   "cinemaDetail_homepage": "官网",
   "cinemaDetail_specialSpecPrice": "特殊上映价格",
@@ -57,7 +60,7 @@
   "movieList_tabBar_currentlyShowing": "上映中",
   "movieList_tabBar_comingSoon": "即将上映",
   "movieList_placeholder": "搜索全部电影",
-  "movieList_button_buy": "购票",
+  "movieList_buy": "购票",
   "cinemaList_address": "正在获取当前位置",
   "movieDetail_button_want": "想看",
   "movieDetail_button_saw": "看过",

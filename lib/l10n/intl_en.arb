@@ -1,5 +1,8 @@
 {
   "@@locale": "en",
+  "showTimeDetail_address": "Address",
+  "showTimeDetail_buy": "",
+  "showTimeDetail_time": "minutes",
   "cinemaDetail_tel": "TEL",
   "cinemaDetail_homepage": "WebSite",
   "cinemaDetail_specialSpecPrice": "",
@@ -57,7 +60,7 @@
   "movieList_tabBar_currentlyShowing": "Currently Showing",
   "movieList_tabBar_comingSoon": "Coming Soon",
   "movieList_placeholder": "",
-  "movieList_button_buy": "",
+  "movieList_buy": "",
   "cinemaList_address": "",
   "movieDetail_button_want": "",
   "movieDetail_button_saw": "",

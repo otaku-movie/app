@@ -104,7 +104,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_state": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage(""),
-        "movieList_button_buy": MessageLookupByLibrary.simpleMessage(""),
+        "movieList_buy": MessageLookupByLibrary.simpleMessage(""),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("Coming Soon"),
@@ -145,6 +145,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectSeat_maxSelectSeatWarn": m2,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("Please select a seat"),
+        "showTimeDetail_address":
+            MessageLookupByLibrary.simpleMessage("Address"),
+        "showTimeDetail_buy": MessageLookupByLibrary.simpleMessage(""),
+        "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("minutes"),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),

@@ -6,8 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
@@ -27,7 +29,10 @@ class CinemaList extends StatefulWidget {
   State<CinemaList> createState() => _PageState();
 }
 
-class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
+class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  
   bool loading = false;
   bool error = false;
   int currentPage = 1;
@@ -144,7 +149,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
         // 获取第一个匹配的经纬度
         double latitude = locations[0].latitude;
         double longitude = locations[0].longitude;
-        print('Latitude: $latitude, Longitude: $longitude');
+
 
         // 计算两点之间的距离
         double distance = calculateDistanceHaversine(
@@ -161,10 +166,18 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
       return item; // 返回更新后的 item
     }).toList();
 
-    // 使用 Future.wait 等待所有异步操作完成，并获取结果
-    List<CinemaListResponse> result = await Future.wait(futures);
+    try {
+       // 使用 Future.wait 等待所有异步操作完成，并获取结果
+      List<CinemaListResponse> result = await Future.wait(futures);
 
-    return result;
+       return result;
+    } catch (err) {
+      log.e(err);
+
+      return data;
+    }
+
+   
   }
 
 
@@ -215,12 +228,12 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
           // direction: Axis.horizontal,
           // crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Text(location.subLocality ?? '', style: TextStyle(fontSize: 32.sp)),
+            Text(location.subLocality ?? '', style: TextStyle(fontSize: 32.sp, color: Colors.white)),
             SizedBox(width: 20.w),
             Expanded(
               child: Input(
               placeholder: S.of(context).movieList_placeholder,
-              placeholderStyle: const TextStyle(color: Colors.black26),
+              placeholderStyle: const TextStyle(color: Colors.white60),
               textStyle: const TextStyle(color: Colors.white),
               height: ScreenUtil().setHeight(60),
               backgroundColor: const Color.fromRGBO(255, 255, 255, 0.1),
@@ -256,10 +269,10 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      body: 
-        loading ? const Center(child: Text('loading...')) : 
-        error ? const Center(child: Text('error')) :
-      EasyRefresh.builder(
+      body: AppErrorWidget(
+        loading: loading,
+        error: error,
+        child: EasyRefresh.builder(
         onRefresh: _onRefresh,
         onLoad: _onLoad,
         childBuilder: (context, physics) {
@@ -302,7 +315,14 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
                         Wrap(
                           spacing: 4.w,
                           children: [
-                            Text('${item.name}', style: TextStyle(fontSize: 36.sp)),
+                            GestureDetector(
+                              onTap: () {
+                                context.pushNamed('cinemaDetail', queryParameters: {
+                                  'id': '${item.id}'
+                                });
+                              },
+                              child: Text('${item.name}', style: TextStyle(fontSize: 36.sp)),
+                            ),
                             const Icon(Icons.star, color: Color(0xFFebb21b)),
                           ],
                         ),
@@ -365,6 +385,7 @@ class _PageState extends State<CinemaList> with SingleTickerProviderStateMixin {
             } as Widget Function(int index)),
           );
         },
+      )
       )
     );
   }

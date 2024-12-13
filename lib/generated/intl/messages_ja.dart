@@ -37,7 +37,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_tel": MessageLookupByLibrary.simpleMessage("連絡先"),
         "cinemaDetail_theaterSpec": MessageLookupByLibrary.simpleMessage(""),
         "cinemaDetail_ticketTypePrice":
-            MessageLookupByLibrary.simpleMessage(""),
+            MessageLookupByLibrary.simpleMessage("基本料金"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("検証コードを送信"),
@@ -101,7 +101,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_state": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage(""),
-        "movieList_button_buy": MessageLookupByLibrary.simpleMessage(""),
+        "movieList_buy": MessageLookupByLibrary.simpleMessage(""),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("近日公開"),
@@ -140,6 +140,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectSeat_maxSelectSeatWarn": m2,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
+        "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
+        "showTimeDetail_buy": MessageLookupByLibrary.simpleMessage(""),
+        "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("分"),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),

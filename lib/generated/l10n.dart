@@ -50,6 +50,36 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Address`
+  String get showTimeDetail_address {
+    return Intl.message(
+      'Address',
+      name: 'showTimeDetail_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get showTimeDetail_buy {
+    return Intl.message(
+      '',
+      name: 'showTimeDetail_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `minutes`
+  String get showTimeDetail_time {
+    return Intl.message(
+      'minutes',
+      name: 'showTimeDetail_time',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `TEL`
   String get cinemaDetail_tel {
     return Intl.message(
@@ -481,10 +511,10 @@ class S {
   }
 
   /// ``
-  String get movieList_button_buy {
+  String get movieList_buy {
     return Intl.message(
       '',
-      name: 'movieList_button_buy',
+      name: 'movieList_buy',
       desc: '',
       args: [],
     );

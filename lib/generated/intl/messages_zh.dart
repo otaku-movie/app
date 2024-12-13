@@ -108,7 +108,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映状态"),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("标签"),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage("时长"),
-        "movieList_button_buy": MessageLookupByLibrary.simpleMessage("购票"),
+        "movieList_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage("搜索全部电影"),
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("即将上映"),
@@ -150,6 +150,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "selectSeat_maxSelectSeatWarn": m2,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("请选择座位"),
+        "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("地址"),
+        "showTimeDetail_buy": MessageLookupByLibrary.simpleMessage("购票"),
+        "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("分"),
         "user_about": MessageLookupByLibrary.simpleMessage("关于"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage("演员数"),

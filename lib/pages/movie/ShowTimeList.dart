@@ -14,8 +14,9 @@ import 'package:get/get.dart'; // Ensure this import is present
 
 class ShowTimeList extends StatefulWidget {
   final String? id;
+  final String? movieName;
 
-  const ShowTimeList({super.key, this.id});
+  const ShowTimeList({super.key, this.id, this.movieName});
 
   @override
   State<ShowTimeList> createState() => _PageState();
@@ -85,11 +86,11 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return data.isEmpty
-        ? const Scaffold(
+        ? Scaffold(
             appBar:  CustomAppBar(
-              title: "电影名称"
+              title: widget.movieName
             ),
-            body: Center(child: CircularProgressIndicator()), // 数据未加载时显示加载指示器
+            body: const Center(child: CircularProgressIndicator()), // 数据未加载时显示加载指示器
           )
         : DefaultTabController(
             initialIndex: 0,
@@ -97,7 +98,7 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
             child: Scaffold(
               backgroundColor: Colors.white,
               appBar: CustomAppBar(
-                title: "电影名称",
+                title: widget.movieName,
                 bottom: TabBar(
                   controller: _tabController,
                   tabs: generateTab(),
@@ -128,8 +129,13 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
                           
                           return GestureDetector(
                             onTap: () {
-                              context.pushNamed('showTimeDetail', pathParameters: {
-                                "id": widget.id ?? ''
+                              context.pushNamed('showTimeDetail', 
+                              pathParameters: {
+                                "id": '${widget.id}'
+                              },
+                              queryParameters: {
+                                "movieId": widget.id,
+                                "cinemaId": '${children.cinemaId}'
                               });
                             },
                             child: Container(
@@ -169,24 +175,24 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
                                     ],
                                   ),
                                   Text(children.cinemaAddress ?? '', style: TextStyle(color: Colors.grey.shade400)),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '今日上映场次共',
-                                          style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600),
-                                        ),
-                                        TextSpan(
-                                          text: '${children.time?.length}',
-                                          style: TextStyle(fontSize: 28.sp, color: Colors.red),
-                                        ),
-                                        TextSpan(
-                                          text: '场',
-                                          style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  // RichText(
+                                  //   text: TextSpan(
+                                  //     children: [
+                                  //       TextSpan(
+                                  //         text: '今日上映场次共',
+                                  //         style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600),
+                                  //       ),
+                                  //       TextSpan(
+                                  //         text: '${children.time?.length}',
+                                  //         style: TextStyle(fontSize: 28.sp, color: Colors.red),
+                                  //       ),
+                                  //       TextSpan(
+                                  //         text: '场',
+                                  //         style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),

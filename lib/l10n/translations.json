@@ -1,4 +1,21 @@
 {
+  "showTimeDetail": {
+    "address": {
+      "zh": "地址",
+      "ja": "アドレス",
+      "en": "Address"
+    },
+    "buy": {
+      "zh": "购票",
+      "ja": "",
+      "en": ""
+    },
+    "time": {
+      "zh": "分",
+      "ja": "分",
+      "en": "minutes"
+    }
+  },
   "cinemaDetail": {
     "tel": {
       "zh": "联系方式",
@@ -289,12 +306,10 @@
       "ja": "",
       "en": ""
     },
-    "button": {
-      "buy": {
-        "zh": "购票",
-        "ja": "",
-        "en": ""
-      }
+    "buy": {
+      "zh": "购票",
+      "ja": "",
+      "en": ""
     }
   },
   "cinemaList": {

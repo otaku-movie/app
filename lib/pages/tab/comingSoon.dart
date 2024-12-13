@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
+import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
@@ -129,7 +130,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
         context.pushNamed('movieDetail');
       },
       child: Text(
-        '购买票',
+        S.of(context).movieList_buy,
         style: TextStyle(color: Colors.white, fontSize: 32.sp),
       ),
     );
@@ -251,7 +252,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                     });
                                   },
                                   child: Text(
-                                    '购买票',
+                                    S.of(context).movieList_buy,
                                     style: TextStyle(color: Colors.white, fontSize: 32.sp),
                                   ),
                                 ),

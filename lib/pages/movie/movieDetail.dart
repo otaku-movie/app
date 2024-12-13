@@ -339,9 +339,14 @@ class _PageState extends State<MovieDetail> {
         ),
       child: GestureDetector(
         onTap: () {
-          context.pushNamed('showTimeList', pathParameters: {
-            "id": '${widget.id}'
-          });
+          context.pushNamed(
+            'showTimeList', 
+            pathParameters: {
+              "id": '${widget.id}'
+            }, 
+            queryParameters: {
+              'movieName': data.name
+            });
         },
         child: SizedBox(
             width: double.infinity,
@@ -352,12 +357,18 @@ class _PageState extends State<MovieDetail> {
                 borderRadius: BorderRadius.circular(100),
               ),
               onPressed: () {
-                context.pushNamed('showTimeList', pathParameters: {
-                  "id": '${widget.id}'
-                });
+                context.pushNamed(
+                  'showTimeList', 
+                  pathParameters: {
+                    "id": '${widget.id}'
+                  },
+                  queryParameters: {
+                    'movieName': data.name
+                  }
+                );
               },
               child: Text(
-                '购票（5555场）',
+                S.of(context).movieDetail_button_buy,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 32.sp,
