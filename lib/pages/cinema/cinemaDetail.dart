@@ -1,11 +1,14 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/cinema/cinema_detail_response.dart';
+import 'package:otaku_movie/response/cinema/cinema_movie_showing_response.dart';
 import 'package:otaku_movie/response/cinema/movie_ticket_type_response.dart';
 import 'package:otaku_movie/response/cinema/theater_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
@@ -29,6 +32,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
   CinemaDetailResponse data = CinemaDetailResponse();
   List<TheaterDetailResponse> theaterList = [];
   List<MovieTicketTypeResponse> movieTicketTypeList = [];
+  List<CinemaMovieShowingResponse> cinemaMovieShowingList = [];
 
   void getData({page = 1}) {
     setState(() {
@@ -77,7 +81,9 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
       if (res.data?.list != null) {
         List<TheaterDetailResponse> list = res.data!.list!;
         
-        theaterList = list;
+        setState(() {
+          theaterList = list;
+        });
       }
     });
   }
@@ -102,6 +108,29 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
       }
     });
   }
+  getCinemaMovieShowingData() {
+    ApiRequest().request<List<CinemaMovieShowingResponse>>(
+      path: '/cinema/movieShowing',
+      method: 'GET',
+      queryParameters: {
+        "id": int.parse(widget.id!)
+      },
+      fromJsonT: (json) {
+        if (json is List) {
+          return json.map((item) {
+            return CinemaMovieShowingResponse.fromJson(item);
+          }).toList();
+        }
+        return [];
+      },
+    ).then((res) {
+      if (res.data != null) {
+        setState(() {
+          cinemaMovieShowingList = res.data ?? [];
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -109,6 +138,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
     getData();  // 获取其他数据
     getTheaterData();
     getMovieTicketType();
+    getCinemaMovieShowingData();
   }
 
   @override
@@ -140,7 +170,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(data.address ?? ''),
+                          child: Text('${S.of(context).cinemaDetail_address}：${data.address}'),
                         ),
                         const Icon(Icons.location_on, color: Colors.red)
                       ],
@@ -161,7 +191,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                         ),
                         GestureDetector(
                           onTap: () async {
-                            await callTel('+81-080-1234-5678');
+                            await callTel(data.tel ?? '');
                           },
                           child: const Icon(Icons.call, color: Colors.blue),
                         ),
@@ -212,6 +242,64 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                   }).toList()),
                   Padding(
                     padding: EdgeInsets.only(top: 50.h),
+                    child:  Text(S.of(context).cinemaDetail_showing, style: TextStyle(
+                      fontSize: 36.sp
+                    )),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Space(
+                      direction: 'row',
+                      right: 30.w,
+                      children: cinemaMovieShowingList.map((item) {
+                        return SizedBox(
+                          width: 240.w,
+                          child: GestureDetector(
+                            onTap: () {
+                               context.pushNamed('showTimeDetail', 
+                                pathParameters: {
+                                  "id": '${item.id}'
+                                },
+                                queryParameters: {
+                                  "movieId": '${item.id}',
+                                  "cinemaId": '${widget.id}'
+                                });
+                            },
+                            child: Space(
+                              direction: 'column',
+                              bottom: 5.h,
+                              children: [
+                                Container(
+                                  // width: 240.w,
+                                  height: 280.h,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.circular(8.0),
+                                    child: ExtendedImage.network(
+                                      item.poster ?? '',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Text(item.name ?? '', 
+                                  softWrap: true,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis
+                                )
+                                
+                              ]
+                            )
+                          )
+                        );
+                    }).toList()),
+                  ),
+                  
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.h),
                     child:  Text(S.of(context).cinemaDetail_ticketTypePrice, style: TextStyle(
                       fontSize: 36.sp
                     )),

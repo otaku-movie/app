@@ -170,11 +170,31 @@ class S {
     );
   }
 
+  /// `Address`
+  String get cinemaDetail_address {
+    return Intl.message(
+      'Address',
+      name: 'cinemaDetail_address',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `WebSite`
   String get cinemaDetail_homepage {
     return Intl.message(
       'WebSite',
       name: 'cinemaDetail_homepage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Showing`
+  String get cinemaDetail_showing {
+    return Intl.message(
+      'Showing',
+      name: 'cinemaDetail_showing',
       desc: '',
       args: [],
     );

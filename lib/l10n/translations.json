@@ -66,10 +66,20 @@
       "ja": "連絡先",
       "en": "TEL"
     },
+    "address": {
+      "zh": "地址",
+      "ja": "アドレス",
+      "en": "Address"
+    },
     "homepage": {
       "zh": "官网",
       "ja": "ホームページ",
       "en": "WebSite"
+    },
+    "showing": {
+      "zh": "正在上映",
+      "ja": "上映中",
+      "en": "Showing"
     },
     "specialSpecPrice": {
       "zh": "特殊上映价格",

@@ -28,10 +28,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "cinemaDetail_address": MessageLookupByLibrary.simpleMessage("地址"),
         "cinemaDetail_homepage": MessageLookupByLibrary.simpleMessage("官网"),
         "cinemaDetail_maxSelectSeat":
             MessageLookupByLibrary.simpleMessage("最大可选座位数"),
         "cinemaDetail_seatCount": m0,
+        "cinemaDetail_showing": MessageLookupByLibrary.simpleMessage("正在上映"),
         "cinemaDetail_specialSpecPrice":
             MessageLookupByLibrary.simpleMessage("特殊上映价格"),
         "cinemaDetail_tel": MessageLookupByLibrary.simpleMessage("联系方式"),
