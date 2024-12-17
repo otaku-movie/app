@@ -83,7 +83,7 @@ class ApiRequest {
     });
   }
 
-  dynamic request<T>({
+  Future<ApiResponse<T>> request<T>({
     required String path,
     required String method,
     Map<String, dynamic>? data,

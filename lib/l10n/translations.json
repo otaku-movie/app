@@ -1,5 +1,10 @@
 {
   "search": {
+    "noData": {
+      "zh": "暂无数据",
+      "ja": "まだデータがありません",
+      "en": "No data yet"
+    },
     "placeholder": {
       "zh": "搜索全部电影",
       "ja": "",
@@ -31,6 +36,11 @@
         "ja": "",
         "en": ""
       }
+    },
+    "level": {
+      "zh": "分级",
+      "ja": "映倫",
+      "en": "Level"
     }
   },
   "showTimeDetail": {
@@ -165,6 +175,82 @@
   },
   "common": {
     "components": {
+      "easyRefresh": {
+        "refresh": {
+          "dragText": {
+            "zh": "下拉刷新",
+            "ja": "下に引っ張って更新",
+            "en": "Pull to refresh"
+          },
+          "armedText": {
+            "zh": "松开刷新",
+            "ja": "更新するために離してください",
+            "en": "Release to refresh"
+          },
+          "readyText": {
+            "zh": "正在刷新...",
+            "ja": "更新中...",
+            "en": "Refreshing..."
+          },
+          "processingText": {
+            "zh": "刷新中...",
+            "ja": "更新しています...",
+            "en": "Refreshing..."
+          },
+          "processedText": {
+            "zh": "刷新完成",
+            "ja": "更新完了",
+            "en": "Refresh complete"
+          },
+          "failedText": {
+            "zh": "刷新失败",
+            "ja": "更新失敗",
+            "en": "Refresh failed"
+          },
+          "noMoreText": {
+            "zh": "没有更多数据了",
+            "ja": "もうデータはありません",
+            "en": "No more data"
+          }
+        },
+        "loadMore": {
+          "dragText": {
+            "zh": "上拉加载更多",
+            "ja": "上に引っ張ってさらに読み込む",
+            "en": "Pull to load more"
+          },
+          "armedText": {
+            "zh": "松开加载更多",
+            "ja": "さらに読み込むために離してください",
+            "en": "Release to load more"
+          },
+          "readyText": {
+            "zh": "准备加载更多",
+            "ja": "さらに読み込む準備",
+            "en": "Ready to load more"
+          },
+          "processingText": {
+            "zh": "加载中...",
+            "ja": "読み込み中...",
+            "en": "Loading..."
+          },
+          "processedText": {
+            "zh": "加载完成",
+            "ja": "読み込み完了",
+            "en": "Load complete"
+          },
+          "failedText": {
+            "zh": "加载失败",
+            "ja": "読み込み失敗",
+            "en": "Load failed"
+          },
+          "noMoreText": {
+            "zh": "没有更多数据了",
+            "ja": "これ以上のデータはありません",
+            "en": "No more data"
+          }
+        }
+      },
       "sendVerifyCode": {
         "send": {
           "zh": "发送验证码",

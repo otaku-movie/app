@@ -10,7 +10,7 @@ class MovieNowShowingResponse extends MovieResponse {
   final List<Cast>? cast;
   
   @JsonKey(name: "hello_movie")
-  final List<HelloMovie>? helloMovie;
+  final List<HelloMovieResponse>? helloMovie;
 
   MovieNowShowingResponse({
     super.id,

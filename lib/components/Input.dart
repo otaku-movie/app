@@ -4,11 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class Input extends StatefulWidget {
   final String placeholder;
   final String type;
+  final TextEditingController controller; 
   final TextInputType? keyboardType;
-  final Icon? suffixIcon;
+  final Widget? suffixIcon;
   final TextStyle? suffixStyle;
   final Color? suffixIconColor;
-  final Icon? prefixIcon;
+  final Widget? prefixIcon;
   final Color? focusColor;
   final Color? backgroundColor;
   final BorderRadius? borderRadius;
@@ -28,6 +29,7 @@ class Input extends StatefulWidget {
     super.key,
     this.type = 'text',
     this.placeholder = '',
+    required this.controller,
     this.cursorColor,
     this.suffixIcon,
     this.suffixIconColor,
@@ -60,6 +62,7 @@ class _InputState extends State<Input> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    
   }
 
   @override
@@ -85,7 +88,7 @@ class _InputState extends State<Input> {
         width: widget.width,
         height: widget.height,
         child: TextField(
-          controller: _controller,
+          controller: widget.controller,
           keyboardType: widget.keyboardType,
           obscureText: widget.type == 'password',
           style: widget.textStyle ??

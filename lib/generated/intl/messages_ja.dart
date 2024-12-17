@@ -39,6 +39,34 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("基本料金"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "common_components_easyRefresh_loadMore_armedText":
+            MessageLookupByLibrary.simpleMessage("さらに読み込むために離してください"),
+        "common_components_easyRefresh_loadMore_dragText":
+            MessageLookupByLibrary.simpleMessage("上に引っ張ってさらに読み込む"),
+        "common_components_easyRefresh_loadMore_failedText":
+            MessageLookupByLibrary.simpleMessage("読み込み失敗"),
+        "common_components_easyRefresh_loadMore_noMoreText":
+            MessageLookupByLibrary.simpleMessage("これ以上のデータはありません"),
+        "common_components_easyRefresh_loadMore_processedText":
+            MessageLookupByLibrary.simpleMessage("読み込み完了"),
+        "common_components_easyRefresh_loadMore_processingText":
+            MessageLookupByLibrary.simpleMessage("読み込み中..."),
+        "common_components_easyRefresh_loadMore_readyText":
+            MessageLookupByLibrary.simpleMessage("さらに読み込む準備"),
+        "common_components_easyRefresh_refresh_armedText":
+            MessageLookupByLibrary.simpleMessage("更新するために離してください"),
+        "common_components_easyRefresh_refresh_dragText":
+            MessageLookupByLibrary.simpleMessage("下に引っ張って更新"),
+        "common_components_easyRefresh_refresh_failedText":
+            MessageLookupByLibrary.simpleMessage("更新失敗"),
+        "common_components_easyRefresh_refresh_noMoreText":
+            MessageLookupByLibrary.simpleMessage("もうデータはありません"),
+        "common_components_easyRefresh_refresh_processedText":
+            MessageLookupByLibrary.simpleMessage("更新完了"),
+        "common_components_easyRefresh_refresh_processingText":
+            MessageLookupByLibrary.simpleMessage("更新しています..."),
+        "common_components_easyRefresh_refresh_readyText":
+            MessageLookupByLibrary.simpleMessage("更新中..."),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("検証コードを送信"),
         "common_enum_seatType_coupleSeat":
@@ -136,6 +164,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_password": MessageLookupByLibrary.simpleMessage(""),
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),
         "search_history": MessageLookupByLibrary.simpleMessage("検索履歴"),
+        "search_level": MessageLookupByLibrary.simpleMessage("映倫"),
+        "search_noData": MessageLookupByLibrary.simpleMessage("まだデータがありません"),
         "search_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "search_removeHistoryConfirm_cancel":
             MessageLookupByLibrary.simpleMessage(""),

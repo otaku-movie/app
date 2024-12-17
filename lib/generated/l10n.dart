@@ -50,6 +50,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `No data yet`
+  String get search_noData {
+    return Intl.message(
+      'No data yet',
+      name: 'search_noData',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// ``
   String get search_placeholder {
     return Intl.message(
@@ -105,6 +115,16 @@ class S {
     return Intl.message(
       '',
       name: 'search_removeHistoryConfirm_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Level`
+  String get search_level {
+    return Intl.message(
+      'Level',
+      name: 'search_level',
       desc: '',
       args: [],
     );
@@ -265,6 +285,146 @@ class S {
     return Intl.message(
       'my page',
       name: 'home_me',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pull to refresh`
+  String get common_components_easyRefresh_refresh_dragText {
+    return Intl.message(
+      'Pull to refresh',
+      name: 'common_components_easyRefresh_refresh_dragText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Release to refresh`
+  String get common_components_easyRefresh_refresh_armedText {
+    return Intl.message(
+      'Release to refresh',
+      name: 'common_components_easyRefresh_refresh_armedText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refreshing...`
+  String get common_components_easyRefresh_refresh_readyText {
+    return Intl.message(
+      'Refreshing...',
+      name: 'common_components_easyRefresh_refresh_readyText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refreshing...`
+  String get common_components_easyRefresh_refresh_processingText {
+    return Intl.message(
+      'Refreshing...',
+      name: 'common_components_easyRefresh_refresh_processingText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh complete`
+  String get common_components_easyRefresh_refresh_processedText {
+    return Intl.message(
+      'Refresh complete',
+      name: 'common_components_easyRefresh_refresh_processedText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh failed`
+  String get common_components_easyRefresh_refresh_failedText {
+    return Intl.message(
+      'Refresh failed',
+      name: 'common_components_easyRefresh_refresh_failedText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No more data`
+  String get common_components_easyRefresh_refresh_noMoreText {
+    return Intl.message(
+      'No more data',
+      name: 'common_components_easyRefresh_refresh_noMoreText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pull to load more`
+  String get common_components_easyRefresh_loadMore_dragText {
+    return Intl.message(
+      'Pull to load more',
+      name: 'common_components_easyRefresh_loadMore_dragText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Release to load more`
+  String get common_components_easyRefresh_loadMore_armedText {
+    return Intl.message(
+      'Release to load more',
+      name: 'common_components_easyRefresh_loadMore_armedText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ready to load more`
+  String get common_components_easyRefresh_loadMore_readyText {
+    return Intl.message(
+      'Ready to load more',
+      name: 'common_components_easyRefresh_loadMore_readyText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading...`
+  String get common_components_easyRefresh_loadMore_processingText {
+    return Intl.message(
+      'Loading...',
+      name: 'common_components_easyRefresh_loadMore_processingText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Load complete`
+  String get common_components_easyRefresh_loadMore_processedText {
+    return Intl.message(
+      'Load complete',
+      name: 'common_components_easyRefresh_loadMore_processedText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Load failed`
+  String get common_components_easyRefresh_loadMore_failedText {
+    return Intl.message(
+      'Load failed',
+      name: 'common_components_easyRefresh_loadMore_failedText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No more data`
+  String get common_components_easyRefresh_loadMore_noMoreText {
+    return Intl.message(
+      'No more data',
+      name: 'common_components_easyRefresh_loadMore_noMoreText',
       desc: '',
       args: [],
     );

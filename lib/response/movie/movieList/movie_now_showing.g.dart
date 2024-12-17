@@ -16,7 +16,7 @@ MovieNowShowingResponse _$MovieNowShowingResponseFromJson(
           ?.map((e) => Cast.fromJson(e as Map<String, dynamic>))
           .toList(),
       helloMovie: (json['hello_movie'] as List<dynamic>?)
-          ?.map((e) => HelloMovie.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => HelloMovieResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
       startDate: json['start_date'] as String?,
     );

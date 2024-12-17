@@ -40,6 +40,34 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("普通影票价格"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage("正在获取当前位置"),
+        "common_components_easyRefresh_loadMore_armedText":
+            MessageLookupByLibrary.simpleMessage("松开加载更多"),
+        "common_components_easyRefresh_loadMore_dragText":
+            MessageLookupByLibrary.simpleMessage("上拉加载更多"),
+        "common_components_easyRefresh_loadMore_failedText":
+            MessageLookupByLibrary.simpleMessage("加载失败"),
+        "common_components_easyRefresh_loadMore_noMoreText":
+            MessageLookupByLibrary.simpleMessage("没有更多数据了"),
+        "common_components_easyRefresh_loadMore_processedText":
+            MessageLookupByLibrary.simpleMessage("加载完成"),
+        "common_components_easyRefresh_loadMore_processingText":
+            MessageLookupByLibrary.simpleMessage("加载中..."),
+        "common_components_easyRefresh_loadMore_readyText":
+            MessageLookupByLibrary.simpleMessage("准备加载更多"),
+        "common_components_easyRefresh_refresh_armedText":
+            MessageLookupByLibrary.simpleMessage("松开刷新"),
+        "common_components_easyRefresh_refresh_dragText":
+            MessageLookupByLibrary.simpleMessage("下拉刷新"),
+        "common_components_easyRefresh_refresh_failedText":
+            MessageLookupByLibrary.simpleMessage("刷新失败"),
+        "common_components_easyRefresh_refresh_noMoreText":
+            MessageLookupByLibrary.simpleMessage("没有更多数据了"),
+        "common_components_easyRefresh_refresh_processedText":
+            MessageLookupByLibrary.simpleMessage("刷新完成"),
+        "common_components_easyRefresh_refresh_processingText":
+            MessageLookupByLibrary.simpleMessage("刷新中..."),
+        "common_components_easyRefresh_refresh_readyText":
+            MessageLookupByLibrary.simpleMessage("正在刷新..."),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("发送验证码"),
         "common_enum_seatType_coupleSeat":
@@ -146,6 +174,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_password": MessageLookupByLibrary.simpleMessage("密码"),
         "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),
         "search_history": MessageLookupByLibrary.simpleMessage("搜索历史"),
+        "search_level": MessageLookupByLibrary.simpleMessage("分级"),
+        "search_noData": MessageLookupByLibrary.simpleMessage("暂无数据"),
         "search_placeholder": MessageLookupByLibrary.simpleMessage("搜索全部电影"),
         "search_removeHistoryConfirm_cancel":
             MessageLookupByLibrary.simpleMessage("取消"),

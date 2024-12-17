@@ -6,13 +6,14 @@ part of 'hello_movie.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-HelloMovie _$HelloMovieFromJson(Map<String, dynamic> json) => HelloMovie(
+HelloMovieResponse _$HelloMovieResponseFromJson(Map<String, dynamic> json) =>
+    HelloMovieResponse(
       id: (json['id'] as num?)?.toInt(),
       code: (json['code'] as num?)?.toInt(),
       date: json['date'] as String?,
     );
 
-Map<String, dynamic> _$HelloMovieToJson(HelloMovie instance) =>
+Map<String, dynamic> _$HelloMovieResponseToJson(HelloMovieResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'code': instance.code,

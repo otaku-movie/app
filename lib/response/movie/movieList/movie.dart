@@ -1,8 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:otaku_movie/response/hello_movie.dart';
 
 part 'movie.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.none)
+@JsonSerializable(fieldRename: FieldRename.snake)
 class MovieResponse {
   final int? id;
   final String? cover;
@@ -20,7 +21,7 @@ class MovieResponse {
   final int? watchedCount;
   final int? wantToSeeCount;
   final List<Spec>? spec;
-  final List<dynamic>? helloMovie;
+  final List<HelloMovieResponse>? helloMovie;
   final List<Tag>? tags;
   final int? levelId;
   final String? levelName;

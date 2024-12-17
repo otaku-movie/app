@@ -40,6 +40,34 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage(""),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "common_components_easyRefresh_loadMore_armedText":
+            MessageLookupByLibrary.simpleMessage("Release to load more"),
+        "common_components_easyRefresh_loadMore_dragText":
+            MessageLookupByLibrary.simpleMessage("Pull to load more"),
+        "common_components_easyRefresh_loadMore_failedText":
+            MessageLookupByLibrary.simpleMessage("Load failed"),
+        "common_components_easyRefresh_loadMore_noMoreText":
+            MessageLookupByLibrary.simpleMessage("No more data"),
+        "common_components_easyRefresh_loadMore_processedText":
+            MessageLookupByLibrary.simpleMessage("Load complete"),
+        "common_components_easyRefresh_loadMore_processingText":
+            MessageLookupByLibrary.simpleMessage("Loading..."),
+        "common_components_easyRefresh_loadMore_readyText":
+            MessageLookupByLibrary.simpleMessage("Ready to load more"),
+        "common_components_easyRefresh_refresh_armedText":
+            MessageLookupByLibrary.simpleMessage("Release to refresh"),
+        "common_components_easyRefresh_refresh_dragText":
+            MessageLookupByLibrary.simpleMessage("Pull to refresh"),
+        "common_components_easyRefresh_refresh_failedText":
+            MessageLookupByLibrary.simpleMessage("Refresh failed"),
+        "common_components_easyRefresh_refresh_noMoreText":
+            MessageLookupByLibrary.simpleMessage("No more data"),
+        "common_components_easyRefresh_refresh_processedText":
+            MessageLookupByLibrary.simpleMessage("Refresh complete"),
+        "common_components_easyRefresh_refresh_processingText":
+            MessageLookupByLibrary.simpleMessage("Refreshing..."),
+        "common_components_easyRefresh_refresh_readyText":
+            MessageLookupByLibrary.simpleMessage("Refreshing..."),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("Send Verification Code"),
         "common_enum_seatType_coupleSeat":
@@ -142,6 +170,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Register"),
         "search_history":
             MessageLookupByLibrary.simpleMessage("Search History"),
+        "search_level": MessageLookupByLibrary.simpleMessage("Level"),
+        "search_noData": MessageLookupByLibrary.simpleMessage("No data yet"),
         "search_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "search_removeHistoryConfirm_cancel":
             MessageLookupByLibrary.simpleMessage(""),

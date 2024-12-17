@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'hello_movie.g.dart';
 
 @JsonSerializable()
-class HelloMovie {
+class HelloMovieResponse {
     @JsonKey(name: "id")
     final int? id;
     @JsonKey(name: "code")
@@ -11,13 +11,13 @@ class HelloMovie {
     @JsonKey(name: "date")
     final String? date;
 
-    HelloMovie({
+    HelloMovieResponse({
         this.id,
         this.code,
         this.date,
     });
 
-    factory HelloMovie.fromJson(Map<String, dynamic> json) => _$HelloMovieFromJson(json);
+    factory HelloMovieResponse.fromJson(Map<String, dynamic> json) => _$HelloMovieResponseFromJson(json);
 
-    Map<String, dynamic> toJson() => _$HelloMovieToJson(this);
+    Map<String, dynamic> toJson() => _$HelloMovieResponseToJson(this);
 }
