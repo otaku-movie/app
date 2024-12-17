@@ -44,9 +44,11 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
         return CinemaDetailResponse.fromJson(json as Map<String, dynamic>);
       },
     ).then((res) async {
-      setState(() {
-        data = res.data;
-      });
+      if (res.data != null) {
+        setState(() {
+          data = res.data!;
+        });
+      }
     }).catchError((err) {
       setState(() {
         error = true;
@@ -72,9 +74,11 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
         );
       },
     ).then((res) async {
-      setState(() {
-        theaterList = res.data.list;
-      });
+      if (res.data?.list != null) {
+        List<TheaterDetailResponse> list = res.data!.list!;
+        
+        theaterList = list;
+      }
     });
   }
 

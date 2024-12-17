@@ -71,7 +71,7 @@ class _PageState extends State<PaySuccess> {
       responseType: ResponseType.bytes
     ).then((res) {
       setState(() {
-        QRcodeBytes = Uint8List.fromList(res);
+        QRcodeBytes = Uint8List.fromList(res as List<int>);
       });
     });
   }

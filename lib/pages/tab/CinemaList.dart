@@ -36,6 +36,7 @@ class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
   bool loading = false;
   bool error = false;
   int currentPage = 1;
+  TextEditingController searchController = TextEditingController();
 
   List<CinemaListResponse> data = [];
   Placemark location = Placemark();
@@ -232,6 +233,7 @@ class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
             SizedBox(width: 20.w),
             Expanded(
               child: Input(
+              controller: searchController,
               placeholder: S.of(context).movieList_placeholder,
               placeholderStyle: const TextStyle(color: Colors.white60),
               textStyle: const TextStyle(color: Colors.white),

@@ -93,7 +93,7 @@ class _PageState extends State<ConfirmOrder> {
       if (res.data != null) {
         setState(() {
           paymentMethodData = res.data as List<PaymentMethodResponse>;
-          defaultPay = res.data[0].id;
+          defaultPay = res.data![0].id;
         });
       }
      

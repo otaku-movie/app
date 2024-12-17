@@ -76,12 +76,12 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return [];
       },
     ).then((res) {
-      setState(() {
-        currentMovieIndex = res.data.indexWhere((item) => item.id == int.parse(widget.movieId!));
-        cinemaMovieShowingList = res.data ?? [];
-      });
-      
-
+      if (res.data != null) {
+        setState(() {
+          currentMovieIndex = res.data!.indexWhere((item) => item.id == int.parse(widget.movieId!));
+          cinemaMovieShowingList = res.data ?? [];
+        });
+      }
     });
   }
 

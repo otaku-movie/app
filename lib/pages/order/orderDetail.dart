@@ -69,9 +69,8 @@ class _PageState extends State<OrderDetail> {
       fromJsonT: (json) {},
       responseType: ResponseType.bytes
     ).then((res) {
-      print(res);
       setState(() {
-        QRcodeBytes = Uint8List.fromList(res);
+        QRcodeBytes = Uint8List.fromList(res as List<int>);
       });
     });
   }

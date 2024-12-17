@@ -89,7 +89,7 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('搜索全部电影', style: TextStyle(
+                  Text(S.of(context).search_placeholder, style: TextStyle(
                     fontSize: 28.sp,
                     color: Colors.grey.shade500
                   ),),
