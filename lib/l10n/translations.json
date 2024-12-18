@@ -431,6 +431,20 @@
         "en": "Coming Soon"
       }
     },
+    "currentlyShowing": {
+      "level": {
+        "zh": "分级",
+        "ja": "映倫",
+        "en": "Level"
+      }
+    },
+    "comingSoon": {
+      "noDate": {
+        "zh": "日期待定",
+        "ja": "",
+        "en": ""
+      }
+    },
     "placeholder": {
       "zh": "搜索全部电影",
       "ja": "",

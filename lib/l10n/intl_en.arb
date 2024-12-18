@@ -83,6 +83,8 @@
   "register_registerButton": "Register",
   "movieList_tabBar_currentlyShowing": "Currently Showing",
   "movieList_tabBar_comingSoon": "Coming Soon",
+  "movieList_currentlyShowing_level": "Level",
+  "movieList_comingSoon_noDate": "",
   "movieList_placeholder": "",
   "movieList_buy": "",
   "cinemaList_address": "",

@@ -3,7 +3,7 @@ import 'package:otaku_movie/response/hello_movie.dart';
 
 part 'movie.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable(fieldRename: FieldRename.none)
 class MovieResponse {
   final int? id;
   final String? cover;

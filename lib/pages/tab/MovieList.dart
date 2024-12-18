@@ -4,6 +4,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/pages/tab/NowShowing.dart';
@@ -41,23 +42,6 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  Future<void> _onRefresh() async {
-  }
-
-  Future<void> _onLoad() async {
-    // await Future.delayed(const Duration(seconds: 2), () {
-    //   if (mounted) {
-    //     setState(() {
-    //       if (_tabController.index == 0) {
-    //         _listCount += 10;
-    //       } else {
-    //         _gridCount += 10;
-    //       }
-    //     });
-    //   }
-    // });
   }
 
   @override
@@ -112,24 +96,13 @@ class _PageState extends State<MovieList> with SingleTickerProviderStateMixin {
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: EasyRefresh.builder(
-          header: const ClassicHeader(),
-          footer: const ClassicFooter(),
-          onRefresh: _onRefresh,
-          onLoad: _onLoad,
-          childBuilder: (context, physics) {
-            return Container(
-              // padding: const EdgeInsets.only(left: 10, right: 10),
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  NowShowing(physics: physics),
-                  ComingSoon(physics: physics)
-                ],
-              ),
-            );
-          },
-        ),
+          child: TabBarView(
+            controller: _tabController,
+            children: const <Widget>[
+              NowShowing(),
+              ComingSoon()
+            ],
+          )
         )
         
       ),

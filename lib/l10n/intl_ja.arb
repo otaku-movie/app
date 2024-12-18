@@ -83,6 +83,8 @@
   "register_registerButton": "",
   "movieList_tabBar_currentlyShowing": "現在上映中",
   "movieList_tabBar_comingSoon": "近日公開",
+  "movieList_currentlyShowing_level": "映倫",
+  "movieList_comingSoon_noDate": "",
   "movieList_placeholder": "",
   "movieList_buy": "",
   "cinemaList_address": "",

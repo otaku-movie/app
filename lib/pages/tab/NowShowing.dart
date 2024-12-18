@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/CustomEasyRefresh.dart';
+import 'package:otaku_movie/components/HelloMovie.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
@@ -12,11 +14,11 @@ import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/utils/toast.dart';
 
 class NowShowing extends StatefulWidget {
-  final ScrollPhysics physics;
 
-  const NowShowing({super.key, required this.physics});
+  const NowShowing({super.key});
 
   @override
   State<NowShowing> createState() => _PageState();
@@ -26,16 +28,19 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true; // 保持页面的状态
 
-
+  EasyRefreshController easyRefreshController = EasyRefreshController();
   List<MovieNowShowingResponse> data = [];
   int currentPage = 1;
+  bool loading = false;
+  bool error = false;
+  bool loadFinished  = false;
 
-  void getData({bool refresh = true}) {
+  void getData({int page = 1}) {
     ApiRequest().request(
       path: '/app/movie/nowShowing',
       method: 'GET',
       queryParameters: {
-        "page": refresh ? 1 : currentPage + 1,
+        "page": page,
         "pageSize": 10,
       },
       fromJsonT: (json) {
@@ -45,14 +50,34 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         );
       },
     ).then((res) {
+      if (res.data?.list != null) {
+        List<MovieNowShowingResponse> list = res.data!.list!;
+        
+        setState(() {
+          if (list.isNotEmpty && !loadFinished) {
+            data.addAll(list); // 追加数据
+          }
+          if (page == 1) {
+            data = list;
+          }
+          currentPage = page;
+          loadFinished = list.isEmpty; // 更新加载完成标志
+          
+        });
+
+        easyRefreshController.finishLoad(
+          list.isEmpty ? IndicatorResult.noMore : IndicatorResult.success,
+          true
+        );
+      }
+    }).catchError((err) {
       setState(() {
-        if (refresh) {
-          data = res.data?.list ?? [];
-          currentPage = 1;
-        } else {
-          data.addAll(res.data?.list ?? []);
-          currentPage++;
-        }
+        error = true;
+      });
+    })
+    .whenComplete(() {
+      setState(() {
+        loading = false;
       });
     });
   }
@@ -63,13 +88,6 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
     getData();
   }
 
-  Future<void> _onRefresh() async {
-    getData(refresh: true);
-  }
-
-  Future<void> _onLoad() async {
-    getData(refresh: false);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,15 +96,19 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: EasyRefresh(
-        header: const ClassicHeader(),
-        footer: const ClassicFooter(),
-        onRefresh: _onRefresh,
-        onLoad: _onLoad,
+        header: customHeader(context),
+        footer: customFooter(context),
+        onRefresh: () {
+          getData();
+        },
+        onLoad: () {
+          getData(page: currentPage + 1);
+        },
         child: AppErrorWidget(
           loading: data.isEmpty,
           error: data.isEmpty,
           child: ListView.builder(
-              physics: widget.physics,
+              // physics: widget.physics,
               itemCount: data.length,
               itemBuilder: (context, index) {
                 MovieNowShowingResponse item = data[index];
@@ -100,7 +122,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
 
   Widget _buildMovieItem(BuildContext context, MovieNowShowingResponse item) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: 20.h),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(width: 1.0, color: Color(0xFFE6E6E6)),
@@ -137,18 +159,20 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                 Positioned(
                   bottom: 0,
                   left: 0,
-                  child: ExtendedImage.asset(
-                    'assets/image/audio-guide.png',
+                  child: HelloMovie(
+                    guideData: item.helloMovie, 
+                    type: HelloMovieGuide.audio,
                     width: 80.w,
-                  ),
+                  )
                 ),
                 Positioned(
                   bottom: 0,
                   right: 0,
-                  child: ExtendedImage.asset(
-                    'assets/image/sub-guide.png',
+                  child: HelloMovie(
+                    guideData: item.helloMovie, 
+                    type: HelloMovieGuide.sub,
                     width: 80.w,
-                  ),
+                  )
                 ),
               ],
             ),
@@ -205,9 +229,9 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
             },
             child: Text(item.name ?? '', style: TextStyle(fontSize: 36.sp)),
           ),
-          Text("监督：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
-          Text("声优：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
-          Text('映倫：${item.levelName}', style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
+          // Text("监督：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
+          // Text("声优：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
+          Text('${S.of(context).movieList_currentlyShowing_level}：${item.levelName}', style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Wrap(

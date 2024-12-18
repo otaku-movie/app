@@ -83,6 +83,8 @@
   "register_registerButton": "注册",
   "movieList_tabBar_currentlyShowing": "上映中",
   "movieList_tabBar_comingSoon": "即将上映",
+  "movieList_currentlyShowing_level": "分级",
+  "movieList_comingSoon_noDate": "日期待定",
   "movieList_placeholder": "搜索全部电影",
   "movieList_buy": "购票",
   "cinemaList_address": "正在获取当前位置",

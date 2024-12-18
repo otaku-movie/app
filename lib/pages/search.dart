@@ -84,6 +84,9 @@ class _PageState extends State<Search> {
           if (list.isNotEmpty && !loadFinished) {
             data.addAll(list); // 追加数据
           } 
+          if (page == 1) {
+            data = list;
+          }
           currentPage = page;
           loadFinished = list.isEmpty; // 更新加载完成标志
           

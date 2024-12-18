@@ -740,6 +740,26 @@ class S {
     );
   }
 
+  /// `Level`
+  String get movieList_currentlyShowing_level {
+    return Intl.message(
+      'Level',
+      name: 'movieList_currentlyShowing_level',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get movieList_comingSoon_noDate {
+    return Intl.message(
+      '',
+      name: 'movieList_comingSoon_noDate',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// ``
   String get movieList_placeholder {
     return Intl.message(

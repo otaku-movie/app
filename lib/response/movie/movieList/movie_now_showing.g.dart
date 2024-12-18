@@ -18,6 +18,7 @@ MovieNowShowingResponse _$MovieNowShowingResponseFromJson(
       helloMovie: (json['hello_movie'] as List<dynamic>?)
           ?.map((e) => HelloMovieResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
+      levelName: json['level_name'] as String?,
       startDate: json['start_date'] as String?,
     );
 
@@ -28,6 +29,7 @@ Map<String, dynamic> _$MovieNowShowingResponseToJson(
       'cover': instance.cover,
       'name': instance.name,
       'start_date': instance.startDate,
+      'level_name': instance.levelName,
       'cast': instance.cast?.map((e) => e.toJson()).toList(),
       'hello_movie': instance.helloMovie?.map((e) => e.toJson()).toList(),
     };

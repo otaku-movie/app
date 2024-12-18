@@ -132,6 +132,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage(""),
         "movieList_buy": MessageLookupByLibrary.simpleMessage(""),
+        "movieList_comingSoon_noDate": MessageLookupByLibrary.simpleMessage(""),
+        "movieList_currentlyShowing_level":
+            MessageLookupByLibrary.simpleMessage("映倫"),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage(""),
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("近日公開"),

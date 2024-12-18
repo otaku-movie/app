@@ -3,7 +3,7 @@ import 'dart:convert';
 
 part 'movie_show_time_detail.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class MovieShowTimeDetailResponse {
   @JsonKey(name: "id")
   final int? id;

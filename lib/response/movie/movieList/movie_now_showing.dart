@@ -4,12 +4,11 @@ import 'package:otaku_movie/response/movie/movieList/movie.dart';
 
 part 'movie_now_showing.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.snake)
 class MovieNowShowingResponse extends MovieResponse {
   @JsonKey(name: "cast")
   final List<Cast>? cast;
   
-  @JsonKey(name: "hello_movie")
   final List<HelloMovieResponse>? helloMovie;
 
   MovieNowShowingResponse({
@@ -18,6 +17,7 @@ class MovieNowShowingResponse extends MovieResponse {
     super.cover,
     this.cast,
     this.helloMovie,
+    super.levelName,
     super.startDate,
   });
 

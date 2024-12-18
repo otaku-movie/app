@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
+import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/rate.dart';
 import 'package:otaku_movie/components/space.dart';
@@ -741,10 +742,14 @@ class _PageState extends State<MovieDetail> {
                             )
                           ]),
                           Row(children: [
-                            Text('${S.of(context).movieDetail_detail_state}：未上映', style: TextStyle(
+                            Text('${S.of(context).movieDetail_detail_state}：', style: TextStyle(
                               fontSize: 28.sp,
                               color: Colors.grey.shade600
-                            ))
+                            )),
+                            Dict(
+                              name: 'releaseStatus',
+                              code: data.status,
+                            )
                           ]),
                           Container(
                             child: RichText(

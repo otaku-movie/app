@@ -139,6 +139,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("标签"),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage("时长"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("购票"),
+        "movieList_comingSoon_noDate":
+            MessageLookupByLibrary.simpleMessage("日期待定"),
+        "movieList_currentlyShowing_level":
+            MessageLookupByLibrary.simpleMessage("分级"),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage("搜索全部电影"),
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("即将上映"),

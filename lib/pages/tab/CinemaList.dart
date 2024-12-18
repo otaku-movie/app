@@ -64,9 +64,11 @@ class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
       getLocation().then((position) async {
         List<CinemaListResponse> result = await getCinemaListWithDistance(list, position);
 
-        setState(() {
-          data = result;
-        });
+        if (mounted) {
+          setState(() {
+            data = result;
+          });
+        }
       });
       
       setState(() {
