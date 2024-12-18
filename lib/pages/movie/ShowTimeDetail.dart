@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_show_time_detail_response.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_showing_response.dart';
@@ -186,7 +187,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                   child: ClipRRect(
                     borderRadius:
                         BorderRadius.circular(8.0),
-                    child: ExtendedImage.network(
+                    child: CustomExtendedImage(
                       item.poster ?? '',
                       fit: BoxFit.cover,
                     ),
@@ -268,7 +269,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                       background: Stack(
                         clipBehavior: Clip.none,
                         children: cinemaMovieShowingList.isEmpty ? [] : [
-                          ExtendedImage.network(
+                          CustomExtendedImage(
                             cinemaMovieShowingList[currentMovieIndex].poster ?? '',
                             width: double.infinity,
                             fit: BoxFit.cover,

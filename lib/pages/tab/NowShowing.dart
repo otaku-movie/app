@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
@@ -126,18 +127,10 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4),
-                    child: ExtendedImage.network(
+                    child: CustomExtendedImage(
                       item.cover ?? '',
                       width: 240.w,
-                      fit: BoxFit.cover,
-                      loadStateChanged: (state) {
-                        if (state.extendedImageLoadState == LoadState.loading) {
-                          return const Center(child: CircularProgressIndicator());
-                        } else if (state.extendedImageLoadState == LoadState.failed) {
-                          return const Icon(Icons.broken_image, color: Colors.grey);
-                        }
-                        return null; // 正常加载完成
-                      },
+                      fit: BoxFit.cover
                     ),
                   ),
                 ),

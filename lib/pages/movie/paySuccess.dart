@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -185,7 +186,7 @@ class _PageState extends State<PaySuccess> {
                                   color: Colors.grey.shade200,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(4),
-                                    child: ExtendedImage.network(
+                                    child: CustomExtendedImage(
                                       data.moviePoster ?? '',
                                       width: 200.w,
                                       height: 230.h,

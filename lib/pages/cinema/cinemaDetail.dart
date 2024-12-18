@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
@@ -279,7 +280,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                                   child: ClipRRect(
                                     borderRadius:
                                         BorderRadius.circular(8.0),
-                                    child: ExtendedImage.network(
+                                    child: CustomExtendedImage(
                                       item.poster ?? '',
                                       fit: BoxFit.cover,
                                     ),

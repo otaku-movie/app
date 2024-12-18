@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -150,7 +151,7 @@ class _PageState extends State<ConfirmOrder> {
                           color: Colors.grey.shade200,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(4),
-                            child: ExtendedImage.network(
+                            child: CustomExtendedImage(
                               data.moviePoster ?? '',
                               width: 220.w,
                               height: 260.h,

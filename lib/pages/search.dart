@@ -13,6 +13,7 @@ import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/HelloMovie.dart';
 import 'package:otaku_movie/components/Input.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -344,19 +345,11 @@ class _PageState extends State<Search> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4),
-                    child: ExtendedImage.network(
+                    child: CustomExtendedImage(
                       item.cover ?? '',
                       width: 240.w,
                       height: 280.h,
-                      fit: BoxFit.cover,
-                      loadStateChanged: (state) {
-                        if (state.extendedImageLoadState == LoadState.loading) {
-                          return const Center(child: CircularProgressIndicator());
-                        } else if (state.extendedImageLoadState == LoadState.failed) {
-                          return const Icon(Icons.broken_image, color: Colors.grey);
-                        }
-                        return null; // 正常加载完成
-                      },
+                      fit: BoxFit.cover
                     ),
                   ),
                 ),

@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
@@ -136,7 +137,7 @@ class _PageState extends State<OrderList> {
                         color: Colors.grey.shade200,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: ExtendedImage.network(
+                          child: CustomExtendedImage(
                             item.moviePoster ?? '',
                             width: 220.w,
                             height: 260.h,

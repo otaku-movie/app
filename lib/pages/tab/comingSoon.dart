@@ -6,6 +6,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -199,18 +200,10 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(4),
-                                    child: ExtendedImage.network(
+                                    child: CustomExtendedImage(
                                       item?.cover ?? '',
                                       width: 240.w,
-                                      fit: BoxFit.cover,
-                                      loadStateChanged: (state) {
-                                        if (state.extendedImageLoadState == LoadState.loading) {
-                                          return const Center(child: CircularProgressIndicator());
-                                        } else if (state.extendedImageLoadState == LoadState.failed) {
-                                          return const Icon(Icons.broken_image, color: Colors.grey);
-                                        }
-                                        return null; // 正常加载完成
-                                      },
+                                      fit: BoxFit.cover
                                     ),
                                   ),
                                 ),

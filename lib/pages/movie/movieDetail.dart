@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/components/rate.dart';
 import 'package:otaku_movie/components/space.dart';
@@ -409,7 +410,7 @@ class _PageState extends State<MovieDetail> {
                 clipBehavior: Clip.none,
                 children: [
                   Positioned(child:  SafeArea(child: Container())),
-                  ExtendedImage.network(data.cover ?? '', width: double.infinity, fit: BoxFit.cover),
+                  CustomExtendedImage(data.cover ?? '', width: double.infinity, fit: BoxFit.cover),
                   // Image.asset('assets/image/raligun.webp', width: double.infinity, fit: BoxFit.cover),
                   Positioned(
                     top: 0,
@@ -472,7 +473,7 @@ class _PageState extends State<MovieDetail> {
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10), // 与 BoxDecoration 的圆角保持一致
-                              child: ExtendedImage.network(
+                              child: CustomExtendedImage(
                                 data.cover ?? '',
                                 width: 260.w,
                                 fit: BoxFit.cover,
@@ -803,7 +804,7 @@ class _PageState extends State<MovieDetail> {
                                         borderRadius: BorderRadius.circular(8)
                                       ),
                                       clipBehavior: Clip.antiAlias,
-                                      child: ExtendedImage.network(
+                                      child: CustomExtendedImage(
                                         item.avatar ?? '',
                                         fit: BoxFit.cover, // 确保图片填满容器
                                       ),
@@ -862,7 +863,7 @@ class _PageState extends State<MovieDetail> {
                                         borderRadius: BorderRadius.circular(8)
                                       ),
                                       clipBehavior: Clip.antiAlias,
-                                      child: ExtendedImage.network(
+                                      child: CustomExtendedImage(
                                         item.cover ?? '',
                                         fit: BoxFit.cover, // 确保图片填满容器
                                       ),

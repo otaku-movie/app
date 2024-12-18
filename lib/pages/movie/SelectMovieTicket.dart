@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/cinema/movie_ticket_type_response.dart';
@@ -102,7 +103,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                           // clipBehavior: Clip.hardEdge,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(4),
-                            child: ExtendedImage.network(
+                            child: CustomExtendedImage(
                               data.moviePoster ?? '',
                               width: 240.w,
                               height: 285.h,
