@@ -41,6 +41,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("基本料金"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "common_components_cropper_actions_flip":
+            MessageLookupByLibrary.simpleMessage("フリップ"),
+        "common_components_cropper_actions_redo":
+            MessageLookupByLibrary.simpleMessage("元に戻す"),
+        "common_components_cropper_actions_reset":
+            MessageLookupByLibrary.simpleMessage("リセット"),
+        "common_components_cropper_actions_rotateLeft":
+            MessageLookupByLibrary.simpleMessage("左へ回転"),
+        "common_components_cropper_actions_rotateRight":
+            MessageLookupByLibrary.simpleMessage("右へ回転"),
+        "common_components_cropper_actions_undo":
+            MessageLookupByLibrary.simpleMessage("キャンセル"),
+        "common_components_cropper_title":
+            MessageLookupByLibrary.simpleMessage("写真をトリミングする"),
         "common_components_easyRefresh_loadMore_armedText":
             MessageLookupByLibrary.simpleMessage("さらに読み込むために離してください"),
         "common_components_easyRefresh_loadMore_dragText":
@@ -71,6 +85,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("更新中..."),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("検証コードを送信"),
+        "common_components_sendVerifyCode_success":
+            MessageLookupByLibrary.simpleMessage(""),
         "common_enum_seatType_coupleSeat":
             MessageLookupByLibrary.simpleMessage("カップルシート"),
         "common_enum_seatType_disabled":
@@ -165,9 +181,27 @@ class MessageLookup extends MessageLookupByLibrary {
             "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。"),
         "payResult_ticketCode": MessageLookupByLibrary.simpleMessage("チケットコード"),
         "payResult_title": MessageLookupByLibrary.simpleMessage("支払い完了"),
-        "register_email": MessageLookupByLibrary.simpleMessage(""),
-        "register_password": MessageLookupByLibrary.simpleMessage(""),
+        "register_haveAccount": MessageLookupByLibrary.simpleMessage(""),
+        "register_loginHere": MessageLookupByLibrary.simpleMessage(""),
+        "register_passwordNotMatchRepeatPassword":
+            MessageLookupByLibrary.simpleMessage("2回入力したパスワードは一致しません"),
         "register_registerButton": MessageLookupByLibrary.simpleMessage(""),
+        "register_repeatPassword_text":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_repeatPassword_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_repeatPassword_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_send": MessageLookupByLibrary.simpleMessage(""),
+        "register_username_text": MessageLookupByLibrary.simpleMessage(""),
+        "register_username_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_username_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_verifyCode_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_verifyCode_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
         "search_history": MessageLookupByLibrary.simpleMessage("検索履歴"),
         "search_level": MessageLookupByLibrary.simpleMessage("映倫"),
         "search_noData": MessageLookupByLibrary.simpleMessage("まだデータがありません"),

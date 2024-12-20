@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:otaku_movie/components/cropper.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/cinema/cinemaDetail.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';

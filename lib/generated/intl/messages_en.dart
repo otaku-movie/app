@@ -42,6 +42,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage(""),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "common_components_cropper_actions_flip":
+            MessageLookupByLibrary.simpleMessage("Flip"),
+        "common_components_cropper_actions_redo":
+            MessageLookupByLibrary.simpleMessage("Restore Undo"),
+        "common_components_cropper_actions_reset":
+            MessageLookupByLibrary.simpleMessage("Reset"),
+        "common_components_cropper_actions_rotateLeft":
+            MessageLookupByLibrary.simpleMessage("Rotate Left"),
+        "common_components_cropper_actions_rotateRight":
+            MessageLookupByLibrary.simpleMessage("Rotate Right"),
+        "common_components_cropper_actions_undo":
+            MessageLookupByLibrary.simpleMessage("Revocation"),
+        "common_components_cropper_title":
+            MessageLookupByLibrary.simpleMessage("Crop the picture"),
         "common_components_easyRefresh_loadMore_armedText":
             MessageLookupByLibrary.simpleMessage("Release to load more"),
         "common_components_easyRefresh_loadMore_dragText":
@@ -72,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Refreshing..."),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("Send Verification Code"),
+        "common_components_sendVerifyCode_success":
+            MessageLookupByLibrary.simpleMessage(""),
         "common_enum_seatType_coupleSeat":
             MessageLookupByLibrary.simpleMessage("Couple Seat"),
         "common_enum_seatType_disabled":
@@ -169,10 +185,32 @@ class MessageLookup extends MessageLookupByLibrary {
         "payResult_ticketCode":
             MessageLookupByLibrary.simpleMessage("Ticket collection code"),
         "payResult_title": MessageLookupByLibrary.simpleMessage("Pay Succeed"),
-        "register_email": MessageLookupByLibrary.simpleMessage("Email"),
-        "register_password": MessageLookupByLibrary.simpleMessage("Password"),
+        "register_haveAccount":
+            MessageLookupByLibrary.simpleMessage("Already have an account?"),
+        "register_loginHere":
+            MessageLookupByLibrary.simpleMessage("Click Here"),
+        "register_passwordNotMatchRepeatPassword":
+            MessageLookupByLibrary.simpleMessage(
+                "The passwords you entered twice do not match"),
         "register_registerButton":
             MessageLookupByLibrary.simpleMessage("Register"),
+        "register_repeatPassword_text":
+            MessageLookupByLibrary.simpleMessage("Repeat Password"),
+        "register_repeatPassword_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_repeatPassword_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_send": MessageLookupByLibrary.simpleMessage("send"),
+        "register_username_text":
+            MessageLookupByLibrary.simpleMessage("UserName"),
+        "register_username_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_username_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_verifyCode_verify_isValid":
+            MessageLookupByLibrary.simpleMessage(""),
+        "register_verifyCode_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
         "search_history":
             MessageLookupByLibrary.simpleMessage("Search History"),
         "search_level": MessageLookupByLibrary.simpleMessage("Level"),

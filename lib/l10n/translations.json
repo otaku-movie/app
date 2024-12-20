@@ -261,11 +261,55 @@
           }
         }
       },
+      "cropper": {
+        "title": {
+          "zh": "裁剪",
+          "ja": "写真をトリミングする",
+          "en": "Crop the picture"
+        },
+        "actions": {
+          "rotateLeft": {
+            "zh": "向左旋转",
+            "ja": "左へ回転",
+            "en": "Rotate Left"
+          },
+          "rotateRight": {
+            "zh": "向右旋转",
+            "ja": "右へ回転",
+            "en": "Rotate Right"
+          },
+          "flip": {
+            "zh": "翻转",
+            "ja": "フリップ",
+            "en": "Flip"
+          },
+          "undo": {
+            "zh": "撤销",
+            "ja": "キャンセル",
+            "en": "Revocation"
+          },
+          "redo": {
+            "zh": "恢复撤销",
+            "ja": "元に戻す",
+            "en": "Restore Undo"
+          },
+          "reset": {
+            "zh": "重置",
+            "ja": "リセット",
+            "en": "Reset"
+          }
+        }
+      },
       "sendVerifyCode": {
         "send": {
           "zh": "发送验证码",
           "ja": "検証コードを送信",
           "en": "Send Verification Code"
+        },
+        "success": {
+          "zh": "验证码发送成功",
+          "ja": "",
+          "en": ""
         }
       }
     },
@@ -402,20 +446,82 @@
     }
   },
   "register": {
-    "email": {
-      "zh": "邮箱",
-      "ja": "",
-      "en": "Email"
+    "repeatPassword": {
+      "text": {
+        "zh": "重复密码",
+        "ja": "",
+        "en": "Repeat Password"
+      },
+      "verify": {
+        "notNull": {
+          "zh": "重复密码不能为空",
+          "ja": "",
+          "en": ""
+        },
+        "isValid": {
+          "zh": "重复密码必须为8-16位，包含数字、字母和下划线",
+          "ja": "",
+          "en": ""
+        }
+      }
     },
-    "password": {
-      "zh": "密码",
-      "ja": "",
-      "en": "Password"
+    "username": {
+      "text": {
+        "zh": "用户名称",
+        "ja": "",
+        "en": "UserName"
+      },
+      "verify": {
+        "notNull": {
+          "zh": "密码不能为空",
+          "ja": "",
+          "en": ""
+        },
+        "isValid": {
+          "zh": "密码必须为8-16位，包含数字、字母和下划线",
+          "ja": "",
+          "en": ""
+        }
+      }
+    },
+    "passwordNotMatchRepeatPassword": {
+      "zh": "两次输入的密码不一致",
+      "ja": "2回入力したパスワードは一致しません",
+      "en": "The passwords you entered twice do not match"
+    },
+    "verifyCode": {
+      "verify": {
+        "notNull": {
+          "zh": "验证码不能为空",
+          "ja": "",
+          "en": ""
+        },
+        "isValid": {
+          "zh": "验证码必须是6位纯数字",
+          "ja": "",
+          "en": ""
+        }
+      }
     },
     "registerButton": {
-      "zh": "注册",
+      "zh": "注册并登录",
       "ja": "",
       "en": "Register"
+    },
+    "send": {
+      "zh": "发送",
+      "ja": "",
+      "en": "send"
+    },
+    "haveAccount": {
+      "zh": "已经有账号了？",
+      "ja": "",
+      "en": "Already have an account?"
+    },
+    "loginHere": {
+      "zh": "点击登录",
+      "ja": "",
+      "en": "Click Here"
     }
   },
   "movieList": {

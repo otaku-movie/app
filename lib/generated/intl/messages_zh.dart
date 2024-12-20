@@ -42,6 +42,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("普通影票价格"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage("正在获取当前位置"),
+        "common_components_cropper_actions_flip":
+            MessageLookupByLibrary.simpleMessage("翻转"),
+        "common_components_cropper_actions_redo":
+            MessageLookupByLibrary.simpleMessage("恢复撤销"),
+        "common_components_cropper_actions_reset":
+            MessageLookupByLibrary.simpleMessage("重置"),
+        "common_components_cropper_actions_rotateLeft":
+            MessageLookupByLibrary.simpleMessage("向左旋转"),
+        "common_components_cropper_actions_rotateRight":
+            MessageLookupByLibrary.simpleMessage("向右旋转"),
+        "common_components_cropper_actions_undo":
+            MessageLookupByLibrary.simpleMessage("撤销"),
+        "common_components_cropper_title":
+            MessageLookupByLibrary.simpleMessage("裁剪"),
         "common_components_easyRefresh_loadMore_armedText":
             MessageLookupByLibrary.simpleMessage("松开加载更多"),
         "common_components_easyRefresh_loadMore_dragText":
@@ -72,6 +86,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("正在刷新..."),
         "common_components_sendVerifyCode_send":
             MessageLookupByLibrary.simpleMessage("发送验证码"),
+        "common_components_sendVerifyCode_success":
+            MessageLookupByLibrary.simpleMessage("验证码发送成功"),
         "common_enum_seatType_coupleSeat":
             MessageLookupByLibrary.simpleMessage("情侣座"),
         "common_enum_seatType_disabled":
@@ -176,9 +192,28 @@ class MessageLookup extends MessageLookupByLibrary {
             "您的订单已经支付完成，请在以下时间之前到达以下地点，祝您观影愉快。"),
         "payResult_ticketCode": MessageLookupByLibrary.simpleMessage("取票码"),
         "payResult_title": MessageLookupByLibrary.simpleMessage("支付完成"),
-        "register_email": MessageLookupByLibrary.simpleMessage("邮箱"),
-        "register_password": MessageLookupByLibrary.simpleMessage("密码"),
-        "register_registerButton": MessageLookupByLibrary.simpleMessage("注册"),
+        "register_haveAccount": MessageLookupByLibrary.simpleMessage("已经有账号了？"),
+        "register_loginHere": MessageLookupByLibrary.simpleMessage("点击登录"),
+        "register_passwordNotMatchRepeatPassword":
+            MessageLookupByLibrary.simpleMessage("两次输入的密码不一致"),
+        "register_registerButton":
+            MessageLookupByLibrary.simpleMessage("注册并登录"),
+        "register_repeatPassword_text":
+            MessageLookupByLibrary.simpleMessage("重复密码"),
+        "register_repeatPassword_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("重复密码必须为8-16位，包含数字、字母和下划线"),
+        "register_repeatPassword_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("重复密码不能为空"),
+        "register_send": MessageLookupByLibrary.simpleMessage("发送"),
+        "register_username_text": MessageLookupByLibrary.simpleMessage("用户名称"),
+        "register_username_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("密码必须为8-16位，包含数字、字母和下划线"),
+        "register_username_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("密码不能为空"),
+        "register_verifyCode_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("验证码必须是6位纯数字"),
+        "register_verifyCode_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("验证码不能为空"),
         "search_history": MessageLookupByLibrary.simpleMessage("搜索历史"),
         "search_level": MessageLookupByLibrary.simpleMessage("分级"),
         "search_noData": MessageLookupByLibrary.simpleMessage("暂无数据"),

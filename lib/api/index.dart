@@ -126,6 +126,11 @@ class ApiRequest {
       }
       
     } catch (e) {
+      if (e is DioException) {
+        if (e.response?.data['code'] != 1) {
+          ToastService.showInfo(e.response?.data['message'] ?? '');
+        }
+      }
       log.e(e);
       rethrow;
     }

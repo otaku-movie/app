@@ -27,6 +27,11 @@ String formatNumberToTime(int totalMinutes) {
     
     return passwordRegExp.hasMatch(password);
   }
+  bool isSixDigitNumber(String input) {
+    final regex = RegExp(r'^\d{6}$');
+    return regex.hasMatch(input);
+  }
+
   String getDay (String date, BuildContext context) {
     if (date.isEmpty) return '';
     

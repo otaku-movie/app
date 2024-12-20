@@ -450,11 +450,91 @@ class S {
     );
   }
 
+  /// `Crop the picture`
+  String get common_components_cropper_title {
+    return Intl.message(
+      'Crop the picture',
+      name: 'common_components_cropper_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rotate Left`
+  String get common_components_cropper_actions_rotateLeft {
+    return Intl.message(
+      'Rotate Left',
+      name: 'common_components_cropper_actions_rotateLeft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rotate Right`
+  String get common_components_cropper_actions_rotateRight {
+    return Intl.message(
+      'Rotate Right',
+      name: 'common_components_cropper_actions_rotateRight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flip`
+  String get common_components_cropper_actions_flip {
+    return Intl.message(
+      'Flip',
+      name: 'common_components_cropper_actions_flip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Revocation`
+  String get common_components_cropper_actions_undo {
+    return Intl.message(
+      'Revocation',
+      name: 'common_components_cropper_actions_undo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore Undo`
+  String get common_components_cropper_actions_redo {
+    return Intl.message(
+      'Restore Undo',
+      name: 'common_components_cropper_actions_redo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset`
+  String get common_components_cropper_actions_reset {
+    return Intl.message(
+      'Reset',
+      name: 'common_components_cropper_actions_reset',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Send Verification Code`
   String get common_components_sendVerifyCode_send {
     return Intl.message(
       'Send Verification Code',
       name: 'common_components_sendVerifyCode_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get common_components_sendVerifyCode_success {
+    return Intl.message(
+      '',
+      name: 'common_components_sendVerifyCode_success',
       desc: '',
       args: [],
     );
@@ -690,21 +770,91 @@ class S {
     );
   }
 
-  /// `Email`
-  String get register_email {
+  /// `Repeat Password`
+  String get register_repeatPassword_text {
     return Intl.message(
-      'Email',
-      name: 'register_email',
+      'Repeat Password',
+      name: 'register_repeatPassword_text',
       desc: '',
       args: [],
     );
   }
 
-  /// `Password`
-  String get register_password {
+  /// ``
+  String get register_repeatPassword_verify_notNull {
     return Intl.message(
-      'Password',
-      name: 'register_password',
+      '',
+      name: 'register_repeatPassword_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get register_repeatPassword_verify_isValid {
+    return Intl.message(
+      '',
+      name: 'register_repeatPassword_verify_isValid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `UserName`
+  String get register_username_text {
+    return Intl.message(
+      'UserName',
+      name: 'register_username_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get register_username_verify_notNull {
+    return Intl.message(
+      '',
+      name: 'register_username_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get register_username_verify_isValid {
+    return Intl.message(
+      '',
+      name: 'register_username_verify_isValid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The passwords you entered twice do not match`
+  String get register_passwordNotMatchRepeatPassword {
+    return Intl.message(
+      'The passwords you entered twice do not match',
+      name: 'register_passwordNotMatchRepeatPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get register_verifyCode_verify_notNull {
+    return Intl.message(
+      '',
+      name: 'register_verifyCode_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get register_verifyCode_verify_isValid {
+    return Intl.message(
+      '',
+      name: 'register_verifyCode_verify_isValid',
       desc: '',
       args: [],
     );
@@ -715,6 +865,36 @@ class S {
     return Intl.message(
       'Register',
       name: 'register_registerButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `send`
+  String get register_send {
+    return Intl.message(
+      'send',
+      name: 'register_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already have an account?`
+  String get register_haveAccount {
+    return Intl.message(
+      'Already have an account?',
+      name: 'register_haveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click Here`
+  String get register_loginHere {
+    return Intl.message(
+      'Click Here',
+      name: 'register_loginHere',
       desc: '',
       args: [],
     );
