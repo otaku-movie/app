@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:otaku_movie/components/cropper.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/cinema/cinemaDetail.dart';
+import 'package:otaku_movie/pages/movie/commentDetail.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/user/User.dart';
 import 'package:otaku_movie/pages/movie/SelectMovieTicket.dart';
@@ -110,6 +111,15 @@ final GoRouter routerConfig = GoRouter(
           name: 'movieDetail',
           builder: (BuildContext context, GoRouterState state) {
             return MovieDetail(id: state.pathParameters['id']);
+          },
+        ),
+        GoRoute(
+          path: '/movie/comment/detail',
+          name: 'commentDetail',
+          builder: (BuildContext context, GoRouterState state) {
+            return CommentDetail(
+              id: state.uri.queryParameters['id']
+            );
           },
         ),
         GoRoute(

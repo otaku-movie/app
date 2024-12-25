@@ -1010,6 +1010,16 @@ class S {
     );
   }
 
+  /// `Write comment`
+  String get movieDetail_writeComment {
+    return Intl.message(
+      'Write comment',
+      name: 'movieDetail_writeComment',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// ``
   String get movieDetail_detail_noDate {
     return Intl.message(
@@ -1125,6 +1135,66 @@ class S {
     return Intl.message(
       '',
       name: 'movieDetail_detail_comment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total {total} replies`
+  String movieDetail_detail_totalReplyMessage(int total) {
+    return Intl.message(
+      'Total $total replies',
+      name: 'movieDetail_detail_totalReplyMessage',
+      desc: '',
+      args: [total],
+    );
+  }
+
+  /// `Comment Detail`
+  String get commentDetail_title {
+    return Intl.message(
+      'Comment Detail',
+      name: 'commentDetail_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comment Reply`
+  String get commentDetail_replyComment {
+    return Intl.message(
+      'Comment Reply',
+      name: 'commentDetail_replyComment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total {total} replies`
+  String commentDetail_totalReplyMessage(int total) {
+    return Intl.message(
+      'Total $total replies',
+      name: 'commentDetail_totalReplyMessage',
+      desc: '',
+      args: [total],
+    );
+  }
+
+  /// `Reply to {reply}`
+  String commentDetail_comment_placeholder(String reply) {
+    return Intl.message(
+      'Reply to $reply',
+      name: 'commentDetail_comment_placeholder',
+      desc: '',
+      args: [reply],
+    );
+  }
+
+  /// `Reply`
+  String get commentDetail_comment_button {
+    return Intl.message(
+      'Reply',
+      name: 'commentDetail_comment_button',
       desc: '',
       args: [],
     );

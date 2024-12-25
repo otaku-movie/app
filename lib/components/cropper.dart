@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:image_editor/image_editor.dart';
@@ -21,6 +22,8 @@ class _CropperPageState extends State<Cropper> {
   final GlobalKey<ExtendedImageEditorState> editorKey = GlobalKey<ExtendedImageEditorState>();
   final ImageEditorController _editorController = ImageEditorController();
   final ImagePicker picker = ImagePicker();
+  
+  get io => null;
 
   /// 打开相册选择图片
   Future<void> _pickImageFromGallery() async {
@@ -80,7 +83,7 @@ class _CropperPageState extends State<Cropper> {
               children: [
                 Expanded(
                   child: ExtendedImage.file(
-                    _image!,
+                    kIsWeb ? _image as File : io.File(_image!.path), // 确保类型匹配,
                     fit: BoxFit.contain,
                     mode: ExtendedImageMode.editor,
                     extendedImageEditorKey: editorKey,

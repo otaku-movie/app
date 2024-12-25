@@ -110,6 +110,7 @@
   "movieDetail_button_saw": "",
   "movieDetail_button_buy": "",
   "movieDetail_comment_reply": "reply",
+  "movieDetail_writeComment": "Write comment",
   "movieDetail_detail_noDate": "",
   "movieDetail_detail_basicMessage": "",
   "movieDetail_detail_originalName": "",
@@ -122,6 +123,33 @@
   "movieDetail_detail_staff": "",
   "movieDetail_detail_character": "",
   "movieDetail_detail_comment": "",
+  "movieDetail_detail_totalReplyMessage": "Total {total} replies",
+  "@movieDetail_detail_totalReplyMessage": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "commentDetail_title": "Comment Detail",
+  "commentDetail_replyComment": "Comment Reply",
+  "commentDetail_totalReplyMessage": "Total {total} replies",
+  "@commentDetail_totalReplyMessage": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "commentDetail_comment_placeholder": "Reply to {reply}",
+  "@commentDetail_comment_placeholder": {
+    "placeholders": {
+      "reply": {
+        "type": "String"
+      }
+    }
+  },
+  "commentDetail_comment_button": "Reply",
   "movieTicketType_total": "Total",
   "movieTicketType_title": "",
   "movieTicketType_seatNumber": "",

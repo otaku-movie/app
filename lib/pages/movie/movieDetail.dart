@@ -16,7 +16,7 @@ import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/character.dart';
-import 'package:otaku_movie/response/movie/movieList/comment/comment.dart';
+import 'package:otaku_movie/response/movie/movieList/comment/comment_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
 import 'package:otaku_movie/response/movie/movie_staff.dart';
 import 'package:otaku_movie/response/response.dart';
@@ -173,7 +173,16 @@ class _PageState extends State<MovieDetail> {
 
   List<Widget> generateComment() {
     return commentListData.map((comment) {
-      return Container(
+      return GestureDetector(
+        onTap: () {
+          context.pushNamed(
+            'commentDetail',
+            queryParameters: {
+              "id": '${comment.id}'
+            }
+          );
+        },
+        child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.w),
         decoration: BoxDecoration(
           border: Border(
@@ -204,7 +213,7 @@ class _PageState extends State<MovieDetail> {
               children: [
                 Container(
                   width: 600.w,
-                  padding: EdgeInsets.symmetric(vertical: 4.h),
+                  // padding: EdgeInsets.symmetric(vertical: 4.h),
                   child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   // crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,14 +227,14 @@ class _PageState extends State<MovieDetail> {
                         Rate(
                           initialRating: 3.5, // 初始评分
                           maxRating: 5.0, // 最大评分
-                          starSize: 35.w, // 星星大小
+                          starSize: 24.w, // 星星大小
                           onRatingUpdate: (rating) {
                             print("当前评分：$rating");
                           },
                         ),
                         SizedBox(width: 10.w),
                         Text('9.8分', style: TextStyle(
-                          fontSize: 40.sp,
+                          fontSize: 32.sp,
                           color: Colors.yellow.shade700
                         ),)
                       ],
@@ -262,21 +271,34 @@ class _PageState extends State<MovieDetail> {
                   padding: EdgeInsets.all(15.w),
                   margin: EdgeInsets.symmetric(vertical: 20.h),
                   decoration: BoxDecoration(
-                    color: Color(0xFFe7e7e7),
+                    color: const Color(0xFFe7e7e7),
                     borderRadius: BorderRadius.circular(8)
                   ),
-                  child: Column(
+                  child: Space(
+                    direction: 'column',
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    bottom: 10.h,
                     children: [
-                      Text('AXXXX：这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容', maxLines: 10, overflow: TextOverflow.ellipsis,),
-                      Text('AXXXX回复@last order：这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容这是个评论内容', maxLines: 10, overflow: TextOverflow.ellipsis,),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20.h),
-                        child:  Text('总共100条回复', style: TextStyle(
-                          color: Colors.grey.shade700
-                        ),),
-                      )
-                    ],
+                      ...comment.reply == null ? []: comment.reply!.map((reply) {
+                        return Text(
+                          '${reply.commentUserName}回复@${reply.replyUserName}：${reply.content}', 
+                          maxLines: 5, 
+                          overflow: TextOverflow.ellipsis
+                        );
+                      }).toList(),
+                      (comment.replyCount ?? 0) > 3 ?  Space(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 10.h),
+                            child:  Text(
+                              S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0), style: TextStyle(
+                                color: Colors.grey.shade700
+                              )
+                            ),
+                          )
+                        ]
+                      ) : Container()
+                    ]
                   ),
                 )
                 
@@ -285,7 +307,8 @@ class _PageState extends State<MovieDetail> {
           )
           
         ]
-      ),
+        )
+        )
       );
     }).toList();
   }
@@ -841,7 +864,7 @@ class _PageState extends State<MovieDetail> {
                           child:  Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('${S.of(context).movieDetail_detail_staff}（${characterData.length}）', style: TextStyle(
+                            Text('${S.of(context).movieDetail_detail_character}（${characterData.length}）', style: TextStyle(
                               // color: Colors.grey.shade700,
                               fontSize: 36.sp,
                               fontWeight: FontWeight.bold
@@ -904,7 +927,20 @@ class _PageState extends State<MovieDetail> {
                               fontSize: 36.sp,
                               fontWeight: FontWeight.bold
                             )),
-                            // Icon(Icons.arrow_forward_ios, size: 36.sp)
+                            GestureDetector(
+                              onTap: () {
+                                
+                              },
+                              child: Space(
+                                right: 5.w,
+                                children: [
+                                Icon( Icons.edit, size: 36.sp, color: Colors.grey.shade500),
+                                Text(S.of(context).movieDetail_writeComment, style: TextStyle(
+                                  color: Colors.grey.shade500
+                                )),
+                              ])
+                            )
+                           
                           ],
                         )
                         ),

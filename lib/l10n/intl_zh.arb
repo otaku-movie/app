@@ -110,6 +110,7 @@
   "movieDetail_button_saw": "看过",
   "movieDetail_button_buy": "购票",
   "movieDetail_comment_reply": "回复",
+  "movieDetail_writeComment": "写评论",
   "movieDetail_detail_noDate": "上映日期待定",
   "movieDetail_detail_basicMessage": "基本信息",
   "movieDetail_detail_originalName": "原名",
@@ -122,6 +123,33 @@
   "movieDetail_detail_staff": "工作人员",
   "movieDetail_detail_character": "角色",
   "movieDetail_detail_comment": "评论",
+  "movieDetail_detail_totalReplyMessage": "共{total}条回复",
+  "@movieDetail_detail_totalReplyMessage": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "commentDetail_title": "评论详情",
+  "commentDetail_replyComment": "评论回复",
+  "commentDetail_totalReplyMessage": "共{total}条回复",
+  "@commentDetail_totalReplyMessage": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "commentDetail_comment_placeholder": "给{reply}回复",
+  "@commentDetail_comment_placeholder": {
+    "placeholders": {
+      "reply": {
+        "type": "String"
+      }
+    }
+  },
+  "commentDetail_comment_button": "回复",
   "movieTicketType_total": "合计",
   "movieTicketType_title": "选择电影票类型",
   "movieTicketType_seatNumber": "座位号",

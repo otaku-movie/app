@@ -22,9 +22,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(seatCount) => "${seatCount} seats";
 
-  static String m1(ticketCount) => "";
+  static String m1(reply) => "Reply to ${reply}";
 
-  static String m2(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
+  static String m2(total) => "Total ${total} replies";
+
+  static String m3(total) => "Total ${total} replies";
+
+  static String m4(ticketCount) => "";
+
+  static String m5(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -42,6 +48,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage(""),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "commentDetail_comment_button":
+            MessageLookupByLibrary.simpleMessage("Reply"),
+        "commentDetail_comment_placeholder": m1,
+        "commentDetail_replyComment":
+            MessageLookupByLibrary.simpleMessage("Comment Reply"),
+        "commentDetail_title":
+            MessageLookupByLibrary.simpleMessage("Comment Detail"),
+        "commentDetail_totalReplyMessage": m2,
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("Flip"),
         "common_components_cropper_actions_redo":
@@ -150,6 +164,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_state": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_totalReplyMessage": m3,
+        "movieDetail_writeComment":
+            MessageLookupByLibrary.simpleMessage("Write comment"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage(""),
         "movieList_comingSoon_noDate": MessageLookupByLibrary.simpleMessage(""),
         "movieList_currentlyShowing_level":
@@ -175,7 +192,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("Ticket collection code"),
-        "orderDetail_ticketCount": m1,
+        "orderDetail_ticketCount": m4,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage(""),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("comment"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
@@ -226,7 +243,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(""),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
-        "selectSeat_maxSelectSeatWarn": m2,
+        "selectSeat_maxSelectSeatWarn": m5,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("Please select a seat"),
         "showTimeDetail_address":

@@ -77,6 +77,8 @@ dependencies:
   carousel_slider: ^5.0.0
   # 选择图片
   image_picker: ^1.1.2
+  # 时间处理
+  jiffy: ^6.3.2
 
 dev_dependencies:
   json_serializable: ^6.8.0

@@ -594,6 +594,11 @@
         "en": "reply"
       }
     },
+    "writeComment": {
+      "zh": "写评论",
+      "ja": "",
+      "en": "Write comment"
+    },
     "detail": {
       "noDate": {
         "zh": "上映日期待定",
@@ -654,6 +659,103 @@
         "zh": "评论",
         "ja": "",
         "en": ""
+      },
+      "totalReplyMessage": {
+        "zh": {
+          "text": "共{total}条回复",
+          "placeholders": {
+            "total": {
+              "type": "int"
+            }
+          }
+        },
+        "ja": {
+          "text": "合計 {total} 件の返信",
+          "placeholders": {
+            "total": {
+              "type": "int"
+            }
+          }
+        },
+        "en": {
+          "text": "Total {total} replies",
+          "placeholders": {
+            "total": {
+              "type": "int"
+            }
+          }
+        }
+      }
+    }
+  },
+  "commentDetail": {
+    "title": {
+      "zh": "评论详情",
+      "ja": "",
+      "en": "Comment Detail"
+    },
+    "replyComment": {
+      "zh": "评论回复",
+      "ja": "",
+      "en": "Comment Reply"
+    },
+    "totalReplyMessage": {
+      "zh": {
+        "text": "共{total}条回复",
+        "placeholders": {
+          "total": {
+            "type": "int"
+          }
+        }
+      },
+      "ja": {
+        "text": "合計 {total} 件の返信",
+        "placeholders": {
+          "total": {
+            "type": "int"
+          }
+        }
+      },
+      "en": {
+        "text": "Total {total} replies",
+        "placeholders": {
+          "total": {
+            "type": "int"
+          }
+        }
+      }
+    },
+    "comment": {
+      "placeholder": {
+        "zh": {
+          "text": "给{reply}回复",
+          "placeholders": {
+            "reply": {
+              "type": "String"
+            }
+          }
+        },
+        "ja": {
+          "text": "{reply} に返信",
+          "placeholders": {
+            "reply": {
+              "type": "String"
+            }
+          }
+        },
+        "en": {
+          "text": "Reply to {reply}",
+          "placeholders": {
+            "reply": {
+              "type": "String"
+            }
+          }
+        }
+      },
+      "button": {
+        "zh": "回复",
+        "ja": "",
+        "en": "Reply"
       }
     }
   },

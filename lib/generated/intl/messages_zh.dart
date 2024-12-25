@@ -22,9 +22,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(seatCount) => "${seatCount}个座位";
 
-  static String m1(ticketCount) => "${ticketCount}张电影票";
+  static String m1(reply) => "给${reply}回复";
 
-  static String m2(maxSeat) => "最大选座数量不能超过${maxSeat}个";
+  static String m2(total) => "共${total}条回复";
+
+  static String m3(total) => "共${total}条回复";
+
+  static String m4(ticketCount) => "${ticketCount}张电影票";
+
+  static String m5(maxSeat) => "最大选座数量不能超过${maxSeat}个";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -42,6 +48,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("普通影票价格"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage("正在获取当前位置"),
+        "commentDetail_comment_button":
+            MessageLookupByLibrary.simpleMessage("回复"),
+        "commentDetail_comment_placeholder": m1,
+        "commentDetail_replyComment":
+            MessageLookupByLibrary.simpleMessage("评论回复"),
+        "commentDetail_title": MessageLookupByLibrary.simpleMessage("评论详情"),
+        "commentDetail_totalReplyMessage": m2,
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("翻转"),
         "common_components_cropper_actions_redo":
@@ -154,6 +167,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映状态"),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("标签"),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage("时长"),
+        "movieDetail_detail_totalReplyMessage": m3,
+        "movieDetail_writeComment": MessageLookupByLibrary.simpleMessage("写评论"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "movieList_comingSoon_noDate":
             MessageLookupByLibrary.simpleMessage("日期待定"),
@@ -183,7 +198,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_payTime": MessageLookupByLibrary.simpleMessage("支付时间"),
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage("座位信息"),
         "orderDetail_ticketCode": MessageLookupByLibrary.simpleMessage("取票码"),
-        "orderDetail_ticketCount": m1,
+        "orderDetail_ticketCount": m4,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage("订单详情"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("评论"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("订单号"),
@@ -228,7 +243,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("删除历史记录"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
-        "selectSeat_maxSelectSeatWarn": m2,
+        "selectSeat_maxSelectSeatWarn": m5,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("请选择座位"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("地址"),

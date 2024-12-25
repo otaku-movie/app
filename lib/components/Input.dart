@@ -24,6 +24,7 @@ class Input extends StatefulWidget {
   final bool? disabled;
   final Color? cursorColor;
   final TextStyle? placeholderStyle;
+  final FocusNode? focusNode;
 
   const Input({
     super.key,
@@ -49,6 +50,7 @@ class Input extends StatefulWidget {
     this.horizontalPadding,
     this.disabled,
     this.placeholderStyle,
+    this.focusNode
   });
 
   @override
@@ -88,6 +90,7 @@ class _InputState extends State<Input> {
         width: widget.width,
         height: widget.height,
         child: TextField(
+          focusNode: widget.focusNode,
           controller: widget.controller,
           keyboardType: widget.keyboardType,
           obscureText: widget.type == 'password',

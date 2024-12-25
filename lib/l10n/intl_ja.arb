@@ -110,6 +110,7 @@
   "movieDetail_button_saw": "",
   "movieDetail_button_buy": "",
   "movieDetail_comment_reply": "",
+  "movieDetail_writeComment": "",
   "movieDetail_detail_noDate": "",
   "movieDetail_detail_basicMessage": "",
   "movieDetail_detail_originalName": "",
@@ -122,6 +123,33 @@
   "movieDetail_detail_staff": "",
   "movieDetail_detail_character": "",
   "movieDetail_detail_comment": "",
+  "movieDetail_detail_totalReplyMessage": "合計 {total} 件の返信",
+  "@movieDetail_detail_totalReplyMessage": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "commentDetail_title": "",
+  "commentDetail_replyComment": "",
+  "commentDetail_totalReplyMessage": "合計 {total} 件の返信",
+  "@commentDetail_totalReplyMessage": {
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "commentDetail_comment_placeholder": "{reply} に返信",
+  "@commentDetail_comment_placeholder": {
+    "placeholders": {
+      "reply": {
+        "type": "String"
+      }
+    }
+  },
+  "commentDetail_comment_button": "",
   "movieTicketType_total": "合計",
   "movieTicketType_title": "",
   "movieTicketType_seatNumber": "",

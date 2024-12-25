@@ -22,9 +22,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(seatCount) => "${seatCount}席";
 
-  static String m1(ticketCount) => "";
+  static String m1(reply) => "${reply} に返信";
 
-  static String m2(maxSeat) => "最大${maxSeat}席までお選びいただけます";
+  static String m2(total) => "合計 ${total} 件の返信";
+
+  static String m3(total) => "合計 ${total} 件の返信";
+
+  static String m4(ticketCount) => "";
+
+  static String m5(maxSeat) => "最大${maxSeat}席までお選びいただけます";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -41,6 +47,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("基本料金"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage(""),
+        "commentDetail_comment_button":
+            MessageLookupByLibrary.simpleMessage(""),
+        "commentDetail_comment_placeholder": m1,
+        "commentDetail_replyComment": MessageLookupByLibrary.simpleMessage(""),
+        "commentDetail_title": MessageLookupByLibrary.simpleMessage(""),
+        "commentDetail_totalReplyMessage": m2,
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("フリップ"),
         "common_components_cropper_actions_redo":
@@ -147,6 +159,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_state": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage(""),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage(""),
+        "movieDetail_detail_totalReplyMessage": m3,
+        "movieDetail_writeComment": MessageLookupByLibrary.simpleMessage(""),
         "movieList_buy": MessageLookupByLibrary.simpleMessage(""),
         "movieList_comingSoon_noDate": MessageLookupByLibrary.simpleMessage(""),
         "movieList_currentlyShowing_level":
@@ -172,7 +186,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage(""),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("チケットコード"),
-        "orderDetail_ticketCount": m1,
+        "orderDetail_ticketCount": m4,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage(""),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("コメント"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage(""),
@@ -216,7 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(""),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("座席を確定する"),
-        "selectSeat_maxSelectSeatWarn": m2,
+        "selectSeat_maxSelectSeatWarn": m5,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
