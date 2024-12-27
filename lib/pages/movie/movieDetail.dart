@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
@@ -173,16 +174,7 @@ class _PageState extends State<MovieDetail> {
 
   List<Widget> generateComment() {
     return commentListData.map((comment) {
-      return GestureDetector(
-        onTap: () {
-          context.pushNamed(
-            'commentDetail',
-            queryParameters: {
-              "id": '${comment.id}'
-            }
-          );
-        },
-        child: Container(
+      return  Container(
         padding: EdgeInsets.symmetric(vertical: 20.w),
         decoration: BoxDecoration(
           border: Border(
@@ -220,23 +212,27 @@ class _PageState extends State<MovieDetail> {
                   children: [
                     Text(comment.commentUserName ?? '', style: TextStyle(
                       fontSize: 32.sp
-                    ),),
-                    Row(
+                    )),
+
+                    comment.rate == null || comment.rate!.isZero ? Container() :  Row(
                       children: [
-                        // Icon(Icons.star),
                         Rate(
-                          initialRating: 3.5, // 初始评分
-                          maxRating: 5.0, // 最大评分
-                          starSize: 24.w, // 星星大小
-                          onRatingUpdate: (rating) {
-                            print("当前评分：$rating");
-                          },
+                          maxRating: 10.0, // 最大评分
+                          starSize: 38.w, // 星星大小
+                          readOnly: true,
+                          point: comment.rate ?? 0
                         ),
-                        SizedBox(width: 10.w),
-                        Text('9.8分', style: TextStyle(
-                          fontSize: 32.sp,
-                          color: Colors.yellow.shade700
-                        ),)
+                        SizedBox(
+                          width: 110.w,  // 固定文字容器宽度
+                          child: Text(
+                            '${comment.rate ?? ''}分',
+                            style: TextStyle(
+                              fontSize: 32.sp, 
+                              color: Colors.yellow.shade800
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ],
                     )
                     
@@ -244,29 +240,98 @@ class _PageState extends State<MovieDetail> {
                 ),
                 ),
                 
-                Text('2分钟前', style: TextStyle(
-                  color: Colors.grey.shade400
-                ),),
+                comment.createTime != null ? Text(
+                    Jiffy.parse(comment.createTime ?? '', pattern: 'yyyy-MM-dd HH:mm:ss').fromNow(),
+                    style: TextStyle(color: Colors.grey.shade400, fontSize: 24.sp),
+                  ) : const Text(''),
                 Container(
                   width: 600.w,
                   padding: EdgeInsets.symmetric(vertical: 4.h),
                   child: Text(comment.content ?? '', maxLines: 5, overflow: TextOverflow.ellipsis),
                 ),
                 // SizedBox(height: 5.h),
-                Wrap(
-                  spacing: 10.w,
-                  children: [
-                    Icon(Icons.thumb_up, color: Colors.grey.shade400, size: 36.sp),
-                    Text('${comment.likeCount}'),
-                    Icon(Icons.thumb_down, color: Colors.grey.shade400, size: 36.sp),
-                    Text('${comment.unlikeCount}'),
-                    Icon(Icons.comment, color: Colors.grey.shade400, size: 36.sp),
-                    Text(S.of(context).movieDetail_comment_reply),
-                    Icon(Icons.translate,  color: Colors.grey.shade400, size: 36.sp),
-                    Text('翻译为日语')
-                  ],
-                ),
-                Container(
+                 Space(
+                    right: 20.w,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          print(1);
+                        },
+                        child: Space(
+                          right: 10.w,
+                          children: [
+                            Icon(
+                              Icons.thumb_up,
+                              color: Colors.grey.shade400, 
+                              size: 36.sp
+                            ),
+                            Text('${comment.likeCount}'),
+                        ]),     
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                        },
+                        child: Space(
+                          right: 10.w,
+                          children: [
+                            Icon(
+                            Icons.thumb_down,
+                            color: Colors.grey.shade400, size: 36.sp
+                          ),
+                          Text('${comment.unlikeCount}'),
+                        ]),     
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // setState(() {
+                          //   showReply = !showReply;
+                          //   replyId = data.id;
+                            
+                          //   replyUsernName = type == 'comment' ? data.commentUserName ?? '' : data.replyUserName ?? '';
+
+                          // });
+                          //  _focusNode.requestFocus();
+                        },
+                        child: Space(
+                          right: 10.w,
+                          children: [
+                            Icon(
+                              Icons.comment,
+                              color: Colors.grey.shade400, 
+                              size: 36.sp
+                            ),
+                            Text(S.of(context).movieDetail_comment_reply),
+                        ]),     
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                        },
+                        child: Space(
+                          right: 10.w,
+                          children: [
+                            Space(
+                            right: 10.w,
+                            children: [
+                              Icon(
+                                Icons.translate,
+                              color: Colors.grey.shade400, size: 36.sp
+                            ),
+                            Text('翻译为日语', style: TextStyle(color: Colors.grey.shade700))
+                          ]),
+                        ]),     
+                      ),
+                    ],
+                  ),
+                comment.reply == null || comment.reply!.isEmpty ? Container() : GestureDetector(
+                  onTap: () {
+                    context.pushNamed(
+                      'commentDetail',
+                      queryParameters: {
+                        "id": '${comment.id}'
+                      }
+                    );
+                  },
+                  child: Container(
                   width: 600.w,
                   padding: EdgeInsets.all(15.w),
                   margin: EdgeInsets.symmetric(vertical: 20.h),
@@ -279,13 +344,13 @@ class _PageState extends State<MovieDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     bottom: 10.h,
                     children: [
-                      ...comment.reply == null ? []: comment.reply!.map((reply) {
+                      ...comment.reply!.map((reply) {
                         return Text(
                           '${reply.commentUserName}回复@${reply.replyUserName}：${reply.content}', 
                           maxLines: 5, 
                           overflow: TextOverflow.ellipsis
                         );
-                      }).toList(),
+                      }),
                       (comment.replyCount ?? 0) > 3 ?  Space(
                         children: [
                           Padding(
@@ -300,14 +365,14 @@ class _PageState extends State<MovieDetail> {
                       ) : Container()
                     ]
                   ),
-                )
+                ),
+                ) 
                 
               ],
             ),
           )
           
         ]
-        )
         )
       );
     }).toList();
@@ -419,7 +484,7 @@ class _PageState extends State<MovieDetail> {
               title: _showTitle
                     ? Text(
                         data.name ?? '',
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white, fontSize: 34.sp),
                       )
                     : null,
               forceElevated: innerBoxIsScrolled,
@@ -533,7 +598,6 @@ class _PageState extends State<MovieDetail> {
                                   Row(
                                     children: [
                                       Rate(
-                                        initialRating: 3.5, // 初始评分
                                         maxRating: 5.0, // 最大评分
                                         starSize: 35.w, // 星星大小
                                         onRatingUpdate: (rating) {
@@ -929,7 +993,10 @@ class _PageState extends State<MovieDetail> {
                             )),
                             GestureDetector(
                               onTap: () {
-                                
+                                context.pushNamed('writeComment', queryParameters: {
+                                  'id': widget.id,
+                                  'movieName': data.name
+                                });
                               },
                               child: Space(
                                 right: 5.w,

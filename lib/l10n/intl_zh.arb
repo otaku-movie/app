@@ -1,5 +1,10 @@
 {
   "@@locale": "zh",
+  "writeComment_title": "写评论",
+  "writeComment_hint": "写下你的评论...",
+  "writeComment_verify_notNull": "评论不能为空",
+  "writeComment_verify_notRate": "请给电影评分",
+  "writeComment_release": "发布",
   "search_noData": "暂无数据",
   "search_placeholder": "搜索全部电影",
   "search_history": "搜索历史",

@@ -27,6 +27,8 @@ class CommentResponse {
     final int? unlikeCount;
     @JsonKey(name: "reply_count")
     final int? replyCount;
+    @JsonKey(name: "rate")
+    final double? rate;
     @JsonKey(name: "reply")
     final List<Reply>? reply;
     @JsonKey(name: "create_time")
@@ -41,6 +43,7 @@ class CommentResponse {
         this.commentUserName,
         this.commentUserAvatar,
         this.movieId,
+        this.rate,
         this.like,
         this.unlike,
         this.likeCount,

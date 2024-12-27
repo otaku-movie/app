@@ -50,6 +50,56 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `Write comment`
+  String get writeComment_title {
+    return Intl.message(
+      'Write comment',
+      name: 'writeComment_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Write your comment...`
+  String get writeComment_hint {
+    return Intl.message(
+      'Write your comment...',
+      name: 'writeComment_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get writeComment_verify_notNull {
+    return Intl.message(
+      '',
+      name: 'writeComment_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get writeComment_verify_notRate {
+    return Intl.message(
+      '',
+      name: 'writeComment_verify_notRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Release`
+  String get writeComment_release {
+    return Intl.message(
+      'Release',
+      name: 'writeComment_release',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `No data yet`
   String get search_noData {
     return Intl.message(

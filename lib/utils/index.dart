@@ -79,4 +79,25 @@ String formatNumberToTime(int totalMinutes) {
       // );
     }
   }
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 点击外部不会关闭弹窗
+      builder: (BuildContext context) {
+        return const Dialog(
+          backgroundColor: Colors.transparent, // 透明背景
+          child: Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ), // 显示加载动画
+          ),
+        );
+      },
+    );
+  }
+
+  // 关闭加载弹窗
+  void hideLoadingDialog(BuildContext context) {
+    Navigator.of(context).pop(); // 关闭弹窗
+  }
   

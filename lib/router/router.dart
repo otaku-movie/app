@@ -4,6 +4,7 @@ import 'package:otaku_movie/components/cropper.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/cinema/cinemaDetail.dart';
 import 'package:otaku_movie/pages/movie/commentDetail.dart';
+import 'package:otaku_movie/pages/movie/writeComment.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/user/User.dart';
 import 'package:otaku_movie/pages/movie/SelectMovieTicket.dart';
@@ -67,6 +68,16 @@ final GoRouter routerConfig = GoRouter(
           name: 'home',
           builder: (BuildContext context, GoRouterState state) {
             return Home();
+          },
+        ),
+         GoRoute(
+          path: '/movie/writeComment',
+          name: 'writeComment',
+          builder: (BuildContext context, GoRouterState state) {
+            return WriteComment(
+              id: state.uri.queryParameters['id'],
+              movieName: state.uri.queryParameters['movieName']
+            );
           },
         ),
         GoRoute(

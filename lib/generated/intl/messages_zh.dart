@@ -259,6 +259,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_language": MessageLookupByLibrary.simpleMessage("语言"),
         "user_logout": MessageLookupByLibrary.simpleMessage("退出登录"),
         "user_privateAgreement": MessageLookupByLibrary.simpleMessage("隐私协议"),
-        "user_title": MessageLookupByLibrary.simpleMessage("我的")
+        "user_title": MessageLookupByLibrary.simpleMessage("我的"),
+        "writeComment_hint": MessageLookupByLibrary.simpleMessage("写下你的评论..."),
+        "writeComment_release": MessageLookupByLibrary.simpleMessage("发布"),
+        "writeComment_title": MessageLookupByLibrary.simpleMessage("写评论"),
+        "writeComment_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("评论不能为空"),
+        "writeComment_verify_notRate":
+            MessageLookupByLibrary.simpleMessage("请给电影评分")
       };
 }

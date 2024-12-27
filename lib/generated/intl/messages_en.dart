@@ -260,6 +260,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_language": MessageLookupByLibrary.simpleMessage("Language"),
         "user_logout": MessageLookupByLibrary.simpleMessage(""),
         "user_privateAgreement": MessageLookupByLibrary.simpleMessage(""),
-        "user_title": MessageLookupByLibrary.simpleMessage("")
+        "user_title": MessageLookupByLibrary.simpleMessage(""),
+        "writeComment_hint":
+            MessageLookupByLibrary.simpleMessage("Write your comment..."),
+        "writeComment_release": MessageLookupByLibrary.simpleMessage("Release"),
+        "writeComment_title":
+            MessageLookupByLibrary.simpleMessage("Write comment"),
+        "writeComment_verify_notNull": MessageLookupByLibrary.simpleMessage(""),
+        "writeComment_verify_notRate": MessageLookupByLibrary.simpleMessage("")
       };
 }

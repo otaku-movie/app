@@ -1,4 +1,33 @@
 {
+  "writeComment": {
+    "title": {
+      "zh": "写评论",
+      "ja": "",
+      "en": "Write comment"
+    },
+    "hint": {
+      "zh": "写下你的评论...",
+      "ja": "",
+      "en": "Write your comment..."
+    },
+    "verify": {
+      "notNull": {
+        "zh": "评论不能为空",
+        "ja": "",
+        "en": ""
+      },
+      "notRate": {
+        "zh": "请给电影评分",
+        "ja": "",
+        "en": ""
+      }
+    },
+    "release": {
+      "zh": "发布",
+      "ja": "",
+      "en": "Release"
+    }
+  },
   "search": {
     "noData": {
       "zh": "暂无数据",

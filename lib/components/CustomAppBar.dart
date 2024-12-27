@@ -29,7 +29,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       title: title is String 
-        ? Text(title as String, style: titleTextStyle ?? TextStyle(color: Colors.white, fontSize: 28.sp)) 
+        ? Text(title as String, style: titleTextStyle ?? TextStyle(color: Colors.white, fontSize: 34.sp)) 
         : title,
       leading: showBackButton && routeMatchList.routes.length > 1
           ? IconButton(

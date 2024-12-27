@@ -15,6 +15,7 @@ class MovieResponse {
   final String? endDate;
   final int? status;
   final int? time;
+  final double? rate;
   final int? cinemaCount;
   final int? theaterCount;
   final int? commentCount;
@@ -38,6 +39,7 @@ class MovieResponse {
     this.endDate,
     this.status,
     this.time,
+    this.rate,
     this.cinemaCount,
     this.theaterCount,
     this.commentCount,

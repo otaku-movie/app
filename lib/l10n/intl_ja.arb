@@ -1,5 +1,10 @@
 {
   "@@locale": "ja",
+  "writeComment_title": "",
+  "writeComment_hint": "",
+  "writeComment_verify_notNull": "",
+  "writeComment_verify_notRate": "",
+  "writeComment_release": "",
   "search_noData": "まだデータがありません",
   "search_placeholder": "",
   "search_history": "検索履歴",

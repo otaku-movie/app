@@ -25,6 +25,7 @@ class Input extends StatefulWidget {
   final Color? cursorColor;
   final TextStyle? placeholderStyle;
   final FocusNode? focusNode;
+  final int maxLines;
 
   const Input({
     super.key,
@@ -50,7 +51,8 @@ class Input extends StatefulWidget {
     this.horizontalPadding,
     this.disabled,
     this.placeholderStyle,
-    this.focusNode
+    this.focusNode,
+    this.maxLines = 1
   });
 
   @override
@@ -124,6 +126,7 @@ class _InputState extends State<Input> {
               borderSide: BorderSide.none,
             ),
           ),
+          maxLines: widget.type == 'textarea' ? widget.maxLines : 1,
           onTap: widget.onTap,
           onChanged: widget.onChange,
           onSubmitted: widget.onSubmit,
