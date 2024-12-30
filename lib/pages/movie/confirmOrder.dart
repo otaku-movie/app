@@ -306,8 +306,7 @@ class _PageState extends State<ConfirmOrder> {
                 Row(
                   children: [
                     Text('${S.of(context).confirmOrder_total}：', style: TextStyle(fontSize: 28.sp)),
-                    Text('${data.orderTotal}円', style: TextStyle(color: Colors.red, fontSize: 48.sp)),
-                    // Text('円', style: TextStyle(color: Colors.red, fontSize: 32.sp))
+                    Text('${data.orderTotal}${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 48.sp)),
                   ],
                 ),
                 SizedBox(width: 16.w),

@@ -51,7 +51,6 @@ class _PageState extends State<PayError> {
                   spacing: 10.h,
                   children: [
                       Icon(Icons.cancel, color: Colors.red, size: 200.sp),
-                      // Text('7500円', style: TextStyle(fontSize: 40.sp)),
                        Container(
                         margin: EdgeInsets.only(top: 50.h, bottom: 50.h),
                         child: Text('您的订单似乎遇到了一些问题，请稍后重试。', style: TextStyle(fontSize: 36.sp)),

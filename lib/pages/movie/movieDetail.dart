@@ -467,7 +467,8 @@ class _PageState extends State<MovieDetail> {
             type: HelloMovieGuide.audio,
             width: 70.w,
           ),
-          Text(
+          
+          audio?.date == null ? const Text('') :  Text(
            (audio?.date ?? '').substring(5), 
             style: TextStyle(
               color: Colors.white,
@@ -482,7 +483,7 @@ class _PageState extends State<MovieDetail> {
             type: HelloMovieGuide.sub,
             width: 70.w,
           ),
-          Text(
+          sub?.date == null ? const Text('') :  Text(
             (sub?.date ?? '').substring(5), 
             style: TextStyle(
               color: Colors.white,

@@ -237,7 +237,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(item.name ?? ''),
-                          Text('+${item.plusPrice}円', style: const TextStyle(color: Colors.red))
+                          Text('+${item.plusPrice}${S.of(context).common_unit_jpy}', style: const TextStyle(color: Colors.red))
                       ]),
                     );
                   }).toList()),
@@ -319,7 +319,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(item.name ?? ''),
-                          Text('${item.price}円', style: const TextStyle(color: Colors.red))
+                          Text('${item.price}${S.of(context).common_unit_jpy}', style: const TextStyle(color: Colors.red))
                       ]),
                     );
                   }).toList()),

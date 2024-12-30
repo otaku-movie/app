@@ -248,8 +248,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                 Row(
                   children: [
                     Text('${S.of(context).movieTicketType_total}：', style: TextStyle(fontSize: 28.sp)),
-                    Text('${getTotalPrice()}円', style: TextStyle(color: Colors.red, fontSize: 48.sp)),
-                    // Text('円', style: TextStyle(color: Colors.red, fontSize: 32.sp))
+                    Text('${getTotalPrice()}${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 48.sp)),
                   ],
                 ),
                 SizedBox(width: 16.w),
@@ -321,7 +320,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(data.name ?? ''), 
-        Text('${data.price}円', style: const TextStyle(color: Colors.red),)
+        Text('${data.price}${S.of(context).common_unit_jpy}', style: const TextStyle(color: Colors.red),)
       ]);
   }
   void _showActionSheet(BuildContext context, Seat seat) {
@@ -340,7 +339,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
               title: Text(el.name ?? '', style: TextStyle(
                 color: activeColor
               ),),
-              trailing: Text('${el.price}円', style: TextStyle(fontSize: 32.sp,  color: activeColor)),
+              trailing: Text('${el.price}${S.of(context).common_unit_jpy}', style: TextStyle(fontSize: 32.sp,  color: activeColor)),
               onTap: () {
                 seat.movieTicketTypeId = el.id;
                 int index = data.seat!.indexWhere((item) => item.movieTicketTypeId == el.id);

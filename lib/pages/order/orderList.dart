@@ -228,8 +228,8 @@ class _PageState extends State<OrderList> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text('${item.orderTotal}円', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
-                                      // Text('円', style: TextStyle(color: Colors.red, fontSize: 32.sp))
+                                      Text('${item.orderTotal}${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
+                                      // Text('${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 32.sp))
                                     ],
                                   ),
                                   SizedBox(width: 16.w),

@@ -109,7 +109,7 @@ class _PageState extends State<PaySuccess> {
                   spacing: 10.h,
                   children: [
                       Icon(Icons.check_circle, color: Colors.green, size: 200.sp),
-                      Text('${data.orderTotal}円', style: TextStyle(fontSize: 40.sp)),
+                      Text('${data.orderTotal}${S.of(context).common_unit_jpy}', style: TextStyle(fontSize: 40.sp)),
                   ],
                 )
               ),
@@ -245,7 +245,7 @@ class _PageState extends State<PaySuccess> {
                                       // Row(
                                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       //   children: [
-                                      //     Text('${data.orderTotal}円', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
+                                      //     Text('${data.orderTotal}${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
                                          
                                       //   ],
                                       // ),

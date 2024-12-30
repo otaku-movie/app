@@ -234,7 +234,7 @@ class _PageState extends State<OrderDetail> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('${data.orderTotal}円', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
+                                      Text('${data.orderTotal}${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
                                       data.orderState == OrderState.succeed ? SizedBox(
                                         width: 120.w,
                                         height: 50.h,                  
