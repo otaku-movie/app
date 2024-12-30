@@ -218,7 +218,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
                             Icons.thumb_down,
                             color: Colors.grey.shade400, size: 36.sp
                           ),
-                          Text('${data.unlikeCount}'),
+                          Text('${data.dislikeCount}'),
                         ]),     
                       ),
                       GestureDetector(

@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/HelloMovie.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
@@ -16,13 +17,11 @@ import 'package:otaku_movie/components/rate.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
+import 'package:otaku_movie/response/hello_movie.dart';
 import 'package:otaku_movie/response/movie/movieList/character.dart';
 import 'package:otaku_movie/response/movie/movieList/comment/comment_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
 import 'package:otaku_movie/response/movie/movie_staff.dart';
-import 'package:otaku_movie/response/response.dart';
-import 'package:otaku_movie/utils/index.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetail extends StatefulWidget {
@@ -117,13 +116,15 @@ class _PageState extends State<MovieDetail> {
   }
 
   void getCommentData({page = 1}) {
+    if (!mounted) return; // 添加mounted检查
+    
     ApiRequest().request(
       path: '/movie/comment/list',
       method: 'POST',
       data: {
         "movieId": int.parse(widget.id ?? ''),
         "page": page,
-        "pageSize": 20,
+        "pageSize": 20
       },
       fromJsonT: (json) {
         return ApiPaginationResponse<CommentResponse>.fromJson(
@@ -132,8 +133,9 @@ class _PageState extends State<MovieDetail> {
         );
       },
     ).then((res) async {
+      if (!mounted) return; // 添加mounted检查
+      
       List<CommentResponse> list = res.data?.list ?? [];
-
       setState(() {
         commentListData = list;
       });
@@ -168,6 +170,7 @@ class _PageState extends State<MovieDetail> {
 
   @override
   void dispose() {
+    _scrollController.dispose(); // 添加释放控制器
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
@@ -225,7 +228,7 @@ class _PageState extends State<MovieDetail> {
                         SizedBox(
                           width: 110.w,  // 固定文字容器宽度
                           child: Text(
-                            '${comment.rate ?? ''}分',
+                            '${comment.rate ?? ''}${S.of(context).common_unit_point}',
                             style: TextStyle(
                               fontSize: 32.sp, 
                               color: Colors.yellow.shade800
@@ -255,14 +258,33 @@ class _PageState extends State<MovieDetail> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          print(1);
+                          setState(() {
+                            comment.like = !comment.like!;
+                            comment.likeCount = comment.like! ? comment.likeCount! + 1 : comment.likeCount! - 1;
+                            if (comment.like! && comment.dislikeCount != 0) {
+                              comment.dislike = false;
+                              comment.dislikeCount = comment.dislikeCount! - 1;
+                            }
+                          });
+                          ApiRequest().request(
+                            path: '/movie/comment/like',
+                            method: 'POST',
+                            data: {
+                              "id": comment.id
+                            },
+                            fromJsonT: (json) {
+                              return json;
+                            },
+                          ).then((res) {
+                            getCommentData();
+                          });
                         },
                         child: Space(
                           right: 10.w,
                           children: [
                             Icon(
                               Icons.thumb_up,
-                              color: Colors.grey.shade400, 
+                              color: comment.like! ? Colors.pink.shade400 : Colors.grey.shade400, 
                               size: 36.sp
                             ),
                             Text('${comment.likeCount}'),
@@ -270,19 +292,42 @@ class _PageState extends State<MovieDetail> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          setState(() {
+                            comment.dislike = !comment.dislike!;
+                            comment.dislikeCount = comment.dislike! ? comment.dislikeCount! + 1 : comment.dislikeCount! - 1;
+                            if (comment.dislike! && comment.likeCount != 0) {
+                              comment.like = false;
+                              comment.likeCount = comment.likeCount! - 1;
+                            }
+                          });
+                          ApiRequest().request(
+                            path: '/movie/comment/dislike',
+                            method: 'POST',
+                            data: {
+                              "id": comment.id
+                            },
+                            fromJsonT: (json) {
+                              return json;
+                            },
+                          ).then((res) {
+                            getCommentData();
+                          });
                         },
                         child: Space(
                           right: 10.w,
                           children: [
                             Icon(
                             Icons.thumb_down,
-                            color: Colors.grey.shade400, size: 36.sp
+                            color: comment.dislike! ? Colors.pink.shade400 : Colors.grey.shade400, size: 36.sp
                           ),
-                          Text('${comment.unlikeCount}'),
+                          Text('${comment.dislikeCount ?? 0}'),
                         ]),     
                       ),
                       GestureDetector(
                         onTap: () {
+                          context.pushNamed('commentDetail', queryParameters: {
+                            "id": '${comment.id}'
+                          });
                           // setState(() {
                           //   showReply = !showReply;
                           //   replyId = data.id;
@@ -300,7 +345,7 @@ class _PageState extends State<MovieDetail> {
                               color: Colors.grey.shade400, 
                               size: 36.sp
                             ),
-                            Text(S.of(context).movieDetail_comment_reply),
+                            Text(S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0), style: TextStyle(color: Colors.grey.shade700)),
                         ]),     
                       ),
                       GestureDetector(
@@ -322,51 +367,51 @@ class _PageState extends State<MovieDetail> {
                       ),
                     ],
                   ),
-                comment.reply == null || comment.reply!.isEmpty ? Container() : GestureDetector(
-                  onTap: () {
-                    context.pushNamed(
-                      'commentDetail',
-                      queryParameters: {
-                        "id": '${comment.id}'
-                      }
-                    );
-                  },
-                  child: Container(
-                  width: 600.w,
-                  padding: EdgeInsets.all(15.w),
-                  margin: EdgeInsets.symmetric(vertical: 20.h),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFe7e7e7),
-                    borderRadius: BorderRadius.circular(8)
-                  ),
-                  child: Space(
-                    direction: 'column',
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    bottom: 10.h,
-                    children: [
-                      ...comment.reply!.map((reply) {
-                        return Text(
-                          '${reply.commentUserName}回复@${reply.replyUserName}：${reply.content}', 
-                          maxLines: 5, 
-                          overflow: TextOverflow.ellipsis
-                        );
-                      }),
-                      (comment.replyCount ?? 0) > 3 ?  Space(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.h),
-                            child:  Text(
-                              S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0), style: TextStyle(
-                                color: Colors.grey.shade700
-                              )
-                            ),
-                          )
-                        ]
-                      ) : Container()
-                    ]
-                  ),
-                ),
-                ) 
+                // comment.reply == null || comment.reply!.isEmpty ? Container() : GestureDetector(
+                //   onTap: () {
+                //     context.pushNamed(
+                //       'commentDetail',
+                //       queryParameters: {
+                //         "id": '${comment.id}'
+                //       }
+                //     );
+                //   },
+                //   child: Container(
+                //   width: 600.w,
+                //   padding: EdgeInsets.all(15.w),
+                //   margin: EdgeInsets.symmetric(vertical: 20.h),
+                //   decoration: BoxDecoration(
+                //     color: const Color(0xFFe7e7e7),
+                //     borderRadius: BorderRadius.circular(8)
+                //   ),
+                //   child: Space(
+                //     direction: 'column',
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     bottom: 10.h,
+                //     children: [
+                //       ...comment.reply!.map((reply) {
+                //         return Text(
+                //           '${reply.commentUserName}回复@${reply.replyUserName}：${reply.content}', 
+                //           maxLines: 5, 
+                //           overflow: TextOverflow.ellipsis
+                //         );
+                //       }),
+                //       (comment.replyCount ?? 0) > 3 ?  Space(
+                //         children: [
+                //           Padding(
+                //             padding: EdgeInsets.only(top: 10.h),
+                //             child:  Text(
+                //               S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0), style: TextStyle(
+                //                 color: Colors.grey.shade700
+                //               )
+                //             ),
+                //           )
+                //         ]
+                //       ) : Container()
+                //     ]
+                //   ),
+                // ),
+                // ) 
                 
               ],
             ),
@@ -400,6 +445,52 @@ class _PageState extends State<MovieDetail> {
     } catch (e) {
       return '';  // 解析失败，说明无效
     }
+  }
+
+  Widget buildHelloMovieGuide(List<HelloMovieResponse>? helloMovie) {
+    if (helloMovie == null) {
+      return Container();
+    }
+
+    HelloMovieResponse? audio = data.helloMovie?.firstWhere((guide) => guide.code == HelloMovieGuide.audio.code, orElse: () => HelloMovieResponse());
+    HelloMovieResponse? sub = data.helloMovie?.firstWhere((guide) => guide.code == HelloMovieGuide.sub.code, orElse: () => HelloMovieResponse());
+
+    return Space(
+      direction: 'row',
+      right: 15.h,
+      children: [
+        Space(
+          right: 15.w,
+          children: [
+          HelloMovie(
+            guideData: data.helloMovie, 
+            type: HelloMovieGuide.audio,
+            width: 70.w,
+          ),
+          Text(
+           (audio?.date ?? '').substring(5), 
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 28.sp
+          )),
+        ]),
+        Space(
+          right: 15.w,
+          children: [
+          HelloMovie(
+            guideData: data.helloMovie, 
+            type: HelloMovieGuide.sub,
+            width: 70.w,
+          ),
+          Text(
+            (sub?.date ?? '').substring(5), 
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 28.sp
+            )),
+          ])
+      ],
+    );
   }
 
   @override
@@ -598,14 +689,17 @@ class _PageState extends State<MovieDetail> {
                                   Row(
                                     children: [
                                       Rate(
-                                        maxRating: 5.0, // 最大评分
+                                        maxRating: 10.0, // 最大评分
                                         starSize: 35.w, // 星星大小
+                                        point: data.rate ?? 0,
+                                        readOnly: true,
+                                        // unfilledColor: Colors.grey.shade100,
                                         onRatingUpdate: (rating) {
                                           // print("当前评分：$rating");
                                         },
                                       ),
                                       SizedBox(width: 20.w),
-                                      Text('9.8分', style: TextStyle(
+                                      Text('${data.rate ?? 0}${S.of(context).common_unit_point}', style: TextStyle(
                                         fontSize: 36.sp,
                                         color: Colors.yellow.shade700
                                       ),)
@@ -621,14 +715,10 @@ class _PageState extends State<MovieDetail> {
                                       color: Colors.white,
                                     ),
                                   ),
-                                  // SizedBox(height: 10.h),                           
-                                  Wrap(
-                                    spacing: 20.w,
-                                    children: [
-                                      ExtendedImage.asset('assets/image/audio-guide.png', width: 80.w),
-                                      ExtendedImage.asset('assets/image/sub-guide.png', width: 80.w),
-                                    ],
-                                  ),
+                                  // SizedBox(height: 10.h),
+
+                                  buildHelloMovieGuide(data.helloMovie),                       
+                                 
                                 ],
                               ),
                               Wrap(
@@ -995,7 +1085,8 @@ class _PageState extends State<MovieDetail> {
                               onTap: () {
                                 context.pushNamed('writeComment', queryParameters: {
                                   'id': widget.id,
-                                  'movieName': data.name
+                                  'movieName': data.name,
+                                  'rated': data.rated
                                 });
                               },
                               child: Space(

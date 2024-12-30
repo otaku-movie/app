@@ -18,13 +18,13 @@ class CommentResponse {
     @JsonKey(name: "movie_id")
     final int? movieId;
     @JsonKey(name: "like")
-    final bool? like;
-    @JsonKey(name: "unlike")
-    final bool? unlike;
+    bool? like;
+    @JsonKey(name: "dislike")
+    bool? dislike;
     @JsonKey(name: "like_count")
-    final int? likeCount;
-    @JsonKey(name: "unlike_count")
-    final int? unlikeCount;
+    int? likeCount;
+    @JsonKey(name: "dislike_count")
+    int? dislikeCount;
     @JsonKey(name: "reply_count")
     final int? replyCount;
     @JsonKey(name: "rate")
@@ -45,9 +45,9 @@ class CommentResponse {
         this.movieId,
         this.rate,
         this.like,
-        this.unlike,
+        this.dislike,
         this.likeCount,
-        this.unlikeCount,
+        this.dislikeCount,
         this.replyCount,
         this.reply,
         this.createTime,
@@ -84,11 +84,11 @@ class Reply {
     @JsonKey(name: "like")
     final bool? like;
     @JsonKey(name: "unlike")
-    final bool? unlike;
+    final bool? dislike;
     @JsonKey(name: "like_count")
     final int? likeCount;
-    @JsonKey(name: "unlike_count")
-    final int? unlikeCount;
+    @JsonKey(name: "dislike_count")
+    final int? dislikeCount;
     @JsonKey(name: "parent_reply_id")
     final String? parentReplyId;
     @JsonKey(name: "create_time")
@@ -108,9 +108,9 @@ class Reply {
         this.replyUserAvatar,
         this.movieCommentId,
         this.like,
-        this.unlike,
+        this.dislike,
         this.likeCount,
-        this.unlikeCount,
+        this.dislikeCount,
         this.parentReplyId,
         this.createTime,
         this.updateTime,

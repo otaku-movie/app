@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:otaku_movie/response/hello_movie.dart';
 
@@ -16,6 +18,8 @@ class MovieResponse {
   final int? status;
   final int? time;
   final double? rate;
+  final int? totalRatings;
+  final bool? rated;
   final int? cinemaCount;
   final int? theaterCount;
   final int? commentCount;
@@ -40,6 +44,8 @@ class MovieResponse {
     this.status,
     this.time,
     this.rate,
+    this.rated = false,
+    this.totalRatings,
     this.cinemaCount,
     this.theaterCount,
     this.commentCount,

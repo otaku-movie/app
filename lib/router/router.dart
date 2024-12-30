@@ -60,14 +60,14 @@ final GoRouter routerConfig = GoRouter(
       path: '/',
       name: 'root',
       builder: (BuildContext context, GoRouterState state) {
-        return Home();
+        return const Login();
       },
       routes: <RouteBase>[
         GoRoute(
           path: '/home',
           name: 'home',
           builder: (BuildContext context, GoRouterState state) {
-            return Home();
+            return const Home();
           },
         ),
          GoRoute(
@@ -76,7 +76,8 @@ final GoRouter routerConfig = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             return WriteComment(
               id: state.uri.queryParameters['id'],
-              movieName: state.uri.queryParameters['movieName']
+              movieName: state.uri.queryParameters['movieName'],
+              rated: state.uri.queryParameters['rated'] == 'true',
             );
           },
         ),
@@ -84,14 +85,14 @@ final GoRouter routerConfig = GoRouter(
           path: '/user/login',
           name: 'login',
           builder: (BuildContext context, GoRouterState state) {
-            return Login();
+            return const Login();
           },
         ),
         GoRoute(
           path: '/user/register',
           name: 'register',
           builder: (BuildContext context, GoRouterState state) {
-            return Register();
+            return const Register();
           },
         ),
         GoRoute(

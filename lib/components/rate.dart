@@ -49,7 +49,21 @@ class _CustomPreciseRatingWidgetState extends State<Rate> {
   @override
   void initState() {
     super.initState();
-    _rating = widget.point;
+    setState(() {
+       _rating = widget.point;
+    });
+   
+  }
+
+  @override
+  void didUpdateWidget(Rate oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 当 widget.point 更新时，同步更新 _rating
+    if (oldWidget.point != widget.point) {
+      setState(() {
+        _rating = widget.point;
+      });
+    }
   }
 
   void _updateRating(Offset localPosition, double totalWidth) {

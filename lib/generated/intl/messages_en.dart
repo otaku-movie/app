@@ -114,6 +114,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Sold"),
         "common_enum_seatType_wheelChair":
             MessageLookupByLibrary.simpleMessage("Wheelchair Seat"),
+        "common_unit_jpy": MessageLookupByLibrary.simpleMessage("JPY"),
+        "common_unit_point": MessageLookupByLibrary.simpleMessage(" point"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("Fri"),
         "common_week_monday": MessageLookupByLibrary.simpleMessage("Mon"),
         "common_week_saturday": MessageLookupByLibrary.simpleMessage("Sat"),

@@ -720,6 +720,26 @@ class S {
     );
   }
 
+  /// ` point`
+  String get common_unit_point {
+    return Intl.message(
+      ' point',
+      name: 'common_unit_point',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `JPY`
+  String get common_unit_jpy {
+    return Intl.message(
+      'JPY',
+      name: 'common_unit_jpy',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Email`
   String get login_email_text {
     return Intl.message(

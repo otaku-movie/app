@@ -113,6 +113,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("已售出"),
         "common_enum_seatType_wheelChair":
             MessageLookupByLibrary.simpleMessage("轮椅座"),
+        "common_unit_jpy": MessageLookupByLibrary.simpleMessage("日元"),
+        "common_unit_point": MessageLookupByLibrary.simpleMessage("分"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("五"),
         "common_week_monday": MessageLookupByLibrary.simpleMessage("一"),
         "common_week_saturday": MessageLookupByLibrary.simpleMessage("六"),

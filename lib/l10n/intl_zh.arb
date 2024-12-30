@@ -81,6 +81,8 @@
   "common_week_friday": "五",
   "common_week_saturday": "六",
   "common_week_sunday": "日",
+  "common_unit_point": "分",
+  "common_unit_jpy": "日元",
   "login_email_text": "邮箱",
   "login_email_verify_notNull": "邮箱不能为空",
   "login_email_verify_isValid": "邮箱不合法",

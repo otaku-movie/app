@@ -81,6 +81,8 @@
   "common_week_friday": "金",
   "common_week_saturday": "土",
   "common_week_sunday": "日",
+  "common_unit_point": "点",
+  "common_unit_jpy": "円",
   "login_email_text": "メール",
   "login_email_verify_notNull": "メールアドレスを入力してください",
   "login_email_verify_isValid": "メールアドレスが正しくありません",

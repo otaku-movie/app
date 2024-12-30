@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -16,8 +18,9 @@ import 'package:otaku_movie/utils/toast.dart';
 class WriteComment extends StatefulWidget {
   String? id;
   String? movieName;
+  bool? rated;
 
-  WriteComment({super.key, this.id, this.movieName});
+  WriteComment({super.key, this.id, this.movieName, this.rated = false});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -60,10 +63,13 @@ class _WriteCommentPageState extends State<WriteComment> {
                 ToastService.showInfo(S.of(context).writeComment_verify_notNull);
                 return;
               }
-              if (_rating == 0) {
-                ToastService.showInfo(S.of(context).writeComment_verify_notRate);
-                return;
+              if (widget.rated == true) {
+                if (_rating == 0) {
+                  ToastService.showInfo(S.of(context).writeComment_verify_notRate);
+                  return;
+                }
               }
+              
               showLoadingDialog(context);
               ApiRequest().request(
                 path: '/movie/comment/save',
@@ -117,7 +123,6 @@ class _WriteCommentPageState extends State<WriteComment> {
                       unfilledColor: Colors.grey.shade300, // 未填充的颜色
                       readOnly: false, // 可以评分
                       onRatingUpdate: (rating) {
-                        print("当前评分：$rating");
                         setState(() {
                           _rating = rating;
                         });
@@ -126,7 +131,7 @@ class _WriteCommentPageState extends State<WriteComment> {
                     SizedBox(
                       width: 110.w,  // 固定文字容器宽度
                       child: Text(
-                        '$_rating分',
+                        '$_rating${S.of(context).common_unit_point}',
                         style: TextStyle(
                           fontSize: 36.sp, 
                           color: Colors.yellow.shade800
