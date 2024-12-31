@@ -44,10 +44,10 @@ class CommentResponse {
         this.commentUserAvatar,
         this.movieId,
         this.rate,
-        this.like,
-        this.dislike,
-        this.likeCount,
-        this.dislikeCount,
+        this.like = false,
+        this.dislike = false,
+        this.likeCount = 0,
+        this.dislikeCount = 0,
         this.replyCount,
         this.reply,
         this.createTime,
@@ -83,7 +83,7 @@ class Reply {
     final int? movieCommentId;
     @JsonKey(name: "like")
     final bool? like;
-    @JsonKey(name: "unlike")
+    @JsonKey(name: "dislike")
     final bool? dislike;
     @JsonKey(name: "like_count")
     final int? likeCount;
@@ -107,10 +107,10 @@ class Reply {
         this.replyUserName,
         this.replyUserAvatar,
         this.movieCommentId,
-        this.like,
-        this.dislike,
-        this.likeCount,
-        this.dislikeCount,
+        this.like = false,
+        this.dislike = false,
+        this.likeCount = 0,
+        this.dislikeCount = 0,
         this.parentReplyId,
         this.createTime,
         this.updateTime,

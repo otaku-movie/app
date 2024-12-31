@@ -118,9 +118,9 @@ class _CommentDetailPageState extends State<CommentDetail> {
       padding: EdgeInsets.only(bottom: 20.h),
       margin: EdgeInsets.only(bottom: 20.h),
       decoration: BoxDecoration( 
-        border: type == 'reply' ? Border(
+        border: Border(
           bottom: BorderSide(width: 1.w, color: Colors.grey.shade200),
-        ) : null,
+        ),
       ),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
@@ -154,26 +154,6 @@ class _CommentDetailPageState extends State<CommentDetail> {
                           type == 'comment' ? data.commentUserName ?? '' : data.replyUserName ?? '',
                           style: TextStyle(fontSize: 32.sp),
                         ),
-                        // Row(
-                        //   children: [
-                        //     // Icon(Icons.star),
-                        //     Rate(
-                        //       initialRating: 3.5, // 初始评分
-                        //       maxRating: 5.0, // 最大评分
-                        //       starSize: 24.w, // 星星大小
-                        //       onRatingUpdate: (rating) {
-                        //         print("当前评分：$rating");
-                        //       },
-                        //     ),
-                        //     SizedBox(width: 10.w),
-                        //     Text(
-                        //       '9.8分',
-                        //       style: TextStyle(
-                        //           fontSize: 32.sp,
-                        //           color: Colors.yellow.shade900),
-                        //     )
-                        //   ],
-                        // )
                       ],
                     ),
                   ),
@@ -195,14 +175,34 @@ class _CommentDetailPageState extends State<CommentDetail> {
                     children: [
                       GestureDetector(
                         onTap: () {
-
+                          setState(() {
+                            data.like = !data.like!;
+                            data.likeCount = data.like! ? data.likeCount! + 1 : data.likeCount! - 1;
+                            if (data.like! && data.dislikeCount != 0) {
+                              data.dislike = false;
+                              data.dislikeCount = data.dislikeCount! - 1;
+                            }
+                          });
+                          ApiRequest().request(
+                            path: '/movie/$type/like',
+                            method: 'POST',
+                            data: {
+                              "id": data.id
+                            },
+                            fromJsonT: (json) {
+                              return json;
+                            },
+                          ).then((res) {
+                            getData();
+                            getReplyData();
+                          });
                         },
                         child: Space(
                           right: 10.w,
                           children: [
                             Icon(
                               Icons.thumb_up,
-                              color: Colors.grey.shade400, 
+                              color: data.like! ? Colors.pink.shade400 : Colors.grey.shade400, 
                               size: 36.sp
                             ),
                             Text('${data.likeCount}'),
@@ -210,13 +210,35 @@ class _CommentDetailPageState extends State<CommentDetail> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          setState(() {
+                            data.dislike = !data.dislike!;
+                            data.dislikeCount = data.dislike! ? data.dislikeCount! + 1 : data.dislikeCount! - 1;
+                            if (data.dislike! && data.likeCount != 0) {
+                              data.like = false;
+                              data.likeCount = data.likeCount! - 1;
+                            }
+                          });
+                          ApiRequest().request(
+                            path: '/movie/$type/dislike',
+                            method: 'POST',
+                            data: {
+                              "id": data.id
+                            },
+                            fromJsonT: (json) {
+                              return json;
+                            },
+                          ).then((res) {
+                            getData();
+                            getReplyData();
+                          });
                         },
                         child: Space(
                           right: 10.w,
                           children: [
                             Icon(
-                            Icons.thumb_down,
-                            color: Colors.grey.shade400, size: 36.sp
+                              Icons.thumb_down,
+                              color: data.dislike! ? Colors.pink.shade400 : Colors.grey.shade400, 
+                              size: 36.sp
                           ),
                           Text('${data.dislikeCount}'),
                         ]),     
@@ -369,13 +391,8 @@ class _CommentDetailPageState extends State<CommentDetail> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                 margin: EdgeInsets.only(bottom: 20.h),
-                // decoration: BoxDecoration(
-                //   // border: Border(
-                //   //   top: BorderSide(width: 20.w, color: Colors.grey.shade200),
-                //   // ),
-                //   // borderRadius: BorderRadius.circular(4.w)
-                // ),
-                child: Space(
+                
+                child:  replyCount == 0 ? null : Space(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(

@@ -177,7 +177,16 @@ class _PageState extends State<MovieDetail> {
 
   List<Widget> generateComment() {
     return commentListData.map((comment) {
-      return  Container(
+      return GestureDetector(
+        // onTap: () {
+        //   context.pushNamed(
+        //     'commentDetail',
+        //     queryParameters: {
+        //       "id": '${comment.id}'
+        //     }
+        //   );
+        // },
+        child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.w),
         decoration: BoxDecoration(
           border: Border(
@@ -419,6 +428,7 @@ class _PageState extends State<MovieDetail> {
           
         ]
         )
+      ),
       );
     }).toList();
   }
@@ -1087,7 +1097,7 @@ class _PageState extends State<MovieDetail> {
                                 context.pushNamed('writeComment', queryParameters: {
                                   'id': widget.id,
                                   'movieName': data.name,
-                                  'rated': data.rated
+                                  'rated': '${data.rated}'
                                 });
                               },
                               child: Space(
