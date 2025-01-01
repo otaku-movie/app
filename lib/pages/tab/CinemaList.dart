@@ -298,8 +298,13 @@ class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
                   }
                 }
               
-             
-              return Container(
+              return GestureDetector(
+                onTap: () {
+                  context.pushNamed('cinemaDetail', queryParameters: {
+                    'id': '${item.id}'
+                  });
+                },
+                child: Container(
                 width: double.infinity,
                  padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
@@ -327,7 +332,7 @@ class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
                               },
                               child: Text('${item.name}', style: TextStyle(fontSize: 36.sp)),
                             ),
-                            const Icon(Icons.star, color: Color(0xFFebb21b)),
+                            // const Icon(Icons.star, color: Color(0xFFebb21b)),
                           ],
                         ),
                         Text(formatDistance, style: TextStyle(color: Colors.grey.shade600))
@@ -385,6 +390,7 @@ class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
                     // )
                   ],
                 ),
+              )
               );
             } as Widget Function(int index)),
           );

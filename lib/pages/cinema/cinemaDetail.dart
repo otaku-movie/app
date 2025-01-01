@@ -217,30 +217,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                       Text('${S.of(context).cinemaDetail_maxSelectSeat}：'),
                       Text('${data.maxSelectSeatCount}'),
                   ]),
-                  Padding(
-                    padding: EdgeInsets.only(top: 50.h),
-                    child:  Text(S.of(context).cinemaDetail_specialSpecPrice, style: TextStyle(
-                      fontSize: 36.sp
-                    )),
-                  ),
-                  Space(
-                    direction: 'column',
-                    children: data.spec == null ? [] : data.spec!.map((item) {
-                    return Container(
-                      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 15.w),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: Colors.grey.shade300)
-                        )
-                      ),
-                      child: Space(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(item.name ?? ''),
-                          Text('+${item.plusPrice}${S.of(context).common_unit_jpy}', style: const TextStyle(color: Colors.red))
-                      ]),
-                    );
-                  }).toList()),
+
                   Padding(
                     padding: EdgeInsets.only(top: 50.h),
                     child:  Text(S.of(context).cinemaDetail_showing, style: TextStyle(
@@ -271,7 +248,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                               bottom: 5.h,
                               children: [
                                 Container(
-                                  // width: 240.w,
+                                  width: 240.w,
                                   height: 280.h,
                                   decoration: BoxDecoration(
                                     color: Colors.grey.shade200,
@@ -323,6 +300,32 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                       ]),
                     );
                   }).toList()),
+
+                                    Padding(
+                    padding: EdgeInsets.only(top: 50.h),
+                    child:  Text(S.of(context).cinemaDetail_specialSpecPrice, style: TextStyle(
+                      fontSize: 36.sp
+                    )),
+                  ),
+                  Space(
+                    direction: 'column',
+                    children: data.spec == null ? [] : data.spec!.map((item) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 15.w),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.grey.shade300)
+                        )
+                      ),
+                      child: Space(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(item.name ?? ''),
+                          Text('+${item.plusPrice}${S.of(context).common_unit_jpy}', style: const TextStyle(color: Colors.red))
+                      ]),
+                    );
+                  }).toList()),
+
                   Padding(
                     padding: EdgeInsets.only(top: 50.h),
                     child:  Text(S.of(context).cinemaDetail_theaterSpec, style: TextStyle(
