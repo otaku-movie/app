@@ -2,11 +2,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'payment_method_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class PaymentMethodResponse {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
 
     PaymentMethodResponse({

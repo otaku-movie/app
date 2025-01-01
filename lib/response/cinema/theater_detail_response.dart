@@ -3,23 +3,23 @@ import 'dart:convert';
 
 part 'theater_detail_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class TheaterDetailResponse {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
-    @JsonKey(name: "row_count")
+    
     final int? rowCount;
-    @JsonKey(name: "column_count")
+    
     final int? columnCount;
-    @JsonKey(name: "cinema_id")
+    
     final int? cinemaId;
-    @JsonKey(name: "cinema_spec_id")
+    
     final int? cinemaSpecId;
-    @JsonKey(name: "cinema_spec_name")
+    
     final String? cinemaSpecName;
-    @JsonKey(name: "seat_count")
+    
     final int? seatCount;
 
     TheaterDetailResponse({

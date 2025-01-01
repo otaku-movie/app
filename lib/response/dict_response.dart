@@ -30,15 +30,15 @@ class DictResponse {
 
 
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class DictItemResponse {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
-    @JsonKey(name: "code")
+    
     final int? code;
-    @JsonKey(name: "dictId")
+    
     final int? dictId;
 
     DictItemResponse({

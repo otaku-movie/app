@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'api_pagination_response.g.dart';
 
-@JsonSerializable(genericArgumentFactories: true)
+@JsonSerializable(fieldRename: FieldRename.none, genericArgumentFactories: true)
 class ApiPaginationResponse<T> {
   final int? page;
   final int? total;

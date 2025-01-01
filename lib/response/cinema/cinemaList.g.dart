@@ -14,11 +14,11 @@ CinemaListResponse _$CinemaListResponseFromJson(Map<String, dynamic> json) =>
       address: json['address'] as String?,
       distance: (json['distance'] as num?)?.toDouble(),
       tel: json['tel'] as String?,
-      homePage: json['home_page'] as String?,
-      maxSelectSeatCount: (json['max_select_seat_count'] as num?)?.toInt(),
-      theaterCount: (json['theater_count'] as num?)?.toInt(),
-      brandId: (json['brand_id'] as num?)?.toInt(),
-      brandName: json['brand_name'] as String?,
+      homePage: json['homePage'] as String?,
+      maxSelectSeatCount: (json['maxSelectSeatCount'] as num?)?.toInt(),
+      theaterCount: (json['theaterCount'] as num?)?.toInt(),
+      brandId: (json['brandId'] as num?)?.toInt(),
+      brandName: json['brandName'] as String?,
       spec: (json['spec'] as List<dynamic>?)
           ?.map((e) => Spec.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -31,11 +31,11 @@ Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
       'description': instance.description,
       'address': instance.address,
       'tel': instance.tel,
-      'home_page': instance.homePage,
-      'max_select_seat_count': instance.maxSelectSeatCount,
-      'theater_count': instance.theaterCount,
-      'brand_id': instance.brandId,
-      'brand_name': instance.brandName,
+      'homePage': instance.homePage,
+      'maxSelectSeatCount': instance.maxSelectSeatCount,
+      'theaterCount': instance.theaterCount,
+      'brandId': instance.brandId,
+      'brandName': instance.brandName,
       'spec': instance.spec?.map((e) => e.toJson()).toList(),
       'distance': instance.distance,
     };
@@ -43,11 +43,11 @@ Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
 Spec _$SpecFromJson(Map<String, dynamic> json) => Spec(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
-      plusPrice: json['plus_price'],
+      plusPrice: json['plusPrice'],
     );
 
 Map<String, dynamic> _$SpecToJson(Spec instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'plus_price': instance.plusPrice,
+      'plusPrice': instance.plusPrice,
     };

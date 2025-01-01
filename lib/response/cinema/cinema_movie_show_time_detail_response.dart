@@ -2,17 +2,17 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'cinema_movie_show_time_detail_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class CinemaMovieShowTimeDetailResponse {
-    @JsonKey(name: "cinema_id")
+    
     final int? cinemaId;
-    @JsonKey(name: "cinema_name")
+    
     final String? cinemaName;
-    @JsonKey(name: "cinema_address")
+    
     final String? cinemaAddress;
-    @JsonKey(name: "cinema_tel")
+    
     final String? cinemaTel;
-    @JsonKey(name: "data")
+    
     final List<CinemaMovieShowTimeDetailResponseDatum>? data;
 
     CinemaMovieShowTimeDetailResponse({
@@ -28,11 +28,11 @@ class CinemaMovieShowTimeDetailResponse {
     Map<String?, dynamic> toJson() => _$CinemaMovieShowTimeDetailResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class CinemaMovieShowTimeDetailResponseDatum {
-    @JsonKey(name: "date")
+    
     final String? date;
-    @JsonKey(name: "data")
+    
     final List<TheaterHallShowTime>? data;
 
     CinemaMovieShowTimeDetailResponseDatum({
@@ -45,17 +45,17 @@ class CinemaMovieShowTimeDetailResponseDatum {
     Map<String?, dynamic> toJson() => _$CinemaMovieShowTimeDetailResponseDatumToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class TheaterHallShowTime {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "theater_hall_id")
+    
     final int? theaterHallId;
-    @JsonKey(name: "theater_hall_name")
+    
     final String? theaterHallName;
-    @JsonKey(name: "start_time")
+    
     final String? startTime;
-    @JsonKey(name: "end_time")
+    
     final String? endTime;
 
     TheaterHallShowTime({

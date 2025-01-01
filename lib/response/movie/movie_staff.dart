@@ -3,15 +3,15 @@ import 'package:json_annotation/json_annotation.dart';
 part 'movie_staff.g.dart';
 
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class MovieStaffResponse {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
-    @JsonKey(name: "avatar")
+    
     final String? avatar;
-    @JsonKey(name: "position")
+    
     final List<Position>? position;
 
     MovieStaffResponse({
@@ -26,11 +26,11 @@ class MovieStaffResponse {
     Map<String, dynamic> toJson() => _$MovieStaffResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Position {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
 
     Position({

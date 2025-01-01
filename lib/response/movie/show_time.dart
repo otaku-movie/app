@@ -3,11 +3,11 @@ import 'package:json_annotation/json_annotation.dart';
 part 'show_time.g.dart';
 
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class ShowTimeResponse {
-    @JsonKey(name: "date")
+    
     final String? date;
-    @JsonKey(name: "data")
+    
     final List<Cinema>? data;
 
     ShowTimeResponse({
@@ -20,15 +20,15 @@ class ShowTimeResponse {
     Map<String, dynamic> toJson() => _$ShowTimeResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Cinema {
-    @JsonKey(name: "cinema_id")
+    
     final int? cinemaId;
-    @JsonKey(name: "cinema_name")
+    
     final String? cinemaName;
-    @JsonKey(name: "cinema_address")
+    
     final String? cinemaAddress;
-    @JsonKey(name: "time")
+    
     final List<Time>? time;
 
     Cinema({
@@ -43,11 +43,11 @@ class Cinema {
     Map<String, dynamic> toJson() => _$CinemaToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Time {
-    @JsonKey(name: "start_time")
+    
     final DateTime? startTime;
-    @JsonKey(name: "end_time")
+    
     final DateTime? endTime;
 
     Time({

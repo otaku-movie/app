@@ -2,13 +2,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'hello_movie.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class HelloMovieResponse {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "code")
+    
     final int? code;
-    @JsonKey(name: "date")
+    
     final String? date;
 
     HelloMovieResponse({

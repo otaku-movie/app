@@ -13,7 +13,7 @@ ApiPaginationResponse<T> _$ApiPaginationResponseFromJson<T>(
     ApiPaginationResponse<T>(
       page: (json['page'] as num?)?.toInt(),
       total: (json['total'] as num?)?.toInt(),
-      pageSize: (json['page_size'] as num?)?.toInt(),
+      pageSize: (json['pageSize'] as num?)?.toInt(),
       list: (json['list'] as List<dynamic>?)?.map(fromJsonT).toList(),
     );
 
@@ -24,6 +24,6 @@ Map<String, dynamic> _$ApiPaginationResponseToJson<T>(
     <String, dynamic>{
       'page': instance.page,
       'total': instance.total,
-      'page_size': instance.pageSize,
+      'pageSize': instance.pageSize,
       'list': instance.list?.map(toJsonT).toList(),
     };

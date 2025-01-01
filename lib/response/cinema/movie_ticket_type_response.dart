@@ -3,21 +3,21 @@ import 'dart:convert';
 
 part 'movie_ticket_type_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class MovieTicketTypeResponse {
-  @JsonKey(name: "id")
+  
   final int? id;
-  @JsonKey(name: "name")
+  
   final String? name;
-  @JsonKey(name: "price")
+  
   final int? price;
-  @JsonKey(name: "cinemaId")
+  
   final int? cinemaId;
-  @JsonKey(name: "createTime")
+  
   final String? createTime;
-  @JsonKey(name: "updateTime")
+  
   final String? updateTime;
-  @JsonKey(name: "deleted")
+  
   final int? deleted;
 
   MovieTicketTypeResponse({

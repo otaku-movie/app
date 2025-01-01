@@ -12,9 +12,9 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
       cover: json['cover'] as String?,
       name: json['name'] as String?,
       email: json['email'] as String?,
-      createTime: json['create_time'] == null
+      createTime: json['createTime'] == null
           ? null
-          : DateTime.parse(json['create_time'] as String),
+          : DateTime.parse(json['createTime'] as String),
       token: json['token'] as String?,
     );
 
@@ -24,6 +24,6 @@ Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
       'cover': instance.cover,
       'name': instance.name,
       'email': instance.email,
-      'create_time': instance.createTime?.toIso8601String(),
+      'createTime': instance.createTime?.toIso8601String(),
       'token': instance.token,
     };

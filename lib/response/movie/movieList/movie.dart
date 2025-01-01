@@ -1,11 +1,12 @@
 import 'dart:ffi';
 
+
 import 'package:json_annotation/json_annotation.dart';
 import 'package:otaku_movie/response/hello_movie.dart';
 
 part 'movie.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable(fieldRename: FieldRename.none)
 class MovieResponse {
   final int? id;
   final String? cover;
@@ -65,13 +66,13 @@ class MovieResponse {
   Map<String, dynamic> toJson() => _$MovieResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Spec {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
-    @JsonKey(name: "description")
+    
     final String? description;
 
     Spec({
@@ -85,11 +86,11 @@ class Spec {
     Map<String, dynamic> toJson() => _$SpecToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Tag {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
 
     Tag({

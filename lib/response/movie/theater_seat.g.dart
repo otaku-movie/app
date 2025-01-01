@@ -105,39 +105,39 @@ const _$SeatTypeEnumMap = {
 SeatItem _$SeatItemFromJson(Map<String, dynamic> json) => SeatItem(
       type: $enumDecodeNullable(_$SeatTypeEnumMap, json['type']),
       id: (json['id'] as num?)?.toInt(),
-      theaterHallId: (json['theater_hall_id'] as num?)?.toInt(),
-      rowName: json['row_name'] as String?,
-      seatName: json['seat_name'] as String?,
+      theaterHallId: (json['theaterHallId'] as num?)?.toInt(),
+      rowName: json['rowName'] as String?,
+      seatName: json['seatName'] as String?,
       x: (json['x'] as num?)?.toInt() ?? 0,
       y: (json['y'] as num?)?.toInt() ?? 0,
       z: json['z'],
       selected: json['selected'] as bool? ?? false,
       show: json['show'] as bool?,
       disabled: json['disabled'] as bool? ?? false,
-      wheelChair: json['wheel_chair'] as bool?,
-      seatPositionGroup: json['seat_position_group'] as String?,
+      wheelChair: json['wheelChair'] as bool?,
+      seatPositionGroup: json['seatPositionGroup'] as String?,
       area: json['area'] == null
           ? null
           : SeatArea.fromJson(json['area'] as Map<String, dynamic>),
-      selectSeatState: (json['select_seat_state'] as num?)?.toInt() ?? 1,
+      selectSeatState: (json['selectSeatState'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$SeatItemToJson(SeatItem instance) => <String, dynamic>{
       'type': _$SeatTypeEnumMap[instance.type],
       'id': instance.id,
-      'theater_hall_id': instance.theaterHallId,
-      'row_name': instance.rowName,
-      'seat_name': instance.seatName,
+      'theaterHallId': instance.theaterHallId,
+      'rowName': instance.rowName,
+      'seatName': instance.seatName,
       'x': instance.x,
       'y': instance.y,
       'z': instance.z,
       'selected': instance.selected,
       'show': instance.show,
       'disabled': instance.disabled,
-      'wheel_chair': instance.wheelChair,
-      'seat_position_group': instance.seatPositionGroup,
+      'wheelChair': instance.wheelChair,
+      'seatPositionGroup': instance.seatPositionGroup,
       'area': instance.area?.toJson(),
-      'select_seat_state': instance.selectSeatState,
+      'selectSeatState': instance.selectSeatState,
     };
 
 SeatArea _$SeatAreaFromJson(Map<String, dynamic> json) => SeatArea(

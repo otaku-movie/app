@@ -4,15 +4,15 @@ import 'package:otaku_movie/enum/index.dart';
 
 part 'theater_seat.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class TheaterSeat {
-    @JsonKey(name: "maxSelectSeatCount")
+    
     final int? maxSelectSeatCount;
-    @JsonKey(name: "seat")
+    
     final List<Seat>? seat;
-    @JsonKey(name: "aisle")
+    
     final List<Aisle>? aisle;
-    @JsonKey(name: "area")
+    
     final List<AreaElement>? area;
 
     TheaterSeat({
@@ -27,19 +27,19 @@ class TheaterSeat {
     Map<String, dynamic> toJson() => _$TheaterSeatToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Aisle {
-    @JsonKey(name: "theaterHallId")
+    
     final int? theaterHallId;
-    @JsonKey(name: "type")
+    
     final AisleType? type;
-    @JsonKey(name: "start")
+    
     final int? start;
-    @JsonKey(name: "createTime")
+    
     final DateTime? createTime;
-    @JsonKey(name: "updateTime")
+    
     final DateTime? updateTime;
-    @JsonKey(name: "deleted")
+    
     final int? deleted;
 
     Aisle({
@@ -56,23 +56,23 @@ class Aisle {
     Map<String, dynamic> toJson() => _$AisleToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class AreaElement {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "theaterHallId")
+    
     final int? theaterHallId;
-    @JsonKey(name: "name")
+    
     final String? name;
-    @JsonKey(name: "color")
+    
     final String? color;
-    @JsonKey(name: "price")
+    
     final int? price;
-    @JsonKey(name: "createTime")
+    
     final DateTime? createTime;
-    @JsonKey(name: "updateTime")
+    
     final DateTime? updateTime;
-    @JsonKey(name: "deleted")
+    
     final int? deleted;
 
     AreaElement({
@@ -93,15 +93,15 @@ class AreaElement {
 
 
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Seat {
-    @JsonKey(name: "type")
+    
     final SeatType? type;
-    @JsonKey(name: "rowAxis")
+    
     final int? rowAxis;
-    @JsonKey(name: "rowName")
+    
     final String? rowName;
-    @JsonKey(name: "children")
+    
     final List<SeatItem>? children;
 
     Seat({
@@ -116,38 +116,38 @@ class Seat {
     Map<String, dynamic> toJson() => _$SeatToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class SeatItem {
-    @JsonKey(name: "type")
+    
     final SeatType? type;
 
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "theater_hall_id")
+    
     final int? theaterHallId;
-    @JsonKey(name: "row_name")
+    
     final String? rowName;
-    @JsonKey(name: "seat_name")
+    
     final String? seatName;
-    @JsonKey(name: "x")
+    
     final int x;
-    @JsonKey(name: "y")
+    
     final int y;
-    @JsonKey(name: "z")
+    
     final dynamic z;
-    @JsonKey(name: "selected")
+    
     final bool selected;
-    @JsonKey(name: "show")
+    
     final bool? show;
-    @JsonKey(name: "disabled")
+    
     final bool disabled;
-    @JsonKey(name: "wheel_chair")
+    
     final bool? wheelChair;
-    @JsonKey(name: "seat_position_group")
+    
     final String? seatPositionGroup;
-    @JsonKey(name: "area")
+    
     final SeatArea? area;
-    @JsonKey(name: "select_seat_state")
+    
     final int? selectSeatState;
 
     SeatItem({
@@ -173,15 +173,15 @@ class SeatItem {
     Map<String, dynamic> toJson() => _$SeatItemToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class SeatArea {
-    @JsonKey(name: "id")
+    
     final int? id;
-    @JsonKey(name: "name")
+    
     final String? name;
-    @JsonKey(name: "price")
+    
     final int? price;
-    @JsonKey(name: "color")
+    
     final String? color;
 
     SeatArea({

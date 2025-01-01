@@ -3,9 +3,9 @@ import 'dart:convert';
 
 part 'verify_code_response.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class VerifyCodeResponse {
-    @JsonKey(name: "token")
+    
     final String? token;
 
     VerifyCodeResponse({

@@ -4,9 +4,9 @@ import 'package:otaku_movie/response/movie/movieList/movie.dart';
 
 part 'movie_now_showing.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable(fieldRename: FieldRename.none)
 class MovieNowShowingResponse extends MovieResponse {
-  @JsonKey(name: "cast")
+  
   final List<Cast>? cast;
   
   final List<HelloMovieResponse>? helloMovie;
@@ -27,12 +27,12 @@ class MovieNowShowingResponse extends MovieResponse {
   Map<String, dynamic> toJson() => _$MovieNowShowingResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(fieldRename: FieldRename.none)
 class Cast {
-  @JsonKey(name: "id")
+  
   final int? id;
 
-  @JsonKey(name: "name")
+  
   final String? name;
 
   Cast({
