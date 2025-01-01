@@ -18,7 +18,8 @@ import 'package:otaku_movie/response/movie/movieList/comment/comment_response.da
 
 class CommentDetail extends StatefulWidget {
   String? id;
-  CommentDetail({super.key, this.id});
+  String? movieId;
+  CommentDetail({super.key, this.id, this.movieId});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -28,6 +29,7 @@ class CommentDetail extends StatefulWidget {
 class _CommentDetailPageState extends State<CommentDetail> {
   TextEditingController commentInputController = TextEditingController();
   EasyRefreshController easyRefreshController = EasyRefreshController();
+   final LanguageController languageController = Get.find();
   final FocusNode _focusNode = FocusNode();
   CommentResponse data = CommentResponse();
   int currentPage = 1;
@@ -37,8 +39,9 @@ class _CommentDetailPageState extends State<CommentDetail> {
   bool showReply = false;
   List<Reply> replyList = [];
   String replyUsernName = '';
+  int currentReplyLength = 0;
   int replyCount = 0;
-  int? replyId;
+  dynamic replyData;
 
   void getData() {
     ApiRequest()
@@ -130,7 +133,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
           child: CircleAvatar(
             radius: 50.0, // 半径
             backgroundColor: Colors.grey.shade300,
-            backgroundImage: NetworkImage(type == 'comment' ? data.commentUserAvatar ?? '' : data.replyUserAvatar ?? ''),
+            backgroundImage: NetworkImage(data.commentUserAvatar ?? ''),
           ),
         ),
         SizedBox(
@@ -151,7 +154,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
                       // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          type == 'comment' ? data.commentUserName ?? '' : data.replyUserName ?? '',
+                          data.commentUserName ?? '',
                           style: TextStyle(fontSize: 32.sp),
                         ),
                       ],
@@ -164,10 +167,24 @@ class _CommentDetailPageState extends State<CommentDetail> {
                   Container(
                     width: 600.w,
                     padding: EdgeInsets.symmetric(vertical: 4.h),
-                    child: Text(
-                        data.content ?? '',
-                        style: TextStyle(fontSize: 30.sp, color: Colors.black87,height: 1.5),
-                      ),
+                    child: Space(
+                      direction: 'column',
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: data is Reply && data.replyUserId != null 
+                                ? '${S.of(context).movieDetail_comment_replyTo(data.replyUserName ?? '')}：' : '',
+                                style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade400)
+                              ),
+                              TextSpan(
+                                text: data.content ?? '',
+                                style: TextStyle(fontSize: 28.sp, color: Colors.black87,height: 1.5),
+                              ),
+                            ]
+                          ))
+                    ])
                   ),
                   SizedBox(height: 5.h),
                   Space(
@@ -246,11 +263,8 @@ class _CommentDetailPageState extends State<CommentDetail> {
                       GestureDetector(
                         onTap: () {
                           setState(() {
-                            showReply = !showReply;
-                            replyId = data.id;
-                            
-                            replyUsernName = type == 'comment' ? data.commentUserName ?? '' : data.replyUserName ?? '';
-
+                            showReply = !showReply;                            
+                            replyData = data;
                           });
                            _focusNode.requestFocus();
                         },
@@ -265,23 +279,40 @@ class _CommentDetailPageState extends State<CommentDetail> {
                             Text(S.of(context).movieDetail_comment_reply),
                         ]),     
                       ),
-                      GestureDetector(
-                        onTap: () {
-                        },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Space(
-                            right: 10.w,
-                            children: [
-                              Icon(
-                                Icons.translate,
-                              color: Colors.grey.shade400, size: 36.sp
-                            ),
-                            Text('翻译为日语', style: TextStyle(color: Colors.grey.shade700))
-                          ]),
-                        ]),     
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //   },
+                      //   child: Space(
+                      //     right: 10.w,
+                      //     children: [
+                      //       Space(
+                      //       right: 10.w,
+                      //       children: [
+                      //         Icon(
+                      //           Icons.translate,
+                      //         color: Colors.grey.shade400, size: 36.sp
+                      //       ),
+                      //       Text(S.of(context).movieDetail_comment_translate(languageController.locale.value.languageCode), style: TextStyle(color: Colors.grey.shade700))
+                      //     ]),
+                      //   ]),     
+                      // ),
+                      //  GestureDetector(
+                      //   onTap: () {
+                      //   },
+                      //   child: Space(
+                      //     right: 10.w,
+                      //     children: [
+                      //       Space(
+                      //       right: 10.w,
+                      //       children: [
+                      //         Icon(
+                      //           Icons.delete,
+                      //         color: Colors.grey.shade400, size: 36.sp
+                      //       ),
+                      //       Text(S.of(context).movieDetail_comment_delete, style: TextStyle(color: Colors.grey.shade700))
+                      //     ]),
+                      //   ]),     
+                      // ),
                     ],
                   ),
                 ],
@@ -298,7 +329,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
         // 关闭键盘弹窗
         FocusScope.of(context).requestFocus(FocusNode());
         setState(() {
-          replyUsernName = '';
+          showReply = false;
         });
       },
       child: Scaffold(
@@ -312,20 +343,32 @@ class _CommentDetailPageState extends State<CommentDetail> {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom, // 键盘高度
         ),
-        child:  replyUsernName == '' ? null :  Container(
+        child:  !showReply ? null :  Container(
+        height: 300.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade200,
+              offset: const Offset(0, -2),
+              blurRadius: 5,
+            )
+          ],
+        ),
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        color: Colors.grey.shade200,
+        // color: Colors.grey.shade200,
         child: Space(
           right: 20.w,
+          direction: 'column',
+          bottom: 20.h,
           children: [
             Expanded(
               child: Input(
                 focusNode: _focusNode,
                 controller: commentInputController,
-                width: 550.w,
-                height: 55.h,
-                horizontalPadding: 35.w,
-                placeholder: '${S.of(context).commentDetail_comment_placeholder(replyUsernName)}：',
+                type: 'textarea',
+                maxLines: 5,
+                placeholder: '${S.of(context).commentDetail_comment_placeholder(replyData.commentUserName)}：',
                 placeholderStyle: TextStyle(color: Colors.grey.shade500, fontSize: 28.sp),
                 textStyle: const TextStyle(color: Colors.black),
                 backgroundColor: Colors.white,
@@ -346,26 +389,67 @@ class _CommentDetailPageState extends State<CommentDetail> {
                       )
                 ) : null,
                 cursorColor: Colors.black,
+                onChange: (value) => {
+                  setState(() {
+                    currentReplyLength = value.length;
+                  })
+                },
                 onSubmit: (val) {
 
                 },
               )),
-              GestureDetector(
-                child: Container(
-                  // width: 100.w,
-                  height: 55.h,
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(horizontal: 40.w),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: Text(
-                    S.of(context).commentDetail_comment_button,
-                    style: TextStyle(color: Colors.white, fontSize: 28.sp),
-                  ),
-                ),
+              Space(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('$currentReplyLength/1000', style: TextStyle(color: Colors.grey.shade500, fontSize: 28.sp)),
+                  GestureDetector(
+                    onTap: () {
+                      String parentReplyId = replyData is Reply && replyData.parentReplyId != null ? '${replyData.parentReplyId}-${replyData.id}' : '${replyData.id}';
+
+                    
+                      ApiRequest().request(
+                        path: '/movie/reply/save',
+                        method: 'POST',
+                        data: {
+                          "movieId": int.parse(widget.movieId ?? ''),
+                          "movieCommentId": int.parse(widget.id ?? ''),
+                          "content": commentInputController.text,
+                          "parentReplyId": parentReplyId,
+                          "replyUserId": replyData.commentUserId
+                        },
+                        fromJsonT: (json) {
+                          return ApiPaginationResponse<Reply>.fromJson(
+                            json,
+                            (data) => Reply.fromJson(data as Map<String, dynamic>),
+                          );
+                        },
+                      ).then((res) async {
+                        setState(() {
+                          commentInputController.text = '';
+                          showReply = false;
+                        });
+                        getReplyData();
+                      });
+                    },
+                    child: Container(
+                      // width: 100.w,
+                      height: 45.h,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.symmetric(horizontal: 30.w),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Text(
+                        S.of(context).commentDetail_comment_button,
+                        style: TextStyle(color: Colors.white, fontSize: 28.sp),
+                      ),
+                    ),
+                  )
+                ]
               )
+              
             
           ]
         ),

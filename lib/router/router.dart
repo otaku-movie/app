@@ -130,7 +130,8 @@ final GoRouter routerConfig = GoRouter(
           name: 'commentDetail',
           builder: (BuildContext context, GoRouterState state) {
             return CommentDetail(
-              id: state.uri.queryParameters['id']
+              id: state.uri.queryParameters['id'],
+              movieId: state.uri.queryParameters['movieId'],
             );
           },
         ),

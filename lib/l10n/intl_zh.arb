@@ -117,6 +117,23 @@
   "movieDetail_button_saw": "看过",
   "movieDetail_button_buy": "购票",
   "movieDetail_comment_reply": "回复",
+  "movieDetail_comment_replyTo": "回复@{reply}",
+  "@movieDetail_comment_replyTo": {
+    "placeholders": {
+      "reply": {
+        "type": "String"
+      }
+    }
+  },
+  "movieDetail_comment_replyTo_translate": "翻译为{language}",
+  "@movieDetail_comment_replyTo_translate": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "movieDetail_comment_delete": "删除",
   "movieDetail_writeComment": "写评论",
   "movieDetail_detail_noDate": "上映日期待定",
   "movieDetail_detail_basicMessage": "基本信息",
@@ -148,7 +165,7 @@
       }
     }
   },
-  "commentDetail_comment_placeholder": "给{reply}回复",
+  "commentDetail_comment_placeholder": "给 {reply} 回复",
   "@commentDetail_comment_placeholder": {
     "placeholders": {
       "reply": {

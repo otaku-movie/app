@@ -117,6 +117,23 @@
   "movieDetail_button_saw": "",
   "movieDetail_button_buy": "",
   "movieDetail_comment_reply": "reply",
+  "movieDetail_comment_replyTo": "Reply to {reply}",
+  "@movieDetail_comment_replyTo": {
+    "placeholders": {
+      "reply": {
+        "type": "String"
+      }
+    }
+  },
+  "movieDetail_comment_replyTo_translate": "Translate to {language}",
+  "@movieDetail_comment_replyTo_translate": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "movieDetail_comment_delete": "Delete",
   "movieDetail_writeComment": "Write comment",
   "movieDetail_detail_noDate": "",
   "movieDetail_detail_basicMessage": "",

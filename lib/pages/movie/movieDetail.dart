@@ -335,7 +335,8 @@ class _PageState extends State<MovieDetail> {
                       GestureDetector(
                         onTap: () {
                           context.pushNamed('commentDetail', queryParameters: {
-                            "id": '${comment.id}'
+                            "id": '${comment.id}',
+                            'movieId': widget.id
                           });
                           // setState(() {
                           //   showReply = !showReply;
@@ -357,23 +358,23 @@ class _PageState extends State<MovieDetail> {
                             Text(S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0), style: TextStyle(color: Colors.grey.shade700)),
                         ]),     
                       ),
-                      GestureDetector(
-                        onTap: () {
-                        },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Space(
-                            right: 10.w,
-                            children: [
-                              Icon(
-                                Icons.translate,
-                              color: Colors.grey.shade400, size: 36.sp
-                            ),
-                            Text('翻译为日语', style: TextStyle(color: Colors.grey.shade700))
-                          ]),
-                        ]),     
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //   },
+                      //   child: Space(
+                      //     right: 10.w,
+                      //     children: [
+                      //       Space(
+                      //       right: 10.w,
+                      //       children: [
+                      //         Icon(
+                      //           Icons.translate,
+                      //         color: Colors.grey.shade400, size: 36.sp
+                      //       ),
+                      //       Text('翻译为日语', style: TextStyle(color: Colors.grey.shade700))
+                      //     ]),
+                      //   ]),     
+                      // ),
                     ],
                   ),
                 // comment.reply == null || comment.reply!.isEmpty ? Container() : GestureDetector(
@@ -1087,7 +1088,7 @@ class _PageState extends State<MovieDetail> {
                           child:  Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('${S.of(context).movieDetail_detail_comment}（${commentListData.length}）', style: TextStyle(
+                            Text('${S.of(context).movieDetail_detail_comment}（${data.commentCount ?? 0}）', style: TextStyle(
                               // color: Colors.grey.shade700,
                               fontSize: 36.sp,
                               fontWeight: FontWeight.bold

@@ -1080,6 +1080,36 @@ class S {
     );
   }
 
+  /// `Reply to {reply}`
+  String movieDetail_comment_replyTo(String reply) {
+    return Intl.message(
+      'Reply to $reply',
+      name: 'movieDetail_comment_replyTo',
+      desc: '',
+      args: [reply],
+    );
+  }
+
+  /// `Translate to {language}`
+  String movieDetail_comment_replyTo_translate(String language) {
+    return Intl.message(
+      'Translate to $language',
+      name: 'movieDetail_comment_replyTo_translate',
+      desc: '',
+      args: [language],
+    );
+  }
+
+  /// `Delete`
+  String get movieDetail_comment_delete {
+    return Intl.message(
+      'Delete',
+      name: 'movieDetail_comment_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Write comment`
   String get movieDetail_writeComment {
     return Intl.message(

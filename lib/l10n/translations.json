@@ -633,6 +633,63 @@
         "zh": "回复",
         "ja": "",
         "en": "reply"
+      },
+      "replyTo": {
+        "zh": {
+          "text": "回复@{reply}",
+          "placeholders": {
+            "reply": {
+              "type": "String"
+            }
+          }
+        },
+        "ja": {
+          "text": "@{reply} に返信",
+          "placeholders": {
+            "reply": {
+              "type": "String"
+            }
+          }
+        },
+        "en": {
+          "text": "Reply to {reply}",
+          "placeholders": {
+            "reply": {
+              "type": "String"
+            }
+          }
+      },
+      "translate": {
+        "zh": {
+        "text": "翻译为{language}",
+          "placeholders": {
+            "language": {
+              "type": "String"
+            }
+          }
+        },
+        "ja": {
+          "text": "{language}へ翻訳",
+            "placeholders": {
+              "language": {
+                "type": "String"
+              }
+            }
+          },
+        "en": {
+          "text": "Translate to {language}",
+            "placeholders": {
+              "language": {
+                "type": "String"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "zh": "删除",
+        "ja": "",
+        "en": "Delete"
       }
     },
     "writeComment": {
@@ -769,7 +826,7 @@
     "comment": {
       "placeholder": {
         "zh": {
-          "text": "给{reply}回复",
+          "text": "给 {reply} 回复",
           "placeholders": {
             "reply": {
               "type": "String"
