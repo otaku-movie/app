@@ -1,0 +1,30 @@
+flavors:
+  dev:
+    app:
+      name: "DEV Movie App"
+
+    android:
+      applicationId: "com.example..otaku-movie.dev"  
+    ios:
+      bundleId: "com.example.otaku-movie.dev"
+  test:
+    app:
+      name: "TEST Movie App"
+    android:
+      applicationId: "com.example.otaku-movie.test"
+    ios:
+      bundleId: "com.example.otaku-movie.test"
+   preprod:
+    app:
+      name: "preprod Movie App"
+    android:
+      applicationId: "com.example.otaku-movie.preprod"
+    ios:
+      bundleId: "com.example.otaku-movie.preprod"
+   prod:
+    app:
+      name: "prod Movie App"
+    android:
+      applicationId: "com.example.otaku-movie"
+    ios:
+      bundleId: "com.example.otaku-movie"

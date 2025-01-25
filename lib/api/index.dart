@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/response.dart';
 import 'package:otaku_movie/router/router.dart';
@@ -16,7 +17,7 @@ class ApiRequest {
     _initializeSharedPreferences();  // 在构造函数中初始化 SharedPreferences
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'http://192.168.1.7:8080/api', // 确保baseUrl格式正确
+        baseUrl: Config.baseUrl, // 确保baseUrl格式正确
         connectTimeout: const Duration(seconds: 60 * 5), // 连接超时
         receiveTimeout: const Duration(seconds: 60 * 5), // 接收超时
       ),

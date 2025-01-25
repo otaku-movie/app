@@ -1,40 +1,52 @@
 {
-  // 使用 IntelliSense 了解相关属性。 
+  // 使用 IntelliSense 了解相关属性。
   // 悬停以查看现有属性的描述。
   // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "app",
-      "request": "launch",
-      "type": "dart"
-    },
-    {
-      "name": "app (profile mode)",
+      "name": "Flutter: Debug (Dev Environment)",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "profile"
+      "flutterMode": "debug",
+      "args": ["--flavor","dev","--dart-define=ENV=dev"]
     },
     {
-      "name": "app (release mode)",
+      "name": "Flutter: Debug (Test Environment)",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "release"
+      "flutterMode": "debug",
+      "args": ["--flavor","qa","--dart-define=ENV=test"]
+    },
+    {
+      "name": "Flutter: Debug (Prod Environment)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "args": ["--flavor","prod", "--dart-define=ENV=prod"]
+    },
+    {
+      "name": "Flutter: Profile",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "args": ["--dart-define=ENV=prod"]
+    },
+    {
+      "name": "Flutter: Release",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "args": ["--dart-define=ENV=prod"]
     },
     {
       "name": "Debug Node.js",
-      "type": "node", // Node.js 调试类型
+      "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/lib/l10n/node/index.js", // 替换为你的 Node.js 主文件路径
-      "outFiles": ["${workspaceFolder}/**/*.js"], // 输出文件匹配规则
-      "cwd": "${workspaceFolder}", // 当前工作目录
-      "console": "integratedTerminal" // 输出显示在 VS Code 的终端中
-    }
-  ],
-  "compounds": [
-    {
-      "name": "Flutter + Node.js",
-      "configurations": ["app", "Debug Node.js"]
+      "outFiles": ["${workspaceFolder}/**/*.js"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
     }
   ]
 }

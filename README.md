@@ -28,3 +28,11 @@ node lib/l10n/node/index.js
 ```
 dart run build_runner build
 ```
+
+## 打包
+
+```
+flutter build apk --flavor dev --dart-define=ENV=dev
+flutter build apk --flavor qa --dart-define=ENV=test
+flutter build apk --flavor prod --dart-define=ENV=prod
+```

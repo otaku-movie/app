@@ -42,6 +42,21 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def env = project.hasProperty("ENV") ? project.getProperty("ENV") : "prod"
+            def version = variant.versionName // 版本号
+            def createTime = new Date().format('yyyy_MM_dd_HH_mm_ss')
+
+            if (variant.buildType.name == "release") {
+                def newFileName = "otaku_movie-${env}-${createTime}-${version}.apk"
+                println("Setting output file name to: $newFileName")
+                output.outputFileName = newFileName
+            }
+        }
     }
 
     buildTypes {
@@ -51,6 +66,63 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        dev {
+            // 作用：指定该 flavor 属于哪个 dimension。
+            // 说明：这里所有的 flavor 都属于 "default" 这个维度。
+            dimension "default"
+            /**
+
+            作用：在基础的 applicationId 上追加后缀，用于区分不同的 flavor。
+            示例：
+                如果你的基础 applicationId 是 com.example.app：
+                dev 的完整 ID 为：com.example.app.dev
+                staging 的完整 ID 为：com.example.app.staging
+                prod 的完整 ID 为：com.example.app（无后缀）。
+             */
+            applicationIdSuffix ".dev"
+            /**
+            作用：在版本名称后追加一个后缀，用于区分版本。
+            示例：
+                如果版本号是 1.0.0：
+                dev 的版本名称为：1.0.0-dev
+                staging 的版本名称为：1.0.0-staging
+                prod 的版本名称为：1.0.0（无后缀）。
+ */
+            versionNameSuffix "-dev"
+            // 作用：在 res/values/strings.xml 中添加一个名为 app_name 的字符串资源。
+            /**
+                作用：为资源文件中的 string 动态设置值。
+                用途：
+                    在 dev 环境中，应用名称显示为 Otaku Movie Dev。
+                    在 staging 环境中，应用名称显示为 Otaku Movie Staging。
+                    在 prod 环境中，应用名称显示为 Otaku Movie。
+                    工作原理：resValue 会将这些值写入到生成的资源文件中，类似于手动在 res/values/strings.xml 文件中添加 <string> 标签。
+             */
+            resValue "string", "app_name", "Otaku Movie Dev"
+        }
+        // ProductFlavor 名称不能以 test 开头。这是因为 Gradle 对 test 作为前缀有特殊用途（如用于测试任务）。为了避免冲突，需要修改 test flavor 的名称。
+        qa { // 替代 test
+            dimension "default"
+            applicationIdSuffix ".qa"
+            versionNameSuffix "-qa"
+            resValue "string", "app_name", "Otaku Movie TEST"
+        }
+        prepord {
+            dimension "default"
+            applicationIdSuffix ".prepord"
+            versionNameSuffix "-prepord"
+            resValue "string", "app_name", "Otaku Movie prepord"
+        }
+        prod {
+            dimension "default"
+            resValue "string", "app_name", "Otaku Movie"
+        }
+    }
+
+   
 }
 
 flutter {
