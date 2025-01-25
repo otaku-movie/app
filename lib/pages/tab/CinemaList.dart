@@ -236,10 +236,12 @@ class _PageState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
             Expanded(
               child: Input(
               controller: searchController,
+              horizontalPadding: 35.w,
               placeholder: S.of(context).movieList_placeholder,
-              placeholderStyle: const TextStyle(color: Colors.white60),
+              placeholderStyle: TextStyle(color: Colors.white60, 
+              fontSize: 28.sp),
               textStyle: const TextStyle(color: Colors.white),
-              height: ScreenUtil().setHeight(60),
+              height: ScreenUtil().setHeight(55),
               backgroundColor: const Color.fromRGBO(255, 255, 255, 0.1),
               borderRadius: BorderRadius.circular(28),
               suffixIcon: const Icon(Icons.search_outlined,

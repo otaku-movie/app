@@ -48,15 +48,28 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return CinemaMovieShowTimeDetailResponse.fromJson(json);
       },
     ).then((res) {
-      if (res.data != null) {
+          if (res.data != null) {
+            if (_tabController != null) {
+            _tabController.dispose();
+        }
+        // _tabController.dispose();
         setState(() {
           data = res.data!;
           tabWidget = generateTab();
+          // 在数据加载后初始化 TabController
+          _tabController =
+              TabController(length: res.data!.data!.length, vsync: this);
         });
 
-        // 在数据加载后初始化 TabController
-        _tabController =
-            TabController(length: res.data!.data!.length, vsync: this);
+        
+      } else {
+        setState(() {
+          data = CinemaMovieShowTimeDetailResponse();
+          tabWidget = [];
+             _tabController =
+            TabController(length: 0, vsync: this);
+        });
+      
       }
     });
   }
@@ -91,6 +104,8 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
+    _tabController = TabController(length: 0, vsync: this);
+    
     if (widget.movieId != null) {
       getData(int.parse(widget.movieId!));
     }
@@ -139,11 +154,11 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (tabWidget.isEmpty) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
+    // if (tabWidget.isEmpty) {
+    //   return const Scaffold(
+    //     body: Center(child: CircularProgressIndicator()),
+    //   );
+    // }
 
     List<Widget> renderCarouselSlider () {
       CinemaMovieShowingResponse movie = cinemaMovieShowingList[currentMovieIndex];
@@ -161,6 +176,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
               setState(() {
                 currentMovieIndex = index;
               });
+              // _tabController.dispose();
               getData(cinemaMovieShowingList[index].id!);
             }
           ),
@@ -178,7 +194,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                   carouselSliderController.animateToPage(index);
                 },
                 child: Container(
-                  // width: 240.w,
+                  width: 300.w,
                   // height: 180.h,
                   decoration: BoxDecoration(
                     color: Colors.grey.shade200,
@@ -335,7 +351,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                         padding: EdgeInsets.only(top: 20.h),
                         // padding: EdgeInsets.symmetric(vertical: 20.h),
                         color: Colors.transparent, // Set the background color
-                        child: TabBar(
+                        child: tabWidget.isNotEmpty ? TabBar(
                           controller: _tabController,
                           tabs: tabWidget,
                           isScrollable: true,
@@ -345,18 +361,20 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                           unselectedLabelColor:
                               Colors.white70, // Unselected label color
                           indicatorColor: Colors.white, // Indicator color
-                        ),
+                        ) : Container(),
                       ),
                     )),
               ),
             ];
           },
-          body: DefaultTabController(
+          // ignore: prefer_is_empty
+          body:data.data?.length == 0 ? Container() :  DefaultTabController(
               initialIndex: 0,
               length: tabWidget.length, // tab的数量.
               child: TabBarView(
                 controller: _tabController,
-                children: data.data!.map((item) {
+                // ignore: prefer_is_empty
+                children: (data.data ?? []).map((item) {
                   return Builder(
                     builder: (BuildContext context) {
                       return CustomScrollView(
@@ -387,11 +405,9 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.start,
-                                      direction: Axis.vertical,
-                                      spacing: 15.w,
+                                    child: Space(
+                                      direction: 'column',
+                                      
                                       children: [
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -399,8 +415,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                             Text(
                                             '${children.startTime} ~ ${children.endTime}',
                                               style: TextStyle(fontSize: 28.sp)),
+                                             
                                           ]
                                         ),
+                                       
                                         
                                         // Wrap(
                                         //   spacing: 20.w,
@@ -424,10 +442,13 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Expanded(
-                                                  child: Text(children
-                                                          .theaterHallName ??
-                                                      '')),
+                                              Row(
+                                                children: [
+                                                  
+                                                  Text(children.theaterHallName ??''),
+                                                  Text('（${children.specName}）'),
+                                                ],
+                                              ),
                                               MaterialButton(
                                                 // height: 50.h,
                                                 // padding: EdgeInsets.symmetric(horizontal: 5.w),

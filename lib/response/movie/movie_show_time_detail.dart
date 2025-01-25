@@ -28,6 +28,8 @@ class MovieShowTimeDetailResponse {
   
   final String? theaterHallName;
 
+   final String? specName;
+
   MovieShowTimeDetailResponse({
     this.id,
     this.date,
@@ -40,6 +42,7 @@ class MovieShowTimeDetailResponse {
     this.cinemaName,
     this.theaterHallId,
     this.theaterHallName,
+    this.specName
   });
 
   factory MovieShowTimeDetailResponse.fromJson(Map<String, dynamic> json) => _$MovieShowTimeDetailResponseFromJson(json);

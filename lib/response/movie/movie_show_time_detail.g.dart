@@ -20,6 +20,7 @@ MovieShowTimeDetailResponse _$MovieShowTimeDetailResponseFromJson(
       cinemaName: json['cinemaName'] as String?,
       theaterHallId: (json['theaterHallId'] as num?)?.toInt(),
       theaterHallName: json['theaterHallName'] as String?,
+      specName: json['specName'] as String?,
     );
 
 Map<String, dynamic> _$MovieShowTimeDetailResponseToJson(
@@ -36,4 +37,5 @@ Map<String, dynamic> _$MovieShowTimeDetailResponseToJson(
       'cinemaName': instance.cinemaName,
       'theaterHallId': instance.theaterHallId,
       'theaterHallName': instance.theaterHallName,
+      'specName': instance.specName,
     };

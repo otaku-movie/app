@@ -58,12 +58,15 @@ class TheaterHallShowTime {
     
     final String? endTime;
 
+    final String? specName;
+
     TheaterHallShowTime({
         this.id,
         this.theaterHallId,
         this.theaterHallName,
         this.startTime,
         this.endTime,
+        this.specName
     });
 
     factory TheaterHallShowTime.fromJson(Map<String, dynamic> json) => _$TheaterHallShowTimeFromJson(json);

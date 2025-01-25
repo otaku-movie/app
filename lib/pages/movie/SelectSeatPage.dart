@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_utils/intl_utils.dart';
 import 'package:logger/logger.dart';
 import 'package:otaku_movie/components/CinemaScreen.dart';
@@ -55,7 +56,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
 
   void getData() {
     ApiRequest().request(
-      path: '/app/movie_show_time/detail',
+      path: '/movie_show_time/detail',
       method: 'GET',
       queryParameters: {
         'id': widget.id
@@ -374,6 +375,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
 
     return map[key] ?? Container(); // 如果传入的 key 无效，返回空容器
   }
+
 
  
   @override
@@ -713,13 +715,30 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                   child: Wrap(
                     runSpacing: 10.h,
                     children: [
-                      Text(_showTimeData.movieName ?? '', style: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold)),
+                      Text(_showTimeData.movieName ?? '', style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 2),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                     
-                          Text('${_showTimeData.date ?? ''}（${getDay(_showTimeData.date ?? '', context)}）${_showTimeData.startTime} ~ ${_showTimeData.endTime}'),
-                          // Text('2D'),
+                          RichText(
+                            text: TextSpan(
+                            style: const TextStyle(color: Colors.black), // 默认样式
+                            children: [
+                              TextSpan(
+                                text: '${formatTime(timeString:  _showTimeData.startTime, format: 'MM-dd')}（${getDay(formatTime(timeString:  _showTimeData.startTime, format: 'yyyy-MM-dd'), context)}）',
+                              ),
+                              TextSpan(
+                                text: formatTime(timeString:_showTimeData.startTime, format: 'HH:mm'),
+                              ),
+                              const TextSpan(
+                                text: ' ~ ',
+                              ),
+                              TextSpan(
+                                text: formatTime(timeString: _showTimeData.endTime, format: 'HH:mm'),
+                              ),
+                            ],
+                          ),
+                        ),
+                          Text(_showTimeData.specName ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.sp)),
                         ],
                       ),
                       

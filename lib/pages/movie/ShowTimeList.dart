@@ -26,6 +26,7 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
   late TabController _tabController;
   List<ShowTimeResponse> data = [];
   int tabLength = 0;
+  bool loading = false;
 
   @override
   void initState() {
@@ -34,6 +35,9 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
   }
 
   getData() {
+    setState(() {
+      loading = true;
+    });
     ApiRequest().request(
       path: '/app/movie/showTime',
       method: 'POST',
@@ -53,6 +57,10 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
         // 在数据加载后初始化 TabController
         _tabController = TabController(length: tabLength, vsync: this);
       }
+    }).whenComplete((){
+      setState(() {
+        loading = false;
+      });
     });
   }
 
@@ -85,12 +93,17 @@ class _PageState extends State<ShowTimeList> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return data.isEmpty
-        ? Scaffold(
+    return loading ? Scaffold(
             appBar:  CustomAppBar(
               title: widget.movieName
             ),
             body: const Center(child: CircularProgressIndicator()), // 数据未加载时显示加载指示器
+          )
+        : data.isEmpty ? Scaffold(
+            appBar: CustomAppBar(
+              title: widget.movieName
+            ),
+            body: const Center(child: Text('')),
           )
         : DefaultTabController(
             initialIndex: 0,

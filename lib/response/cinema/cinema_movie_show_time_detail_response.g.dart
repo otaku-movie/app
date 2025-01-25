@@ -54,6 +54,7 @@ TheaterHallShowTime _$TheaterHallShowTimeFromJson(Map<String, dynamic> json) =>
       theaterHallName: json['theaterHallName'] as String?,
       startTime: json['startTime'] as String?,
       endTime: json['endTime'] as String?,
+      specName: json['specName'] as String?,
     );
 
 Map<String, dynamic> _$TheaterHallShowTimeToJson(
@@ -64,4 +65,5 @@ Map<String, dynamic> _$TheaterHallShowTimeToJson(
       'theaterHallName': instance.theaterHallName,
       'startTime': instance.startTime,
       'endTime': instance.endTime,
+      'specName': instance.specName,
     };

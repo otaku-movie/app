@@ -809,7 +809,7 @@ class _PageState extends State<MovieDetail> {
                         padding: EdgeInsets.only(bottom: 10.h, top: 20.h, right: 0.w),
                           child:  Text(data.description ?? '', style: TextStyle(
                           color: Colors.grey.shade700,
-                          fontSize: 29.sp
+                          fontSize: 26.sp
                         ), textAlign: TextAlign.justify,),
                       ),
                       
@@ -925,9 +925,12 @@ class _PageState extends State<MovieDetail> {
                                   // );
                                 }
                               },
-                              child: Text(data.homePage ?? '', style: const TextStyle(
+                              child: SizedBox(
+                                width: 610.w,
+                                child: Text(data.homePage ?? '', style: const TextStyle(
                                 color: Color.fromARGB(255, 5, 32, 239)
-                              ),),
+                              ), overflow:TextOverflow.ellipsis),
+                              ) 
                             )
                           ]),
                           Row(children: [

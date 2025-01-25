@@ -105,8 +105,8 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           getData(page: currentPage + 1);
         },
         child: AppErrorWidget(
-          loading: data.isEmpty,
-          error: data.isEmpty,
+          loading: loading,
+          error: error,
           child: ListView.builder(
               // physics: widget.physics,
               itemCount: data.length,
@@ -227,7 +227,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                 "id": '${item.id}'
               });
             },
-            child: Text(item.name ?? '', style: TextStyle(fontSize: 36.sp)),
+            child: Text(item.name ?? '', style: TextStyle(fontSize: 30.sp)),
           ),
           // Text("监督：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
           // Text("声优：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
