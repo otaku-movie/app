@@ -158,7 +158,11 @@ class _PageState extends State<UserInfo> {
               _buildListTile(Icons.language, S.of(context).user_language, langName, () {
                  _showActionSheet(context);
               }),
-              _buildListTile(Icons.edit, S.of(context).user_editProfile, null, () {}),
+              _buildListTile(Icons.edit, S.of(context).user_editProfile, null, () {
+                context.pushNamed('userProfile', queryParameters: {
+                  'id': data.id.toString(),
+                });
+              }),
               _buildListTile(Icons.privacy_tip, S.of(context).user_privateAgreement, null, () {}),
               _buildListTile(Icons.check, S.of(context).user_checkUpdate, '1.0.0', () {}),
               _buildListTile(Icons.info_outline, S.of(context).user_about, null, () {}),

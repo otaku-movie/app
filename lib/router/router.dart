@@ -19,6 +19,7 @@ import 'package:otaku_movie/pages/order/orderDetail.dart';
 import 'package:otaku_movie/pages/order/orderList.dart';
 import 'package:otaku_movie/pages/search.dart';
 import 'package:otaku_movie/pages/user/login.dart';
+import 'package:otaku_movie/pages/user/profile.dart';
 import 'package:otaku_movie/pages/user/register.dart';
 
 // class Routes {
@@ -60,7 +61,8 @@ final GoRouter routerConfig = GoRouter(
       path: '/',
       name: 'root',
       builder: (BuildContext context, GoRouterState state) {
-        return const Login();
+        return const Login(
+        );
       },
       routes: <RouteBase>[
         GoRoute(
@@ -93,6 +95,15 @@ final GoRouter routerConfig = GoRouter(
           name: 'register',
           builder: (BuildContext context, GoRouterState state) {
             return const Register();
+          },
+        ),
+        GoRoute(
+          path: '/user/profile',
+          name: 'userProfile',
+          builder: (BuildContext context, GoRouterState state) {
+            return UserProfile(
+              id: state.uri.queryParameters['id']
+            );
           },
         ),
         GoRoute(

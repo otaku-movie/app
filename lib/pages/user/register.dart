@@ -226,6 +226,9 @@ class _RegisterState extends State<Register> {
                       if (password.isEmpty) {
                         return ToastService.showError(S.of(context).login_password_verify_notNull);
                       }
+                      if (usernameController.text.isEmpty) {
+                        return ToastService.showError(S.of(context).register_username_verify_notNull);
+                      }
                       if (!isValidPassword(password)) {
                         return ToastService.showError(S.of(context).login_password_verify_isValid);
                       }

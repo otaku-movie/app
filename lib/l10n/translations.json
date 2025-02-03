@@ -514,12 +514,7 @@
       },
       "verify": {
         "notNull": {
-          "zh": "密码不能为空",
-          "ja": "",
-          "en": ""
-        },
-        "isValid": {
-          "zh": "密码必须为8-16位，包含数字、字母和下划线",
+          "zh": "用户名不能为空",
           "ja": "",
           "en": ""
         }
@@ -1070,6 +1065,54 @@
       "zh": "取票码",
       "ja": "チケットコード",
       "en": "Ticket collection code"
+    }
+  },
+  "userProfile": {
+    "title": {
+      "zh": "个人信息",
+      "ja": "",
+      "en": ""
+    },
+    "avatar": {
+      "zh": "头像",
+      "ja": "",
+      "en": ""
+    },
+    "username": {
+      "zh": "用户名",
+      "ja": "",
+      "en": ""
+    },
+    "email": {
+      "zh": "邮箱",
+      "ja": "",
+      "en": "Email"
+    },
+    "registerTime": {
+      "zh": "注册时间",
+      "ja": "",
+      "en": "Register Time"
+    },
+    "save": {
+      "zh": "保存",
+      "ja": "",
+      "en": "Save"
+    },
+    "edit": {
+      "username": {
+        "placeholder": {
+          "zh": "请输入用户名",
+          "ja": "",
+          "en": "Please enter your username"
+        },
+        "verify": {
+          "notNull": {
+            "zh": "用户名不能为空",
+            "ja": "",
+            "en": ""
+          }
+        }
+      }
     }
   }
 }

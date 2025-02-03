@@ -87,7 +87,7 @@ class ApiRequest {
   Future<ApiResponse<T>> request<T>({
     required String path,
     required String method,
-    Map<String, dynamic>? data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
     ResponseType? responseType,
@@ -99,6 +99,7 @@ class ApiRequest {
         headers: headers,
         responseType: responseType ?? ResponseType.json
       );
+      
 
       Response response = await _dio.request(
         path,

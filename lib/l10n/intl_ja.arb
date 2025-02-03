@@ -98,7 +98,6 @@
   "register_repeatPassword_verify_isValid": "",
   "register_username_text": "",
   "register_username_verify_notNull": "",
-  "register_username_verify_isValid": "",
   "register_passwordNotMatchRepeatPassword": "2回入力したパスワードは一致しません",
   "register_verifyCode_verify_notNull": "",
   "register_verifyCode_verify_isValid": "",
@@ -216,5 +215,13 @@
   "orderDetail_orderMessage": "",
   "payResult_title": "支払い完了",
   "payResult_success": "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。",
-  "payResult_ticketCode": "チケットコード"
+  "payResult_ticketCode": "チケットコード",
+  "userProfile_title": "",
+  "userProfile_avatar": "",
+  "userProfile_username": "",
+  "userProfile_email": "",
+  "userProfile_registerTime": "",
+  "userProfile_save": "",
+  "userProfile_edit_username_placeholder": "",
+  "userProfile_edit_username_verify_notNull": ""
 }

@@ -890,16 +890,6 @@ class S {
     );
   }
 
-  /// ``
-  String get register_username_verify_isValid {
-    return Intl.message(
-      '',
-      name: 'register_username_verify_isValid',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `The passwords you entered twice do not match`
   String get register_passwordNotMatchRepeatPassword {
     return Intl.message(
@@ -1655,6 +1645,86 @@ class S {
     return Intl.message(
       'Ticket collection code',
       name: 'payResult_ticketCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get userProfile_title {
+    return Intl.message(
+      '',
+      name: 'userProfile_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get userProfile_avatar {
+    return Intl.message(
+      '',
+      name: 'userProfile_avatar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get userProfile_username {
+    return Intl.message(
+      '',
+      name: 'userProfile_username',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get userProfile_email {
+    return Intl.message(
+      'Email',
+      name: 'userProfile_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register Time`
+  String get userProfile_registerTime {
+    return Intl.message(
+      'Register Time',
+      name: 'userProfile_registerTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get userProfile_save {
+    return Intl.message(
+      'Save',
+      name: 'userProfile_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your username`
+  String get userProfile_edit_username_placeholder {
+    return Intl.message(
+      'Please enter your username',
+      name: 'userProfile_edit_username_placeholder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ``
+  String get userProfile_edit_username_verify_notNull {
+    return Intl.message(
+      '',
+      name: 'userProfile_edit_username_verify_notNull',
       desc: '',
       args: [],
     );

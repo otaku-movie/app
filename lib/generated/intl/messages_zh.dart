@@ -231,10 +231,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("重复密码不能为空"),
         "register_send": MessageLookupByLibrary.simpleMessage("发送"),
         "register_username_text": MessageLookupByLibrary.simpleMessage("用户名称"),
-        "register_username_verify_isValid":
-            MessageLookupByLibrary.simpleMessage("密码必须为8-16位，包含数字、字母和下划线"),
         "register_username_verify_notNull":
-            MessageLookupByLibrary.simpleMessage("密码不能为空"),
+            MessageLookupByLibrary.simpleMessage("用户名不能为空"),
         "register_verifyCode_verify_isValid":
             MessageLookupByLibrary.simpleMessage("验证码必须是6位纯数字"),
         "register_verifyCode_verify_notNull":
@@ -259,6 +257,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("地址"),
         "showTimeDetail_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("分"),
+        "userProfile_avatar": MessageLookupByLibrary.simpleMessage("头像"),
+        "userProfile_edit_username_placeholder":
+            MessageLookupByLibrary.simpleMessage("请输入用户名"),
+        "userProfile_edit_username_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("用户名不能为空"),
+        "userProfile_email": MessageLookupByLibrary.simpleMessage("邮箱"),
+        "userProfile_registerTime":
+            MessageLookupByLibrary.simpleMessage("注册时间"),
+        "userProfile_save": MessageLookupByLibrary.simpleMessage("保存"),
+        "userProfile_title": MessageLookupByLibrary.simpleMessage("个人信息"),
+        "userProfile_username": MessageLookupByLibrary.simpleMessage("用户名"),
         "user_about": MessageLookupByLibrary.simpleMessage("关于"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("检查更新"),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage("演员数"),

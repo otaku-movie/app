@@ -217,8 +217,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(""),
         "register_send": MessageLookupByLibrary.simpleMessage(""),
         "register_username_text": MessageLookupByLibrary.simpleMessage(""),
-        "register_username_verify_isValid":
-            MessageLookupByLibrary.simpleMessage(""),
         "register_username_verify_notNull":
             MessageLookupByLibrary.simpleMessage(""),
         "register_verifyCode_verify_isValid":
@@ -245,6 +243,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
         "showTimeDetail_buy": MessageLookupByLibrary.simpleMessage(""),
         "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("分"),
+        "userProfile_avatar": MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_edit_username_placeholder":
+            MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_edit_username_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_email": MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_registerTime": MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_save": MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_title": MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_username": MessageLookupByLibrary.simpleMessage(""),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),

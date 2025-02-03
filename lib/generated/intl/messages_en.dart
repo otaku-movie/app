@@ -230,8 +230,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_send": MessageLookupByLibrary.simpleMessage("send"),
         "register_username_text":
             MessageLookupByLibrary.simpleMessage("UserName"),
-        "register_username_verify_isValid":
-            MessageLookupByLibrary.simpleMessage(""),
         "register_username_verify_notNull":
             MessageLookupByLibrary.simpleMessage(""),
         "register_verifyCode_verify_isValid":
@@ -260,6 +258,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Address"),
         "showTimeDetail_buy": MessageLookupByLibrary.simpleMessage(""),
         "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("minutes"),
+        "userProfile_avatar": MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_edit_username_placeholder":
+            MessageLookupByLibrary.simpleMessage("Please enter your username"),
+        "userProfile_edit_username_verify_notNull":
+            MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_email": MessageLookupByLibrary.simpleMessage("Email"),
+        "userProfile_registerTime":
+            MessageLookupByLibrary.simpleMessage("Register Time"),
+        "userProfile_save": MessageLookupByLibrary.simpleMessage("Save"),
+        "userProfile_title": MessageLookupByLibrary.simpleMessage(""),
+        "userProfile_username": MessageLookupByLibrary.simpleMessage(""),
         "user_about": MessageLookupByLibrary.simpleMessage(""),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage(""),
         "user_data_characterCount": MessageLookupByLibrary.simpleMessage(""),

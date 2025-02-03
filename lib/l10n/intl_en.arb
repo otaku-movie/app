@@ -98,7 +98,6 @@
   "register_repeatPassword_verify_isValid": "",
   "register_username_text": "UserName",
   "register_username_verify_notNull": "",
-  "register_username_verify_isValid": "",
   "register_passwordNotMatchRepeatPassword": "The passwords you entered twice do not match",
   "register_verifyCode_verify_notNull": "",
   "register_verifyCode_verify_isValid": "",
@@ -216,5 +215,13 @@
   "orderDetail_orderMessage": "",
   "payResult_title": "Pay Succeed",
   "payResult_success": "Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie.",
-  "payResult_ticketCode": "Ticket collection code"
+  "payResult_ticketCode": "Ticket collection code",
+  "userProfile_title": "",
+  "userProfile_avatar": "",
+  "userProfile_username": "",
+  "userProfile_email": "Email",
+  "userProfile_registerTime": "Register Time",
+  "userProfile_save": "Save",
+  "userProfile_edit_username_placeholder": "Please enter your username",
+  "userProfile_edit_username_verify_notNull": ""
 }

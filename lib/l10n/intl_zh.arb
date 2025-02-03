@@ -97,8 +97,7 @@
   "register_repeatPassword_verify_notNull": "重复密码不能为空",
   "register_repeatPassword_verify_isValid": "重复密码必须为8-16位，包含数字、字母和下划线",
   "register_username_text": "用户名称",
-  "register_username_verify_notNull": "密码不能为空",
-  "register_username_verify_isValid": "密码必须为8-16位，包含数字、字母和下划线",
+  "register_username_verify_notNull": "用户名不能为空",
   "register_passwordNotMatchRepeatPassword": "两次输入的密码不一致",
   "register_verifyCode_verify_notNull": "验证码不能为空",
   "register_verifyCode_verify_isValid": "验证码必须是6位纯数字",
@@ -216,5 +215,13 @@
   "orderDetail_orderMessage": "订单信息",
   "payResult_title": "支付完成",
   "payResult_success": "您的订单已经支付完成，请在以下时间之前到达以下地点，祝您观影愉快。",
-  "payResult_ticketCode": "取票码"
+  "payResult_ticketCode": "取票码",
+  "userProfile_title": "个人信息",
+  "userProfile_avatar": "头像",
+  "userProfile_username": "用户名",
+  "userProfile_email": "邮箱",
+  "userProfile_registerTime": "注册时间",
+  "userProfile_save": "保存",
+  "userProfile_edit_username_placeholder": "请输入用户名",
+  "userProfile_edit_username_verify_notNull": "用户名不能为空"
 }
