@@ -40,7 +40,7 @@ class SendVerifyCode extends StatefulWidget {
 class _PageState extends State<SendVerifyCode> {
   final TextEditingController verificationCodeController = TextEditingController();
 
-  late Timer _timer; // 定时器，用来倒计时
+  Timer? _timer; // 定时器，用来倒计时
   int _countdown = 0; // 倒计时时间，单位秒
   int defaultTime = 0;
   bool send = false;
@@ -55,8 +55,8 @@ class _PageState extends State<SendVerifyCode> {
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
+    _timer?.cancel(); 
   }
   
   // 模拟发送验证码并开始倒计时
@@ -95,7 +95,7 @@ class _PageState extends State<SendVerifyCode> {
           _countdown--;
         });
         if (_countdown == 0) {
-          _timer.cancel(); // 停止倒计时
+          _timer?.cancel(); // 停止倒计时
           setState(() {
             _countdown = defaultTime; // 重置倒计时
             send = false;

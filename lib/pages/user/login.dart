@@ -173,6 +173,17 @@ class _LoginPageState extends State<Login> {
           ),
         ],
       ),
+      bottomNavigationBar: Container(
+        height: 100.h,
+        alignment: Alignment.center,
+        child: GestureDetector(
+          onTap: () {
+            context.pushNamed('forgotPassword');
+          },
+          child: const Text('忘记密码'),
+        )
+
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();

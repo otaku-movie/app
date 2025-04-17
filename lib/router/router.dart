@@ -18,6 +18,7 @@ import 'package:otaku_movie/pages/movie/paySuccess.dart';
 import 'package:otaku_movie/pages/order/orderDetail.dart';
 import 'package:otaku_movie/pages/order/orderList.dart';
 import 'package:otaku_movie/pages/search.dart';
+import 'package:otaku_movie/pages/user/forgotPassword.dart';
 import 'package:otaku_movie/pages/user/login.dart';
 import 'package:otaku_movie/pages/user/profile.dart';
 import 'package:otaku_movie/pages/user/register.dart';
@@ -81,6 +82,13 @@ final GoRouter routerConfig = GoRouter(
               movieName: state.uri.queryParameters['movieName'],
               rated: state.uri.queryParameters['rated'] == 'true',
             );
+          },
+        ),
+        GoRoute(
+          path: '/user/forgotPassword',
+          name: 'forgotPassword',
+          builder: (BuildContext context, GoRouterState state) {
+            return ForgotPassword();
           },
         ),
         GoRoute(
