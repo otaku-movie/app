@@ -279,6 +279,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_language": MessageLookupByLibrary.simpleMessage("Language"),
         "user_logout": MessageLookupByLibrary.simpleMessage(""),
         "user_privateAgreement": MessageLookupByLibrary.simpleMessage(""),
+        "user_registerTime": MessageLookupByLibrary.simpleMessage(""),
         "user_title": MessageLookupByLibrary.simpleMessage(""),
         "writeComment_hint":
             MessageLookupByLibrary.simpleMessage("Write your comment..."),

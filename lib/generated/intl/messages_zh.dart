@@ -278,6 +278,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_language": MessageLookupByLibrary.simpleMessage("语言"),
         "user_logout": MessageLookupByLibrary.simpleMessage("退出登录"),
         "user_privateAgreement": MessageLookupByLibrary.simpleMessage("隐私协议"),
+        "user_registerTime": MessageLookupByLibrary.simpleMessage("注册时间"),
         "user_title": MessageLookupByLibrary.simpleMessage("我的"),
         "writeComment_hint": MessageLookupByLibrary.simpleMessage("写下你的评论..."),
         "writeComment_release": MessageLookupByLibrary.simpleMessage("发布"),

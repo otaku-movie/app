@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/components/cropper.dart';
 import 'package:otaku_movie/pages/Home.dart';
+import 'package:otaku_movie/pages/about.dart';
 import 'package:otaku_movie/pages/cinema/cinemaDetail.dart';
 import 'package:otaku_movie/pages/movie/commentDetail.dart';
 import 'package:otaku_movie/pages/movie/writeComment.dart';
@@ -33,6 +34,13 @@ final GoRouter routerConfig = GoRouter(
           name: 'splash',
           builder: (BuildContext context, GoRouterState state) {
             return const SplashScreen();
+          },
+        ),
+        GoRoute(
+          path: '/about',
+          name: 'about',
+          builder: (BuildContext context, GoRouterState state) {
+            return AboutPage();
           },
         ),
         GoRoute(

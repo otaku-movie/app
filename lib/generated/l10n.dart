@@ -1430,6 +1430,16 @@ class S {
     );
   }
 
+  /// ``
+  String get user_registerTime {
+    return Intl.message(
+      '',
+      name: 'user_registerTime',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Language`
   String get user_language {
     return Intl.message(

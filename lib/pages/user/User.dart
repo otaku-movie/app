@@ -3,10 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/user/user_detail_response.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:otaku_movie/utils/index.dart';
 import '../../components/CustomAppBar.dart';
 
 class UserInfo extends StatefulWidget {
@@ -107,7 +108,7 @@ class _PageState extends State<UserInfo> {
                       CircleAvatar(
                         radius: 60.w, // 根据屏幕调整头像大小
                         backgroundColor: Colors.grey.shade300,
-                        backgroundImage: NetworkImage(data.cover ?? ''),
+                        backgroundImage: NetworkImage('${Config.imageBaseUrl}${data.cover}'),
                       ),
                       SizedBox(width: 20.w),
                       // 用户信息文本
@@ -119,7 +120,7 @@ class _PageState extends State<UserInfo> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(data.name ?? '', style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold)),
-                                Text(data.createTime ?? '', style: TextStyle(fontSize: 24.sp)),
+                                
                               ],
                             ),
                           
@@ -135,81 +136,123 @@ class _PageState extends State<UserInfo> {
                 ),
               ),
               // 统计信息部分的网格布局
-              Padding(
-                padding: EdgeInsets.only(bottom: 16.h),
-                // child:
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 16.w,
-                  mainAxisSpacing: 16.h,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    _buildStatCard(S.of(context).user_data_orderCount, '${data.orderCount ?? 0}', Colors.purple, () {
-                      context.pushNamed('orderList');
-                    }),
-                    _buildStatCard(S.of(context).user_data_wantCount, '${data.wantCount ?? 0}', Colors.orange, () {}),
-                    _buildStatCard(S.of(context).user_data_characterCount, '${'0' ?? 0}', Colors.blue, () {}),
-                    // _buildStatCard(S.of(context).user_data_staffCount, '${data ?? 0}', Colors.green, () {}),
-                  ],
-                ),
-              ),
-              // 设置项的列表
-              _buildListTile(Icons.language, S.of(context).user_language, langName, () {
-                 _showActionSheet(context);
-              }),
-              _buildListTile(Icons.edit, S.of(context).user_editProfile, null, () {
+              // Padding(
+              //   padding: EdgeInsets.only(bottom: 16.h),
+              //   // child:
+              //   child: GridView.count(
+              //     crossAxisCount: 1,
+              //     crossAxisSpacing: 16.w,
+              //     mainAxisSpacing: 16.h,
+              //     shrinkWrap: true,
+              //     physics: const NeverScrollableScrollPhysics(),
+              //     children: [
+              //       _buildStatCard(S.of(context).user_data_orderCount, '${data.orderCount ?? 0}', Colors.purple, () {
+              //         context.pushNamed('orderList');
+              //       })
+              //       // _buildStatCard(S.of(context).user_data_staffCount, '${data ?? 0}', Colors.green, () {}),
+              //     ],
+              //   ),
+              // ),
+              _buildListTile(
+              title: S.of(context).user_registerTime,
+              trailing: data.createTime ?? '',
+              onTap: () {},
+              showArrow: false
+            ),
+             _buildListTile(
+              icon: null,
+              title: S.of(context).user_data_orderCount,
+              trailing: '${data.orderCount ?? 0}',
+              // showArrow: false,
+              onTap: () {
+                _showActionSheet(context);
+              },
+            ),           
+            _buildListTile(
+              icon: Icons.language,
+              title: S.of(context).user_language,
+              trailing: langName,
+              onTap: () {
+                _showActionSheet(context);
+              },
+            ),
+            _buildListTile(
+              icon: Icons.edit,
+              title: S.of(context).user_editProfile,
+              onTap: () {
                 context.pushNamed('userProfile', queryParameters: {
                   'id': data.id.toString(),
                 });
-              }),
-              _buildListTile(Icons.privacy_tip, S.of(context).user_privateAgreement, null, () {}),
-              _buildListTile(Icons.check, S.of(context).user_checkUpdate, '1.0.0', () {}),
-              _buildListTile(Icons.info_outline, S.of(context).user_about, null, () {}),
-              _buildListTile(Icons.logout, S.of(context).user_logout, null, () {}),
+              },
+            ),
+            _buildListTile(
+              icon: Icons.privacy_tip,
+              title: S.of(context).user_privateAgreement,
+              onTap: () {
+                launchURL('https://www.google.com');
+              },
+            ),
+            _buildListTile(
+              icon: Icons.check,
+              title: S.of(context).user_checkUpdate,
+              trailing: '1.0.0',
+              onTap: () {},
+            ),
+            _buildListTile(
+              icon: Icons.info_outline,
+              title: S.of(context).user_about,
+              onTap: () {
+                context.pushNamed('about');
+              },
+            ),
+            _buildListTile(
+              icon: Icons.logout,
+              title: S.of(context).user_logout,
+              onTap: () {},
+            ),
             ],
           ),
         ),
       ),
     );
   }
-
-  // 创建统计卡片的辅助方法
-  Widget _buildStatCard(String title, String count, Color color, GestureTapCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        padding: EdgeInsets.all(8.w),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(title, style: TextStyle(color: Colors.white, fontSize: 32.sp)),
-            Text(count, style: TextStyle(color: Colors.white, fontSize: 40.sp, fontWeight: FontWeight.bold)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 创建 ListTile 的辅助方法
-  Widget _buildListTile(IconData icon, String title, String? trailingText, GestureTapCallback onTap) {
+  Widget _buildListTile({
+    IconData? icon,
+    required dynamic title,
+    dynamic trailing,
+    required GestureTapCallback onTap,
+    bool showArrow = true, // ✅ 控制是否显示箭头
+  }) {
     return Container(
       decoration: BoxDecoration(
         border: Border(bottom: BorderSide(color: Colors.grey.shade300, width: 1.0)),
       ),
       child: ListTile(
-        leading: Icon(icon, color: Colors.grey.shade500),
-        title: Text(title, style: TextStyle(fontSize: 24.sp)),
-        trailing: trailingText != null
-            ? Text(trailingText, style: TextStyle(fontSize: 22.sp))
-            : Icon(Icons.arrow_forward_ios, size: 24.sp),
+        leading: icon != null
+            ? Icon(icon, color: Colors.grey.shade500)
+            : const SizedBox(width: 24), // ✅ 占位保持对齐
+        title: title is String
+            ? Text(title, style: TextStyle(fontSize: 24.sp))
+            : title as Widget,
+        trailing: trailing != null
+            ? trailing is String
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(trailing, style: TextStyle(fontSize: 22.sp)),
+                      if (showArrow) ...[
+                        SizedBox(width: 8.w),
+                        const Icon(Icons.arrow_forward_ios, size: 16),
+                      ],
+                    ],
+                  )
+                : trailing as Widget
+            : (showArrow
+                ? const Icon(Icons.arrow_forward_ios, size: 16)
+                : null),
         onTap: onTap,
       ),
     );
   }
+
 }
