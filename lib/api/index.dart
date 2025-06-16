@@ -18,8 +18,8 @@ class ApiRequest {
     _dio = Dio(
       BaseOptions(
         baseUrl: Config.baseUrl, // 确保baseUrl格式正确
-        connectTimeout: const Duration(seconds: 60 * 5), // 连接超时
-        receiveTimeout: const Duration(seconds: 60 * 5), // 接收超时
+        connectTimeout: const Duration(seconds: 60 * 30), // 连接超时
+        receiveTimeout: const Duration(seconds: 60 * 30), // 接收超时
       ),
     );
 

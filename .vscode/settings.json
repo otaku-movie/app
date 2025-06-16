@@ -2,5 +2,6 @@
   "java.compile.nullAnalysis.mode": "automatic",
   "commentTranslate.multiLineMerge": true,
   "cmake.sourceDirectory": "D:/project/movie/app/linux",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "commentTranslate.hover.enabled": false
 }

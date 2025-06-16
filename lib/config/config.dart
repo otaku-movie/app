@@ -10,7 +10,7 @@ class Config {
   static EnvironmentType currentEnvironment = EnvironmentType.dev;
 
   // 定义各环境的 API URL
-  static const String localApiUrl = 'http://192.168.1.2:8080/api';
+  static const String localApiUrl = 'http://192.168.3.4:8080/api';
   static const String testApiUrl = 'http://test-api.otaku-movie.com/api';
   static const String preprodApiUrl = '';
   static const String prodApiUrl = '';

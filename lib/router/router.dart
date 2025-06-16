@@ -22,50 +22,19 @@ import 'package:otaku_movie/pages/user/forgotPassword.dart';
 import 'package:otaku_movie/pages/user/login.dart';
 import 'package:otaku_movie/pages/user/profile.dart';
 import 'package:otaku_movie/pages/user/register.dart';
+import 'package:otaku_movie/pages/splash_screen.dart';
 
-// class Routes {
-//   static FluroRouter router = FluroRouter();
-//   static String root = '/';
-//   static String setting = '/setting';
-//   static void configureRoutes(FluroRouter router) {
-//     router.notFoundHandler = Handler(
-//         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-//       return Notfound();
-//     });
-//     router.define(root, handler: Handler(
-//         handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
-//       return Home();
-//     }));
-//     router.define(setting, handler: Handler(
-//         handlerFunc: (BuildContext? context, Map<String, dynamic> params) {
-//       return Setting();
-//     }));
-
-//     router.define("/movie/movieList", handler: Handler(
-//         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-//       return const MovieList();
-//     }));
-//      router.define("/movie/showTimeList", handler: Handler(
-//         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-//       return const ShowTimeList();
-//     }));
-//     router.define("/me", handler: Handler(
-//         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-//       return const UserInfo();
-//     }));
-//   }
-// }
 
 final GoRouter routerConfig = GoRouter(
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/',
-      name: 'root',
-      builder: (BuildContext context, GoRouterState state) {
-        return const Login(
-        );
-      },
-      routes: <RouteBase>[
+  initialLocation: '/splash',
+  routes:  <RouteBase>[
+        GoRoute(
+          path: '/splash',
+          name: 'splash',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SplashScreen();
+          },
+        ),
         GoRoute(
           path: '/home',
           name: 'home',
@@ -243,6 +212,4 @@ final GoRouter routerConfig = GoRouter(
           },
         ),
       ],
-    ),
-  ],
-);
+    );
