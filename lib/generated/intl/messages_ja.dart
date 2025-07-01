@@ -179,6 +179,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("近日公開"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("現在上映中"),
+        "movieShowList_dropdown_area":
+            MessageLookupByLibrary.simpleMessage("地域"),
+        "movieShowList_dropdown_screenSpec":
+            MessageLookupByLibrary.simpleMessage("上映仕様"),
+        "movieShowList_dropdown_subtitle":
+            MessageLookupByLibrary.simpleMessage("字幕"),
         "movieTicketType_confirmOrder":
             MessageLookupByLibrary.simpleMessage("注文確認"),
         "movieTicketType_seatNumber": MessageLookupByLibrary.simpleMessage(""),
@@ -266,9 +272,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_registerTime": MessageLookupByLibrary.simpleMessage(""),
         "user_title": MessageLookupByLibrary.simpleMessage(""),
         "writeComment_hint": MessageLookupByLibrary.simpleMessage(""),
-        "writeComment_release": MessageLookupByLibrary.simpleMessage(""),
+        "writeComment_release": MessageLookupByLibrary.simpleMessage("リリース"),
         "writeComment_title": MessageLookupByLibrary.simpleMessage(""),
-        "writeComment_verify_notNull": MessageLookupByLibrary.simpleMessage(""),
+        "writeComment_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("コメントを入力してください"),
         "writeComment_verify_notRate": MessageLookupByLibrary.simpleMessage("")
       };
 }

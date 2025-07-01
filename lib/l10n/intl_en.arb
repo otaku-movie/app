@@ -2,7 +2,7 @@
   "@@locale": "en",
   "writeComment_title": "Write comment",
   "writeComment_hint": "Write your comment...",
-  "writeComment_verify_notNull": "",
+  "writeComment_verify_notNull": "Comment cannot be empty",
   "writeComment_verify_notRate": "",
   "writeComment_release": "Release",
   "search_noData": "No data yet",
@@ -224,5 +224,8 @@
   "userProfile_registerTime": "Register Time",
   "userProfile_save": "Save",
   "userProfile_edit_username_placeholder": "Please enter your username",
-  "userProfile_edit_username_verify_notNull": ""
+  "userProfile_edit_username_verify_notNull": "",
+  "movieShowList_dropdown_area": "Area",
+  "movieShowList_dropdown_screenSpec": "Screen Spec",
+  "movieShowList_dropdown_subtitle": "Subtitle"
 }

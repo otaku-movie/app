@@ -2,29 +2,29 @@
   "writeComment": {
     "title": {
       "zh": "写评论",
-      "ja": "",
+      "ja": "コメントを書く",
       "en": "Write comment"
     },
     "hint": {
       "zh": "写下你的评论...",
-      "ja": "",
+      "ja": "コメントを入力してください...",
       "en": "Write your comment..."
     },
     "verify": {
       "notNull": {
         "zh": "评论不能为空",
-        "ja": "",
-        "en": ""
+        "ja": "コメントを入力してください",
+        "en": "Comment cannot be empty"
       },
       "notRate": {
         "zh": "请给电影评分",
-        "ja": "",
-        "en": ""
+        "ja": "映画に評価を付けてください",
+        "en": "Please rate the movie"
       }
     },
     "release": {
       "zh": "发布",
-      "ja": "",
+      "ja": "リリース",
       "en": "Release"
     }
   },
@@ -36,10 +36,10 @@
     },
     "placeholder": {
       "zh": "搜索全部电影",
-      "ja": "",
-      "en": ""
+      "ja": "すべての映画を検索",
+      "en": "Search all movies"
     },
-    "history":  {
+    "history": {
       "zh": "搜索历史",
       "ja": "検索履歴",
       "en": "Search History"
@@ -47,23 +47,23 @@
     "removeHistoryConfirm": {
       "title": {
         "zh": "删除历史记录",
-        "ja": "",
-        "en": ""
+        "ja": "履歴を削除",
+        "en": "Delete History"
       },
       "content": {
         "zh": "是否确定要删除历史记录?",
-        "ja": "",
-        "en": ""
+        "ja": "検索履歴を削除してもよろしいですか？",
+        "en": "Are you sure you want to delete your search history?"
       },
       "confirm": {
         "zh": "确定",
-        "ja": "",
-        "en": ""
+        "ja": "確認",
+        "en": "Confirm"
       },
       "cancel": {
         "zh": "取消",
-        "ja": "",
-        "en": ""
+        "ja": "キャンセル",
+        "en": "Cancel"
       }
     },
     "level": {
@@ -80,8 +80,8 @@
     },
     "buy": {
       "zh": "购票",
-      "ja": "",
-      "en": ""
+      "ja": "チケット購入",
+      "en": "Buy Ticket"
     },
     "time": {
       "zh": "分",
@@ -113,12 +113,12 @@
     "specialSpecPrice": {
       "zh": "特殊上映价格",
       "ja": "特別上映料金",
-      "en": ""
+      "en": "Special Screening Price"
     },
     "ticketTypePrice": {
       "zh": "普通影票价格",
       "ja": "基本料金",
-      "en": ""
+      "en": "Standard Ticket Price"
     },
     "maxSelectSeat": {
       "zh": "最大可选座位数",
@@ -127,32 +127,26 @@
     },
     "theaterSpec": {
       "zh": "影厅信息",
-      "ja": "",
-      "en": ""
+      "ja": "シアター情報",
+      "en": "Theater Info"
     },
     "seatCount": {
       "zh": {
         "text": "{seatCount}个座位",
         "placeholders": {
-          "seatCount": {
-            "type": "int"
-          }
+          "seatCount": {"type": "int"}
         }
       },
       "ja": {
         "text": "{seatCount}席",
         "placeholders": {
-          "seatCount": {
-            "type": "int"
-          }
+          "seatCount": {"type": "int"}
         }
       },
       "en": {
         "text": "{seatCount} seats",
         "placeholders": {
-          "seatCount": {
-            "type": "int"
-          }
+          "seatCount": {"type": "int"}
         }
       }
     }
@@ -162,25 +156,19 @@
       "zh": {
         "text": "最大选座数量不能超过{maxSeat}个",
         "placeholders": {
-          "maxSeat": {
-            "type": "int"
-          }
+          "maxSeat": {"type": "int"}
         }
       },
       "ja": {
         "text": "最大{maxSeat}席までお選びいただけます",
         "placeholders": {
-          "maxSeat": {
-            "type": "int"
-          }
+          "maxSeat": {"type": "int"}
         }
       },
       "en": {
         "text": "A maximum of {maxSeat} seats can be selected",
         "placeholders": {
-          "maxSeat": {
-            "type": "int"
-          }
+          "maxSeat": {"type": "int"}
         }
       }
     },
@@ -314,13 +302,13 @@
           },
           "undo": {
             "zh": "撤销",
-            "ja": "キャンセル",
-            "en": "Revocation"
+            "ja": "元に戻す",
+            "en": "Undo"
           },
           "redo": {
             "zh": "恢复撤销",
-            "ja": "元に戻す",
-            "en": "Restore Undo"
+            "ja": "やり直す",
+            "en": "Redo"
           },
           "reset": {
             "zh": "重置",
@@ -337,8 +325,8 @@
         },
         "success": {
           "zh": "验证码发送成功",
-          "ja": "",
-          "en": ""
+          "ja": "認証コードが送信されました",
+          "en": "Verification code sent successfully"
         }
       }
     },
@@ -351,7 +339,7 @@
         },
         "wheelChair": {
           "zh": "轮椅座",
-          "ja": "輪椅シート",
+          "ja": "車椅子席",
           "en": "Wheelchair Seat"
         },
         "disabled": {
@@ -417,7 +405,7 @@
       "point": {
         "zh": "分",
         "ja": "点",
-        "en": " point"
+        "en": "point"
       },
       "jpy": {
         "zh": "日元",
@@ -455,13 +443,13 @@
       "verify": {
         "notNull": {
           "zh": "密码不能为空",
-          "ja": "",
-          "en": ""
+          "ja": "パスワードを入力してください",
+          "en": "Password cannot be empty"
         },
         "isValid": {
           "zh": "密码必须为8-16位，包含数字、字母和下划线",
-          "ja": "",
-          "en": ""
+          "ja": "8〜16文字の英数字とアンダースコアを含めてください",
+          "en": "Password must be 8-16 characters with letters, numbers, and underscores"
         }
       }
     },
@@ -472,17 +460,17 @@
     },
     "verificationCode": {
       "zh": "验证码",
-      "ja": "",
-      "en": ""
+      "ja": "認証コード",
+      "en": "Verification Code"
     },
     "sendVerifyCodeButton": {
       "zh": "发送验证码",
-      "ja": "",
-      "en": ""
+      "ja": "認証コードを送信",
+      "en": "Send Verification Code"
     },
     "noAccount": {
       "zh": "还没有注册账号？",
-      "ja": "",
+      "ja": "アカウントをお持ちでない方はこちら",
       "en": "Don't have an account?"
     }
   },
@@ -490,33 +478,33 @@
     "repeatPassword": {
       "text": {
         "zh": "重复密码",
-        "ja": "",
+        "ja": "パスワード（確認）",
         "en": "Repeat Password"
       },
       "verify": {
         "notNull": {
           "zh": "重复密码不能为空",
-          "ja": "",
-          "en": ""
+          "ja": "確認用パスワードを入力してください",
+          "en": "Repeat password cannot be empty"
         },
         "isValid": {
           "zh": "重复密码必须为8-16位，包含数字、字母和下划线",
-          "ja": "",
-          "en": ""
+          "ja": "8〜16文字の英数字とアンダースコアを含めてください",
+          "en": "Repeat password must be 8-16 characters with letters, numbers, and underscores"
         }
       }
     },
     "username": {
       "text": {
         "zh": "用户名称",
-        "ja": "",
+        "ja": "ユーザー名",
         "en": "UserName"
       },
       "verify": {
         "notNull": {
           "zh": "用户名不能为空",
-          "ja": "",
-          "en": ""
+          "ja": "ユーザー名を入力してください",
+          "en": "Username cannot be empty"
         }
       }
     },
@@ -529,34 +517,34 @@
       "verify": {
         "notNull": {
           "zh": "验证码不能为空",
-          "ja": "",
-          "en": ""
+          "ja": "認証コードを入力してください",
+          "en": "Verification code cannot be empty"
         },
         "isValid": {
           "zh": "验证码必须是6位纯数字",
-          "ja": "",
-          "en": ""
+          "ja": "6桁の数字を入力してください",
+          "en": "Verification code must be 6 digits"
         }
       }
     },
     "registerButton": {
       "zh": "注册并登录",
-      "ja": "",
+      "ja": "登録してログイン",
       "en": "Register"
     },
     "send": {
       "zh": "发送",
-      "ja": "",
-      "en": "send"
+      "ja": "送信",
+      "en": "Send"
     },
     "haveAccount": {
       "zh": "已经有账号了？",
-      "ja": "",
+      "ja": "すでにアカウントをお持ちですか？",
       "en": "Already have an account?"
     },
     "loginHere": {
       "zh": "点击登录",
-      "ja": "",
+      "ja": "こちらからログイン",
       "en": "Click Here"
     }
   },
@@ -583,51 +571,51 @@
     "comingSoon": {
       "noDate": {
         "zh": "日期待定",
-        "ja": "",
-        "en": ""
+        "ja": "日程未定",
+        "en": "Date TBD"
       }
     },
     "placeholder": {
       "zh": "搜索全部电影",
-      "ja": "",
-      "en": ""
+      "ja": "すべての映画を検索",
+      "en": "Search all movies"
     },
     "buy": {
       "zh": "购票",
-      "ja": "",
-      "en": ""
+      "ja": "チケット購入",
+      "en": "Buy Ticket"
     }
   },
   "cinemaList": {
     "address": {
       "zh": "正在获取当前位置",
-      "ja": "",
-      "en": ""
+      "ja": "現在地を取得中",
+      "en": "Getting current location"
     }
   },
   "movieDetail": {
     "button": {
       "want": {
         "zh": "想看",
-        "ja": "",
-        "en": ""
+        "ja": "見たい",
+        "en": "Want to Watch"
       },
       "saw": {
         "zh": "看过",
-        "ja": "",
-        "en": ""
+        "ja": "見た",
+        "en": "Watched"
       },
       "buy": {
         "zh": "购票",
-        "ja": "",
-        "en": ""
+        "ja": "チケット購入",
+        "en": "Buy Ticket"
       }
     },
     "comment": {
       "reply": {
         "zh": "回复",
-        "ja": "",
-        "en": "reply"
+        "ja": "返信",
+        "en": "Reply"
       },
       "replyTo": {
         "zh": {
@@ -653,10 +641,11 @@
               "type": "String"
             }
           }
+        }
       },
       "translate": {
         "zh": {
-        "text": "翻译为{language}",
+          "text": "翻译为{language}",
           "placeholders": {
             "language": {
               "type": "String"
@@ -665,93 +654,92 @@
         },
         "ja": {
           "text": "{language}へ翻訳",
-            "placeholders": {
-              "language": {
-                "type": "String"
-              }
+          "placeholders": {
+            "language": {
+              "type": "String"
             }
-          },
+          }
+        },
         "en": {
           "text": "Translate to {language}",
-            "placeholders": {
-              "language": {
-                "type": "String"
-              }
+          "placeholders": {
+            "language": {
+              "type": "String"
             }
           }
         }
       },
       "delete": {
         "zh": "删除",
-        "ja": "",
+        "ja": "削除",
         "en": "Delete"
       }
     },
     "writeComment": {
       "zh": "写评论",
-      "ja": "",
-      "en": "Write comment"
+      "ja": "コメントを書く",
+      "en": "Write Comment"
     },
     "detail": {
       "noDate": {
         "zh": "上映日期待定",
-        "ja": "",
-        "en": ""
+        "ja": "上映日未定",
+        "en": "Release date TBD"
       },
       "basicMessage": {
         "zh": "基本信息",
-        "ja": "",
-        "en": ""
+        "ja": "基本情報",
+        "en": "Basic Info"
       },
       "originalName": {
         "zh": "原名",
-        "ja": "",
-        "en": ""
+        "ja": "原題",
+        "en": "Original Title"
       },
       "time": {
         "zh": "时长",
-        "ja": "",
-        "en": ""
+        "ja": "上映時間",
+        "en": "Duration"
       },
       "spec": {
         "zh": "上映规格",
-        "ja": "",
-        "en": ""
+        "ja": "上映仕様",
+        "en": "Screening Spec"
       },
       "tags": {
         "zh": "标签",
-        "ja": "",
-        "en": ""
+        "ja": "タグ",
+        "en": "Tags"
       },
       "homepage": {
         "zh": "官网",
-        "ja": "",
-        "en": ""
+        "ja": "公式サイト",
+        "en": "Official Website"
       },
       "state": {
         "zh": "上映状态",
-        "ja": "",
-        "en": ""
+        "ja": "上映状況",
+        "en": "Screening Status"
       },
       "level": {
         "zh": "分级",
-        "ja": "",
-        "en": ""
+        "ja": "レーティング",
+        "en": "Rating"
       },
       "staff": {
         "zh": "工作人员",
-        "ja": "",
-        "en": ""
+        "ja": "スタッフ",
+        "en": "Staff"
       },
       "character": {
         "zh": "角色",
-        "ja": "",
-        "en": ""
+        "ja": "キャラクター",
+        "en": "Character"
       },
       "comment": {
         "zh": "评论",
-        "ja": "",
-        "en": ""
+        "ja": "コメント",
+        "en": "Comment"
       },
       "totalReplyMessage": {
         "zh": {
@@ -784,12 +772,12 @@
   "commentDetail": {
     "title": {
       "zh": "评论详情",
-      "ja": "",
+      "ja": "コメント詳細",
       "en": "Comment Detail"
     },
     "replyComment": {
       "zh": "评论回复",
-      "ja": "",
+      "ja": "コメント返信",
       "en": "Comment Reply"
     },
     "totalReplyMessage": {
@@ -847,7 +835,7 @@
       },
       "button": {
         "zh": "回复",
-        "ja": "",
+        "ja": "返信",
         "en": "Reply"
       }
     }
@@ -860,18 +848,18 @@
     },
     "title": {
       "zh": "选择电影票类型",
-      "ja": "",
-      "en": ""
+      "ja": "映画チケットの種類を選択してください",
+      "en": "Select Movie Ticket Type"
     },
     "seatNumber": {
       "zh": "座位号",
-      "ja": "",
-      "en": ""
+      "ja": "座席番号",
+      "en": "Seat Number"
     },
     "selectMovieTicketType": {
       "zh": "请选择电影票类型",
-      "ja": "",
-      "en": ""
+      "ja": "映画チケットの種類を選んでください",
+      "en": "Please select a movie ticket type"
     },
     "confirmOrder": {
       "zh": "确认订单",
@@ -882,8 +870,8 @@
   "confirmOrder": {
     "title": {
       "zh": "确认订单",
-      "ja": "",
-      "en": ""
+      "ja": "注文確認",
+      "en": "Confirm Order"
     },
     "total": {
       "zh": "合计",
@@ -892,8 +880,8 @@
     },
     "selectPayMethod": {
       "zh": "选择支付方式",
-      "ja": "",
-      "en": ""
+      "ja": "支払い方法を選択してください",
+      "en": "Select Payment Method"
     },
     "pay": {
       "zh": "支付",
@@ -904,35 +892,35 @@
   "user": {
     "title": {
       "zh": "我的",
-      "ja": "",
-      "en": ""
+      "ja": "マイページ",
+      "en": "My Profile"
     },
     "data": {
       "orderCount": {
         "zh": "订单数",
-        "ja": "",
-        "en": ""
+        "ja": "注文数",
+        "en": "Order Count"
       },
       "wantCount": {
         "zh": "想看数",
-        "ja": "",
-        "en": ""
+        "ja": "観たい数",
+        "en": "Want to Watch Count"
       },
       "characterCount": {
         "zh": "演员数",
-        "ja": "",
-        "en": ""
+        "ja": "キャラクター数",
+        "en": "Character Count"
       },
       "staffCount": {
         "zh": "工作人员数",
-        "ja": "",
-        "en": ""
+        "ja": "スタッフ数",
+        "en": "Staff Count"
       }
     },
     "registerTime": {
       "zh": "注册时间",
-      "ja": "",
-      "en": ""
+      "ja": "登録日時",
+      "en": "Registration Time"
     },
     "language": {
       "zh": "语言",
@@ -941,57 +929,57 @@
     },
     "editProfile": {
       "zh": "编辑个人信息",
-      "ja": "",
-      "en": ""
+      "ja": "プロフィール編集",
+      "en": "Edit Profile"
     },
     "privateAgreement": {
       "zh": "隐私协议",
-      "ja": "",
-      "en": ""
+      "ja": "プライバシーポリシー",
+      "en": "Privacy Agreement"
     },
     "checkUpdate": {
       "zh": "检查更新",
-      "ja": "",
-      "en": ""
+      "ja": "アップデート確認",
+      "en": "Check Update"
     },
     "about": {
       "zh": "关于",
-      "ja": "",
-      "en": ""
+      "ja": "アプリについて",
+      "en": "About"
     },
     "logout": {
       "zh": "退出登录",
-      "ja": "",
-      "en": ""
+      "ja": "ログアウト",
+      "en": "Logout"
     }
   },
   "orderList": {
     "title": {
       "zh": "订单列表",
-      "ja": "",
-      "en": ""
+      "ja": "注文一覧",
+      "en": "Order List"
     },
     "orderNumber": {
       "zh": "订单号",
-      "ja": "",
-      "en": ""
+      "ja": "注文番号",
+      "en": "Order Number"
     },
     "comment": {
       "zh": "评论",
       "ja": "コメント",
-      "en": "comment"
+      "en": "Comment"
     }
   },
   "orderDetail": {
     "title": {
       "zh": "订单详情",
-      "ja": "",
-      "en": ""
+      "ja": "注文詳細",
+      "en": "Order Detail"
     },
     "ticketCode": {
       "zh": "取票码",
       "ja": "チケットコード",
-      "en": "Ticket collection code"
+      "en": "Ticket Collection Code"
     },
     "ticketCount": {
       "zh": {
@@ -1003,7 +991,7 @@
         }
       },
       "ja": {
-        "text": "",
+        "text": "映画チケット {ticketCount} 枚",
         "placeholders": {
           "ticketCount": {
             "type": "int"
@@ -1011,7 +999,7 @@
         }
       },
       "en": {
-        "text": "",
+        "text": "{ticketCount} Movie Tickets",
         "placeholders": {
           "ticketCount": {
             "type": "int"
@@ -1021,102 +1009,121 @@
     },
     "orderNumber": {
       "zh": "订单号",
-      "ja": "",
-      "en": ""
+      "ja": "注文番号",
+      "en": "Order Number"
     },
     "orderState": {
       "zh": "订单状态",
-      "ja": "",
-      "en": ""
+      "ja": "注文状態",
+      "en": "Order Status"
     },
     "orderCreateTime": {
       "zh": "订单创建时间",
-      "ja": "",
-      "en": ""
+      "ja": "注文作成日時",
+      "en": "Order Creation Time"
     },
     "payTime": {
       "zh": "支付时间",
-      "ja": "",
-      "en": ""
+      "ja": "支払日時",
+      "en": "Payment Time"
     },
     "payMethod": {
       "zh": "支付方式",
-      "ja": "",
-      "en": ""
+      "ja": "支払い方法",
+      "en": "Payment Method"
     },
     "seatMessage": {
       "zh": "座位信息",
-      "ja": "",
-      "en": ""
+      "ja": "座席情報",
+      "en": "Seat Information"
     },
     "orderMessage": {
       "zh": "订单信息",
-      "ja": "",
-      "en": ""
+      "ja": "注文情報",
+      "en": "Order Information"
     }
   },
   "payResult": {
     "title":  {
       "zh": "支付完成",
       "ja": "支払い完了",
-      "en": "Pay Succeed"
+      "en": "Payment Successful"
     },
     "success": {
       "zh": "您的订单已经支付完成，请在以下时间之前到达以下地点，祝您观影愉快。",
-      "ja": "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。",
-      "en": "Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie."
+      "ja": "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。良い映画鑑賞をお楽しみください。",
+      "en": "Your order has been paid. Please arrive at the following location before the specified time. Enjoy your movie."
     },
     "ticketCode": {
       "zh": "取票码",
       "ja": "チケットコード",
-      "en": "Ticket collection code"
+      "en": "Ticket Collection Code"
     }
   },
   "userProfile": {
     "title": {
       "zh": "个人信息",
-      "ja": "",
-      "en": ""
+      "ja": "個人情報",
+      "en": "User Profile"
     },
     "avatar": {
       "zh": "头像",
-      "ja": "",
-      "en": ""
+      "ja": "アバター",
+      "en": "Avatar"
     },
     "username": {
       "zh": "用户名",
-      "ja": "",
-      "en": ""
+      "ja": "ユーザー名",
+      "en": "Username"
     },
     "email": {
       "zh": "邮箱",
-      "ja": "",
+      "ja": "メール",
       "en": "Email"
     },
     "registerTime": {
       "zh": "注册时间",
-      "ja": "",
+      "ja": "登録日時",
       "en": "Register Time"
     },
     "save": {
       "zh": "保存",
-      "ja": "",
+      "ja": "保存",
       "en": "Save"
     },
     "edit": {
       "username": {
         "placeholder": {
           "zh": "请输入用户名",
-          "ja": "",
+          "ja": "ユーザー名を入力してください",
           "en": "Please enter your username"
         },
         "verify": {
           "notNull": {
             "zh": "用户名不能为空",
-            "ja": "",
-            "en": ""
+            "ja": "ユーザー名は必須です",
+            "en": "Username cannot be empty"
           }
         }
+      }
+    }
+  },
+  "movieShowList": {
+    "dropdown": {
+      "area": {
+        "zh": "地区",
+        "ja": "地域",
+        "en": "Area"
+      },
+      "screenSpec": {
+        "zh": "放映规格",
+        "ja": "上映仕様",
+        "en": "Screen Spec"
+      },
+      "subtitle": {
+        "zh": "字幕",
+        "ja": "字幕",
+        "en": "Subtitle"
       }
     }
   }

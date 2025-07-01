@@ -70,10 +70,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Comment cannot be empty`
   String get writeComment_verify_notNull {
     return Intl.message(
-      '',
+      'Comment cannot be empty',
       name: 'writeComment_verify_notNull',
       desc: '',
       args: [],
@@ -1735,6 +1735,36 @@ class S {
     return Intl.message(
       '',
       name: 'userProfile_edit_username_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Area`
+  String get movieShowList_dropdown_area {
+    return Intl.message(
+      'Area',
+      name: 'movieShowList_dropdown_area',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Screen Spec`
+  String get movieShowList_dropdown_screenSpec {
+    return Intl.message(
+      'Screen Spec',
+      name: 'movieShowList_dropdown_screenSpec',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subtitle`
+  String get movieShowList_dropdown_subtitle {
+    return Intl.message(
+      'Subtitle',
+      name: 'movieShowList_dropdown_subtitle',
       desc: '',
       args: [],
     );

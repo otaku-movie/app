@@ -189,6 +189,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("即将上映"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("上映中"),
+        "movieShowList_dropdown_area":
+            MessageLookupByLibrary.simpleMessage("地区"),
+        "movieShowList_dropdown_screenSpec":
+            MessageLookupByLibrary.simpleMessage("放映规格"),
+        "movieShowList_dropdown_subtitle":
+            MessageLookupByLibrary.simpleMessage("字幕"),
         "movieTicketType_confirmOrder":
             MessageLookupByLibrary.simpleMessage("确认订单"),
         "movieTicketType_seatNumber":

@@ -186,6 +186,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Coming Soon"),
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("Currently Showing"),
+        "movieShowList_dropdown_area":
+            MessageLookupByLibrary.simpleMessage("Area"),
+        "movieShowList_dropdown_screenSpec":
+            MessageLookupByLibrary.simpleMessage("Screen Spec"),
+        "movieShowList_dropdown_subtitle":
+            MessageLookupByLibrary.simpleMessage("Subtitle"),
         "movieTicketType_confirmOrder":
             MessageLookupByLibrary.simpleMessage("Confirm Order"),
         "movieTicketType_seatNumber": MessageLookupByLibrary.simpleMessage(""),
@@ -286,7 +292,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "writeComment_release": MessageLookupByLibrary.simpleMessage("Release"),
         "writeComment_title":
             MessageLookupByLibrary.simpleMessage("Write comment"),
-        "writeComment_verify_notNull": MessageLookupByLibrary.simpleMessage(""),
+        "writeComment_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("Comment cannot be empty"),
         "writeComment_verify_notRate": MessageLookupByLibrary.simpleMessage("")
       };
 }

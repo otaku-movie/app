@@ -2,9 +2,9 @@
   "@@locale": "ja",
   "writeComment_title": "",
   "writeComment_hint": "",
-  "writeComment_verify_notNull": "",
+  "writeComment_verify_notNull": "コメントを入力してください",
   "writeComment_verify_notRate": "",
-  "writeComment_release": "",
+  "writeComment_release": "リリース",
   "search_noData": "まだデータがありません",
   "search_placeholder": "",
   "search_history": "検索履歴",
@@ -224,5 +224,8 @@
   "userProfile_registerTime": "",
   "userProfile_save": "",
   "userProfile_edit_username_placeholder": "",
-  "userProfile_edit_username_verify_notNull": ""
+  "userProfile_edit_username_verify_notNull": "",
+  "movieShowList_dropdown_area": "地域",
+  "movieShowList_dropdown_screenSpec": "上映仕様",
+  "movieShowList_dropdown_subtitle": "字幕"
 }

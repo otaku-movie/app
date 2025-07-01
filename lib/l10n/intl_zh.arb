@@ -224,5 +224,8 @@
   "userProfile_registerTime": "注册时间",
   "userProfile_save": "保存",
   "userProfile_edit_username_placeholder": "请输入用户名",
-  "userProfile_edit_username_verify_notNull": "用户名不能为空"
+  "userProfile_edit_username_verify_notNull": "用户名不能为空",
+  "movieShowList_dropdown_area": "地区",
+  "movieShowList_dropdown_screenSpec": "放映规格",
+  "movieShowList_dropdown_subtitle": "字幕"
 }
