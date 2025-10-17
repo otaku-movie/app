@@ -13,6 +13,7 @@ class CinemaDetailResponse {
     final String? description;
     
     final String? address;
+    final String? fullAddress;
     
     final String? tel;
     
@@ -33,6 +34,7 @@ class CinemaDetailResponse {
         this.name,
         this.description,
         this.address,
+        this.fullAddress,
         this.tel,
         this.homePage,
         this.maxSelectSeatCount,

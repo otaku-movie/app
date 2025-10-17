@@ -171,7 +171,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text('${S.of(context).cinemaDetail_address}：${data.address}'),
+                          child: Text('${S.of(context).cinemaDetail_address}：${data.fullAddress}'),
                         ),
                         const Icon(Icons.location_on, color: Colors.red)
                       ],
@@ -200,18 +200,29 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                     ),
                   ),
                   Space(
+                    direction: 'row', // 关键：横向排列
                     children: [
                       Text('${S.of(context).cinemaDetail_homepage}：'),
-                      GestureDetector(
-                        onTap: () {
-                          launchURL(data.homePage ?? '');
-                        },
-                        child:  Text(data.homePage ?? '', style: const TextStyle(
-                          color: Color.fromARGB(255, 5, 32, 239)
-                        )),
+                      SizedBox(
+                        width: 600.w,
+                        child: GestureDetector(
+                          onTap: () {
+                            launchURL(data.homePage ?? '');
+                          },
+                          child: Text(
+                            data.homePage ?? '',
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 5, 32, 239),
+                            ),
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
                       ),
-                    ]
+                    ],
                   ),
+                 
                   Space(
                     children: [
                       Text('${S.of(context).cinemaDetail_maxSelectSeat}：'),

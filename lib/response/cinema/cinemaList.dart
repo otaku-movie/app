@@ -13,6 +13,7 @@ class CinemaListResponse {
     final String? description;
     
     final String? address;
+    final String? fullAddress;
     
     final String? tel;
     
@@ -35,6 +36,7 @@ class CinemaListResponse {
         this.name,
         this.description,
         this.address,
+        this.fullAddress,
         this.distance,
         this.tel,
         this.homePage,
