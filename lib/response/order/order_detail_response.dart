@@ -41,7 +41,8 @@ class OrderDetailResponse {
     final dynamic cinemaId;
     
     final String? cinemaName;
-    
+
+    final String? cinemaFullAddress;
     final String? theaterHallName;
     
     final String? theaterHallSpecName;
@@ -67,6 +68,7 @@ class OrderDetailResponse {
         this.moviePoster,
         this.cinemaId,
         this.cinemaName,
+        this.cinemaFullAddress,
         this.theaterHallName,
         this.theaterHallSpecName,
         this.seat,

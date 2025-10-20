@@ -7,6 +7,7 @@ import 'package:otaku_movie/pages/cinema/cinemaDetail.dart';
 import 'package:otaku_movie/pages/movie/commentDetail.dart';
 import 'package:otaku_movie/pages/movie/writeComment.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
+import 'package:otaku_movie/pages/tab/Ticket.dart';
 import 'package:otaku_movie/pages/user/User.dart';
 import 'package:otaku_movie/pages/movie/SelectMovieTicket.dart';
 import 'package:otaku_movie/pages/movie/SelectSeatPage.dart';
@@ -114,6 +115,13 @@ final GoRouter routerConfig = GoRouter(
             return const MovieList();
           },
         ),
+         GoRoute(
+          path: '/user/ticket',
+          name: 'ticketList',
+          builder: (BuildContext context, GoRouterState state) {
+            return const Ticket();
+          },
+        ),
         GoRoute(
           path: '/movie/detail/:id',
           name: 'movieDetail',
@@ -156,8 +164,8 @@ final GoRouter routerConfig = GoRouter(
           name: 'selectSeat',
           builder: (BuildContext context, GoRouterState state) {
             return SelectSeatPage(
-              id: state.uri.queryParameters['id'], 
-              theaterHallId: state.uri.queryParameters['theaterHallId']
+              id: state.uri.queryParameters['id'] ?? '', 
+              theaterHallId: state.uri.queryParameters['theaterHallId'] ?? ''
             );
           },
         ),

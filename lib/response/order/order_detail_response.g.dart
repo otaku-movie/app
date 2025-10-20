@@ -26,6 +26,7 @@ OrderDetailResponse _$OrderDetailResponseFromJson(Map<String, dynamic> json) =>
       moviePoster: json['moviePoster'] as String?,
       cinemaId: json['cinemaId'],
       cinemaName: json['cinemaName'] as String?,
+      cinemaFullAddress: json['cinemaFullAddress'] as String?,
       theaterHallName: json['theaterHallName'] as String?,
       theaterHallSpecName: json['theaterHallSpecName'] as String?,
       seat: (json['seat'] as List<dynamic>?)
@@ -54,6 +55,7 @@ Map<String, dynamic> _$OrderDetailResponseToJson(
       'moviePoster': instance.moviePoster,
       'cinemaId': instance.cinemaId,
       'cinemaName': instance.cinemaName,
+      'cinemaFullAddress': instance.cinemaFullAddress,
       'theaterHallName': instance.theaterHallName,
       'theaterHallSpecName': instance.theaterHallSpecName,
       'seat': instance.seat?.map((e) => e.toJson()).toList(),

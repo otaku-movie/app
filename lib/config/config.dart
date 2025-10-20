@@ -18,13 +18,13 @@ class EnvironmentConfig {
       case EnvironmentType.dev:
         return const EnvironmentConfig(
           apiUrl: 'http://192.168.3.4:8080/api',
-          imageBaseUrl: 'https://drive.bangumi.xyz/test-movie',
+          imageBaseUrl: 'http://drive.bangumi.xyz:9000/test-movie',
           appTitle: 'Dev Otaku Movie',
         );
       case EnvironmentType.test:
         return const EnvironmentConfig(
           apiUrl: 'http://test-api.otaku-movie.com/api',
-          imageBaseUrl: 'https://drive.bangumi.xyz/test-movie',
+          imageBaseUrl: 'https://drive.bangumi.xyz:9000/test-movie',
           appTitle: 'Test Otaku Movie',
         );
       case EnvironmentType.preprod:
@@ -36,7 +36,7 @@ class EnvironmentConfig {
       case EnvironmentType.prod:
         return const EnvironmentConfig(
           apiUrl: '',
-          imageBaseUrl: 'https://drive.bangumi.xyz/test-movie',
+          imageBaseUrl: 'https://cdn.otaku-movie.com/images',
           appTitle: 'Prod Otaku Movie',
         );
     }

@@ -80,10 +80,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Please rate the movie`
   String get writeComment_verify_notRate {
     return Intl.message(
-      '',
+      'Please rate the movie',
       name: 'writeComment_verify_notRate',
       desc: '',
       args: [],
@@ -110,10 +110,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Search all movies`
   String get search_placeholder {
     return Intl.message(
-      '',
+      'Search all movies',
       name: 'search_placeholder',
       desc: '',
       args: [],
@@ -130,40 +130,40 @@ class S {
     );
   }
 
-  /// ``
+  /// `Delete History`
   String get search_removeHistoryConfirm_title {
     return Intl.message(
-      '',
+      'Delete History',
       name: 'search_removeHistoryConfirm_title',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Are you sure you want to delete your search history?`
   String get search_removeHistoryConfirm_content {
     return Intl.message(
-      '',
+      'Are you sure you want to delete your search history?',
       name: 'search_removeHistoryConfirm_content',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Confirm`
   String get search_removeHistoryConfirm_confirm {
     return Intl.message(
-      '',
+      'Confirm',
       name: 'search_removeHistoryConfirm_confirm',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Cancel`
   String get search_removeHistoryConfirm_cancel {
     return Intl.message(
-      '',
+      'Cancel',
       name: 'search_removeHistoryConfirm_cancel',
       desc: '',
       args: [],
@@ -190,10 +190,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Buy Ticket`
   String get showTimeDetail_buy {
     return Intl.message(
-      '',
+      'Buy Ticket',
       name: 'showTimeDetail_buy',
       desc: '',
       args: [],
@@ -250,20 +250,20 @@ class S {
     );
   }
 
-  /// ``
+  /// `Special Screening Price`
   String get cinemaDetail_specialSpecPrice {
     return Intl.message(
-      '',
+      'Special Screening Price',
       name: 'cinemaDetail_specialSpecPrice',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Standard Ticket Price`
   String get cinemaDetail_ticketTypePrice {
     return Intl.message(
-      '',
+      'Standard Ticket Price',
       name: 'cinemaDetail_ticketTypePrice',
       desc: '',
       args: [],
@@ -280,10 +280,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Theater Info`
   String get cinemaDetail_theaterSpec {
     return Intl.message(
-      '',
+      'Theater Info',
       name: 'cinemaDetail_theaterSpec',
       desc: '',
       args: [],
@@ -340,6 +340,16 @@ class S {
     );
   }
 
+  /// `My Ticket`
+  String get home_ticket {
+    return Intl.message(
+      'My Ticket',
+      name: 'home_ticket',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `cinema`
   String get home_cinema {
     return Intl.message(
@@ -357,6 +367,286 @@ class S {
       name: 'home_me',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Show Time`
+  String get ticket_showTime {
+    return Intl.message(
+      'Show Time',
+      name: 'ticket_showTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expected End Time`
+  String get ticket_endTime {
+    return Intl.message(
+      'Expected End Time',
+      name: 'ticket_endTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seat Count`
+  String get ticket_seatCount {
+    return Intl.message(
+      'Seat Count',
+      name: 'ticket_seatCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No ticket yet`
+  String get ticket_noData {
+    return Intl.message(
+      'No ticket yet',
+      name: 'ticket_noData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy tickets now!`
+  String get ticket_noDataTip {
+    return Intl.message(
+      'Buy tickets now!',
+      name: 'ticket_noDataTip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Valid`
+  String get ticket_status_valid {
+    return Intl.message(
+      'Valid',
+      name: 'ticket_status_valid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used`
+  String get ticket_status_used {
+    return Intl.message(
+      'Used',
+      name: 'ticket_status_used',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expired`
+  String get ticket_status_expired {
+    return Intl.message(
+      'Expired',
+      name: 'ticket_status_expired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancelled`
+  String get ticket_status_cancelled {
+    return Intl.message(
+      'Cancelled',
+      name: 'ticket_status_cancelled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time unknown`
+  String get ticket_time_unknown {
+    return Intl.message(
+      'Time unknown',
+      name: 'ticket_time_unknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time format error`
+  String get ticket_time_formatError {
+    return Intl.message(
+      'Time format error',
+      name: 'ticket_time_formatError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{days} days left`
+  String ticket_time_remaining_days(Object days) {
+    return Intl.message(
+      '$days days left',
+      name: 'ticket_time_remaining_days',
+      desc: '',
+      args: [days],
+    );
+  }
+
+  /// `{hours} hours left`
+  String ticket_time_remaining_hours(Object hours) {
+    return Intl.message(
+      '$hours hours left',
+      name: 'ticket_time_remaining_hours',
+      desc: '',
+      args: [hours],
+    );
+  }
+
+  /// `{minutes} minutes left`
+  String ticket_time_remaining_minutes(Object minutes) {
+    return Intl.message(
+      '$minutes minutes left',
+      name: 'ticket_time_remaining_minutes',
+      desc: '',
+      args: [minutes],
+    );
+  }
+
+  /// `Starting soon`
+  String get ticket_time_remaining_soon {
+    return Intl.message(
+      'Starting soon',
+      name: 'ticket_time_remaining_soon',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mon`
+  String get ticket_time_weekdays_monday {
+    return Intl.message(
+      'Mon',
+      name: 'ticket_time_weekdays_monday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tue`
+  String get ticket_time_weekdays_tuesday {
+    return Intl.message(
+      'Tue',
+      name: 'ticket_time_weekdays_tuesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wed`
+  String get ticket_time_weekdays_wednesday {
+    return Intl.message(
+      'Wed',
+      name: 'ticket_time_weekdays_wednesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thu`
+  String get ticket_time_weekdays_thursday {
+    return Intl.message(
+      'Thu',
+      name: 'ticket_time_weekdays_thursday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fri`
+  String get ticket_time_weekdays_friday {
+    return Intl.message(
+      'Fri',
+      name: 'ticket_time_weekdays_friday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sat`
+  String get ticket_time_weekdays_saturday {
+    return Intl.message(
+      'Sat',
+      name: 'ticket_time_weekdays_saturday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sun`
+  String get ticket_time_weekdays_sunday {
+    return Intl.message(
+      'Sun',
+      name: 'ticket_time_weekdays_sunday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ticket Count`
+  String get ticket_ticketCount {
+    return Intl.message(
+      'Ticket Count',
+      name: 'ticket_ticketCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Purchased`
+  String get ticket_totalPurchased {
+    return Intl.message(
+      'Total Purchased',
+      name: 'ticket_totalPurchased',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` tickets`
+  String get ticket_tickets {
+    return Intl.message(
+      ' tickets',
+      name: 'ticket_tickets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap to view details`
+  String get ticket_tapToView {
+    return Intl.message(
+      'Tap to view details',
+      name: 'ticket_tapToView',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy Tickets`
+  String get ticket_buyTickets {
+    return Intl.message(
+      'Buy Tickets',
+      name: 'ticket_buyTickets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share movie ticket: {movieName}`
+  String ticket_shareTicket(Object movieName) {
+    return Intl.message(
+      'Share movie ticket: $movieName',
+      name: 'ticket_shareTicket',
+      desc: '',
+      args: [movieName],
     );
   }
 
@@ -540,20 +830,20 @@ class S {
     );
   }
 
-  /// `Revocation`
+  /// `Undo`
   String get common_components_cropper_actions_undo {
     return Intl.message(
-      'Revocation',
+      'Undo',
       name: 'common_components_cropper_actions_undo',
       desc: '',
       args: [],
     );
   }
 
-  /// `Restore Undo`
+  /// `Redo`
   String get common_components_cropper_actions_redo {
     return Intl.message(
-      'Restore Undo',
+      'Redo',
       name: 'common_components_cropper_actions_redo',
       desc: '',
       args: [],
@@ -580,10 +870,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Verification code sent successfully`
   String get common_components_sendVerifyCode_success {
     return Intl.message(
-      '',
+      'Verification code sent successfully',
       name: 'common_components_sendVerifyCode_success',
       desc: '',
       args: [],
@@ -720,10 +1010,10 @@ class S {
     );
   }
 
-  /// ` point`
+  /// `point`
   String get common_unit_point {
     return Intl.message(
-      ' point',
+      'point',
       name: 'common_unit_point',
       desc: '',
       args: [],
@@ -780,20 +1070,20 @@ class S {
     );
   }
 
-  /// ``
+  /// `Password cannot be empty`
   String get login_password_verify_notNull {
     return Intl.message(
-      '',
+      'Password cannot be empty',
       name: 'login_password_verify_notNull',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Password must be 8-16 characters with letters, numbers, and underscores`
   String get login_password_verify_isValid {
     return Intl.message(
-      '',
+      'Password must be 8-16 characters with letters, numbers, and underscores',
       name: 'login_password_verify_isValid',
       desc: '',
       args: [],
@@ -810,20 +1100,20 @@ class S {
     );
   }
 
-  /// ``
+  /// `Verification Code`
   String get login_verificationCode {
     return Intl.message(
-      '',
+      'Verification Code',
       name: 'login_verificationCode',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Send Verification Code`
   String get login_sendVerifyCodeButton {
     return Intl.message(
-      '',
+      'Send Verification Code',
       name: 'login_sendVerifyCodeButton',
       desc: '',
       args: [],
@@ -850,20 +1140,20 @@ class S {
     );
   }
 
-  /// ``
+  /// `Repeat password cannot be empty`
   String get register_repeatPassword_verify_notNull {
     return Intl.message(
-      '',
+      'Repeat password cannot be empty',
       name: 'register_repeatPassword_verify_notNull',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Repeat password must be 8-16 characters with letters, numbers, and underscores`
   String get register_repeatPassword_verify_isValid {
     return Intl.message(
-      '',
+      'Repeat password must be 8-16 characters with letters, numbers, and underscores',
       name: 'register_repeatPassword_verify_isValid',
       desc: '',
       args: [],
@@ -880,10 +1170,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Username cannot be empty`
   String get register_username_verify_notNull {
     return Intl.message(
-      '',
+      'Username cannot be empty',
       name: 'register_username_verify_notNull',
       desc: '',
       args: [],
@@ -900,20 +1190,20 @@ class S {
     );
   }
 
-  /// ``
+  /// `Verification code cannot be empty`
   String get register_verifyCode_verify_notNull {
     return Intl.message(
-      '',
+      'Verification code cannot be empty',
       name: 'register_verifyCode_verify_notNull',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Verification code must be 6 digits`
   String get register_verifyCode_verify_isValid {
     return Intl.message(
-      '',
+      'Verification code must be 6 digits',
       name: 'register_verifyCode_verify_isValid',
       desc: '',
       args: [],
@@ -930,10 +1220,10 @@ class S {
     );
   }
 
-  /// `send`
+  /// `Send`
   String get register_send {
     return Intl.message(
-      'send',
+      'Send',
       name: 'register_send',
       desc: '',
       args: [],
@@ -990,80 +1280,70 @@ class S {
     );
   }
 
-  /// ``
+  /// `Date TBD`
   String get movieList_comingSoon_noDate {
     return Intl.message(
-      '',
+      'Date TBD',
       name: 'movieList_comingSoon_noDate',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Search all movies`
   String get movieList_placeholder {
     return Intl.message(
-      '',
+      'Search all movies',
       name: 'movieList_placeholder',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Buy Ticket`
   String get movieList_buy {
     return Intl.message(
-      '',
+      'Buy Ticket',
       name: 'movieList_buy',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
-  String get cinemaList_address {
-    return Intl.message(
-      '',
-      name: 'cinemaList_address',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// ``
+  /// `Want to Watch`
   String get movieDetail_button_want {
     return Intl.message(
-      '',
+      'Want to Watch',
       name: 'movieDetail_button_want',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Watched`
   String get movieDetail_button_saw {
     return Intl.message(
-      '',
+      'Watched',
       name: 'movieDetail_button_saw',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Buy Ticket`
   String get movieDetail_button_buy {
     return Intl.message(
-      '',
+      'Buy Ticket',
       name: 'movieDetail_button_buy',
       desc: '',
       args: [],
     );
   }
 
-  /// `reply`
+  /// `Reply`
   String get movieDetail_comment_reply {
     return Intl.message(
-      'reply',
+      'Reply',
       name: 'movieDetail_comment_reply',
       desc: '',
       args: [],
@@ -1081,10 +1361,10 @@ class S {
   }
 
   /// `Translate to {language}`
-  String movieDetail_comment_replyTo_translate(String language) {
+  String movieDetail_comment_translate(String language) {
     return Intl.message(
       'Translate to $language',
-      name: 'movieDetail_comment_replyTo_translate',
+      name: 'movieDetail_comment_translate',
       desc: '',
       args: [language],
     );
@@ -1100,130 +1380,130 @@ class S {
     );
   }
 
-  /// `Write comment`
+  /// `Write Comment`
   String get movieDetail_writeComment {
     return Intl.message(
-      'Write comment',
+      'Write Comment',
       name: 'movieDetail_writeComment',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Release date TBD`
   String get movieDetail_detail_noDate {
     return Intl.message(
-      '',
+      'Release date TBD',
       name: 'movieDetail_detail_noDate',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Basic Info`
   String get movieDetail_detail_basicMessage {
     return Intl.message(
-      '',
+      'Basic Info',
       name: 'movieDetail_detail_basicMessage',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Original Title`
   String get movieDetail_detail_originalName {
     return Intl.message(
-      '',
+      'Original Title',
       name: 'movieDetail_detail_originalName',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Duration`
   String get movieDetail_detail_time {
     return Intl.message(
-      '',
+      'Duration',
       name: 'movieDetail_detail_time',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Screening Spec`
   String get movieDetail_detail_spec {
     return Intl.message(
-      '',
+      'Screening Spec',
       name: 'movieDetail_detail_spec',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Tags`
   String get movieDetail_detail_tags {
     return Intl.message(
-      '',
+      'Tags',
       name: 'movieDetail_detail_tags',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Official Website`
   String get movieDetail_detail_homepage {
     return Intl.message(
-      '',
+      'Official Website',
       name: 'movieDetail_detail_homepage',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Screening Status`
   String get movieDetail_detail_state {
     return Intl.message(
-      '',
+      'Screening Status',
       name: 'movieDetail_detail_state',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Rating`
   String get movieDetail_detail_level {
     return Intl.message(
-      '',
+      'Rating',
       name: 'movieDetail_detail_level',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Staff`
   String get movieDetail_detail_staff {
     return Intl.message(
-      '',
+      'Staff',
       name: 'movieDetail_detail_staff',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Character`
   String get movieDetail_detail_character {
     return Intl.message(
-      '',
+      'Character',
       name: 'movieDetail_detail_character',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Comment`
   String get movieDetail_detail_comment {
     return Intl.message(
-      '',
+      'Comment',
       name: 'movieDetail_detail_comment',
       desc: '',
       args: [],
@@ -1300,30 +1580,30 @@ class S {
     );
   }
 
-  /// ``
+  /// `Select Movie Ticket Type`
   String get movieTicketType_title {
     return Intl.message(
-      '',
+      'Select Movie Ticket Type',
       name: 'movieTicketType_title',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Seat Number`
   String get movieTicketType_seatNumber {
     return Intl.message(
-      '',
+      'Seat Number',
       name: 'movieTicketType_seatNumber',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Please select a movie ticket type`
   String get movieTicketType_selectMovieTicketType {
     return Intl.message(
-      '',
+      'Please select a movie ticket type',
       name: 'movieTicketType_selectMovieTicketType',
       desc: '',
       args: [],
@@ -1340,10 +1620,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Confirm Order`
   String get confirmOrder_title {
     return Intl.message(
-      '',
+      'Confirm Order',
       name: 'confirmOrder_title',
       desc: '',
       args: [],
@@ -1360,10 +1640,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Select Payment Method`
   String get confirmOrder_selectPayMethod {
     return Intl.message(
-      '',
+      'Select Payment Method',
       name: 'confirmOrder_selectPayMethod',
       desc: '',
       args: [],
@@ -1380,60 +1660,70 @@ class S {
     );
   }
 
-  /// ``
+  /// `My Profile`
   String get user_title {
     return Intl.message(
-      '',
+      'My Profile',
       name: 'user_title',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Order Count`
   String get user_data_orderCount {
     return Intl.message(
-      '',
+      'Order Count',
       name: 'user_data_orderCount',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Watch History`
+  String get user_data_watchHistory {
+    return Intl.message(
+      'Watch History',
+      name: 'user_data_watchHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Want to Watch Count`
   String get user_data_wantCount {
     return Intl.message(
-      '',
+      'Want to Watch Count',
       name: 'user_data_wantCount',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Character Count`
   String get user_data_characterCount {
     return Intl.message(
-      '',
+      'Character Count',
       name: 'user_data_characterCount',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Staff Count`
   String get user_data_staffCount {
     return Intl.message(
-      '',
+      'Staff Count',
       name: 'user_data_staffCount',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Registration Time`
   String get user_registerTime {
     return Intl.message(
-      '',
+      'Registration Time',
       name: 'user_registerTime',
       desc: '',
       args: [],
@@ -1450,240 +1740,240 @@ class S {
     );
   }
 
-  /// ``
+  /// `Edit Profile`
   String get user_editProfile {
     return Intl.message(
-      '',
+      'Edit Profile',
       name: 'user_editProfile',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Privacy Agreement`
   String get user_privateAgreement {
     return Intl.message(
-      '',
+      'Privacy Agreement',
       name: 'user_privateAgreement',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Check Update`
   String get user_checkUpdate {
     return Intl.message(
-      '',
+      'Check Update',
       name: 'user_checkUpdate',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `About`
   String get user_about {
     return Intl.message(
-      '',
+      'About',
       name: 'user_about',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Logout`
   String get user_logout {
     return Intl.message(
-      '',
+      'Logout',
       name: 'user_logout',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Order List`
   String get orderList_title {
     return Intl.message(
-      '',
+      'Order List',
       name: 'orderList_title',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Order Number`
   String get orderList_orderNumber {
     return Intl.message(
-      '',
+      'Order Number',
       name: 'orderList_orderNumber',
       desc: '',
       args: [],
     );
   }
 
-  /// `comment`
+  /// `Comment`
   String get orderList_comment {
     return Intl.message(
-      'comment',
+      'Comment',
       name: 'orderList_comment',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Order Detail`
   String get orderDetail_title {
     return Intl.message(
-      '',
+      'Order Detail',
       name: 'orderDetail_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Ticket collection code`
+  /// `Ticket Collection Code`
   String get orderDetail_ticketCode {
     return Intl.message(
-      'Ticket collection code',
+      'Ticket Collection Code',
       name: 'orderDetail_ticketCode',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `{ticketCount} Movie Tickets`
   String orderDetail_ticketCount(int ticketCount) {
     return Intl.message(
-      '',
+      '$ticketCount Movie Tickets',
       name: 'orderDetail_ticketCount',
       desc: '',
       args: [ticketCount],
     );
   }
 
-  /// ``
+  /// `Order Number`
   String get orderDetail_orderNumber {
     return Intl.message(
-      '',
+      'Order Number',
       name: 'orderDetail_orderNumber',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Order Status`
   String get orderDetail_orderState {
     return Intl.message(
-      '',
+      'Order Status',
       name: 'orderDetail_orderState',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Order Creation Time`
   String get orderDetail_orderCreateTime {
     return Intl.message(
-      '',
+      'Order Creation Time',
       name: 'orderDetail_orderCreateTime',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Payment Time`
   String get orderDetail_payTime {
     return Intl.message(
-      '',
+      'Payment Time',
       name: 'orderDetail_payTime',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Payment Method`
   String get orderDetail_payMethod {
     return Intl.message(
-      '',
+      'Payment Method',
       name: 'orderDetail_payMethod',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Seat Information`
   String get orderDetail_seatMessage {
     return Intl.message(
-      '',
+      'Seat Information',
       name: 'orderDetail_seatMessage',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Order Information`
   String get orderDetail_orderMessage {
     return Intl.message(
-      '',
+      'Order Information',
       name: 'orderDetail_orderMessage',
       desc: '',
       args: [],
     );
   }
 
-  /// `Pay Succeed`
+  /// `Payment Successful`
   String get payResult_title {
     return Intl.message(
-      'Pay Succeed',
+      'Payment Successful',
       name: 'payResult_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie.`
+  /// `Your order has been paid. Please arrive at the following location before the specified time. Enjoy your movie.`
   String get payResult_success {
     return Intl.message(
-      'Your order has been paid. Please arrive at the following location before the following time. Enjoy your movie.',
+      'Your order has been paid. Please arrive at the following location before the specified time. Enjoy your movie.',
       name: 'payResult_success',
       desc: '',
       args: [],
     );
   }
 
-  /// `Ticket collection code`
+  /// `Ticket Collection Code`
   String get payResult_ticketCode {
     return Intl.message(
-      'Ticket collection code',
+      'Ticket Collection Code',
       name: 'payResult_ticketCode',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `User Profile`
   String get userProfile_title {
     return Intl.message(
-      '',
+      'User Profile',
       name: 'userProfile_title',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Avatar`
   String get userProfile_avatar {
     return Intl.message(
-      '',
+      'Avatar',
       name: 'userProfile_avatar',
       desc: '',
       args: [],
     );
   }
 
-  /// ``
+  /// `Username`
   String get userProfile_username {
     return Intl.message(
-      '',
+      'Username',
       name: 'userProfile_username',
       desc: '',
       args: [],
@@ -1730,10 +2020,10 @@ class S {
     );
   }
 
-  /// ``
+  /// `Username cannot be empty`
   String get userProfile_edit_username_verify_notNull {
     return Intl.message(
-      '',
+      'Username cannot be empty',
       name: 'userProfile_edit_username_verify_notNull',
       desc: '',
       args: [],
@@ -1765,6 +2055,146 @@ class S {
     return Intl.message(
       'Subtitle',
       name: 'movieShowList_dropdown_subtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nearby Cinemas`
+  String get cinemaList_title {
+    return Intl.message(
+      'Nearby Cinemas',
+      name: 'cinemaList_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Getting current location`
+  String get cinemaList_address {
+    return Intl.message(
+      'Getting current location',
+      name: 'cinemaList_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search cinema name or address`
+  String get cinemaList_search_hint {
+    return Intl.message(
+      'Search cinema name or address',
+      name: 'cinemaList_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear`
+  String get cinemaList_search_clear {
+    return Intl.message(
+      'Clear',
+      name: 'cinemaList_search_clear',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Found {count} related cinemas`
+  String cinemaList_search_results_found(Object count) {
+    return Intl.message(
+      'Found $count related cinemas',
+      name: 'cinemaList_search_results_found',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `No related cinemas found, please try other keywords`
+  String get cinemaList_search_results_notFound {
+    return Intl.message(
+      'No related cinemas found, please try other keywords',
+      name: 'cinemaList_search_results_notFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filter by Area`
+  String get cinemaList_filter_title {
+    return Intl.message(
+      'Filter by Area',
+      name: 'cinemaList_filter_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading area data...`
+  String get cinemaList_filter_loading {
+    return Intl.message(
+      'Loading area data...',
+      name: 'cinemaList_filter_loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading failed, please retry`
+  String get cinemaList_loading {
+    return Intl.message(
+      'Loading failed, please retry',
+      name: 'cinemaList_loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No cinema data`
+  String get cinemaList_empty_noData {
+    return Intl.message(
+      'No cinema data',
+      name: 'cinemaList_empty_noData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please try again later`
+  String get cinemaList_empty_noDataTip {
+    return Intl.message(
+      'Please try again later',
+      name: 'cinemaList_empty_noDataTip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No related cinemas found`
+  String get cinemaList_empty_noSearchResults {
+    return Intl.message(
+      'No related cinemas found',
+      name: 'cinemaList_empty_noSearchResults',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please try other keywords`
+  String get cinemaList_empty_noSearchResultsTip {
+    return Intl.message(
+      'Please try other keywords',
+      name: 'cinemaList_empty_noSearchResultsTip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Now Showing`
+  String get cinemaList_movies_nowShowing {
+    return Intl.message(
+      'Now Showing',
+      name: 'cinemaList_movies_nowShowing',
       desc: '',
       args: [],
     );

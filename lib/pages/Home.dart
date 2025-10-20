@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/tab/CinemaList.dart';
+import 'package:otaku_movie/pages/tab/Ticket.dart';
 import 'package:otaku_movie/pages/user/User.dart';
 import 'package:otaku_movie/pages/setting.dart';
 import 'package:otaku_movie/controller/DictController.dart';
@@ -38,7 +39,13 @@ class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
       "body": const MovieList(),
     },
     {
-      "icon": const Icon(Icons.theaters_sharp),
+      "icon": const Icon(Icons.airplane_ticket),
+      "title": S.of(context).home_ticket,
+      // "body": const Setting(),
+      "body": const Ticket(),
+    },
+     {
+      "icon": const Icon(Icons.theaters),
       "title": S.of(context).home_cinema,
       // "body": const Setting(),
       "body": const CinemaList(),

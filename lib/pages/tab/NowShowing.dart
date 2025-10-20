@@ -130,7 +130,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
       ),
       child: Space(
         direction: "row",
-        right: 20.w,
+        right: 10.w,
         children: [
           GestureDetector(
             onTap: () {

@@ -189,6 +189,11 @@
       "ja": "ホーム",
       "en": "home"
     },
+    "ticket": {
+      "zh": "我的票",
+      "ja": "チケット",
+      "en": "My Ticket"
+    },
     "cinema": {
       "zh": "电影院",
       "ja": "映画館",
@@ -198,6 +203,156 @@
       "zh": "我的",
       "ja": "マイページ",
       "en": "my page"
+    }
+  },
+  "ticket": {
+    "showTime": {
+      "zh": "放映时间",
+      "ja": "上映時間",
+      "en": "Show Time"
+    },
+    "endTime": {
+      "zh": "预计结束",
+      "ja": "予想終了時間",
+      "en": "Expected End Time"
+    },
+    "seatCount": {
+      "zh": "座位数",
+      "ja": "座席数",
+      "en": "Seat Count"
+    },
+    "noData": {
+      "zh": "暂无电影票",
+      "ja": "まだチケットがありません",
+      "en": "No ticket yet"
+    },
+    "noDataTip": {
+      "zh": "快去购买电影票吧！",
+      "ja": "チケットを購入してください！",
+      "en": "Buy tickets now!"
+    },
+    "status": {
+      "valid": {
+        "zh": "有效",
+        "ja": "有効",
+        "en": "Valid"
+      },
+      "used": {
+        "zh": "已使用",
+        "ja": "使用済み",
+        "en": "Used"
+      },
+      "expired": {
+        "zh": "已过期",
+        "ja": "期限切れ",
+        "en": "Expired"
+      },
+      "cancelled": {
+        "zh": "已取消",
+        "ja": "キャンセル済み",
+        "en": "Cancelled"
+      }
+    },
+    "time": {
+      "unknown": {
+        "zh": "时间未知",
+        "ja": "時間不明",
+        "en": "Time unknown"
+      },
+      "formatError": {
+        "zh": "时间格式错误",
+        "ja": "時間形式エラー",
+        "en": "Time format error"
+      },
+      "remaining": {
+        "days": {
+          "zh": "还有{days}天",
+          "ja": "あと{days}日",
+          "en": "{days} days left"
+        },
+        "hours": {
+          "zh": "还有{hours}小时",
+          "ja": "あと{hours}時間",
+          "en": "{hours} hours left"
+        },
+        "minutes": {
+          "zh": "还有{minutes}分钟",
+          "ja": "あと{minutes}分",
+          "en": "{minutes} minutes left"
+        },
+        "soon": {
+          "zh": "即将开始",
+          "ja": "まもなく開始",
+          "en": "Starting soon"
+        }
+      },
+      "weekdays": {
+        "monday": {
+          "zh": "周一",
+          "ja": "月曜日",
+          "en": "Mon"
+        },
+        "tuesday": {
+          "zh": "周二",
+          "ja": "火曜日",
+          "en": "Tue"
+        },
+        "wednesday": {
+          "zh": "周三",
+          "ja": "水曜日",
+          "en": "Wed"
+        },
+        "thursday": {
+          "zh": "周四",
+          "ja": "木曜日",
+          "en": "Thu"
+        },
+        "friday": {
+          "zh": "周五",
+          "ja": "金曜日",
+          "en": "Fri"
+        },
+        "saturday": {
+          "zh": "周六",
+          "ja": "土曜日",
+          "en": "Sat"
+        },
+        "sunday": {
+          "zh": "周日",
+          "ja": "日曜日",
+          "en": "Sun"
+        }
+      }
+    },
+    "ticketCount": {
+      "zh": "票数",
+      "ja": "チケット数",
+      "en": "Ticket Count"
+    },
+    "totalPurchased": {
+      "zh": "共购买",
+      "ja": "合計購入",
+      "en": "Total Purchased"
+    },
+    "tickets": {
+      "zh": "张票",
+      "ja": "枚のチケット",
+      "en": " tickets"
+    },
+    "tapToView": {
+      "zh": "点击查看详情",
+      "ja": "タップして詳細を表示",
+      "en": "Tap to view details"
+    },
+    "buyTickets": {
+      "zh": "去购票",
+      "ja": "チケットを購入",
+      "en": "Buy Tickets"
+    },
+    "shareTicket": {
+      "zh": "分享电影票: {movieName}",
+      "ja": "映画チケットをシェア: {movieName}",
+      "en": "Share movie ticket: {movieName}"
     }
   },
   "common": {
@@ -586,13 +741,6 @@
       "en": "Buy Ticket"
     }
   },
-  "cinemaList": {
-    "address": {
-      "zh": "正在获取当前位置",
-      "ja": "現在地を取得中",
-      "en": "Getting current location"
-    }
-  },
   "movieDetail": {
     "button": {
       "want": {
@@ -901,6 +1049,11 @@
         "ja": "注文数",
         "en": "Order Count"
       },
+      "watchHistory": {
+        "zh": "观影记录",
+        "ja": "鑑賞履歴",
+        "en": "Watch History"
+      },
       "wantCount": {
         "zh": "想看数",
         "ja": "観たい数",
@@ -1124,6 +1277,88 @@
         "zh": "字幕",
         "ja": "字幕",
         "en": "Subtitle"
+      }
+    }
+  },
+  "cinemaList": {
+    "title": {
+      "zh": "附近影院",
+      "ja": "近くの映画館",
+      "en": "Nearby Cinemas"
+    },
+    "address": {
+      "zh": "正在获取当前位置",
+      "ja": "現在地を取得中",
+      "en": "Getting current location"
+    },
+    "search": {
+      "hint": {
+        "zh": "搜索影院名称或地址",
+        "ja": "映画館名または住所を検索",
+        "en": "Search cinema name or address"
+      },
+      "clear": {
+        "zh": "清除",
+        "ja": "クリア",
+        "en": "Clear"
+      },
+      "results": {
+        "found": {
+          "zh": "找到 {count} 个相关影院",
+          "ja": "{count} 件の関連映画館が見つかりました",
+          "en": "Found {count} related cinemas"
+        },
+        "notFound": {
+          "zh": "未找到相关影院，请尝试其他关键词",
+          "ja": "関連する映画館が見つかりません。他のキーワードをお試しください",
+          "en": "No related cinemas found, please try other keywords"
+        }
+      }
+    },
+    "filter": {
+      "title": {
+        "zh": "按区域筛选",
+        "ja": "地域でフィルター",
+        "en": "Filter by Area"
+      },
+      "loading": {
+        "zh": "正在加载区域数据...",
+        "ja": "地域データを読み込み中...",
+        "en": "Loading area data..."
+      }
+    },
+    "loading": {
+      "zh": "加载失败，请重试",
+      "ja": "読み込みに失敗しました。再試行してください",
+      "en": "Loading failed, please retry"
+    },
+    "empty": {
+      "noData": {
+        "zh": "暂无影院数据",
+        "ja": "映画館データがありません",
+        "en": "No cinema data"
+      },
+      "noDataTip": {
+        "zh": "请稍后再试",
+        "ja": "後でもう一度お試しください",
+        "en": "Please try again later"
+      },
+      "noSearchResults": {
+        "zh": "没有找到相关影院",
+        "ja": "関連する映画館が見つかりません",
+        "en": "No related cinemas found"
+      },
+      "noSearchResultsTip": {
+        "zh": "请尝试其他关键词",
+        "ja": "他のキーワードをお試しください",
+        "en": "Please try other keywords"
+      }
+    },
+    "movies": {
+      "nowShowing": {
+        "zh": "正在上映",
+        "ja": "上映中",
+        "en": "Now Showing"
       }
     }
   }
