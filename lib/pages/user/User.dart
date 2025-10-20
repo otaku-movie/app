@@ -8,7 +8,6 @@ import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/user/user_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
-import '../../components/CustomAppBar.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
@@ -80,142 +79,392 @@ class _PageState extends State<UserInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: Text(S.of(context).user_title, style: const TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blue,
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 24.sp),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(16.w), // 统一的内边距
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              
-              // 用户信息部分，使用 Card 组件
-              Card(
-                margin: EdgeInsets.only(bottom: 16.h),
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(16.w),
-                  child: Row(
-                    children: [
-                      // 用户头像
-                      CircleAvatar(
-                        radius: 60.w, // 根据屏幕调整头像大小
-                        backgroundColor: Colors.grey.shade300,
-                        backgroundImage: NetworkImage('${Config.imageBaseUrl}${data.cover}'),
-                      ),
-                      SizedBox(width: 20.w),
-                      // 用户信息文本
-                      Expanded(
-                        child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(data.name ?? '', style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold)),
-                                
-                              ],
-                            ),
-                          
-                          SizedBox(height: 8.h),
-                          Text(data.email ?? '', style: TextStyle(color: Colors.grey.shade500, fontSize: 24.sp)),
-                          
-                        ],
-                      ),
-                      )
-                      
+      backgroundColor: Colors.grey.shade50,
+      body: CustomScrollView(
+        slivers: [
+          // 自定义AppBar
+          SliverAppBar(
+            expandedHeight: 280.h,
+            floating: false,
+            pinned: true,
+            backgroundColor: Colors.blue.shade600,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.blue.shade600,
+                      Colors.blue.shade800,
                     ],
                   ),
                 ),
+                child: SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.all(20.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 用户头像和基本信息
+                        Row(
+                          children: [
+                            // 头像
+                            Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white, width: 3.w),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: CircleAvatar(
+                                radius: 50.w,
+                                backgroundColor: Colors.grey.shade300,
+                                backgroundImage: data.cover != null 
+                                  ? NetworkImage('${Config.imageBaseUrl}${data.cover}')
+                                  : null,
+                                child: data.cover == null 
+                                  ? Icon(Icons.person, size: 50.sp, color: Colors.grey.shade600)
+                                  : null,
+                              ),
+                            ),
+                            SizedBox(width: 20.w),
+                            // 用户信息
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data.name ?? S.of(context).user_title,
+                                    style: TextStyle(
+                                      fontSize: 32.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8.h),
+                                  Text(
+                                    data.email ?? '',
+                                    style: TextStyle(
+                                      fontSize: 24.sp,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                  SizedBox(height: 12.h),
+                                  // 注册时间
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(20.r),
+                                    ),
+                                    child: Text(
+                                      '${S.of(context).user_registerTime}: ${data.createTime ?? ''}',
+                                      style: TextStyle(
+                                        fontSize: 20.sp,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              // 统计信息部分的网格布局
-              // Padding(
-              //   padding: EdgeInsets.only(bottom: 16.h),
-              //   // child:
-              //   child: GridView.count(
-              //     crossAxisCount: 1,
-              //     crossAxisSpacing: 16.w,
-              //     mainAxisSpacing: 16.h,
-              //     shrinkWrap: true,
-              //     physics: const NeverScrollableScrollPhysics(),
-              //     children: [
-              //       _buildStatCard(S.of(context).user_data_orderCount, '${data.orderCount ?? 0}', Colors.purple, () {
-              //         context.pushNamed('orderList');
-              //       })
-              //       // _buildStatCard(S.of(context).user_data_staffCount, '${data ?? 0}', Colors.green, () {}),
-              //     ],
-              //   ),
-              // ),
-              _buildListTile(
-              title: S.of(context).user_registerTime,
-              trailing: data.createTime ?? '',
-              onTap: () {},
-              showArrow: false
             ),
-             _buildListTile(
-              icon: null,
-              title: S.of(context).user_data_orderCount,
-              trailing: '${data.orderCount ?? 0}',
-              // showArrow: false,
-              onTap: () {
-                _showActionSheet(context);
-              },
-            ),           
-            _buildListTile(
-              icon: Icons.language,
-              title: S.of(context).user_language,
-              trailing: langName,
-              onTap: () {
-                _showActionSheet(context);
-              },
+          ),
+          
+          // 内容区域
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Column(
+                children: [
+                  // 统计卡片
+                  _buildStatsCard(),
+                  
+                  SizedBox(height: 20.h),
+                  
+                  // 功能菜单
+                  _buildMenuSection(),
+                  
+                  SizedBox(height: 20.h),
+                  
+                  // 设置菜单
+                  _buildSettingsSection(),
+                ],
+              ),
             ),
-            _buildListTile(
-              icon: Icons.edit,
-              title: S.of(context).user_editProfile,
-              onTap: () {
-                context.pushNamed('userProfile', queryParameters: {
-                  'id': data.id.toString(),
-                });
-              },
+          ),
+        ],
+      ),
+    );
+  }
+  // 统计卡片
+  Widget _buildStatsCard() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(20.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              S.of(context).user_data_orderCount,
+              style: TextStyle(
+                fontSize: 24.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade800,
+              ),
             ),
-            _buildListTile(
-              icon: Icons.privacy_tip,
-              title: S.of(context).user_privateAgreement,
-              onTap: () {
-                launchURL('https://www.google.com');
-              },
+            SizedBox(height: 16.h),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildStatItem(
+                    icon: Icons.receipt_long,
+                    title: S.of(context).user_data_orderCount,
+                    value: '${data.orderCount ?? 0}',
+                    color: Colors.blue,
+                    onTap: () => context.pushNamed('orderList'),
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: _buildStatItem(
+                    icon: Icons.movie,
+                    title: S.of(context).user_data_watchHistory,
+                    value: '${data.orderCount ?? 0}',
+                    color: Colors.green,
+                    onTap: () => context.pushNamed('orderList'),
+                  ),
+                ),
+              ],
             ),
-            _buildListTile(
-              icon: Icons.check,
-              title: S.of(context).user_checkUpdate,
-              trailing: '1.0.0',
-              onTap: () {},
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 统计项目
+  Widget _buildStatItem({
+    required IconData icon,
+    required String title,
+    required String value,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(16.w),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(color: color.withOpacity(0.2)),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 32.sp),
+            SizedBox(height: 8.h),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 28.sp,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
             ),
-            _buildListTile(
-              icon: Icons.info_outline,
-              title: S.of(context).user_about,
-              onTap: () {
-                context.pushNamed('about');
-              },
+            SizedBox(height: 4.h),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.grey.shade600,
+              ),
+              textAlign: TextAlign.center,
             ),
-            _buildListTile(
-              icon: Icons.logout,
-              title: S.of(context).user_logout,
-              onTap: () {},
-            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 功能菜单部分
+  Widget _buildMenuSection() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _buildModernListTile(
+            icon: Icons.edit,
+            title: S.of(context).user_editProfile,
+            onTap: () {
+              context.pushNamed('userProfile', queryParameters: {
+                'id': data.id.toString(),
+              });
+            },
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.language,
+            title: S.of(context).user_language,
+            trailing: langName,
+            onTap: () => _showActionSheet(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 设置菜单部分
+  Widget _buildSettingsSection() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _buildModernListTile(
+            icon: Icons.privacy_tip,
+            title: S.of(context).user_privateAgreement,
+            onTap: () => launchURL('https://www.google.com'),
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.check,
+            title: S.of(context).user_checkUpdate,
+            trailing: '1.0.0',
+            onTap: () {},
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.info_outline,
+            title: S.of(context).user_about,
+            onTap: () => context.pushNamed('about'),
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.logout,
+            title: S.of(context).user_logout,
+            textColor: Colors.red,
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildModernListTile({
+    required IconData icon,
+    required String title,
+    String? trailing,
+    required VoidCallback onTap,
+    Color? textColor,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12.r),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Icon(
+                  icon,
+                  color: textColor ?? Colors.grey.shade600,
+                  size: 24.sp,
+                ),
+              ),
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.w500,
+                    color: textColor ?? Colors.grey.shade800,
+                  ),
+                ),
+              ),
+              if (trailing != null) ...[
+                Text(
+                  trailing,
+                  style: TextStyle(
+                    fontSize: 22.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+              ],
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 16.sp,
+                color: Colors.grey.shade400,
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
+  // 分割线
+  Widget _buildDivider() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.w),
+      height: 1.h,
+      color: Colors.grey.shade200,
+    );
+  }
+
   Widget _buildListTile({
     IconData? icon,
     required dynamic title,

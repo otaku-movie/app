@@ -733,49 +733,50 @@ class _PageState extends State<MovieDetail> {
                                  
                                 ],
                               ),
-                              Wrap(
-                                // direction: Axis.vertical,
-                                spacing: 20.w,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 50.w),
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromARGB(255, 234, 58, 105),
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min, // 按内容适配宽度
-                                      children: [
-                                        const Icon(Icons.favorite, color: Colors.white),
-                                        SizedBox(width: 10.w), // 图标和文字间距
-                                        const Text(
-                                          '想看',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 48.w),
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromARGB(255, 5, 189, 239),
-                                      borderRadius: BorderRadius.circular(50),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min, // 按内容适配宽度
-                                      children: [
-                                        const Icon(Icons.remove_red_eye, color: Colors.white),
-                                        // const Icon(Icons.star, color: Colors.white),
-                                        SizedBox(width: 10.w), // 图标和文字间距
-                                        const Text(
-                                          '看过',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
+                              // Space(
+                              //   // direction: Axis.vertical,
+                              //   // spacing: 20.w,
+                              //   right: 20.w,
+                              //   children: [
+                              //     Container(
+                              //       padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 50.w),
+                              //       decoration: BoxDecoration(
+                              //         color: const Color.fromARGB(255, 234, 58, 105),
+                              //         borderRadius: BorderRadius.circular(50),
+                              //       ),
+                              //       child: Row(
+                              //         mainAxisSize: MainAxisSize.min, // 按内容适配宽度
+                              //         children: [
+                              //           const Icon(Icons.favorite, color: Colors.white),
+                              //           SizedBox(width: 10.w), // 图标和文字间距
+                              //           const Text(
+                              //             '想看',
+                              //             style: TextStyle(color: Colors.white),
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //     Container(
+                              //       padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 48.w),
+                              //       decoration: BoxDecoration(
+                              //         color: const Color.fromARGB(255, 5, 189, 239),
+                              //         borderRadius: BorderRadius.circular(50),
+                              //       ),
+                              //       child: Row(
+                              //         mainAxisSize: MainAxisSize.min, // 按内容适配宽度
+                              //         children: [
+                              //           const Icon(Icons.remove_red_eye, color: Colors.white),
+                              //           // const Icon(Icons.star, color: Colors.white),
+                              //           SizedBox(width: 10.w), // 图标和文字间距
+                              //           const Text(
+                              //             '看过',
+                              //             style: TextStyle(color: Colors.white),
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ],
+                              // )
                             
                             ],
                           ),
