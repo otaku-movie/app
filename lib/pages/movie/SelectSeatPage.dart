@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import 'package:intl_utils/intl_utils.dart';
-import 'package:logger/logger.dart';
 import 'package:otaku_movie/components/CinemaScreen.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/space.dart';
-import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/log/index.dart';
-import 'package:otaku_movie/pages/movie/confirmOrder.dart';
 import 'package:otaku_movie/response/movie/movie_show_time_detail.dart';
-// import 'package:go_router/go_router.dart';
-// import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/movie/theater_seat.dart';
-import 'package:otaku_movie/response/response.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
 
 import '../../api/index.dart';
 
 class SelectSeatPage extends StatefulWidget {
-  String? id;
-  String? theaterHallId;
+  final String? id;
+  final String? theaterHallId;
   
   SelectSeatPage({super.key, this.id, this.theaterHallId});
 
@@ -35,7 +26,6 @@ class SelectSeatPage extends StatefulWidget {
 }
 
 class _SeatSelectionPageState extends State<SelectSeatPage> {
-  double _scaleFactor = 1.0;
   TransformationController  transformationController = TransformationController();
 
   // 座位大小
@@ -157,13 +147,13 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     if (
       item.selectSeatState == SelectSeatState.locked.code ||
       item.selectSeatState == SelectSeatState.sold.code ||
-      item.disabled!
+      item.disabled
     ) {
       return;
     }
 
-    if (selectSeatSet.length >= data.maxSelectSeatCount!) {
-      return ToastService.showWarning(S.of(context).selectSeat_maxSelectSeatWarn(data.maxSelectSeatCount!));
+    if (selectSeatSet.length >= (data.maxSelectSeatCount ?? 0)) {
+      return ToastService.showWarning(S.of(context).selectSeat_maxSelectSeatWarn(data.maxSelectSeatCount ?? 0));
     }
     if (item.seatPositionGroup != null) {
       item.seatPositionGroup!.split('-').forEach((el) {
@@ -226,7 +216,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     );
 
     // 不可选的座位
-    if (seat.disabled!) {
+    if (seat.disabled) {
       result = generatorSeatState(
         'disabled', 
         margin: margin, 
@@ -280,7 +270,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     // 在函数内部设置默认值
     double finalWidth = width ?? 32.w; // 如果未传入 width，使用 ScreenUtil 的默认值
     double finalHeight = height ?? 32.w; // 同理，默认高度
-    double finalRadius = radius ?? 6.w; // 默认圆角
+    double finalRadius = radius ?? 10.w; // 默认圆角
 
     Widget buildContainer({
       EdgeInsetsGeometry? margin,
@@ -295,7 +285,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(finalRadius),
-          border: Border.all(color: borderColor ?? Colors.transparent, width: 1.5),
+          border: Border.all(color: borderColor ?? Colors.transparent, width: 1),
         ),
         child: child,
       );
@@ -358,9 +348,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
       child: child,
     );
     Widget available = buildContainer(
-      borderColor: const Color.fromARGB(255, 6, 130, 239),
+      borderColor: Color.fromARGB(255, 0, 135, 252),
       margin: margin,
       child: child,
+      color: Colors.white,
     );
 
     Map<String, Widget> map = {
@@ -389,10 +380,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
         "widget": generatorSeatState('coupleSeat'),
        'name': S.of(context).common_enum_seatType_coupleSeat,
       },
-      {
-       'name': S.of(context).common_enum_seatType_disabled,
-        'widget': generatorSeatState('disabled'),
-      },
+      // {
+      //  'name': S.of(context).common_enum_seatType_disabled,
+      //   'widget': generatorSeatState('disabled'),
+      // },
       // {
       //  'name': S.of(context).common_enum_seatType_selected,
       //  'widget':  generatorSeatState('selected')
@@ -421,7 +412,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     }
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.grey.shade100,
       appBar: CustomAppBar(
         title: Text(
           _showTimeData.cinemaName ?? '', 
@@ -435,9 +426,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
             
             child:  GestureDetector(
             onScaleUpdate: (details) {
-              setState(() {
-                _scaleFactor = details.scale.clamp(0.5, 3.0);
-              });
+              // Scale factor is handled by InteractiveViewer
             },
             child: InteractiveViewer(
               constrained: false,
@@ -446,18 +435,25 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
               maxScale: 2.6,
               transformationController: transformationController,
               child: Container(
+                
                 child: Space(
                   direction: 'column',
                     // spacing: 0.0,
                     children: [
-                      // Container(
-                      //     width: MediaQuery.of(context).size.width * 0.8, // 宽度为屏幕宽度的 80%
-                      //     height: 80.h, // 固定高度
-                      //     margin: EdgeInsets.only(bottom: 20.h),
-                      //     child: CustomPaint(
-                      //       painter: CinemaScreenPainter(),
-                      //     ),
-                      // ),
+                       Center(
+                         child: Container(
+                           width: columnCount > 0 ? (seatSize + seatGap) * columnCount : 200.w, // 根据座位列数计算宽度
+                           height: 80.h, // 固定高度
+                           margin: EdgeInsets.only(top:100.h, bottom: 150.h),
+                           child: CinemaScreen(
+                             width: columnCount > 0 ? (seatSize + seatGap) * columnCount : 200.w,
+                             height: 80.h,
+                             hallName: _showTimeData.theaterHallName ?? "",
+                           ),
+                         ),
+                       ),
+                      
+                      // 生成座位行号
                       Space(
                         children: [
                            Wrap(
@@ -467,10 +463,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                  width: seatSize,
                                  height: seatSize,
                                  alignment: Alignment.center,
-                                 // margin: EdgeInsets.all(seatGap),
-                                
                                ),
-                              // 排号
                               ...seatData.map((row)  {
                                 return Container(
                                   width: seatSize,
@@ -488,19 +481,12 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // 生成座位列号
                           Wrap(
                             direction: Axis.horizontal,
-                            children: List.generate(columnCount, (index) {
-                              return Container(
-                                  width: seatSize, // 排号区域宽度
-                                  height: seatSize,
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.only(right: seatGap),
-                                  child: Text(
-                                    '${index + 1}',
-                                    style: TextStyle(fontSize: 24.sp, color: Colors.black),
-                                  ));
-                            })),
+                            children: buildSeatColumnName()
+                          ),
+                          // 生成座位
                             ...seatData.map((row) {
                               if (row.type == SeatType.aisle) {
                                 // 如果是过道，返回一个空白行
@@ -672,7 +658,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                     ),
                                   ),
                                   Text(
-                                    '${item.name!}（${item.price}円）',
+                                    '${item.name}（${item.price}円）',
                                     style: TextStyle(fontSize: 24.sp),
                                   ),
                                 ],
@@ -692,158 +678,447 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
           Positioned(
             left: 20,
             right: 20,
-            bottom: 10,
-            child: Wrap(
-              runSpacing: 30.h,
+            bottom: 20,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
+                // 电影信息卡片
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(20),
+                  padding: EdgeInsets.all(24.w),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey.shade200,
-                          offset: const Offset(0.0, 3.0), //阴影y轴偏移量
-                          blurRadius: 2, //阴影模糊程度
-                          spreadRadius: 2 //阴影扩散程度
-                          )
-                    ],
-
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.white,
+                        Colors.grey.shade50,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
-                  child: Wrap(
-                    runSpacing: 10.h,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(_showTimeData.movieName ?? '', style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis, maxLines: 2),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                            style: const TextStyle(color: Colors.black), // 默认样式
-                            children: [
-                              TextSpan(
-                                text: '${formatTime(timeString:  _showTimeData.startTime, format: 'MM-dd')}（${getDay(formatTime(timeString:  _showTimeData.startTime, format: 'yyyy-MM-dd'), context)}）',
-                              ),
-                              TextSpan(
-                                text: formatTime(timeString:_showTimeData.startTime, format: 'HH:mm'),
-                              ),
-                              const TextSpan(
-                                text: ' ~ ',
-                              ),
-                              TextSpan(
-                                text: formatTime(timeString: _showTimeData.endTime, format: 'HH:mm'),
-                              ),
-                            ],
-                          ),
+                      // 电影标题
+                      Text(
+                        _showTimeData.movieName ?? '',
+                        style: TextStyle(
+                          fontSize: 32.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                          fontFamily: 'Poppins',
                         ),
-                          Text(_showTimeData.specName ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28.sp)),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 12.h),
+                      
+                      // 时间信息 - 年月日和时间在同一行
+                      Row(
+                        children: [
+                          Text(
+                            '${formatTime(timeString: _showTimeData.startTime, format: 'yyyy年MM月dd日')}（${getDay(formatTime(timeString: _showTimeData.startTime, format: 'yyyy-MM-dd'), context)}）',
+                            style: TextStyle(
+                              fontSize: 28.sp,
+                              color: Colors.grey.shade600,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                          SizedBox(width: 16.w),
+                          Text(
+                            formatTime(timeString: _showTimeData.startTime, format: 'HH:mm'),
+                            style: TextStyle(
+                              fontSize: 26.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                          Text(
+                            ' ~ ',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.grey.shade500,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                          Text(
+                            formatTime(timeString: _showTimeData.endTime, format: 'HH:mm'),
+                            style: TextStyle(
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 12.h),
+                      
+                      // 标签组
+                      Wrap(
+                        spacing: 10.w,
+                        runSpacing: 10.h,
+                        children: [
+                          // 影厅规格标签
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.shade50,
+                              borderRadius: BorderRadius.circular(30.r),
+                              border: Border.all(color: Colors.blue.shade200),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.movie,
+                                  size: 22.sp,
+                                  color: Colors.blue.shade600,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  _showTimeData.specName ?? '',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blue.shade700,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                          // 影厅名称标签
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade50,
+                              borderRadius: BorderRadius.circular(30.r),
+                              border: Border.all(color: Colors.green.shade200),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  size: 22.sp,
+                                  color: Colors.green.shade600,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  _showTimeData.theaterHallName ?? '',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.green.shade700,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                          // 字幕标签
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                            decoration: BoxDecoration(
+                              color: Colors.orange.shade50,
+                              borderRadius: BorderRadius.circular(30.r),
+                              border: Border.all(color: Colors.orange.shade200),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.subtitles,
+                                  size: 22.sp,
+                                  color: Colors.orange.shade600,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  '中文字幕',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.orange.shade700,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                          // 舞台致辞标签 - 特殊场次，更突出
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.purple.shade400,
+                                  Colors.purple.shade600,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(30.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.mic,
+                                  size: 22.sp,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  '舞台致辞',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                          // 3D标签
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                            decoration: BoxDecoration(
+                              color: Colors.red.shade50,
+                              borderRadius: BorderRadius.circular(30.r),
+                              border: Border.all(color: Colors.red.shade200),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.view_in_ar,
+                                  size: 22.sp,
+                                  color: Colors.red.shade600,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  '3D',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.red.shade700,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                          // 首映礼标签 - 特殊场次
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.amber.shade400,
+                                  Colors.orange.shade600,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(30.r),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.star,
+                                  size: 22.sp,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  '首映礼',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                       
-                      Wrap(
-                        spacing: 20.w,
-                        runSpacing: 15.h,
-                        children: selectSeatList.map((item) {
-                          return GestureDetector(
-                            onTap: () {
-                              if (item.seatPositionGroup != null) {
-                                // 情侣座
-                                item.seatPositionGroup!.split('-').forEach((el) {
-                                  List<String> position = el.split(',');
-                                  int x = int.parse(position[0]);
-                                  int y = int.parse(position[1]);
-
-                                  
-                                  // 获取行的index，需要考虑空排
-                                  int row = seatData.indexWhere((el) => el.rowAxis == x);
-
-                                  if (row != -1) {
-                                    SeatItem seat = seatData[row].children!.firstWhere((el) => el.y == y);
-
-                                    selectSeatList.removeWhere((el) => el.id == seat.id);
-                                  }
-                                });
-                              } else {
-                                // 不同座位
-                                selectSeatList.removeWhere((el) => el.id == item.id);
-                              }
-
+                      // 已选座位
+                      if (selectSeatList.isNotEmpty) ...[
+                        SizedBox(height: 16.h),
+                        Text(
+                          '已选座位',
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Wrap(
+                          spacing: 18.w,
+                          runSpacing: 8.h,
+                          children: selectSeatList.map((seat) {
+                            return GestureDetector(
+                              onTap: () {
                               setState(() {
-                                  selectSeatList = selectSeatList;
-                                  selectSeatSet = selectSeatList.map((el) => el.id!).toSet();
+                                  selectSeatList.removeWhere((s) => s.id == seat.id);
                                 });
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8.w, horizontal: 18.w),
+                                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                               decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.grey.shade200),
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: 10.w,
+                                  color: Colors.blue.shade50,
+                                  borderRadius: BorderRadius.circular(24.r),
+                                  border: Border.all(color: Colors.blue.shade200),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text('${item.seatName}', style: TextStyle(fontSize: 24.sp)),
-                                  Icon(Icons.close, color: Colors.grey.shade400, size: 20)
-                                ],
-                              )
-                            )
-                          );
-                        }).toList()),
+                                    Text(
+                                      seat.seatName ?? '',
+                                      style: TextStyle(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.blue.shade700,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                    SizedBox(width: 6.w),
+                                    Icon(
+                                      Icons.close,
+                                      size: 22.sp,
+                                      color: Colors.blue.shade400,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
                     ],
                   ),
                 ),
-                MaterialButton(
-                  minWidth: double.infinity,
-                  height: 70.h,
-                  color: Colors.blue,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(100))),
-                  onPressed: () {
-                    if (selectSeatList.isEmpty) {
-                      ToastService.showWarning(S.of(context).selectSeat_notSelectSeatWarn);
-                      return;
-                    }
-                    ApiRequest().request(
-                      path: '/movie_show_time/select_seat/save',
-                      method: 'POST',
-                      data: {
-                        'movieShowTimeId': _showTimeData.id,
-                        "theaterHallId":_showTimeData.theaterHallId,
-                        'seatPosition': selectSeatList.map((item) {
-                          return {
-                            "x": item.x,
-                            "y": item.y,
-                            "seatId": item.id
-                          };
-                        }).toList()
-                      },
-                      fromJsonT: (json) {},
-                    ).then((res) {
-                      context.pushNamed("selectMovieTicketType", queryParameters: {
-                        'movieShowTimeId': '${_showTimeData.id}',
-                        'cinemaId': '${_showTimeData.cinemaId}'
-                      });
-                    });
-
-                  },
-                  child: Text(
-                      S.of(context).selectSeat_confirmSelectSeat,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32.sp)),
-                )
+                
+                SizedBox(height: 25.h),
+                
+                // 确认按钮
+                Container(
+                  width: double.infinity,
+                  height: 72.h,
+                  decoration: BoxDecoration(
+                    gradient: selectSeatList.isNotEmpty
+                        ? LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              const Color(0xFF007BFF),
+                              const Color(0xFF0056CC),
+                            ],
+                          )
+                        : null,
+                    color: selectSeatList.isEmpty ? Colors.grey.shade300 : null,
+                    borderRadius: BorderRadius.circular(36.r),
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(36.r),
+                      onTap: selectSeatList.isNotEmpty ? _confirmSelection : null,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (selectSeatList.isNotEmpty) ...[
+                              Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.white,
+                                size: 28.sp,
+                              ),
+                              SizedBox(width: 12.w),
+                            ],
+                            Text(
+                              selectSeatList.isEmpty
+                                  ? '请选择座位'
+                                  : '确认选择 ${selectSeatList.length} 个座位',
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                fontWeight: FontWeight.w600,
+                                color: selectSeatList.isEmpty
+                                    ? Colors.grey.shade500
+                                    : Colors.white,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-            )
+            ),
           )
         ],
       ),
-     
-      // ),
     );
+  }
+  
+  List<Widget> buildSeatColumnName() {
+    int index = 0;
+
+    if (seatData.isEmpty) {
+      return [];
+    }
+    
+    List<SeatItem> firstRow = seatData[0].children!;
+    List<Widget> result = [];
+
+    for (var item in firstRow) {
+      if (item.type != SeatType.aisle) {
+        index++;
+      }
+      result.add(
+          Container(
+            width: seatSize, // 排号区域宽度
+            height: seatSize,
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(right: seatGap),
+            child: item.type == SeatType.aisle ? null : Text(
+              '$index',
+              style: TextStyle(fontSize: 24.sp, color: Colors.black),
+            )
+          )
+        );
+    }
+
+    return result;
+  }
+
+  void _confirmSelection() {
+    if (selectSeatList.isEmpty) return;
+    
+    // 这里可以添加确认选座的逻辑
+    ToastService.showToast('已选择 ${selectSeatList.length} 个座位');
+    
+    // 可以导航到确认页面
+    // context.push('/confirmOrder', extra: {
+    //   'selectSeatList': selectSeatList,
+    //   'showTimeData': _showTimeData,
+    // });
   }
 }
