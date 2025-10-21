@@ -240,15 +240,33 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("放映规格"),
         "movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("字幕"),
+        "movieTicketType_actualPrice":
+            MessageLookupByLibrary.simpleMessage("实付"),
+        "movieTicketType_cinema": MessageLookupByLibrary.simpleMessage("影院"),
         "movieTicketType_confirmOrder":
             MessageLookupByLibrary.simpleMessage("确认订单"),
+        "movieTicketType_movieInfo":
+            MessageLookupByLibrary.simpleMessage("电影信息"),
+        "movieTicketType_price": MessageLookupByLibrary.simpleMessage("价格"),
+        "movieTicketType_seatInfo":
+            MessageLookupByLibrary.simpleMessage("座位信息"),
         "movieTicketType_seatNumber":
             MessageLookupByLibrary.simpleMessage("座位号"),
         "movieTicketType_selectMovieTicketType":
             MessageLookupByLibrary.simpleMessage("请选择电影票类型"),
+        "movieTicketType_selectTicketType":
+            MessageLookupByLibrary.simpleMessage("选择票种"),
+        "movieTicketType_selectTicketTypeForSeats":
+            MessageLookupByLibrary.simpleMessage("请为每个座位选择合适的票种"),
+        "movieTicketType_showTime":
+            MessageLookupByLibrary.simpleMessage("放映时间"),
+        "movieTicketType_ticketType":
+            MessageLookupByLibrary.simpleMessage("票种"),
         "movieTicketType_title":
             MessageLookupByLibrary.simpleMessage("选择电影票类型"),
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合计"),
+        "movieTicketType_totalPrice":
+            MessageLookupByLibrary.simpleMessage("总价"),
         "orderDetail_orderCreateTime":
             MessageLookupByLibrary.simpleMessage("订单创建时间"),
         "orderDetail_orderMessage":

@@ -247,15 +247,33 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映仕様"),
         "movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("字幕"),
+        "movieTicketType_actualPrice":
+            MessageLookupByLibrary.simpleMessage("実際の支払い"),
+        "movieTicketType_cinema": MessageLookupByLibrary.simpleMessage("映画館"),
         "movieTicketType_confirmOrder":
             MessageLookupByLibrary.simpleMessage("注文確認"),
+        "movieTicketType_movieInfo":
+            MessageLookupByLibrary.simpleMessage("映画情報"),
+        "movieTicketType_price": MessageLookupByLibrary.simpleMessage("価格"),
+        "movieTicketType_seatInfo":
+            MessageLookupByLibrary.simpleMessage("座席情報"),
         "movieTicketType_seatNumber":
             MessageLookupByLibrary.simpleMessage("座席番号"),
         "movieTicketType_selectMovieTicketType":
             MessageLookupByLibrary.simpleMessage("映画チケットの種類を選んでください"),
+        "movieTicketType_selectTicketType":
+            MessageLookupByLibrary.simpleMessage("チケット種類を選択"),
+        "movieTicketType_selectTicketTypeForSeats":
+            MessageLookupByLibrary.simpleMessage("各座席に適切なチケット種類を選択してください"),
+        "movieTicketType_showTime":
+            MessageLookupByLibrary.simpleMessage("上映時間"),
+        "movieTicketType_ticketType":
+            MessageLookupByLibrary.simpleMessage("チケット種類"),
         "movieTicketType_title":
             MessageLookupByLibrary.simpleMessage("映画チケットの種類を選択してください"),
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合計"),
+        "movieTicketType_totalPrice":
+            MessageLookupByLibrary.simpleMessage("合計金額"),
         "orderDetail_orderCreateTime":
             MessageLookupByLibrary.simpleMessage("注文作成日時"),
         "orderDetail_orderMessage":

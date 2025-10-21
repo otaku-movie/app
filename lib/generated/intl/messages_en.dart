@@ -260,16 +260,36 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Screen Spec"),
         "movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("Subtitle"),
+        "movieTicketType_actualPrice":
+            MessageLookupByLibrary.simpleMessage("Actual Payment"),
+        "movieTicketType_cinema":
+            MessageLookupByLibrary.simpleMessage("Cinema"),
         "movieTicketType_confirmOrder":
             MessageLookupByLibrary.simpleMessage("Confirm Order"),
+        "movieTicketType_movieInfo":
+            MessageLookupByLibrary.simpleMessage("Movie Info"),
+        "movieTicketType_price": MessageLookupByLibrary.simpleMessage("Price"),
+        "movieTicketType_seatInfo":
+            MessageLookupByLibrary.simpleMessage("Seat Information"),
         "movieTicketType_seatNumber":
             MessageLookupByLibrary.simpleMessage("Seat Number"),
         "movieTicketType_selectMovieTicketType":
             MessageLookupByLibrary.simpleMessage(
                 "Please select a movie ticket type"),
+        "movieTicketType_selectTicketType":
+            MessageLookupByLibrary.simpleMessage("Select Ticket Type"),
+        "movieTicketType_selectTicketTypeForSeats":
+            MessageLookupByLibrary.simpleMessage(
+                "Please select appropriate ticket type for each seat"),
+        "movieTicketType_showTime":
+            MessageLookupByLibrary.simpleMessage("Show Time"),
+        "movieTicketType_ticketType":
+            MessageLookupByLibrary.simpleMessage("Ticket Type"),
         "movieTicketType_title":
             MessageLookupByLibrary.simpleMessage("Select Movie Ticket Type"),
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("Total"),
+        "movieTicketType_totalPrice":
+            MessageLookupByLibrary.simpleMessage("Total Price"),
         "orderDetail_orderCreateTime":
             MessageLookupByLibrary.simpleMessage("Order Creation Time"),
         "orderDetail_orderMessage":

@@ -1620,6 +1620,106 @@ class S {
     );
   }
 
+  /// `Please select appropriate ticket type for each seat`
+  String get movieTicketType_selectTicketTypeForSeats {
+    return Intl.message(
+      'Please select appropriate ticket type for each seat',
+      name: 'movieTicketType_selectTicketTypeForSeats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Movie Info`
+  String get movieTicketType_movieInfo {
+    return Intl.message(
+      'Movie Info',
+      name: 'movieTicketType_movieInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show Time`
+  String get movieTicketType_showTime {
+    return Intl.message(
+      'Show Time',
+      name: 'movieTicketType_showTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cinema`
+  String get movieTicketType_cinema {
+    return Intl.message(
+      'Cinema',
+      name: 'movieTicketType_cinema',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seat Information`
+  String get movieTicketType_seatInfo {
+    return Intl.message(
+      'Seat Information',
+      name: 'movieTicketType_seatInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ticket Type`
+  String get movieTicketType_ticketType {
+    return Intl.message(
+      'Ticket Type',
+      name: 'movieTicketType_ticketType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price`
+  String get movieTicketType_price {
+    return Intl.message(
+      'Price',
+      name: 'movieTicketType_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Ticket Type`
+  String get movieTicketType_selectTicketType {
+    return Intl.message(
+      'Select Ticket Type',
+      name: 'movieTicketType_selectTicketType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Price`
+  String get movieTicketType_totalPrice {
+    return Intl.message(
+      'Total Price',
+      name: 'movieTicketType_totalPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Actual Payment`
+  String get movieTicketType_actualPrice {
+    return Intl.message(
+      'Actual Payment',
+      name: 'movieTicketType_actualPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm Order`
   String get confirmOrder_title {
     return Intl.message(

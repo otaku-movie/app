@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CinemaScreen.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/space.dart';
@@ -1114,12 +1115,33 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     if (selectSeatList.isEmpty) return;
     
     // 这里可以添加确认选座的逻辑
-    ToastService.showToast(S.of(context).cinemaList_selectSeat_seatsSelected(selectSeatList.length));
+    // ToastService.showToast(S.of(context).cinemaList_selectSeat_seatsSelected(selectSeatList.length));
+
+      if (selectSeatList.isEmpty) {
+        ToastService.showWarning(S.of(context).selectSeat_notSelectSeatWarn);
+        return;
+      }
+      ApiRequest().request(
+        path: '/movie_show_time/select_seat/save',
+        method: 'POST',
+        data: {
+          'movieShowTimeId': _showTimeData.id,
+          "theaterHallId":_showTimeData.theaterHallId,
+          'seatPosition': selectSeatList.map((item) {
+            return {
+              "x": item.x,
+              "y": item.y,
+              "seatId": item.id
+            };
+          }).toList()
+        },
+        fromJsonT: (json) {},
+      ).then((res) {
+        context.pushNamed("selectMovieTicketType", queryParameters: {
+          'movieShowTimeId': '${_showTimeData.id}',
+          'cinemaId': '${_showTimeData.cinemaId}'
+        });
+      });
     
-    // 可以导航到确认页面
-    // context.push('/confirmOrder', extra: {
-    //   'selectSeatList': selectSeatList,
-    //   'showTimeData': _showTimeData,
-    // });
   }
 }

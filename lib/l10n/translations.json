@@ -1013,6 +1013,56 @@
       "zh": "确认订单",
       "ja": "注文確認",
       "en": "Confirm Order"
+    },
+    "selectTicketTypeForSeats": {
+      "zh": "请为每个座位选择合适的票种",
+      "ja": "各座席に適切なチケット種類を選択してください",
+      "en": "Please select appropriate ticket type for each seat"
+    },
+    "movieInfo": {
+      "zh": "电影信息",
+      "ja": "映画情報",
+      "en": "Movie Info"
+    },
+    "showTime": {
+      "zh": "放映时间",
+      "ja": "上映時間",
+      "en": "Show Time"
+    },
+    "cinema": {
+      "zh": "影院",
+      "ja": "映画館",
+      "en": "Cinema"
+    },
+    "seatInfo": {
+      "zh": "座位信息",
+      "ja": "座席情報",
+      "en": "Seat Information"
+    },
+    "ticketType": {
+      "zh": "票种",
+      "ja": "チケット種類",
+      "en": "Ticket Type"
+    },
+    "price": {
+      "zh": "价格",
+      "ja": "価格",
+      "en": "Price"
+    },
+    "selectTicketType": {
+      "zh": "选择票种",
+      "ja": "チケット種類を選択",
+      "en": "Select Ticket Type"
+    },
+    "totalPrice": {
+      "zh": "总价",
+      "ja": "合計金額",
+      "en": "Total Price"
+    },
+    "actualPrice": {
+      "zh": "实付",
+      "ja": "実際の支払い",
+      "en": "Actual Payment"
     }
   },
   "confirmOrder": {
