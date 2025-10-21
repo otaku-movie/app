@@ -24,27 +24,31 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(count) => "Found ${count} related cinemas";
 
-  static String m2(reply) => "Reply to ${reply}";
+  static String m2(count) => "Confirm selection of ${count} seats";
 
-  static String m3(total) => "Total ${total} replies";
+  static String m3(count) => "Selected ${count} seats";
 
   static String m4(reply) => "Reply to ${reply}";
 
-  static String m5(language) => "Translate to ${language}";
+  static String m5(total) => "Total ${total} replies";
 
-  static String m6(total) => "Total ${total} replies";
+  static String m6(reply) => "Reply to ${reply}";
 
-  static String m7(ticketCount) => "${ticketCount} Movie Tickets";
+  static String m7(language) => "Translate to ${language}";
 
-  static String m8(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
+  static String m8(total) => "Total ${total} replies";
 
-  static String m9(movieName) => "Share movie ticket: ${movieName}";
+  static String m9(ticketCount) => "${ticketCount} Movie Tickets";
 
-  static String m10(days) => "${days} days left";
+  static String m10(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
 
-  static String m11(hours) => "${hours} hours left";
+  static String m11(movieName) => "Share movie ticket: ${movieName}";
 
-  static String m12(minutes) => "${minutes} minutes left";
+  static String m12(days) => "${days} days left";
+
+  static String m13(hours) => "${hours} hours left";
+
+  static String m14(minutes) => "${minutes} minutes left";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -88,16 +92,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaList_search_results_notFound":
             MessageLookupByLibrary.simpleMessage(
                 "No related cinemas found, please try other keywords"),
+        "cinemaList_selectSeat_confirmSelection": m2,
+        "cinemaList_selectSeat_dateFormat":
+            MessageLookupByLibrary.simpleMessage("MMM dd, yyyy"),
+        "cinemaList_selectSeat_pleaseSelectSeats":
+            MessageLookupByLibrary.simpleMessage("Please select seats"),
+        "cinemaList_selectSeat_seatsSelected": m3,
+        "cinemaList_selectSeat_selectedSeats":
+            MessageLookupByLibrary.simpleMessage("Selected Seats"),
         "cinemaList_title":
             MessageLookupByLibrary.simpleMessage("Nearby Cinemas"),
         "commentDetail_comment_button":
             MessageLookupByLibrary.simpleMessage("Reply"),
-        "commentDetail_comment_placeholder": m2,
+        "commentDetail_comment_placeholder": m4,
         "commentDetail_replyComment":
             MessageLookupByLibrary.simpleMessage("Comment Reply"),
         "commentDetail_title":
             MessageLookupByLibrary.simpleMessage("Comment Detail"),
-        "commentDetail_totalReplyMessage": m3,
+        "commentDetail_totalReplyMessage": m5,
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("Flip"),
         "common_components_cropper_actions_redo":
@@ -203,8 +215,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete"),
         "movieDetail_comment_reply":
             MessageLookupByLibrary.simpleMessage("Reply"),
-        "movieDetail_comment_replyTo": m4,
-        "movieDetail_comment_translate": m5,
+        "movieDetail_comment_replyTo": m6,
+        "movieDetail_comment_translate": m7,
         "movieDetail_detail_basicMessage":
             MessageLookupByLibrary.simpleMessage("Basic Info"),
         "movieDetail_detail_character":
@@ -228,7 +240,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("Tags"),
         "movieDetail_detail_time":
             MessageLookupByLibrary.simpleMessage("Duration"),
-        "movieDetail_detail_totalReplyMessage": m6,
+        "movieDetail_detail_totalReplyMessage": m8,
         "movieDetail_writeComment":
             MessageLookupByLibrary.simpleMessage("Write Comment"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("Buy Ticket"),
@@ -274,7 +286,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Seat Information"),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("Ticket Collection Code"),
-        "orderDetail_ticketCount": m7,
+        "orderDetail_ticketCount": m9,
         "orderDetail_title":
             MessageLookupByLibrary.simpleMessage("Order Detail"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("Comment"),
@@ -332,7 +344,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete History"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
-        "selectSeat_maxSelectSeatWarn": m8,
+        "selectSeat_maxSelectSeatWarn": m10,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("Please select a seat"),
         "showTimeDetail_address":
@@ -348,7 +360,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("Buy tickets now!"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("Seat Count"),
-        "ticket_shareTicket": m9,
+        "ticket_shareTicket": m11,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("Show Time"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("Cancelled"),
@@ -363,9 +375,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage(" tickets"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("Time format error"),
-        "ticket_time_remaining_days": m10,
-        "ticket_time_remaining_hours": m11,
-        "ticket_time_remaining_minutes": m12,
+        "ticket_time_remaining_days": m12,
+        "ticket_time_remaining_hours": m13,
+        "ticket_time_remaining_minutes": m14,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("Starting soon"),
         "ticket_time_unknown":

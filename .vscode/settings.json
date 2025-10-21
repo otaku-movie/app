@@ -3,5 +3,6 @@
   "commentTranslate.multiLineMerge": true,
   "cmake.sourceDirectory": "D:/project/movie/app/linux",
   "java.configuration.updateBuildConfiguration": "interactive",
-  "commentTranslate.hover.enabled": false
+  "commentTranslate.hover.enabled": false,
+  "i18n-ally.localesPaths": []
 }

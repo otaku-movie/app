@@ -1360,6 +1360,33 @@
         "ja": "上映中",
         "en": "Now Showing"
       }
+    },
+    "selectSeat": {
+      "selectedSeats": {
+        "zh": "已选座位",
+        "ja": "選択済み座席",
+        "en": "Selected Seats"
+      },
+      "pleaseSelectSeats": {
+        "zh": "请选择座位",
+        "ja": "座席を選択してください",
+        "en": "Please select seats"
+      },
+      "confirmSelection": {
+        "zh": "确认选择 {count} 个座位",
+        "ja": "{count} 席の選択を確認",
+        "en": "Confirm selection of {count} seats"
+      },
+      "seatsSelected": {
+        "zh": "已选择 {count} 个座位",
+        "ja": "{count} 席を選択しました",
+        "en": "Selected {count} seats"
+      },
+      "dateFormat": {
+        "zh": "yyyy年MM月dd日",
+        "ja": "yyyy年MM月dd日",
+        "en": "MMM dd, yyyy"
+      }
     }
   }
 }

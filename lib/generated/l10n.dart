@@ -2199,6 +2199,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Selected Seats`
+  String get cinemaList_selectSeat_selectedSeats {
+    return Intl.message(
+      'Selected Seats',
+      name: 'cinemaList_selectSeat_selectedSeats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select seats`
+  String get cinemaList_selectSeat_pleaseSelectSeats {
+    return Intl.message(
+      'Please select seats',
+      name: 'cinemaList_selectSeat_pleaseSelectSeats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm selection of {count} seats`
+  String cinemaList_selectSeat_confirmSelection(Object count) {
+    return Intl.message(
+      'Confirm selection of $count seats',
+      name: 'cinemaList_selectSeat_confirmSelection',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Selected {count} seats`
+  String cinemaList_selectSeat_seatsSelected(Object count) {
+    return Intl.message(
+      'Selected $count seats',
+      name: 'cinemaList_selectSeat_seatsSelected',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `MMM dd, yyyy`
+  String get cinemaList_selectSeat_dateFormat {
+    return Intl.message(
+      'MMM dd, yyyy',
+      name: 'cinemaList_selectSeat_dateFormat',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

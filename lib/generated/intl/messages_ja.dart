@@ -24,27 +24,31 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(count) => "${count} 件の関連映画館が見つかりました";
 
-  static String m2(reply) => "${reply} に返信";
+  static String m2(count) => "${count} 席の選択を確認";
 
-  static String m3(total) => "合計 ${total} 件の返信";
+  static String m3(count) => "${count} 席を選択しました";
 
-  static String m4(reply) => "@${reply} に返信";
+  static String m4(reply) => "${reply} に返信";
 
-  static String m5(language) => "${language}へ翻訳";
+  static String m5(total) => "合計 ${total} 件の返信";
 
-  static String m6(total) => "合計 ${total} 件の返信";
+  static String m6(reply) => "@${reply} に返信";
 
-  static String m7(ticketCount) => "映画チケット ${ticketCount} 枚";
+  static String m7(language) => "${language}へ翻訳";
 
-  static String m8(maxSeat) => "最大${maxSeat}席までお選びいただけます";
+  static String m8(total) => "合計 ${total} 件の返信";
 
-  static String m9(movieName) => "映画チケットをシェア: ${movieName}";
+  static String m9(ticketCount) => "映画チケット ${ticketCount} 枚";
 
-  static String m10(days) => "あと${days}日";
+  static String m10(maxSeat) => "最大${maxSeat}席までお選びいただけます";
 
-  static String m11(hours) => "あと${hours}時間";
+  static String m11(movieName) => "映画チケットをシェア: ${movieName}";
 
-  static String m12(minutes) => "あと${minutes}分";
+  static String m12(days) => "あと${days}日";
+
+  static String m13(hours) => "あと${hours}時間";
+
+  static String m14(minutes) => "あと${minutes}分";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -85,14 +89,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaList_search_results_notFound":
             MessageLookupByLibrary.simpleMessage(
                 "関連する映画館が見つかりません。他のキーワードをお試しください"),
+        "cinemaList_selectSeat_confirmSelection": m2,
+        "cinemaList_selectSeat_dateFormat":
+            MessageLookupByLibrary.simpleMessage("yyyy年MM月dd日"),
+        "cinemaList_selectSeat_pleaseSelectSeats":
+            MessageLookupByLibrary.simpleMessage("座席を選択してください"),
+        "cinemaList_selectSeat_seatsSelected": m3,
+        "cinemaList_selectSeat_selectedSeats":
+            MessageLookupByLibrary.simpleMessage("選択済み座席"),
         "cinemaList_title": MessageLookupByLibrary.simpleMessage("近くの映画館"),
         "commentDetail_comment_button":
             MessageLookupByLibrary.simpleMessage("返信"),
-        "commentDetail_comment_placeholder": m2,
+        "commentDetail_comment_placeholder": m4,
         "commentDetail_replyComment":
             MessageLookupByLibrary.simpleMessage("コメント返信"),
         "commentDetail_title": MessageLookupByLibrary.simpleMessage("コメント詳細"),
-        "commentDetail_totalReplyMessage": m3,
+        "commentDetail_totalReplyMessage": m5,
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("フリップ"),
         "common_components_cropper_actions_redo":
@@ -192,8 +204,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_comment_delete":
             MessageLookupByLibrary.simpleMessage("削除"),
         "movieDetail_comment_reply": MessageLookupByLibrary.simpleMessage("返信"),
-        "movieDetail_comment_replyTo": m4,
-        "movieDetail_comment_translate": m5,
+        "movieDetail_comment_replyTo": m6,
+        "movieDetail_comment_translate": m7,
         "movieDetail_detail_basicMessage":
             MessageLookupByLibrary.simpleMessage("基本情報"),
         "movieDetail_detail_character":
@@ -215,7 +227,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映状況"),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("タグ"),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage("上映時間"),
-        "movieDetail_detail_totalReplyMessage": m6,
+        "movieDetail_detail_totalReplyMessage": m8,
         "movieDetail_writeComment":
             MessageLookupByLibrary.simpleMessage("コメントを書く"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("チケット購入"),
@@ -255,7 +267,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage("座席情報"),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("チケットコード"),
-        "orderDetail_ticketCount": m7,
+        "orderDetail_ticketCount": m9,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage("注文詳細"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("コメント"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("注文番号"),
@@ -299,7 +311,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("履歴を削除"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("座席を確定する"),
-        "selectSeat_maxSelectSeatWarn": m8,
+        "selectSeat_maxSelectSeatWarn": m10,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
@@ -311,7 +323,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("チケットを購入してください！"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("座席数"),
-        "ticket_shareTicket": m9,
+        "ticket_shareTicket": m11,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("上映時間"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("キャンセル済み"),
@@ -323,9 +335,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage("枚のチケット"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("時間形式エラー"),
-        "ticket_time_remaining_days": m10,
-        "ticket_time_remaining_hours": m11,
-        "ticket_time_remaining_minutes": m12,
+        "ticket_time_remaining_days": m12,
+        "ticket_time_remaining_hours": m13,
+        "ticket_time_remaining_minutes": m14,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("まもなく開始"),
         "ticket_time_unknown": MessageLookupByLibrary.simpleMessage("時間不明"),

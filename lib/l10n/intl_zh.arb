@@ -270,5 +270,10 @@
   "cinemaList_empty_noDataTip": "请稍后再试",
   "cinemaList_empty_noSearchResults": "没有找到相关影院",
   "cinemaList_empty_noSearchResultsTip": "请尝试其他关键词",
-  "cinemaList_movies_nowShowing": "正在上映"
+  "cinemaList_movies_nowShowing": "正在上映",
+  "cinemaList_selectSeat_selectedSeats": "已选座位",
+  "cinemaList_selectSeat_pleaseSelectSeats": "请选择座位",
+  "cinemaList_selectSeat_confirmSelection": "确认选择 {count} 个座位",
+  "cinemaList_selectSeat_seatsSelected": "已选择 {count} 个座位",
+  "cinemaList_selectSeat_dateFormat": "yyyy年MM月dd日"
 }

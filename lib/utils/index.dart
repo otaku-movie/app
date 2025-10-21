@@ -141,3 +141,122 @@ EnvironmentType getEnvironment() {
       return EnvironmentType.prod;
   }
 }
+
+/// 解析CSS颜色字符串为Flutter Color对象
+/// 支持多种格式：十六进制、RGB、RGBA、HSL、HSLA、命名颜色
+Color parseColor(String? colorString) {
+  if (colorString == null || colorString.isEmpty) {
+    return Colors.grey; // 默认颜色
+  }
+  
+  // 移除可能的空格
+  colorString = colorString.trim();
+  
+  // 处理命名颜色（常见颜色名称）- 优先处理
+  switch (colorString.toLowerCase()) {
+    case 'red': return Colors.red;
+    case 'green': return Colors.green;
+    case 'blue': return Colors.blue;
+    case 'yellow': return Colors.yellow;
+    case 'orange': return Colors.orange;
+    case 'purple': return Colors.purple;
+    case 'pink': return Colors.pink;
+    case 'brown': return Colors.brown;
+    case 'grey': case 'gray': return Colors.grey;
+    case 'black': return Colors.black;
+    case 'white': return Colors.white;
+    case 'transparent': return Colors.transparent;
+  }
+  
+  // 处理十六进制颜色 (#FF0000, #ff0000, FF0000)
+  if (colorString.startsWith('#')) {
+    colorString = colorString.substring(1);
+  }
+  
+  // 验证是否为有效的十六进制字符串
+  bool isValidHex(String str) {
+    return RegExp(r'^[0-9A-Fa-f]+$').hasMatch(str);
+  }
+  
+  if (colorString.length == 6 && isValidHex(colorString)) {
+    // 6位十六进制
+    try {
+      return Color(int.parse('FF$colorString', radix: 16));
+    } catch (e) {
+      return Colors.grey;
+    }
+  } else if (colorString.length == 3 && isValidHex(colorString)) {
+    // 3位十六进制，扩展为6位
+    try {
+      String expanded = '';
+      for (int i = 0; i < 3; i++) {
+        expanded += colorString[i] + colorString[i];
+      }
+      return Color(int.parse('FF$expanded', radix: 16));
+    } catch (e) {
+      return Colors.grey;
+    }
+  } else if (colorString.length == 8 && isValidHex(colorString)) {
+    // 8位十六进制，包含透明度
+    try {
+      return Color(int.parse(colorString, radix: 16));
+    } catch (e) {
+      return Colors.grey;
+    }
+  }
+  
+  // 处理rgb/rgba格式
+  if (colorString.startsWith('rgb')) {
+    RegExp rgbRegex = RegExp(r'rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)');
+    Match? match = rgbRegex.firstMatch(colorString);
+    if (match != null) {
+      int r = int.parse(match.group(1)!);
+      int g = int.parse(match.group(2)!);
+      int b = int.parse(match.group(3)!);
+      double a = match.group(4) != null ? double.parse(match.group(4)!) : 1.0;
+      return Color.fromRGBO(r, g, b, a);
+    }
+  }
+  
+  // 处理hsl格式
+  if (colorString.startsWith('hsl')) {
+    RegExp hslRegex = RegExp(r'hsla?\((\d+),\s*(\d+)%,\s*(\d+)%(?:,\s*([\d.]+))?\)');
+    Match? match = hslRegex.firstMatch(colorString);
+    if (match != null) {
+      int h = int.parse(match.group(1)!);
+      int s = int.parse(match.group(2)!);
+      int l = int.parse(match.group(3)!);
+      double a = match.group(4) != null ? double.parse(match.group(4)!) : 1.0;
+      
+      // 将HSL转换为RGB
+      double c = (1 - (2 * l / 100 - 1).abs()) * s / 100;
+      double x = c * (1 - ((h / 60) % 2 - 1).abs());
+      double m = l / 100 - c / 2;
+      
+      double r, g, b;
+      if (h < 60) {
+        r = c; g = x; b = 0;
+      } else if (h < 120) {
+        r = x; g = c; b = 0;
+      } else if (h < 180) {
+        r = 0; g = c; b = x;
+      } else if (h < 240) {
+        r = 0; g = x; b = c;
+      } else if (h < 300) {
+        r = x; g = 0; b = c;
+      } else {
+        r = c; g = 0; b = x;
+      }
+      
+      return Color.fromRGBO(
+        ((r + m) * 255).round(),
+        ((g + m) * 255).round(),
+        ((b + m) * 255).round(),
+        a,
+      );
+    }
+  }
+  
+  // 如果无法解析，返回默认颜色
+  return Colors.grey;
+}

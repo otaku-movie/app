@@ -270,5 +270,10 @@
   "cinemaList_empty_noDataTip": "後でもう一度お試しください",
   "cinemaList_empty_noSearchResults": "関連する映画館が見つかりません",
   "cinemaList_empty_noSearchResultsTip": "他のキーワードをお試しください",
-  "cinemaList_movies_nowShowing": "上映中"
+  "cinemaList_movies_nowShowing": "上映中",
+  "cinemaList_selectSeat_selectedSeats": "選択済み座席",
+  "cinemaList_selectSeat_pleaseSelectSeats": "座席を選択してください",
+  "cinemaList_selectSeat_confirmSelection": "{count} 席の選択を確認",
+  "cinemaList_selectSeat_seatsSelected": "{count} 席を選択しました",
+  "cinemaList_selectSeat_dateFormat": "yyyy年MM月dd日"
 }

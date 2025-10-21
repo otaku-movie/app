@@ -748,7 +748,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                       ],
                     ),
                     child: Row(
-                      children: [
+          children: [
                         Container(
                           padding: EdgeInsets.all(12.w),
                           decoration: BoxDecoration(
@@ -763,7 +763,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                         ),
                         SizedBox(width: 16.w),
                         Expanded(
-                          child: Text(
+              child: Text(
                             location!.subLocality!,
                             style: TextStyle(
                               fontSize: 18.sp,
@@ -797,23 +797,23 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              ),
+            ),
+          ],
+        ),
+      ),
                 
                 // 搜索和筛选区域
                 Row(
                   children: [
                     // 地区筛选按钮
                     GestureDetector(
-                      onTap: () {
+                onTap: () {
                         setState(() {
                           showFilterBar = true;
-                        });
-                      },
-                      child: Container(
+                  });
+                },
+                child: Container(
                         height: 60.h,
                         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
                         decoration: BoxDecoration(
@@ -866,7 +866,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                     SizedBox(width: 12.w),
                     
                     // 搜索框
-                    Expanded(
+                        Expanded(
                       child: Container(
                         height: 60.h,
                         decoration: BoxDecoration(

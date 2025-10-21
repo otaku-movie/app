@@ -143,6 +143,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     return transformationController.value.getMaxScaleOnAxis();
   }
 
+
   void selectSeat (SeatItem item) {
     if (
       item.selectSeatState == SelectSeatState.locked.code ||
@@ -206,7 +207,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     final locked = SelectSeatState.locked.code;
     final sold = SelectSeatState.sold.code;
 
-    
+    // 默认状态
     Widget result = generatorSeatState(
       'available', 
       margin: margin, 
@@ -215,7 +216,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
       child: child
     );
 
-    // 不可选的座位
+    // 优先级1: 不可选的座位
     if (seat.disabled) {
       result = generatorSeatState(
         'disabled', 
@@ -226,6 +227,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
       );
     }
     
+    // 优先级2: 座位状态 (sold/locked 优先级高于区域)
     if (seat.selectSeatState != null) {
        if (seat.selectSeatState == locked) {
         result = generatorSeatState(
@@ -246,19 +248,85 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
       );
       }
     }
+    
+    // 优先级3: 已选中的座位
     if (selectSeatSet.contains(seat.id)) {
-      result = generatorSeatState(
-        'selected', 
-        margin: margin, 
-        width: width, 
-        height: height,
-        child: child
-      );
+      // 如果有区域颜色，使用区域颜色的选中状态
+      if (seat.area != null && seat.area!.color != null) {
+        result = _buildSeatWithAreaColorSelected(seat, width, height, margin, child);
+      } else {
+        // 使用默认的选中状态
+        result = generatorSeatState(
+          'selected', 
+          margin: margin, 
+          width: width, 
+          height: height,
+          child: child
+        );
+      }
+    }
+    
+    // 优先级4: 区域颜色 (只有在没有更高优先级状态时才应用)
+    if (seat.area != null && seat.area!.color != null && 
+        seat.selectSeatState != locked && seat.selectSeatState != sold &&
+        !selectSeatSet.contains(seat.id) && !seat.disabled) {
+      // 使用区域颜色渲染座位
+      result = _buildSeatWithAreaColor(seat, width, height, margin, child);
     }
 
     return result;
  }
- 
+
+  // 使用区域颜色渲染座位
+  Widget _buildSeatWithAreaColor(SeatItem seat, double? width, double? height, 
+      EdgeInsetsGeometry? margin, Widget? child) {
+    double finalWidth = width ?? 32.w;
+    double finalHeight = height ?? 32.w;
+    double finalRadius = 10.w;
+    
+    Color areaColor = parseColor(seat.area!.color);
+    
+    return Container(
+      width: finalWidth,
+      height: finalHeight,
+      margin: margin,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(finalRadius),
+        border: Border.all(color: areaColor, width: 1.5),
+      ),
+      child: child,
+    );
+  }
+
+  // 使用区域颜色渲染选中状态的座位
+  Widget _buildSeatWithAreaColorSelected(SeatItem seat, double? width, double? height, 
+      EdgeInsetsGeometry? margin, Widget? child) {
+    double finalWidth = width ?? 32.w;
+    double finalHeight = height ?? 32.w;
+    double finalRadius = 10.w;
+    
+    Color areaColor = parseColor(seat.area!.color);
+    
+    return Container(
+      width: finalWidth,
+      height: finalHeight,
+      margin: margin,
+      decoration: BoxDecoration(
+        color: areaColor, // 使用区域颜色作为背景色
+        borderRadius: BorderRadius.circular(finalRadius),
+        border: Border.all(color: areaColor, width: 1.5),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.check,
+          color: Colors.white,
+          size: finalWidth * 0.6, // 图标大小按宽度比例
+        ),
+      ),
+    );
+  }
+
   Widget generatorSeatState(
     String key, {
     double? width, // 宽度可为空
@@ -654,11 +722,11 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                     margin: const EdgeInsets.only(right: 6.0),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(color: Colors.red, width: 1.5),
+                                      border: Border.all(color: parseColor(item.color), width: 1),
                                     ),
                                   ),
                                   Text(
-                                    '${item.name}（${item.price}円）',
+                                    '${item.name}（${item.price}${S.of(context).common_unit_jpy}）',
                                     style: TextStyle(fontSize: 24.sp),
                                   ),
                                 ],
@@ -718,7 +786,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       Row(
                         children: [
                           Text(
-                            '${formatTime(timeString: _showTimeData.startTime, format: 'yyyy年MM月dd日')}（${getDay(formatTime(timeString: _showTimeData.startTime, format: 'yyyy-MM-dd'), context)}）',
+                            '${formatTime(timeString: _showTimeData.startTime, format: S.of(context).cinemaList_selectSeat_dateFormat)}（${getDay(formatTime(timeString: _showTimeData.startTime, format: 'yyyy-MM-dd'), context)}）',
                             style: TextStyle(
                               fontSize: 28.sp,
                               color: Colors.grey.shade600,
@@ -822,136 +890,69 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                           ),
                           
                           // 字幕标签
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                            decoration: BoxDecoration(
-                              color: Colors.orange.shade50,
-                              borderRadius: BorderRadius.circular(30.r),
-                              border: Border.all(color: Colors.orange.shade200),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.subtitles,
-                                  size: 22.sp,
-                                  color: Colors.orange.shade600,
-                                ),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  '中文字幕',
-                                  style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.orange.shade700,
-                                    fontFamily: 'Poppins',
+                          ...(_showTimeData.subtitle?.map((item) => 
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                              decoration: BoxDecoration(
+                                color: Colors.orange.shade50,
+                                borderRadius: BorderRadius.circular(30.r),
+                                border: Border.all(color: Colors.orange.shade200),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.subtitles,
+                                    size: 22.sp,
+                                    color: Colors.orange.shade600,
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          
-                          // 舞台致辞标签 - 特殊场次，更突出
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.purple.shade400,
-                                  Colors.purple.shade600,
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    item.name ?? '',
+                                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: Colors.orange.shade700, fontFamily: 'Poppins'),
+                                  ),
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(30.r),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.mic,
-                                  size: 22.sp,
-                                  color: Colors.white,
+                            )
+                          ).toList() ?? []),
+                          
+                          // 电影场次标签 - 动态渲染
+                          ...(_showTimeData.movieShowTimeTags?.map((tag) => 
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.purple.shade400,
+                                    Colors.purple.shade600,
+                                  ],
                                 ),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  '舞台致辞',
-                                  style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
+                                borderRadius: BorderRadius.circular(30.r),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.local_activity,
+                                    size: 22.sp,
                                     color: Colors.white,
-                                    fontFamily: 'Poppins',
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          
-                          // 3D标签
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                            decoration: BoxDecoration(
-                              color: Colors.red.shade50,
-                              borderRadius: BorderRadius.circular(30.r),
-                              border: Border.all(color: Colors.red.shade200),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.view_in_ar,
-                                  size: 22.sp,
-                                  color: Colors.red.shade600,
-                                ),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  '3D',
-                                  style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.red.shade700,
-                                    fontFamily: 'Poppins',
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    tag.name ?? '',
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Poppins',
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          
-                          // 首映礼标签 - 特殊场次
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.amber.shade400,
-                                  Colors.orange.shade600,
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(30.r),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  size: 22.sp,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  '首映礼',
-                                  style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                            )
+                          ).toList() ?? []),
                         ],
                       ),
                       
@@ -959,7 +960,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       if (selectSeatList.isNotEmpty) ...[
                         SizedBox(height: 16.h),
                         Text(
-                          '已选座位',
+                          S.of(context).cinemaList_selectSeat_selectedSeats,
                           style: TextStyle(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.w600,
@@ -1022,12 +1023,12 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                   height: 72.h,
                   decoration: BoxDecoration(
                     gradient: selectSeatList.isNotEmpty
-                        ? LinearGradient(
+                        ? const LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              const Color(0xFF007BFF),
-                              const Color(0xFF0056CC),
+                              Color(0xFF007BFF),
+                              Color(0xFF0056CC),
                             ],
                           )
                         : null,
@@ -1053,10 +1054,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                             ],
                             Text(
                               selectSeatList.isEmpty
-                                  ? '请选择座位'
-                                  : '确认选择 ${selectSeatList.length} 个座位',
+                                  ? S.of(context).cinemaList_selectSeat_pleaseSelectSeats
+                                  : S.of(context).cinemaList_selectSeat_confirmSelection(selectSeatList.length),
                               style: TextStyle(
-                                fontSize: 22.sp,
+                                fontSize: 28.sp,
                                 fontWeight: FontWeight.w600,
                                 color: selectSeatList.isEmpty
                                     ? Colors.grey.shade500
@@ -1113,7 +1114,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     if (selectSeatList.isEmpty) return;
     
     // 这里可以添加确认选座的逻辑
-    ToastService.showToast('已选择 ${selectSeatList.length} 个座位');
+    ToastService.showToast(S.of(context).cinemaList_selectSeat_seatsSelected(selectSeatList.length));
     
     // 可以导航到确认页面
     // context.push('/confirmOrder', extra: {

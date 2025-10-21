@@ -270,5 +270,10 @@
   "cinemaList_empty_noDataTip": "Please try again later",
   "cinemaList_empty_noSearchResults": "No related cinemas found",
   "cinemaList_empty_noSearchResultsTip": "Please try other keywords",
-  "cinemaList_movies_nowShowing": "Now Showing"
+  "cinemaList_movies_nowShowing": "Now Showing",
+  "cinemaList_selectSeat_selectedSeats": "Selected Seats",
+  "cinemaList_selectSeat_pleaseSelectSeats": "Please select seats",
+  "cinemaList_selectSeat_confirmSelection": "Confirm selection of {count} seats",
+  "cinemaList_selectSeat_seatsSelected": "Selected {count} seats",
+  "cinemaList_selectSeat_dateFormat": "MMM dd, yyyy"
 }
