@@ -26,9 +26,11 @@ class _PageState extends State<Ticket> {
   bool loading = false;
 
   void getData({bool refresh = true}) {
-    setState(() {
-      loading = true;
-    });
+    if (mounted) {
+      setState(() {
+        loading = true;
+      });
+    }
     ApiRequest().request(
       path: '/user/orderList',
       method: 'POST',
@@ -43,19 +45,23 @@ class _PageState extends State<Ticket> {
         );
       },
     ).then((res) {
-      setState(() {
-        if (refresh) {
-          data = res.data?.list ?? [];
-          currentPage = 1;
-        } else {
-          data.addAll(res.data?.list ?? []);
-          currentPage++;
-        }
-      });
+      if (mounted) {
+        setState(() {
+          if (refresh) {
+            data = res.data?.list ?? [];
+            currentPage = 1;
+          } else {
+            data.addAll(res.data?.list ?? []);
+            currentPage++;
+          }
+        });
+      }
     }).whenComplete(() {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 
@@ -180,7 +186,7 @@ class _PageState extends State<Ticket> {
 
   Widget _buildTicketCard(OrderDetailResponse ticket) {
     return GestureDetector(
-      onTap: () {
+            onTap: () {
         context.pushNamed(
           'orderDetail',
           queryParameters: {
@@ -330,7 +336,7 @@ class _PageState extends State<Ticket> {
                               SizedBox(height: 10.h),
                               Row(
                                 children: [
-                                  _buildTag(ticket.theaterHallSpecName ?? ''),
+                                  _buildTag(ticket.specName ?? ''),
                                   SizedBox(width: 8.w),
                                   // _buildTag(ticket.theaterHallLanguage ?? ''),
                                 ],

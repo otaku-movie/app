@@ -1085,6 +1085,46 @@
       "zh": "支付",
       "ja": "支払いへ",
       "en": "Buy"
+    },
+    "selectedSeats": {
+      "zh": "已选座位",
+      "ja": "選択済み座席",
+      "en": "Selected Seats"
+    },
+    "seatCount": {
+      "zh": {
+        "text": "{count}个座位",
+        "placeholders": {
+          "count": {"type": "int"}
+        }
+      },
+      "ja": {
+        "text": "{count}席",
+        "placeholders": {
+          "count": {"type": "int"}
+        }
+      },
+      "en": {
+        "text": "{count} seats",
+        "placeholders": {
+          "count": {"type": "int"}
+        }
+      }
+    },
+    "timeInfo": {
+      "zh": "时间信息",
+      "ja": "時間情報",
+      "en": "Time Information"
+    },
+    "cinemaInfo": {
+      "zh": "影院信息",
+      "ja": "映画館情報",
+      "en": "Cinema Information"
+    },
+    "countdown": {
+      "zh": "剩余时间",
+      "ja": "残り時間",
+      "en": "Time Remaining"
     }
   },
   "user": {

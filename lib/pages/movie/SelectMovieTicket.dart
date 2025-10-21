@@ -143,12 +143,12 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                               borderRadius: BorderRadius.circular(20.r),
                             child: CustomExtendedImage(
                               data.moviePoster ?? '',
-                                width: 200.w,
-                                height: 280.h,
+                                width: 230.w,
+                                height: 250.h,
                               fit: BoxFit.cover,
-                              ),
                             ),
                           ),
+                        ),
                           
                           SizedBox(width: 20.w),
                           
@@ -192,32 +192,32 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                         color: Colors.blue.shade600,
                                       ),
                                       SizedBox(width: 8.w),
-                                      RichText(
-                                        text: TextSpan(
-                                          style: TextStyle(
+                                    RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(
                                             fontSize: 24.sp,
                                             color: Colors.blue.shade700,
                                             fontWeight: FontWeight.w600,
-                                          ),
-                                          children: [
-                                            TextSpan(
+                                        ),
+                                        children: [
+                                          TextSpan(
                                               text: formatTime(
                                                 timeString: data.date,
                                                 format: S.of(context).cinemaList_selectSeat_dateFormat,
                                               ),
-                                            ),
-                                            TextSpan(
-                                              text: '（${getDay(data.date ?? '', context)}）',
+                                          ),
+                                          TextSpan(
+                                            text: '（${getDay(data.date ?? '', context)}）',
                                               style: TextStyle(
                                                 color: Colors.blue.shade600,
                                                 fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
+                                ),
                                 ),
                                 
                                 SizedBox(height: 12.h),
@@ -235,14 +235,14 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
-                                    children: [
+                                  children: [
                                       Icon(
                                         Icons.movie,
                                         size: 20.sp,
                                         color: Colors.orange.shade600,
                                       ),
                                       SizedBox(width: 8.w),
-                                      Text(
+                                    Text(
                                         '${data.startTime} ~ ${data.endTime}',
                                         style: TextStyle(
                                           fontSize: 22.sp,
@@ -297,11 +297,11 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                                 fontSize: 22.sp,
                                                 color: Colors.grey.shade700,
                                                 fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                                       SizedBox(height: 4.h),
                                       Row(
                                         children: [
@@ -660,10 +660,10 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                             ],
                           ),
                         ),
-                      ),
                     ),
                   ),
-                ],
+                ),
+              ],
               ),
             ),
           ),
@@ -678,8 +678,8 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
     return data.seat!.fold(0, (prev, current) {
       if (current.movieTicketTypeId != null) {
         try {
-          MovieTicketTypeResponse ticketType = movieTicketTypeData.firstWhere((el) => el.id == current.movieTicketTypeId);
-          return prev + (ticketType.price ?? 0) + (current.plusPrice ?? 0);
+        MovieTicketTypeResponse ticketType = movieTicketTypeData.firstWhere((el) => el.id == current.movieTicketTypeId);
+        return prev + (ticketType.price ?? 0) + (current.plusPrice ?? 0);
         } catch (e) {
           // 如果没有找到匹配的票种，返回原价格
           return prev + (current.plusPrice ?? 0);
@@ -692,7 +692,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
 
   Widget getTicketType (item) {
     try {
-      MovieTicketTypeResponse data = movieTicketTypeData.firstWhere((el) => el.id == item.movieTicketTypeId);
+    MovieTicketTypeResponse data = movieTicketTypeData.firstWhere((el) => el.id == item.movieTicketTypeId);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -871,9 +871,9 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                 int index = data.seat!.indexWhere((item) => item.seatName == seat.seatName);
                 
                 if (index != -1 && data.seat != null && index < data.seat!.length) {
-                  setState(() {
+                setState(() {
                     data.seat![index].movieTicketTypeId = el.id;
-                  });
+                });
                 }
                 
                 Navigator.pop(context);

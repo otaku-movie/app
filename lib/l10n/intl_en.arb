@@ -220,6 +220,18 @@
   "confirmOrder_total": "Total",
   "confirmOrder_selectPayMethod": "Select Payment Method",
   "confirmOrder_pay": "Buy",
+  "confirmOrder_selectedSeats": "Selected Seats",
+  "confirmOrder_seatCount": "{count} seats",
+  "@confirmOrder_seatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmOrder_timeInfo": "Time Information",
+  "confirmOrder_cinemaInfo": "Cinema Information",
+  "confirmOrder_countdown": "Time Remaining",
   "user_title": "My Profile",
   "user_data_orderCount": "Order Count",
   "user_data_watchHistory": "Watch History",

@@ -257,13 +257,13 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
         result = _buildSeatWithAreaColorSelected(seat, width, height, margin, child);
       } else {
         // 使用默认的选中状态
-        result = generatorSeatState(
-          'selected', 
-          margin: margin, 
-          width: width, 
-          height: height,
-          child: child
-        );
+      result = generatorSeatState(
+        'selected', 
+        margin: margin, 
+        width: width, 
+        height: height,
+        child: child
+      );
       }
     }
     
@@ -326,8 +326,8 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
         ),
       ),
     );
-  }
-
+ }
+ 
   Widget generatorSeatState(
     String key, {
     double? width, // 宽度可为空
@@ -828,8 +828,8 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       // 标签组
                       Wrap(
                         spacing: 10.w,
-                        runSpacing: 10.h,
-                        children: [
+                    runSpacing: 10.h,
+                    children: [
                           // 影厅规格标签
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
@@ -840,7 +840,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: [
+                        children: [
                                 Icon(
                                   Icons.movie,
                                   size: 22.sp,
@@ -870,7 +870,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: [
+                            children: [
                                 Icon(
                                   Icons.location_on,
                                   size: 22.sp,
@@ -911,9 +911,9 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                   Text(
                                     item.name ?? '',
                                     style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: Colors.orange.shade700, fontFamily: 'Poppins'),
-                                  ),
-                                ],
                               ),
+                            ],
+                          ),
                             )
                           ).toList() ?? []),
                           
@@ -970,12 +970,12 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                           ),
                         ),
                         SizedBox(height: 8.h),
-                        Wrap(
+                      Wrap(
                           spacing: 18.w,
                           runSpacing: 8.h,
                           children: selectSeatList.map((seat) {
-                            return GestureDetector(
-                              onTap: () {
+                          return GestureDetector(
+                            onTap: () {
                               setState(() {
                                   selectSeatList.removeWhere((s) => s.id == seat.id);
                                 });
@@ -1117,31 +1117,31 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     // 这里可以添加确认选座的逻辑
     // ToastService.showToast(S.of(context).cinemaList_selectSeat_seatsSelected(selectSeatList.length));
 
-      if (selectSeatList.isEmpty) {
-        ToastService.showWarning(S.of(context).selectSeat_notSelectSeatWarn);
-        return;
-      }
-      ApiRequest().request(
-        path: '/movie_show_time/select_seat/save',
-        method: 'POST',
-        data: {
-          'movieShowTimeId': _showTimeData.id,
-          "theaterHallId":_showTimeData.theaterHallId,
-          'seatPosition': selectSeatList.map((item) {
-            return {
-              "x": item.x,
-              "y": item.y,
-              "seatId": item.id
-            };
-          }).toList()
-        },
-        fromJsonT: (json) {},
-      ).then((res) {
-        context.pushNamed("selectMovieTicketType", queryParameters: {
-          'movieShowTimeId': '${_showTimeData.id}',
-          'cinemaId': '${_showTimeData.cinemaId}'
-        });
-      });
-    
+                    if (selectSeatList.isEmpty) {
+                      ToastService.showWarning(S.of(context).selectSeat_notSelectSeatWarn);
+                      return;
+                    }
+                    ApiRequest().request(
+                      path: '/movie_show_time/select_seat/save',
+                      method: 'POST',
+                      data: {
+                        'movieShowTimeId': _showTimeData.id,
+                        "theaterHallId":_showTimeData.theaterHallId,
+                        'seatPosition': selectSeatList.map((item) {
+                          return {
+                            "x": item.x,
+                            "y": item.y,
+                            "seatId": item.id
+                          };
+                        }).toList()
+                      },
+                      fromJsonT: (json) {},
+                    ).then((res) {
+                      context.pushNamed("selectMovieTicketType", queryParameters: {
+                        'movieShowTimeId': '${_showTimeData.id}',
+                        'cinemaId': '${_showTimeData.cinemaId}'
+                      });
+                    });
+
   }
 }

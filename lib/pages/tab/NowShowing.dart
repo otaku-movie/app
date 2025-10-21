@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/HelloMovie.dart';
@@ -9,12 +8,9 @@ import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
-import 'package:otaku_movie/response/response.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/components/error.dart';
-import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otaku_movie/utils/toast.dart';
 
 class NowShowing extends StatefulWidget {
 
@@ -53,17 +49,19 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
       if (res.data?.list != null) {
         List<MovieNowShowingResponse> list = res.data!.list!;
         
-        setState(() {
-          if (list.isNotEmpty && !loadFinished) {
-            data.addAll(list); // 追加数据
-          }
-          if (page == 1) {
-            data = list;
-          }
-          currentPage = page;
-          loadFinished = list.isEmpty; // 更新加载完成标志
-          
-        });
+        if (mounted) {
+          setState(() {
+            if (list.isNotEmpty && !loadFinished) {
+              data.addAll(list); // 追加数据
+            }
+            if (page == 1) {
+              data = list;
+            }
+            currentPage = page;
+            loadFinished = list.isEmpty; // 更新加载完成标志
+            
+          });
+        }
 
         easyRefreshController.finishLoad(
           list.isEmpty ? IndicatorResult.noMore : IndicatorResult.success,
@@ -71,14 +69,18 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         );
       }
     }).catchError((err) {
-      setState(() {
-        error = true;
-      });
+      if (mounted) {
+        setState(() {
+          error = true;
+        });
+      }
     })
     .whenComplete(() {
-      setState(() {
-        loading = false;
-      });
+      if (mounted) {
+        setState(() {
+          loading = false;
+        });
+      }
     });
   }
 

@@ -233,7 +233,7 @@ class _PageState extends State<PaySuccess> {
                                                 ),
                                                 // 时间段部分
                                                 TextSpan(
-                                                  text: ' ${data.startTime} ~ ${data.endTime} ${data.theaterHallSpecName}',
+                                                  text: ' ${data.startTime} ~ ${data.endTime} ${data.specName}',
                                                 ),
                                               ],
                                             )

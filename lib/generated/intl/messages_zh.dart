@@ -32,23 +32,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m5(total) => "共${total}条回复";
 
-  static String m6(reply) => "回复@${reply}";
+  static String m6(count) => "${count}个座位";
 
-  static String m7(language) => "翻译为${language}";
+  static String m7(reply) => "回复@${reply}";
 
-  static String m8(total) => "共${total}条回复";
+  static String m8(language) => "翻译为${language}";
 
-  static String m9(ticketCount) => "${ticketCount}张电影票";
+  static String m9(total) => "共${total}条回复";
 
-  static String m10(maxSeat) => "最大选座数量不能超过${maxSeat}个";
+  static String m10(ticketCount) => "${ticketCount}张电影票";
 
-  static String m11(movieName) => "分享电影票: ${movieName}";
+  static String m11(maxSeat) => "最大选座数量不能超过${maxSeat}个";
 
-  static String m12(days) => "还有${days}天";
+  static String m12(movieName) => "分享电影票: ${movieName}";
 
-  static String m13(hours) => "还有${hours}小时";
+  static String m13(days) => "还有${days}天";
 
-  static String m14(minutes) => "还有${minutes}分钟";
+  static String m14(hours) => "还有${hours}小时";
+
+  static String m15(minutes) => "还有${minutes}分钟";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -170,9 +172,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_week_thursday": MessageLookupByLibrary.simpleMessage("四"),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage("二"),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage("三"),
+        "confirmOrder_cinemaInfo": MessageLookupByLibrary.simpleMessage("影院信息"),
+        "confirmOrder_countdown": MessageLookupByLibrary.simpleMessage("剩余时间"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支付"),
+        "confirmOrder_seatCount": m6,
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage("选择支付方式"),
+        "confirmOrder_selectedSeats":
+            MessageLookupByLibrary.simpleMessage("已选座位"),
+        "confirmOrder_timeInfo": MessageLookupByLibrary.simpleMessage("时间信息"),
         "confirmOrder_title": MessageLookupByLibrary.simpleMessage("确认订单"),
         "confirmOrder_total": MessageLookupByLibrary.simpleMessage("合计"),
         "home_cinema": MessageLookupByLibrary.simpleMessage("电影院"),
@@ -200,8 +208,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_comment_delete":
             MessageLookupByLibrary.simpleMessage("删除"),
         "movieDetail_comment_reply": MessageLookupByLibrary.simpleMessage("回复"),
-        "movieDetail_comment_replyTo": m6,
-        "movieDetail_comment_translate": m7,
+        "movieDetail_comment_replyTo": m7,
+        "movieDetail_comment_translate": m8,
         "movieDetail_detail_basicMessage":
             MessageLookupByLibrary.simpleMessage("基本信息"),
         "movieDetail_detail_character":
@@ -222,7 +230,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映状态"),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("标签"),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage("时长"),
-        "movieDetail_detail_totalReplyMessage": m8,
+        "movieDetail_detail_totalReplyMessage": m9,
         "movieDetail_writeComment": MessageLookupByLibrary.simpleMessage("写评论"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "movieList_comingSoon_noDate":
@@ -277,7 +285,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_payTime": MessageLookupByLibrary.simpleMessage("支付时间"),
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage("座位信息"),
         "orderDetail_ticketCode": MessageLookupByLibrary.simpleMessage("取票码"),
-        "orderDetail_ticketCount": m9,
+        "orderDetail_ticketCount": m10,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage("订单详情"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("评论"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("订单号"),
@@ -320,7 +328,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("删除历史记录"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
-        "selectSeat_maxSelectSeatWarn": m10,
+        "selectSeat_maxSelectSeatWarn": m11,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("请选择座位"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("地址"),
@@ -331,7 +339,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noData": MessageLookupByLibrary.simpleMessage("暂无电影票"),
         "ticket_noDataTip": MessageLookupByLibrary.simpleMessage("快去购买电影票吧！"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("座位数"),
-        "ticket_shareTicket": m11,
+        "ticket_shareTicket": m12,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("放映时间"),
         "ticket_status_cancelled": MessageLookupByLibrary.simpleMessage("已取消"),
         "ticket_status_expired": MessageLookupByLibrary.simpleMessage("已过期"),
@@ -342,9 +350,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage("张票"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("时间格式错误"),
-        "ticket_time_remaining_days": m12,
-        "ticket_time_remaining_hours": m13,
-        "ticket_time_remaining_minutes": m14,
+        "ticket_time_remaining_days": m13,
+        "ticket_time_remaining_hours": m14,
+        "ticket_time_remaining_minutes": m15,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("即将开始"),
         "ticket_time_unknown": MessageLookupByLibrary.simpleMessage("时间未知"),

@@ -45,7 +45,7 @@ class OrderDetailResponse {
     final String? cinemaFullAddress;
     final String? theaterHallName;
     
-    final String? theaterHallSpecName;
+    final String? specName;
     
     final List<Seat>? seat;
 
@@ -70,7 +70,7 @@ class OrderDetailResponse {
         this.cinemaName,
         this.cinemaFullAddress,
         this.theaterHallName,
-        this.theaterHallSpecName,
+        this.specName,
         this.seat,
     });
 

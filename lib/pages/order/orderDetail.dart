@@ -222,7 +222,7 @@ class _PageState extends State<OrderDetail> {
                                             ),
                                             // 时间段部分
                                             TextSpan(
-                                              text: ' ${data.startTime} ~ ${data.endTime} ${data.theaterHallSpecName}',
+                                              text: ' ${data.startTime} ~ ${data.endTime} ${data.specName}',
                                             ),
                                           ],
                                         )

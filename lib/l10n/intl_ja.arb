@@ -220,6 +220,18 @@
   "confirmOrder_total": "合計",
   "confirmOrder_selectPayMethod": "支払い方法を選択してください",
   "confirmOrder_pay": "支払いへ",
+  "confirmOrder_selectedSeats": "選択済み座席",
+  "confirmOrder_seatCount": "{count}席",
+  "@confirmOrder_seatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmOrder_timeInfo": "時間情報",
+  "confirmOrder_cinemaInfo": "映画館情報",
+  "confirmOrder_countdown": "残り時間",
   "user_title": "マイページ",
   "user_data_orderCount": "注文数",
   "user_data_watchHistory": "鑑賞履歴",

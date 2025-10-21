@@ -185,7 +185,7 @@ class _PageState extends State<OrderList> {
                                         ),
                                         // 时间段部分
                                         TextSpan(
-                                          text: ' ${item.startTime} ~ ${item.endTime} ${item.theaterHallSpecName}',
+                                          text: ' ${item.startTime} ~ ${item.endTime} ${item.specName}',
                                         )],
                                       )
                                     ),

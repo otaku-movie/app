@@ -1760,6 +1760,56 @@ class S {
     );
   }
 
+  /// `Selected Seats`
+  String get confirmOrder_selectedSeats {
+    return Intl.message(
+      'Selected Seats',
+      name: 'confirmOrder_selectedSeats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} seats`
+  String confirmOrder_seatCount(int count) {
+    return Intl.message(
+      '$count seats',
+      name: 'confirmOrder_seatCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Time Information`
+  String get confirmOrder_timeInfo {
+    return Intl.message(
+      'Time Information',
+      name: 'confirmOrder_timeInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cinema Information`
+  String get confirmOrder_cinemaInfo {
+    return Intl.message(
+      'Cinema Information',
+      name: 'confirmOrder_cinemaInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time Remaining`
+  String get confirmOrder_countdown {
+    return Intl.message(
+      'Time Remaining',
+      name: 'confirmOrder_countdown',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `My Profile`
   String get user_title {
     return Intl.message(

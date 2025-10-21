@@ -220,6 +220,18 @@
   "confirmOrder_total": "合计",
   "confirmOrder_selectPayMethod": "选择支付方式",
   "confirmOrder_pay": "支付",
+  "confirmOrder_selectedSeats": "已选座位",
+  "confirmOrder_seatCount": "{count}个座位",
+  "@confirmOrder_seatCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "confirmOrder_timeInfo": "时间信息",
+  "confirmOrder_cinemaInfo": "影院信息",
+  "confirmOrder_countdown": "剩余时间",
   "user_title": "我的",
   "user_data_orderCount": "订单数",
   "user_data_watchHistory": "观影记录",
