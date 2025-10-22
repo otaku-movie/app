@@ -42,15 +42,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(ticketCount) => "${ticketCount}张电影票";
 
-  static String m11(maxSeat) => "最大选座数量不能超过${maxSeat}个";
+  static String m11(date) => "有效期: ${date}";
 
-  static String m12(movieName) => "分享电影票: ${movieName}";
+  static String m12(maxSeat) => "最大选座数量不能超过${maxSeat}个";
 
-  static String m13(days) => "还有${days}天";
+  static String m13(movieName) => "分享电影票: ${movieName}";
 
-  static String m14(hours) => "还有${hours}小时";
+  static String m14(days) => "还有${days}天";
 
-  static String m15(minutes) => "还有${minutes}分钟";
+  static String m15(hours) => "还有${hours}小时";
+
+  static String m16(minutes) => "还有${minutes}分钟";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -172,8 +174,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_week_thursday": MessageLookupByLibrary.simpleMessage("四"),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage("二"),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage("三"),
+        "confirmOrder_cancelOrder":
+            MessageLookupByLibrary.simpleMessage("取消订单"),
+        "confirmOrder_cancelOrderConfirm":
+            MessageLookupByLibrary.simpleMessage("您已选择了座位，确定要取消订单并释放已选择的座位吗？"),
+        "confirmOrder_cancelOrderFailed":
+            MessageLookupByLibrary.simpleMessage("取消订单失败，请重试"),
         "confirmOrder_cinemaInfo": MessageLookupByLibrary.simpleMessage("影院信息"),
+        "confirmOrder_confirmCancel":
+            MessageLookupByLibrary.simpleMessage("确认取消"),
+        "confirmOrder_continuePay":
+            MessageLookupByLibrary.simpleMessage("继续支付"),
         "confirmOrder_countdown": MessageLookupByLibrary.simpleMessage("剩余时间"),
+        "confirmOrder_orderCanceled":
+            MessageLookupByLibrary.simpleMessage("订单已取消"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支付"),
         "confirmOrder_seatCount": m6,
         "confirmOrder_selectPayMethod":
@@ -294,6 +308,81 @@ class MessageLookup extends MessageLookupByLibrary {
             "您的订单已经支付完成，请在以下时间之前到达以下地点，祝您观影愉快。"),
         "payResult_ticketCode": MessageLookupByLibrary.simpleMessage("取票码"),
         "payResult_title": MessageLookupByLibrary.simpleMessage("支付完成"),
+        "payment_addCreditCard_cardConfirmed":
+            MessageLookupByLibrary.simpleMessage("信用卡信息已确认"),
+        "payment_addCreditCard_cardHolderName":
+            MessageLookupByLibrary.simpleMessage("持卡人姓名"),
+        "payment_addCreditCard_cardHolderNameError":
+            MessageLookupByLibrary.simpleMessage("请输入持卡人姓名"),
+        "payment_addCreditCard_cardHolderNameHint":
+            MessageLookupByLibrary.simpleMessage("请输入持卡人姓名"),
+        "payment_addCreditCard_cardNumber":
+            MessageLookupByLibrary.simpleMessage("卡号"),
+        "payment_addCreditCard_cardNumberError":
+            MessageLookupByLibrary.simpleMessage("请输入有效的卡号"),
+        "payment_addCreditCard_cardNumberHint":
+            MessageLookupByLibrary.simpleMessage("请输入卡号"),
+        "payment_addCreditCard_cardNumberLength":
+            MessageLookupByLibrary.simpleMessage("卡号长度不正确"),
+        "payment_addCreditCard_cardSaved":
+            MessageLookupByLibrary.simpleMessage("信用卡已保存"),
+        "payment_addCreditCard_confirmAdd":
+            MessageLookupByLibrary.simpleMessage("确认添加"),
+        "payment_addCreditCard_cvv":
+            MessageLookupByLibrary.simpleMessage("CVV"),
+        "payment_addCreditCard_cvvError":
+            MessageLookupByLibrary.simpleMessage("請输入CVV"),
+        "payment_addCreditCard_cvvHint":
+            MessageLookupByLibrary.simpleMessage("•••"),
+        "payment_addCreditCard_cvvLength":
+            MessageLookupByLibrary.simpleMessage("长度不正确"),
+        "payment_addCreditCard_expiryDate":
+            MessageLookupByLibrary.simpleMessage("有效期"),
+        "payment_addCreditCard_expiryDateError":
+            MessageLookupByLibrary.simpleMessage("请输入有效期"),
+        "payment_addCreditCard_expiryDateExpired":
+            MessageLookupByLibrary.simpleMessage("卡片已过期"),
+        "payment_addCreditCard_expiryDateHint":
+            MessageLookupByLibrary.simpleMessage("MM/YY"),
+        "payment_addCreditCard_expiryDateInvalid":
+            MessageLookupByLibrary.simpleMessage("有效期格式不正确"),
+        "payment_addCreditCard_operationFailed":
+            MessageLookupByLibrary.simpleMessage("操作失败，请重试"),
+        "payment_addCreditCard_saveCard":
+            MessageLookupByLibrary.simpleMessage("保存此信用卡"),
+        "payment_addCreditCard_saveToAccount":
+            MessageLookupByLibrary.simpleMessage("将保存到您的账户，方便下次使用"),
+        "payment_addCreditCard_title":
+            MessageLookupByLibrary.simpleMessage("添加信用卡"),
+        "payment_addCreditCard_useOnce":
+            MessageLookupByLibrary.simpleMessage("仅本次使用，不会保存"),
+        "payment_selectCreditCard_addNewCard":
+            MessageLookupByLibrary.simpleMessage("添加新信用卡"),
+        "payment_selectCreditCard_confirmPayment":
+            MessageLookupByLibrary.simpleMessage("确认支付"),
+        "payment_selectCreditCard_expiryDate": m11,
+        "payment_selectCreditCard_loadFailed":
+            MessageLookupByLibrary.simpleMessage("加载信用卡列表失败"),
+        "payment_selectCreditCard_noCreditCard":
+            MessageLookupByLibrary.simpleMessage("暂无信用卡"),
+        "payment_selectCreditCard_paymentFailed":
+            MessageLookupByLibrary.simpleMessage("支付失败，请重试"),
+        "payment_selectCreditCard_paymentSuccess":
+            MessageLookupByLibrary.simpleMessage("支付成功"),
+        "payment_selectCreditCard_pleaseAddCard":
+            MessageLookupByLibrary.simpleMessage("请添加一张信用卡"),
+        "payment_selectCreditCard_pleaseSelectCard":
+            MessageLookupByLibrary.simpleMessage("请选择一张信用卡"),
+        "payment_selectCreditCard_removeTempCard":
+            MessageLookupByLibrary.simpleMessage("移除临时卡片"),
+        "payment_selectCreditCard_tempCard":
+            MessageLookupByLibrary.simpleMessage("临时卡片（仅本次使用）"),
+        "payment_selectCreditCard_tempCardRemoved":
+            MessageLookupByLibrary.simpleMessage("已移除临时卡片"),
+        "payment_selectCreditCard_tempCardSelected":
+            MessageLookupByLibrary.simpleMessage("已选择临时信用卡"),
+        "payment_selectCreditCard_title":
+            MessageLookupByLibrary.simpleMessage("选择信用卡"),
         "register_haveAccount": MessageLookupByLibrary.simpleMessage("已经有账号了？"),
         "register_loginHere": MessageLookupByLibrary.simpleMessage("点击登录"),
         "register_passwordNotMatchRepeatPassword":
@@ -326,9 +415,29 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("是否确定要删除历史记录?"),
         "search_removeHistoryConfirm_title":
             MessageLookupByLibrary.simpleMessage("删除历史记录"),
+        "seatCancel_cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "seatCancel_confirm": MessageLookupByLibrary.simpleMessage("确定"),
+        "seatCancel_confirmMessage":
+            MessageLookupByLibrary.simpleMessage("您已选择了座位，确定要取消已选择的座位吗？"),
+        "seatCancel_confirmTitle":
+            MessageLookupByLibrary.simpleMessage("取消座位选择"),
+        "seatCancel_errorMessage":
+            MessageLookupByLibrary.simpleMessage("取消座位选择失败，请重试"),
+        "seatCancel_successMessage":
+            MessageLookupByLibrary.simpleMessage("座位选择已取消"),
+        "seatSelection_cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "seatSelection_cancelSeatConfirm":
+            MessageLookupByLibrary.simpleMessage("您已选择了座位，确定要取消已选择的座位吗？"),
+        "seatSelection_cancelSeatFailed":
+            MessageLookupByLibrary.simpleMessage("取消座位选择失败，请重试"),
+        "seatSelection_cancelSeatTitle":
+            MessageLookupByLibrary.simpleMessage("取消座位选择"),
+        "seatSelection_confirm": MessageLookupByLibrary.simpleMessage("确定"),
+        "seatSelection_seatCanceled":
+            MessageLookupByLibrary.simpleMessage("座位选择已取消"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
-        "selectSeat_maxSelectSeatWarn": m11,
+        "selectSeat_maxSelectSeatWarn": m12,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("请选择座位"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("地址"),
@@ -339,7 +448,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noData": MessageLookupByLibrary.simpleMessage("暂无电影票"),
         "ticket_noDataTip": MessageLookupByLibrary.simpleMessage("快去购买电影票吧！"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("座位数"),
-        "ticket_shareTicket": m12,
+        "ticket_shareTicket": m13,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("放映时间"),
         "ticket_status_cancelled": MessageLookupByLibrary.simpleMessage("已取消"),
         "ticket_status_expired": MessageLookupByLibrary.simpleMessage("已过期"),
@@ -350,9 +459,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage("张票"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("时间格式错误"),
-        "ticket_time_remaining_days": m13,
-        "ticket_time_remaining_hours": m14,
-        "ticket_time_remaining_minutes": m15,
+        "ticket_time_remaining_days": m14,
+        "ticket_time_remaining_hours": m15,
+        "ticket_time_remaining_minutes": m16,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("即将开始"),
         "ticket_time_unknown": MessageLookupByLibrary.simpleMessage("时间未知"),

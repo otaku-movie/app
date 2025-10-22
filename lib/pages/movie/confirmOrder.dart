@@ -13,6 +13,9 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/order/order_detail_response.dart';
 import 'package:otaku_movie/response/order/payment_method_response.dart';
 import 'package:otaku_movie/utils/index.dart';
+import 'package:otaku_movie/utils/toast.dart';
+import 'package:otaku_movie/utils/seat_cancel_manager.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 class ConfirmOrder extends StatefulWidget {
@@ -72,8 +75,6 @@ class _PageState extends State<ConfirmOrder> {
         setState(() {
           data = res.data!;
         });
-        // 调试信息：打印specName的值
-        print('specName: ${data.specName}');
       }
     }).whenComplete(() {
       setState(() {
@@ -129,9 +130,12 @@ class _PageState extends State<ConfirmOrder> {
     getPaymentMethodData();
     getData();
 
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (countDown <= 0) {
         _timer?.cancel();  // 取消计时器
+        
+        // 倒计时结束，自动取消订单并返回到选座页面
+        await _cancelOrderAndReturn();
         return;
       }
       
@@ -148,72 +152,322 @@ class _PageState extends State<ConfirmOrder> {
     super.dispose();
   }
 
-  // 根据支付方式名称获取图标
-  IconData _getPaymentIcon(String paymentName) {
-    switch (paymentName) {
-      case '支付宝':
-        return Icons.account_balance_wallet;
-      case '微信':
-        return Icons.wechat;
-      case 'PayPay':
-        return Icons.payment;
-      case 'クレジットカード':
-        return Icons.credit_card;
-      case 'LINE Pay':
-        return Icons.chat;
-      case '楽天Pay':
-        return Icons.shopping_bag;
-      case 'd払い':
-        return Icons.phone_android;
-      case 'au PAY':
-        return Icons.phone_android;
-      case 'メルペイ':
-        return Icons.account_balance;
-      case 'Suica':
-        return Icons.train;
-      case 'PASMO':
-        return Icons.train;
-      case 'nanaco':
-        return Icons.card_giftcard;
-      case 'WAON':
-        return Icons.card_giftcard;
-      default:
-        return Icons.payment;
+  // 取消订单并返回到选座页面
+  Future<void> _cancelOrderAndReturn() async {
+    try {
+      // 调用取消订单接口
+      await ApiRequest().request(
+        path: '/api/movieOrder/cancel',
+        method: 'POST',
+        data: {
+          'orderId': int.parse(widget.id!),
+        },
+        fromJsonT: (json) => json,
+      );
+      
+      // 获取座位选择信息用于跳转
+      final seatData = SeatCancelManager.getCurrentSeatSelection();
+      
+      // 清除座位选择信息
+      SeatCancelManager.clearSeatSelection();
+      
+      if (!mounted) return;
+      
+      // 显示提示
+      ToastService.showWarning(S.of(context).confirmOrder_orderCanceled);
+      
+      // 跳转回座位选择页面
+      if (seatData != null && 
+          seatData['movieShowTimeId'] != null && 
+          seatData['theaterHallId'] != null) {
+        context.pushReplacementNamed(
+          'selectSeat',
+          queryParameters: {
+            'id': seatData['movieShowTimeId'].toString(),
+            'theaterHallId': seatData['theaterHallId'].toString(),
+          }
+        );
+      } else {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ToastService.showError(S.of(context).confirmOrder_cancelOrderFailed);
     }
   }
 
-  // 根据支付方式名称获取图标颜色
-  Color _getPaymentIconColor(String paymentName) {
+  // 根据支付方式名称获取图标
+  Widget _getPaymentIcon(String paymentName) {
     switch (paymentName) {
       case '支付宝':
-        return Colors.blue.shade600; // 支付宝蓝色
+        return SvgPicture.asset(
+          'assets/icons/pay/zhifubaozhifu.svg',
+          width: 28.w,
+          height: 28.w,
+        );
       case '微信':
-        return Colors.green.shade600; // 微信绿色
+        return SvgPicture.asset(
+          'assets/icons/pay/zhifu-weixinzhifu.svg',
+          width: 28.w,
+          height: 28.w,
+        );
       case 'PayPay':
-        return Colors.orange.shade600; // PayPay橙色
+        return SvgPicture.asset(
+          'assets/icons/pay/paypay.svg',
+          width: 28.w,
+          height: 28.w,
+        );
       case 'クレジットカード':
-        return Colors.purple.shade600; // 信用卡紫色
+        return Icon(
+          Icons.credit_card,
+          size: 28.sp,
+          color: Colors.purple.shade600,
+        );
+      case 'Visa':
+        return SvgPicture.asset(
+          'assets/icons/pay/visa.svg',
+          width: 28.w,
+          height: 28.w,
+        );
+      case 'MasterCard':
+        return SvgPicture.asset(
+          'assets/icons/pay/master-card.svg',
+          width: 28.w,
+          height: 28.w,
+        );
+      case 'JCB':
+        return SvgPicture.asset(
+          'assets/icons/pay/jcb.svg',
+          width: 28.w,
+          height: 28.w,
+        );
+      case '银联':
+        return SvgPicture.asset(
+          'assets/icons/pay/yinlian.svg',
+          width: 28.w,
+          height: 28.w,
+        );
       case 'LINE Pay':
-        return Colors.green.shade500; // LINE绿色
+        return Icon(
+          Icons.chat,
+          size: 28.sp,
+          color: Colors.green.shade500,
+        );
       case '楽天Pay':
-        return Colors.red.shade600; // 楽天红色
+        return Icon(
+          Icons.shopping_bag,
+          size: 28.sp,
+          color: Colors.red.shade600,
+        );
       case 'd払い':
-        return Colors.blue.shade500; // NTT Docomo蓝色
+        return Icon(
+          Icons.phone_android,
+          size: 28.sp,
+          color: Colors.blue.shade500,
+        );
       case 'au PAY':
-        return Colors.orange.shade500; // au橙色
+        return SvgPicture.asset(
+          'assets/icons/pay/auPay.svg',
+          width: 28.w,
+          height: 28.w,
+        );
       case 'メルペイ':
-        return Colors.amber.shade600; // メルカリ黄色
+        return Icon(
+          Icons.account_balance,
+          size: 28.sp,
+          color: Colors.amber.shade600,
+        );
       case 'Suica':
-        return Colors.blue.shade700; // JR东日本蓝色
+        return Icon(
+          Icons.train,
+          size: 28.sp,
+          color: Colors.blue.shade700,
+        );
       case 'PASMO':
-        return Colors.purple.shade500; // 私铁紫色
+        return SvgPicture.asset(
+          'assets/icons/pay/logo-pasmo.svg',
+          width: 28.w,
+          height: 28.w,
+        );
+      case 'Apple Pay':
+      case 'apple-pay':
+        return SvgPicture.asset(
+          'assets/icons/pay/apple-pay.svg',
+          width: 28.w,
+          height: 28.w,
+        );
+      case 'PayPal':
+      case 'paypal':
+        return SvgPicture.asset(
+          'assets/icons/pay/paypal.svg',
+          width: 28.w,
+          height: 28.w,
+        );
+      case 'Amazon Pay':
+      case 'amazon-pay':
+        return SvgPicture.asset(
+          'assets/icons/pay/amazon pay.svg',
+          width: 28.w,
+          height: 28.w,
+        );
       case 'nanaco':
-        return Colors.pink.shade500; // セブン-イレブン粉色
+        return Icon(
+          Icons.card_giftcard,
+          size: 28.sp,
+          color: Colors.pink.shade500,
+        );
       case 'WAON':
-        return Colors.orange.shade400; // AEON橙色
+        return Icon(
+          Icons.card_giftcard,
+          size: 28.sp,
+          color: Colors.orange.shade400,
+        );
       default:
-        return Colors.grey.shade600;
+        return Icon(
+          Icons.payment,
+          size: 28.sp,
+          color: Colors.grey.shade600,
+        );
     }
+  }
+
+
+  // 检查是否为信用卡支付方式
+  bool _isCreditCardPayment(String paymentName) {
+    String name = paymentName.toLowerCase();
+    return name.contains('信用卡') || 
+           name.contains('クレジット') || 
+           name.contains('credit') ||
+           name.contains('card');
+  }
+
+  // 获取信用卡品牌标识
+  Widget _getCreditCardBrand(String paymentName) {
+    // 检查是否为信用卡支付方式
+    if (!_isCreditCardPayment(paymentName)) {
+      return SizedBox.shrink();
+    }
+
+    // 如果是信用卡，显示所有品牌标识
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Visa标识
+        Container(
+          width: 60.w,
+          height: 36.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
+          child: Center(
+            child: Container(
+              width: 50.w,
+              height: 28.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              child: ClipRect(
+                child: SvgPicture.asset(
+                  'assets/icons/pay/visa.svg',
+                  width: 50.w,
+                  height: 28.h,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 10.w),
+        
+        // MasterCard标识
+        Container(
+          width: 60.w,
+          height: 36.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
+          child: Center(
+            child: Container(
+              width: 50.w,
+              height: 28.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              child: ClipRect(
+                child: SvgPicture.asset(
+                  'assets/icons/pay/master-card.svg',
+                  width: 50.w,
+                  height: 28.h,
+                  // fit: BoxFit.,
+                  alignment: Alignment.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 10.w),
+        
+        // JCB标识
+        Container(
+          width: 60.w,
+          height: 36.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
+          child: Center(
+            child: Container(
+              width: 50.w,
+              height: 28.h,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              child: ClipRect(
+                child: SvgPicture.asset(
+                  'assets/icons/pay/jcb.svg',
+                  width: 50.w,
+                  height: 28.h,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: 10.w),
+        
+        // 银联标识
+        Container(
+          width: 60.w,
+          height: 36.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.r),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
+          child: Center(
+            child: ClipRect(
+              child: SvgPicture.asset(
+                'assets/icons/pay/yinlian.svg',
+                width: 40.w,
+                height: 22.h,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -222,6 +476,102 @@ class _PageState extends State<ConfirmOrder> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: Text(S.of(context).confirmOrder_title, style: const TextStyle(color: Colors.white)),
+        onBackButtonPressed: () async {
+          // 显示确认对话框
+          final shouldCancel = await showDialog<bool>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                title: Text(
+                  S.of(context).confirmOrder_cancelOrder,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                content: Text(
+                  S.of(context).confirmOrder_cancelOrderConfirm,
+                  style: const TextStyle(fontSize: 16),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text(
+                      S.of(context).confirmOrder_continuePay,
+                      style: TextStyle(
+                        color: Colors.grey.shade600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red.shade600,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      S.of(context).confirmOrder_confirmCancel,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+
+          if (shouldCancel == true) {
+            // 用户确认取消，调用取消订单接口
+            try {
+              await ApiRequest().request(
+                path: '/movieOrder/cancel',
+                method: 'POST',
+                data: {
+                  'orderId': int.parse(widget.id!),
+                },
+                fromJsonT: (json) => json,
+              );
+              
+              // 获取座位选择信息用于跳转
+              final seatData = SeatCancelManager.getCurrentSeatSelection();
+              
+              // 清除座位选择信息
+              SeatCancelManager.clearSeatSelection();
+              
+              ToastService.showSuccess(S.of(context).confirmOrder_orderCanceled);
+              
+              if (mounted) {
+                // 跳转回座位选择页面
+                if (seatData != null && 
+                    seatData['movieShowTimeId'] != null && 
+                    seatData['theaterHallId'] != null) {
+                  context.pushReplacementNamed(
+                    'selectSeat',
+                    queryParameters: {
+                      'id': seatData['movieShowTimeId'].toString(),
+                      'theaterHallId': seatData['theaterHallId'].toString(),
+                    }
+                  );
+                } else {
+                  Navigator.of(context).pop();
+                }
+              }
+            } catch (e) {
+              ToastService.showError(S.of(context).confirmOrder_cancelOrderFailed);
+            }
+          }
+        },
       ),
       body: AppErrorWidget(
         loading: loading,
@@ -727,16 +1077,13 @@ class _PageState extends State<ConfirmOrder> {
                           
                           return Container(
                             decoration: BoxDecoration(
-                              color: isSelected ? Colors.blue.shade50 : Colors.white,
+                              color: Colors.white,
                               borderRadius: BorderRadius.only(
                                 topLeft: index == 0 ? Radius.circular(16.r) : Radius.zero,
                                 topRight: index == 0 ? Radius.circular(16.r) : Radius.zero,
                                 bottomLeft: isLast ? Radius.circular(16.r) : Radius.zero,
                                 bottomRight: isLast ? Radius.circular(16.r) : Radius.zero,
                               ),
-                              border: isSelected 
-                                ? Border.all(color: Colors.blue.shade300, width: 2)
-                                : null,
                             ),
                             child: Material(
                               color: Colors.transparent,
@@ -760,50 +1107,45 @@ class _PageState extends State<ConfirmOrder> {
                                       Container(
                                         width: 50.w,
                                         height: 50.w,
-                                        decoration: BoxDecoration(
-                                          color: isSelected ? Colors.blue.shade100 : Colors.grey.shade100,
+                          decoration: BoxDecoration(
+                                          color: Colors.grey.shade100,
                                           borderRadius: BorderRadius.circular(12.r),
-                                          border: isSelected 
-                                            ? Border.all(color: Colors.blue.shade300, width: 2)
-                                            : null,
                                         ),
-                                        child: Icon(
-                                          _getPaymentIcon(item.name ?? ''),
-                                          size: 28.sp,
-                                          color: isSelected 
-                                            ? _getPaymentIconColor(item.name ?? '')
-                                            : _getPaymentIconColor(item.name ?? '').withOpacity(0.6),
-                                        ),
+                                        child: _getPaymentIcon(item.name ?? ''),
                                       ),
                                       SizedBox(width: 16.w),
                                       
-                                      // 支付方式名称
+                                      // 支付方式名称和信用卡品牌标识
                                       Expanded(
-                                        child: Text(
-                                          item.name ?? '',
-                                          style: TextStyle(
-                                            fontSize: 22.sp,
-                                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                                            color: isSelected ? Colors.blue.shade800 : Colors.grey.shade800,
-                                          ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                                            Text(
+                                              item.name ?? '',
+                                              style: TextStyle(
+                                                fontSize: 22.sp,
+                                                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                                                color: isSelected ? Colors.blue.shade800 : Colors.grey.shade800,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            _getCreditCardBrand(item.name ?? ''),
+                                          ],
                                         ),
                                       ),
                                       
                                       // 选中状态指示器
                                       Container(
-                                        width: 28.w,
-                                        height: 28.w,
+                                        width: 32.w,
+                                        height: 32.w,
                           decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: isSelected ? Colors.blue.shade600 : Colors.grey.shade300,
-                                          border: isSelected 
-                                            ? Border.all(color: Colors.blue.shade600, width: 2)
-                                            : Border.all(color: Colors.grey.shade400, width: 1),
                                         ),
                                         child: isSelected 
                                           ? Icon(
                                               Icons.check,
-                                              size: 20.sp,
+                                              size: 22.sp,
                                               color: Colors.white,
                                             )
                                           : null,
@@ -902,28 +1244,58 @@ class _PageState extends State<ConfirmOrder> {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(50.r),
-                        onTap: payLoading ? null : () {
+                        onTap: payLoading ? null : () async {
+                      // 检查选择的支付方式
+                      final selectedPayment = paymentMethodData.firstWhere(
+                        (payment) => payment.id == defaultPay,
+                        orElse: () => PaymentMethodResponse(),
+                      );
+                      
+                      // 如果是信用卡支付，跳转到选择信用卡页面
+                      if (selectedPayment.name == 'クレジットカード') {
+                        // 跳转到选择信用卡页面
+                        await context.pushNamed(
+                          'selectCreditCard',
+                          queryParameters: {
+                            'orderId': '${data.id}',
+                          },
+                        );
+                        return;
+                      }
+                      
+                      // 其他支付方式，直接调用支付接口
                       setState(() {
                         payLoading = true;
                       });
 
-                      ApiRequest().request(
-                        path: '/movieOrder/pay',
-                        method: 'POST', 
-                        data: {
-                          'orderId': data.id,
-                          'payId': defaultPay
-                        },
-                        fromJsonT: (json) {},
-                      ).then((res) {
-                        context.pushNamed('paySuccess', queryParameters: {
-                          'orderId': '${data.id}'
-                        });
-                      }).whenComplete(() {
+                      try {
+                        await ApiRequest().request<dynamic>(
+                          path: '/movieOrder/pay',
+                          method: 'POST', 
+                          data: {
+                            'orderId': data.id,
+                            'payId': defaultPay
+                          },
+                          fromJsonT: (json) => json,
+                        );
+                        
+                        if (mounted) {
                           setState(() {
                             payLoading = false;
                           });
-                        });
+                          
+                          context.pushNamed('paySuccess', queryParameters: {
+                            'orderId': '${data.id}'
+                          });
+                        }
+                      } catch (e) {
+                        if (mounted) {
+                          setState(() {
+                            payLoading = false;
+                          });
+                          ToastService.showError('支付失败，请重试');
+                        }
+                      }
                     },
                         child: Center(
                           child: Row(

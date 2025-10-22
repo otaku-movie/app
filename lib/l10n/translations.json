@@ -1065,6 +1065,38 @@
       "en": "Actual Payment"
     }
   },
+  "seatCancel": {
+    "confirmTitle": {
+      "zh": "取消座位选择",
+      "ja": "座席選択をキャンセル",
+      "en": "Cancel Seat Selection"
+    },
+    "confirmMessage": {
+      "zh": "您已选择了座位，确定要取消已选择的座位吗？",
+      "ja": "座席を選択済みです。選択した座席をキャンセルしますか？",
+      "en": "You have selected seats. Are you sure you want to cancel the selected seats?"
+    },
+    "cancel": {
+      "zh": "取消",
+      "ja": "キャンセル",
+      "en": "Cancel"
+    },
+    "confirm": {
+      "zh": "确定",
+      "ja": "確定",
+      "en": "Confirm"
+    },
+    "successMessage": {
+      "zh": "座位选择已取消",
+      "ja": "座席選択がキャンセルされました",
+      "en": "Seat selection has been cancelled"
+    },
+    "errorMessage": {
+      "zh": "取消座位选择失败，请重试",
+      "ja": "座席選択のキャンセルに失敗しました。再試行してください",
+      "en": "Failed to cancel seat selection, please try again"
+    }
+  },
   "confirmOrder": {
     "title": {
       "zh": "确认订单",
@@ -1125,6 +1157,68 @@
       "zh": "剩余时间",
       "ja": "残り時間",
       "en": "Time Remaining"
+    },
+    "cancelOrder": {
+      "zh": "取消订单",
+      "ja": "注文をキャンセル",
+      "en": "Cancel Order"
+    },
+    "cancelOrderConfirm": {
+      "zh": "您已选择了座位，确定要取消订单并释放已选择的座位吗？",
+      "ja": "座席を選択済みです。注文をキャンセルして選択済みの座席を解放しますか？",
+      "en": "You have selected seats. Are you sure you want to cancel the order and release the selected seats?"
+    },
+    "continuePay": {
+      "zh": "继续支付",
+      "ja": "支払いを続ける",
+      "en": "Continue Payment"
+    },
+    "confirmCancel": {
+      "zh": "确认取消",
+      "ja": "キャンセル確認",
+      "en": "Confirm Cancel"
+    },
+    "orderCanceled": {
+      "zh": "订单已取消",
+      "ja": "注文がキャンセルされました",
+      "en": "Order Canceled"
+    },
+    "cancelOrderFailed": {
+      "zh": "取消订单失败，请重试",
+      "ja": "注文のキャンセルに失敗しました。再試行してください",
+      "en": "Failed to cancel order, please try again"
+    }
+  },
+  "seatSelection": {
+    "cancelSeatTitle": {
+      "zh": "取消座位选择",
+      "ja": "座席選択をキャンセル",
+      "en": "Cancel Seat Selection"
+    },
+    "cancelSeatConfirm": {
+      "zh": "您已选择了座位，确定要取消已选择的座位吗？",
+      "ja": "座席を選択済みです。選択済みの座席をキャンセルしますか？",
+      "en": "You have selected seats. Are you sure you want to cancel the selected seats?"
+    },
+    "cancel": {
+      "zh": "取消",
+      "ja": "キャンセル",
+      "en": "Cancel"
+    },
+    "confirm": {
+      "zh": "确定",
+      "ja": "確定",
+      "en": "Confirm"
+    },
+    "seatCanceled": {
+      "zh": "座位选择已取消",
+      "ja": "座席選択がキャンセルされました",
+      "en": "Seat selection canceled"
+    },
+    "cancelSeatFailed": {
+      "zh": "取消座位选择失败，请重试",
+      "ja": "座席選択のキャンセルに失敗しました。再試行してください",
+      "en": "Failed to cancel seat selection, please try again"
     }
   },
   "user": {
@@ -1367,6 +1461,202 @@
         "zh": "字幕",
         "ja": "字幕",
         "en": "Subtitle"
+      }
+    }
+  },
+  "payment": {
+    "addCreditCard": {
+      "title": {
+        "zh": "添加信用卡",
+        "ja": "クレジットカードを追加",
+        "en": "Add Credit Card"
+      },
+      "cardNumber": {
+        "zh": "卡号",
+        "ja": "カード番号",
+        "en": "Card Number"
+      },
+      "cardNumberHint": {
+        "zh": "请输入卡号",
+        "ja": "カード番号を入力してください",
+        "en": "Enter card number"
+      },
+      "cardNumberError": {
+        "zh": "请输入有效的卡号",
+        "ja": "有効なカード番号を入力してください",
+        "en": "Please enter a valid card number"
+      },
+      "cardNumberLength": {
+        "zh": "卡号长度不正确",
+        "ja": "カード番号の長さが正しくありません",
+        "en": "Invalid card number length"
+      },
+      "cardHolderName": {
+        "zh": "持卡人姓名",
+        "ja": "カード名義",
+        "en": "Cardholder Name"
+      },
+      "cardHolderNameHint": {
+        "zh": "请输入持卡人姓名",
+        "ja": "カード名義を入力してください",
+        "en": "Enter cardholder name"
+      },
+      "cardHolderNameError": {
+        "zh": "请输入持卡人姓名",
+        "ja": "カード名義を入力してください",
+        "en": "Please enter cardholder name"
+      },
+      "expiryDate": {
+        "zh": "有效期",
+        "ja": "有効期限",
+        "en": "Expiry Date"
+      },
+      "expiryDateHint": {
+        "zh": "MM/YY",
+        "ja": "MM/YY",
+        "en": "MM/YY"
+      },
+      "expiryDateError": {
+        "zh": "请输入有效期",
+        "ja": "有効期限を入力してください",
+        "en": "Please enter expiry date"
+      },
+      "expiryDateInvalid": {
+        "zh": "有效期格式不正确",
+        "ja": "有効期限の形式が正しくありません",
+        "en": "Invalid expiry date format"
+      },
+      "expiryDateExpired": {
+        "zh": "卡片已过期",
+        "ja": "カードの有効期限が切れています",
+        "en": "Card has expired"
+      },
+      "cvv": {
+        "zh": "CVV",
+        "ja": "セキュリティコード",
+        "en": "CVV"
+      },
+      "cvvHint": {
+        "zh": "•••",
+        "ja": "•••",
+        "en": "•••"
+      },
+      "cvvError": {
+        "zh": "請输入CVV",
+        "ja": "セキュリティコードを入力してください",
+        "en": "Please enter CVV"
+      },
+      "cvvLength": {
+        "zh": "长度不正确",
+        "ja": "長さが正しくありません",
+        "en": "Invalid length"
+      },
+      "saveCard": {
+        "zh": "保存此信用卡",
+        "ja": "このクレジットカードを保存",
+        "en": "Save this credit card"
+      },
+      "saveToAccount": {
+        "zh": "将保存到您的账户，方便下次使用",
+        "ja": "アカウントに保存され、次回使用時に便利です",
+        "en": "Will be saved to your account for future use"
+      },
+      "useOnce": {
+        "zh": "仅本次使用，不会保存",
+        "ja": "今回のみ使用、保存されません",
+        "en": "Use once only, will not be saved"
+      },
+      "confirmAdd": {
+        "zh": "确认添加",
+        "ja": "追加確認",
+        "en": "Confirm Add"
+      },
+      "cardSaved": {
+        "zh": "信用卡已保存",
+        "ja": "クレジットカードが保存されました",
+        "en": "Credit card saved"
+      },
+      "cardConfirmed": {
+        "zh": "信用卡信息已确认",
+        "ja": "クレジットカード情報が確認されました",
+        "en": "Credit card confirmed"
+      },
+      "operationFailed": {
+        "zh": "操作失败，请重试",
+        "ja": "操作に失敗しました。再試行してください",
+        "en": "Operation failed, please try again"
+      }
+    },
+    "selectCreditCard": {
+      "title": {
+        "zh": "选择信用卡",
+        "ja": "クレジットカードを選択",
+        "en": "Select Credit Card"
+      },
+      "noCreditCard": {
+        "zh": "暂无信用卡",
+        "ja": "クレジットカードがありません",
+        "en": "No credit cards"
+      },
+      "pleaseAddCard": {
+        "zh": "请添加一张信用卡",
+        "ja": "クレジットカードを追加してください",
+        "en": "Please add a credit card"
+      },
+      "tempCard": {
+        "zh": "临时卡片（仅本次使用）",
+        "ja": "一時カード（今回のみ）",
+        "en": "Temporary card (one-time use)"
+      },
+      "expiryDate": {
+        "zh": "有效期: {date}",
+        "ja": "有効期限: {date}",
+        "en": "Exp: {date}"
+      },
+      "removeTempCard": {
+        "zh": "移除临时卡片",
+        "ja": "一時カードを削除",
+        "en": "Remove temporary card"
+      },
+      "tempCardRemoved": {
+        "zh": "已移除临时卡片",
+        "ja": "一時カードが削除されました",
+        "en": "Temporary card removed"
+      },
+      "addNewCard": {
+        "zh": "添加新信用卡",
+        "ja": "新しいクレジットカードを追加",
+        "en": "Add New Credit Card"
+      },
+      "confirmPayment": {
+        "zh": "确认支付",
+        "ja": "支払い確認",
+        "en": "Confirm Payment"
+      },
+      "pleaseSelectCard": {
+        "zh": "请选择一张信用卡",
+        "ja": "クレジットカードを選択してください",
+        "en": "Please select a credit card"
+      },
+      "paymentSuccess": {
+        "zh": "支付成功",
+        "ja": "支払い成功",
+        "en": "Payment successful"
+      },
+      "paymentFailed": {
+        "zh": "支付失败，请重试",
+        "ja": "支払いに失敗しました。再試行してください",
+        "en": "Payment failed, please try again"
+      },
+      "loadFailed": {
+        "zh": "加载信用卡列表失败",
+        "ja": "クレジットカード一覧の読み込みに失敗しました",
+        "en": "Failed to load credit card list"
+      },
+      "tempCardSelected": {
+        "zh": "已选择临时信用卡",
+        "ja": "一時クレジットカードが選択されました",
+        "en": "Temporary credit card selected"
       }
     }
   },

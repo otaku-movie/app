@@ -110,9 +110,13 @@ class ApiRequest {
 
       final contentType = response.headers.value('content-type');
 
-      // 检查响应类型
+      // 检查响应类型 - 如果不是 JSON，直接包装成 ApiResponse 返回
       if (contentType != null && !contentType.contains('application/json')) {
-        return response.data;
+        return ApiResponse<T>(
+          code: response.statusCode ?? 200,
+          message: 'success',
+          data: response.data as T,  // 直接返回原始数据（图片、文件等）
+        );
       }
       
       ApiResponse<T> apiResponse = ApiResponse<T>.fromJson(

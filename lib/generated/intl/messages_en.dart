@@ -42,15 +42,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(ticketCount) => "${ticketCount} Movie Tickets";
 
-  static String m11(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
+  static String m11(date) => "Exp: ${date}";
 
-  static String m12(movieName) => "Share movie ticket: ${movieName}";
+  static String m12(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
 
-  static String m13(days) => "${days} days left";
+  static String m13(movieName) => "Share movie ticket: ${movieName}";
 
-  static String m14(hours) => "${hours} hours left";
+  static String m14(days) => "${days} days left";
 
-  static String m15(minutes) => "${minutes} minutes left";
+  static String m15(hours) => "${hours} hours left";
+
+  static String m16(minutes) => "${minutes} minutes left";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -180,10 +182,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_week_thursday": MessageLookupByLibrary.simpleMessage("Thu"),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage("Tue"),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage("Wed"),
+        "confirmOrder_cancelOrder":
+            MessageLookupByLibrary.simpleMessage("Cancel Order"),
+        "confirmOrder_cancelOrderConfirm": MessageLookupByLibrary.simpleMessage(
+            "You have selected seats. Are you sure you want to cancel the order and release the selected seats?"),
+        "confirmOrder_cancelOrderFailed": MessageLookupByLibrary.simpleMessage(
+            "Failed to cancel order, please try again"),
         "confirmOrder_cinemaInfo":
             MessageLookupByLibrary.simpleMessage("Cinema Information"),
+        "confirmOrder_confirmCancel":
+            MessageLookupByLibrary.simpleMessage("Confirm Cancel"),
+        "confirmOrder_continuePay":
+            MessageLookupByLibrary.simpleMessage("Continue Payment"),
         "confirmOrder_countdown":
             MessageLookupByLibrary.simpleMessage("Time Remaining"),
+        "confirmOrder_orderCanceled":
+            MessageLookupByLibrary.simpleMessage("Order Canceled"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("Buy"),
         "confirmOrder_seatCount": m6,
         "confirmOrder_selectPayMethod":
@@ -330,6 +344,89 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Ticket Collection Code"),
         "payResult_title":
             MessageLookupByLibrary.simpleMessage("Payment Successful"),
+        "payment_addCreditCard_cardConfirmed":
+            MessageLookupByLibrary.simpleMessage("Credit card confirmed"),
+        "payment_addCreditCard_cardHolderName":
+            MessageLookupByLibrary.simpleMessage("Cardholder Name"),
+        "payment_addCreditCard_cardHolderNameError":
+            MessageLookupByLibrary.simpleMessage(
+                "Please enter cardholder name"),
+        "payment_addCreditCard_cardHolderNameHint":
+            MessageLookupByLibrary.simpleMessage("Enter cardholder name"),
+        "payment_addCreditCard_cardNumber":
+            MessageLookupByLibrary.simpleMessage("Card Number"),
+        "payment_addCreditCard_cardNumberError":
+            MessageLookupByLibrary.simpleMessage(
+                "Please enter a valid card number"),
+        "payment_addCreditCard_cardNumberHint":
+            MessageLookupByLibrary.simpleMessage("Enter card number"),
+        "payment_addCreditCard_cardNumberLength":
+            MessageLookupByLibrary.simpleMessage("Invalid card number length"),
+        "payment_addCreditCard_cardSaved":
+            MessageLookupByLibrary.simpleMessage("Credit card saved"),
+        "payment_addCreditCard_confirmAdd":
+            MessageLookupByLibrary.simpleMessage("Confirm Add"),
+        "payment_addCreditCard_cvv":
+            MessageLookupByLibrary.simpleMessage("CVV"),
+        "payment_addCreditCard_cvvError":
+            MessageLookupByLibrary.simpleMessage("Please enter CVV"),
+        "payment_addCreditCard_cvvHint":
+            MessageLookupByLibrary.simpleMessage("•••"),
+        "payment_addCreditCard_cvvLength":
+            MessageLookupByLibrary.simpleMessage("Invalid length"),
+        "payment_addCreditCard_expiryDate":
+            MessageLookupByLibrary.simpleMessage("Expiry Date"),
+        "payment_addCreditCard_expiryDateError":
+            MessageLookupByLibrary.simpleMessage("Please enter expiry date"),
+        "payment_addCreditCard_expiryDateExpired":
+            MessageLookupByLibrary.simpleMessage("Card has expired"),
+        "payment_addCreditCard_expiryDateHint":
+            MessageLookupByLibrary.simpleMessage("MM/YY"),
+        "payment_addCreditCard_expiryDateInvalid":
+            MessageLookupByLibrary.simpleMessage("Invalid expiry date format"),
+        "payment_addCreditCard_operationFailed":
+            MessageLookupByLibrary.simpleMessage(
+                "Operation failed, please try again"),
+        "payment_addCreditCard_saveCard":
+            MessageLookupByLibrary.simpleMessage("Save this credit card"),
+        "payment_addCreditCard_saveToAccount":
+            MessageLookupByLibrary.simpleMessage(
+                "Will be saved to your account for future use"),
+        "payment_addCreditCard_title":
+            MessageLookupByLibrary.simpleMessage("Add Credit Card"),
+        "payment_addCreditCard_useOnce": MessageLookupByLibrary.simpleMessage(
+            "Use once only, will not be saved"),
+        "payment_selectCreditCard_addNewCard":
+            MessageLookupByLibrary.simpleMessage("Add New Credit Card"),
+        "payment_selectCreditCard_confirmPayment":
+            MessageLookupByLibrary.simpleMessage("Confirm Payment"),
+        "payment_selectCreditCard_expiryDate": m11,
+        "payment_selectCreditCard_loadFailed":
+            MessageLookupByLibrary.simpleMessage(
+                "Failed to load credit card list"),
+        "payment_selectCreditCard_noCreditCard":
+            MessageLookupByLibrary.simpleMessage("No credit cards"),
+        "payment_selectCreditCard_paymentFailed":
+            MessageLookupByLibrary.simpleMessage(
+                "Payment failed, please try again"),
+        "payment_selectCreditCard_paymentSuccess":
+            MessageLookupByLibrary.simpleMessage("Payment successful"),
+        "payment_selectCreditCard_pleaseAddCard":
+            MessageLookupByLibrary.simpleMessage("Please add a credit card"),
+        "payment_selectCreditCard_pleaseSelectCard":
+            MessageLookupByLibrary.simpleMessage("Please select a credit card"),
+        "payment_selectCreditCard_removeTempCard":
+            MessageLookupByLibrary.simpleMessage("Remove temporary card"),
+        "payment_selectCreditCard_tempCard":
+            MessageLookupByLibrary.simpleMessage(
+                "Temporary card (one-time use)"),
+        "payment_selectCreditCard_tempCardRemoved":
+            MessageLookupByLibrary.simpleMessage("Temporary card removed"),
+        "payment_selectCreditCard_tempCardSelected":
+            MessageLookupByLibrary.simpleMessage(
+                "Temporary credit card selected"),
+        "payment_selectCreditCard_title":
+            MessageLookupByLibrary.simpleMessage("Select Credit Card"),
         "register_haveAccount":
             MessageLookupByLibrary.simpleMessage("Already have an account?"),
         "register_loginHere":
@@ -373,9 +470,30 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Are you sure you want to delete your search history?"),
         "search_removeHistoryConfirm_title":
             MessageLookupByLibrary.simpleMessage("Delete History"),
+        "seatCancel_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "seatCancel_confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "seatCancel_confirmMessage": MessageLookupByLibrary.simpleMessage(
+            "You have selected seats. Are you sure you want to cancel the selected seats?"),
+        "seatCancel_confirmTitle":
+            MessageLookupByLibrary.simpleMessage("Cancel Seat Selection"),
+        "seatCancel_errorMessage": MessageLookupByLibrary.simpleMessage(
+            "Failed to cancel seat selection, please try again"),
+        "seatCancel_successMessage": MessageLookupByLibrary.simpleMessage(
+            "Seat selection has been cancelled"),
+        "seatSelection_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "seatSelection_cancelSeatConfirm": MessageLookupByLibrary.simpleMessage(
+            "You have selected seats. Are you sure you want to cancel the selected seats?"),
+        "seatSelection_cancelSeatFailed": MessageLookupByLibrary.simpleMessage(
+            "Failed to cancel seat selection, please try again"),
+        "seatSelection_cancelSeatTitle":
+            MessageLookupByLibrary.simpleMessage("Cancel Seat Selection"),
+        "seatSelection_confirm":
+            MessageLookupByLibrary.simpleMessage("Confirm"),
+        "seatSelection_seatCanceled":
+            MessageLookupByLibrary.simpleMessage("Seat selection canceled"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
-        "selectSeat_maxSelectSeatWarn": m11,
+        "selectSeat_maxSelectSeatWarn": m12,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("Please select a seat"),
         "showTimeDetail_address":
@@ -391,7 +509,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("Buy tickets now!"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("Seat Count"),
-        "ticket_shareTicket": m12,
+        "ticket_shareTicket": m13,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("Show Time"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("Cancelled"),
@@ -406,9 +524,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage(" tickets"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("Time format error"),
-        "ticket_time_remaining_days": m13,
-        "ticket_time_remaining_hours": m14,
-        "ticket_time_remaining_minutes": m15,
+        "ticket_time_remaining_days": m14,
+        "ticket_time_remaining_hours": m15,
+        "ticket_time_remaining_minutes": m16,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("Starting soon"),
         "ticket_time_unknown":

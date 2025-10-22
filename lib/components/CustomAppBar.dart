@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otaku_movie/pages/movie/confirmOrder.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final dynamic title;
@@ -35,10 +34,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () {
-                // List<RouteBase> routes = routeMatchList.routes;
-                Navigator.of(context).pop();
-                // GoRouter.of(context).pop();
-                // context.pop();
+                if (onBackButtonPressed != null) {
+                  onBackButtonPressed!();
+                } else {
+                  Navigator.of(context).pop();
+                }
               },
             )
           : null,

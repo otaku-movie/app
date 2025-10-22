@@ -62,18 +62,25 @@ class _PageState extends State<PaySuccess> {
    
   }
   generatorQRCode () {
-    ApiRequest().request(
+    ApiRequest().request<dynamic>(
       path: '/movieOrder/generatorQRcode',
       method: 'GET', 
       queryParameters: {
         "id": int.parse(widget.orderId!)
       },
-      fromJsonT: (json) {},
+      fromJsonT: (json) => json,
       responseType: ResponseType.bytes
     ).then((res) {
       setState(() {
-        QRcodeBytes = Uint8List.fromList(res as List<int>);
+        // res.data 现在包含图片的字节数据
+        if (res.data is List<int>) {
+          QRcodeBytes = Uint8List.fromList(res.data as List<int>);
+        } else if (res.data is Uint8List) {
+          QRcodeBytes = res.data as Uint8List;
+        }
       });
+    }).catchError((e) {
+      print('生成二维码失败: $e');
     });
   }
 

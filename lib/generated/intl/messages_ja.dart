@@ -42,15 +42,17 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m10(ticketCount) => "映画チケット ${ticketCount} 枚";
 
-  static String m11(maxSeat) => "最大${maxSeat}席までお選びいただけます";
+  static String m11(date) => "有効期限: ${date}";
 
-  static String m12(movieName) => "映画チケットをシェア: ${movieName}";
+  static String m12(maxSeat) => "最大${maxSeat}席までお選びいただけます";
 
-  static String m13(days) => "あと${days}日";
+  static String m13(movieName) => "映画チケットをシェア: ${movieName}";
 
-  static String m14(hours) => "あと${hours}時間";
+  static String m14(days) => "あと${days}日";
 
-  static String m15(minutes) => "あと${minutes}分";
+  static String m15(hours) => "あと${hours}時間";
+
+  static String m16(minutes) => "あと${minutes}分";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -174,9 +176,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_week_thursday": MessageLookupByLibrary.simpleMessage("木"),
         "common_week_tuesday": MessageLookupByLibrary.simpleMessage("火"),
         "common_week_wednesday": MessageLookupByLibrary.simpleMessage("水"),
+        "confirmOrder_cancelOrder":
+            MessageLookupByLibrary.simpleMessage("注文をキャンセル"),
+        "confirmOrder_cancelOrderConfirm": MessageLookupByLibrary.simpleMessage(
+            "座席を選択済みです。注文をキャンセルして選択済みの座席を解放しますか？"),
+        "confirmOrder_cancelOrderFailed":
+            MessageLookupByLibrary.simpleMessage("注文のキャンセルに失敗しました。再試行してください"),
         "confirmOrder_cinemaInfo":
             MessageLookupByLibrary.simpleMessage("映画館情報"),
+        "confirmOrder_confirmCancel":
+            MessageLookupByLibrary.simpleMessage("キャンセル確認"),
+        "confirmOrder_continuePay":
+            MessageLookupByLibrary.simpleMessage("支払いを続ける"),
         "confirmOrder_countdown": MessageLookupByLibrary.simpleMessage("残り時間"),
+        "confirmOrder_orderCanceled":
+            MessageLookupByLibrary.simpleMessage("注文がキャンセルされました"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支払いへ"),
         "confirmOrder_seatCount": m6,
         "confirmOrder_selectPayMethod":
@@ -303,6 +317,81 @@ class MessageLookup extends MessageLookupByLibrary {
             "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。良い映画鑑賞をお楽しみください。"),
         "payResult_ticketCode": MessageLookupByLibrary.simpleMessage("チケットコード"),
         "payResult_title": MessageLookupByLibrary.simpleMessage("支払い完了"),
+        "payment_addCreditCard_cardConfirmed":
+            MessageLookupByLibrary.simpleMessage("クレジットカード情報が確認されました"),
+        "payment_addCreditCard_cardHolderName":
+            MessageLookupByLibrary.simpleMessage("カード名義"),
+        "payment_addCreditCard_cardHolderNameError":
+            MessageLookupByLibrary.simpleMessage("カード名義を入力してください"),
+        "payment_addCreditCard_cardHolderNameHint":
+            MessageLookupByLibrary.simpleMessage("カード名義を入力してください"),
+        "payment_addCreditCard_cardNumber":
+            MessageLookupByLibrary.simpleMessage("カード番号"),
+        "payment_addCreditCard_cardNumberError":
+            MessageLookupByLibrary.simpleMessage("有効なカード番号を入力してください"),
+        "payment_addCreditCard_cardNumberHint":
+            MessageLookupByLibrary.simpleMessage("カード番号を入力してください"),
+        "payment_addCreditCard_cardNumberLength":
+            MessageLookupByLibrary.simpleMessage("カード番号の長さが正しくありません"),
+        "payment_addCreditCard_cardSaved":
+            MessageLookupByLibrary.simpleMessage("クレジットカードが保存されました"),
+        "payment_addCreditCard_confirmAdd":
+            MessageLookupByLibrary.simpleMessage("追加確認"),
+        "payment_addCreditCard_cvv":
+            MessageLookupByLibrary.simpleMessage("セキュリティコード"),
+        "payment_addCreditCard_cvvError":
+            MessageLookupByLibrary.simpleMessage("セキュリティコードを入力してください"),
+        "payment_addCreditCard_cvvHint":
+            MessageLookupByLibrary.simpleMessage("•••"),
+        "payment_addCreditCard_cvvLength":
+            MessageLookupByLibrary.simpleMessage("長さが正しくありません"),
+        "payment_addCreditCard_expiryDate":
+            MessageLookupByLibrary.simpleMessage("有効期限"),
+        "payment_addCreditCard_expiryDateError":
+            MessageLookupByLibrary.simpleMessage("有効期限を入力してください"),
+        "payment_addCreditCard_expiryDateExpired":
+            MessageLookupByLibrary.simpleMessage("カードの有効期限が切れています"),
+        "payment_addCreditCard_expiryDateHint":
+            MessageLookupByLibrary.simpleMessage("MM/YY"),
+        "payment_addCreditCard_expiryDateInvalid":
+            MessageLookupByLibrary.simpleMessage("有効期限の形式が正しくありません"),
+        "payment_addCreditCard_operationFailed":
+            MessageLookupByLibrary.simpleMessage("操作に失敗しました。再試行してください"),
+        "payment_addCreditCard_saveCard":
+            MessageLookupByLibrary.simpleMessage("このクレジットカードを保存"),
+        "payment_addCreditCard_saveToAccount":
+            MessageLookupByLibrary.simpleMessage("アカウントに保存され、次回使用時に便利です"),
+        "payment_addCreditCard_title":
+            MessageLookupByLibrary.simpleMessage("クレジットカードを追加"),
+        "payment_addCreditCard_useOnce":
+            MessageLookupByLibrary.simpleMessage("今回のみ使用、保存されません"),
+        "payment_selectCreditCard_addNewCard":
+            MessageLookupByLibrary.simpleMessage("新しいクレジットカードを追加"),
+        "payment_selectCreditCard_confirmPayment":
+            MessageLookupByLibrary.simpleMessage("支払い確認"),
+        "payment_selectCreditCard_expiryDate": m11,
+        "payment_selectCreditCard_loadFailed":
+            MessageLookupByLibrary.simpleMessage("クレジットカード一覧の読み込みに失敗しました"),
+        "payment_selectCreditCard_noCreditCard":
+            MessageLookupByLibrary.simpleMessage("クレジットカードがありません"),
+        "payment_selectCreditCard_paymentFailed":
+            MessageLookupByLibrary.simpleMessage("支払いに失敗しました。再試行してください"),
+        "payment_selectCreditCard_paymentSuccess":
+            MessageLookupByLibrary.simpleMessage("支払い成功"),
+        "payment_selectCreditCard_pleaseAddCard":
+            MessageLookupByLibrary.simpleMessage("クレジットカードを追加してください"),
+        "payment_selectCreditCard_pleaseSelectCard":
+            MessageLookupByLibrary.simpleMessage("クレジットカードを選択してください"),
+        "payment_selectCreditCard_removeTempCard":
+            MessageLookupByLibrary.simpleMessage("一時カードを削除"),
+        "payment_selectCreditCard_tempCard":
+            MessageLookupByLibrary.simpleMessage("一時カード（今回のみ）"),
+        "payment_selectCreditCard_tempCardRemoved":
+            MessageLookupByLibrary.simpleMessage("一時カードが削除されました"),
+        "payment_selectCreditCard_tempCardSelected":
+            MessageLookupByLibrary.simpleMessage("一時クレジットカードが選択されました"),
+        "payment_selectCreditCard_title":
+            MessageLookupByLibrary.simpleMessage("クレジットカードを選択"),
         "register_haveAccount":
             MessageLookupByLibrary.simpleMessage("すでにアカウントをお持ちですか？"),
         "register_loginHere": MessageLookupByLibrary.simpleMessage("こちらからログイン"),
@@ -336,9 +425,29 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("検索履歴を削除してもよろしいですか？"),
         "search_removeHistoryConfirm_title":
             MessageLookupByLibrary.simpleMessage("履歴を削除"),
+        "seatCancel_cancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
+        "seatCancel_confirm": MessageLookupByLibrary.simpleMessage("確定"),
+        "seatCancel_confirmMessage":
+            MessageLookupByLibrary.simpleMessage("座席を選択済みです。選択した座席をキャンセルしますか？"),
+        "seatCancel_confirmTitle":
+            MessageLookupByLibrary.simpleMessage("座席選択をキャンセル"),
+        "seatCancel_errorMessage":
+            MessageLookupByLibrary.simpleMessage("座席選択のキャンセルに失敗しました。再試行してください"),
+        "seatCancel_successMessage":
+            MessageLookupByLibrary.simpleMessage("座席選択がキャンセルされました"),
+        "seatSelection_cancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
+        "seatSelection_cancelSeatConfirm": MessageLookupByLibrary.simpleMessage(
+            "座席を選択済みです。選択済みの座席をキャンセルしますか？"),
+        "seatSelection_cancelSeatFailed":
+            MessageLookupByLibrary.simpleMessage("座席選択のキャンセルに失敗しました。再試行してください"),
+        "seatSelection_cancelSeatTitle":
+            MessageLookupByLibrary.simpleMessage("座席選択をキャンセル"),
+        "seatSelection_confirm": MessageLookupByLibrary.simpleMessage("確定"),
+        "seatSelection_seatCanceled":
+            MessageLookupByLibrary.simpleMessage("座席選択がキャンセルされました"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("座席を確定する"),
-        "selectSeat_maxSelectSeatWarn": m11,
+        "selectSeat_maxSelectSeatWarn": m12,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
@@ -350,7 +459,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("チケットを購入してください！"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("座席数"),
-        "ticket_shareTicket": m12,
+        "ticket_shareTicket": m13,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("上映時間"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("キャンセル済み"),
@@ -362,9 +471,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage("枚のチケット"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("時間形式エラー"),
-        "ticket_time_remaining_days": m13,
-        "ticket_time_remaining_hours": m14,
-        "ticket_time_remaining_minutes": m15,
+        "ticket_time_remaining_days": m14,
+        "ticket_time_remaining_hours": m15,
+        "ticket_time_remaining_minutes": m16,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("まもなく開始"),
         "ticket_time_unknown": MessageLookupByLibrary.simpleMessage("時間不明"),

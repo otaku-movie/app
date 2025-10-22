@@ -12,6 +12,7 @@ import 'package:otaku_movie/response/movie/movie_show_time_detail.dart';
 import 'package:otaku_movie/response/movie/theater_seat.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
+import 'package:otaku_movie/utils/seat_cancel_manager.dart';
 
 import '../../api/index.dart';
 
@@ -487,6 +488,157 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
           _showTimeData.cinemaName ?? '', 
           style: TextStyle(color: Colors.white, fontSize: 36.sp)
         ),
+        onBackButtonPressed: () async {
+          // 处理返回按钮点击
+          if (selectSeatList.isEmpty) {
+            // 没有选座，直接返回
+            Navigator.of(context).pop();
+            return;
+          }
+          
+          // 有选座，显示确认对话框（Vant 风格）
+          if (!mounted) return;
+          final shouldCancel = await showDialog<bool>(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return Center(
+                child: Container(
+                  width: 640.w,
+                  margin: EdgeInsets.symmetric(horizontal: 32.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(32.r),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 标题
+                      Padding(
+                        padding: EdgeInsets.only(top: 52.h, bottom: 16.h),
+                        child: Text(
+                          S.of(context).seatSelection_cancelSeatTitle,
+                          style: TextStyle(
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF323233),
+                          ),
+                        ),
+                      ),
+                      
+                      // 内容
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 24.h),
+                        child: Text(
+                          S.of(context).seatSelection_cancelSeatConfirm,
+                          style: TextStyle(
+                            fontSize: 28.sp,
+                            color: const Color(0xFF646566),
+                            height: 1.6,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      
+                      SizedBox(height: 24.h),
+                      
+                      // 按钮组 - Vant 风格的横向分割按钮
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              color: const Color(0xFFEBEDF0),
+                              width: 1,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            // 取消按钮
+                            Expanded(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(32.r),
+                                  ),
+                                  child: Container(
+                                    height: 100.h,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      S.of(context).confirmOrder_continuePay,
+                                      style: TextStyle(
+                                        fontSize: 32.sp,
+                                        color: const Color(0xFF323233),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            
+                            // 分割线
+                            Container(
+                              width: 1,
+                              height: 100.h,
+                              color: const Color(0xFFEBEDF0),
+                            ),
+                            
+                            // 确认按钮
+                            Expanded(
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  borderRadius: BorderRadius.only(
+                                    bottomRight: Radius.circular(32.r),
+                                  ),
+                                  child: Container(
+                                    height: 100.h,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      S.of(context).confirmOrder_confirmCancel,
+                                      style: TextStyle(
+                                        fontSize: 32.sp,
+                                        color: const Color(0xFFEE0A24),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+
+          if (!mounted) return;
+          if (shouldCancel == true) {
+            // 用户确认取消，清除选座并返回
+            setState(() {
+              selectSeatList.clear();
+              selectSeatSet.clear();
+            });
+            
+            // 显示取消成功提示
+            ToastService.showSuccess(S.of(context).seatSelection_seatCanceled);
+            
+            if (!mounted) return;
+            Navigator.of(context).pop();
+          }
+        },
       ),
       body: Stack(
         children: [
@@ -1121,22 +1273,32 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       ToastService.showWarning(S.of(context).selectSeat_notSelectSeatWarn);
                       return;
                     }
+                    // 准备座位数据
+                    final seatPositions = selectSeatList.map((item) {
+                      return {
+                        "x": item.x,
+                        "y": item.y,
+                        "seatId": item.id
+                      };
+                    }).toList();
+
                     ApiRequest().request(
                       path: '/movie_show_time/select_seat/save',
                       method: 'POST',
                       data: {
                         'movieShowTimeId': _showTimeData.id,
                         "theaterHallId":_showTimeData.theaterHallId,
-                        'seatPosition': selectSeatList.map((item) {
-                          return {
-                            "x": item.x,
-                            "y": item.y,
-                            "seatId": item.id
-                          };
-                        }).toList()
+                        'seatPosition': seatPositions
                       },
                       fromJsonT: (json) {},
                     ).then((res) {
+                      // 保存座位选择信息到座位取消管理器
+                      SeatCancelManager.saveSeatSelection(
+                        movieShowTimeId: _showTimeData.id!,
+                        theaterHallId: _showTimeData.theaterHallId!,
+                        selectedSeats: seatPositions,
+                      );
+                      
                       context.pushNamed("selectMovieTicketType", queryParameters: {
                         'movieShowTimeId': '${_showTimeData.id}',
                         'cinemaId': '${_showTimeData.cinemaId}'

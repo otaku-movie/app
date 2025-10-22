@@ -113,6 +113,10 @@ flutter:
     - assets/image/
     - assets/icons/
     - assets/icons/pay/
+  fonts:
+    - family: iconfont
+      fonts:
+        - asset: assets/icons/iconfont.ttf
 
 # For information on the generic Dart part of this file, see the
 # following pages: https://dart.dev/tools/pub/pubspec

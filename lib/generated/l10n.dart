@@ -1720,6 +1720,66 @@ class S {
     );
   }
 
+  /// `Cancel Seat Selection`
+  String get seatCancel_confirmTitle {
+    return Intl.message(
+      'Cancel Seat Selection',
+      name: 'seatCancel_confirmTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have selected seats. Are you sure you want to cancel the selected seats?`
+  String get seatCancel_confirmMessage {
+    return Intl.message(
+      'You have selected seats. Are you sure you want to cancel the selected seats?',
+      name: 'seatCancel_confirmMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get seatCancel_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'seatCancel_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get seatCancel_confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'seatCancel_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seat selection has been cancelled`
+  String get seatCancel_successMessage {
+    return Intl.message(
+      'Seat selection has been cancelled',
+      name: 'seatCancel_successMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to cancel seat selection, please try again`
+  String get seatCancel_errorMessage {
+    return Intl.message(
+      'Failed to cancel seat selection, please try again',
+      name: 'seatCancel_errorMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm Order`
   String get confirmOrder_title {
     return Intl.message(
@@ -1805,6 +1865,126 @@ class S {
     return Intl.message(
       'Time Remaining',
       name: 'confirmOrder_countdown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel Order`
+  String get confirmOrder_cancelOrder {
+    return Intl.message(
+      'Cancel Order',
+      name: 'confirmOrder_cancelOrder',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have selected seats. Are you sure you want to cancel the order and release the selected seats?`
+  String get confirmOrder_cancelOrderConfirm {
+    return Intl.message(
+      'You have selected seats. Are you sure you want to cancel the order and release the selected seats?',
+      name: 'confirmOrder_cancelOrderConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue Payment`
+  String get confirmOrder_continuePay {
+    return Intl.message(
+      'Continue Payment',
+      name: 'confirmOrder_continuePay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Cancel`
+  String get confirmOrder_confirmCancel {
+    return Intl.message(
+      'Confirm Cancel',
+      name: 'confirmOrder_confirmCancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order Canceled`
+  String get confirmOrder_orderCanceled {
+    return Intl.message(
+      'Order Canceled',
+      name: 'confirmOrder_orderCanceled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to cancel order, please try again`
+  String get confirmOrder_cancelOrderFailed {
+    return Intl.message(
+      'Failed to cancel order, please try again',
+      name: 'confirmOrder_cancelOrderFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel Seat Selection`
+  String get seatSelection_cancelSeatTitle {
+    return Intl.message(
+      'Cancel Seat Selection',
+      name: 'seatSelection_cancelSeatTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You have selected seats. Are you sure you want to cancel the selected seats?`
+  String get seatSelection_cancelSeatConfirm {
+    return Intl.message(
+      'You have selected seats. Are you sure you want to cancel the selected seats?',
+      name: 'seatSelection_cancelSeatConfirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get seatSelection_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'seatSelection_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get seatSelection_confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'seatSelection_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seat selection canceled`
+  String get seatSelection_seatCanceled {
+    return Intl.message(
+      'Seat selection canceled',
+      name: 'seatSelection_seatCanceled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to cancel seat selection, please try again`
+  String get seatSelection_cancelSeatFailed {
+    return Intl.message(
+      'Failed to cancel seat selection, please try again',
+      name: 'seatSelection_cancelSeatFailed',
       desc: '',
       args: [],
     );
@@ -2205,6 +2385,386 @@ class S {
     return Intl.message(
       'Subtitle',
       name: 'movieShowList_dropdown_subtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add Credit Card`
+  String get payment_addCreditCard_title {
+    return Intl.message(
+      'Add Credit Card',
+      name: 'payment_addCreditCard_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Card Number`
+  String get payment_addCreditCard_cardNumber {
+    return Intl.message(
+      'Card Number',
+      name: 'payment_addCreditCard_cardNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter card number`
+  String get payment_addCreditCard_cardNumberHint {
+    return Intl.message(
+      'Enter card number',
+      name: 'payment_addCreditCard_cardNumberHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid card number`
+  String get payment_addCreditCard_cardNumberError {
+    return Intl.message(
+      'Please enter a valid card number',
+      name: 'payment_addCreditCard_cardNumberError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid card number length`
+  String get payment_addCreditCard_cardNumberLength {
+    return Intl.message(
+      'Invalid card number length',
+      name: 'payment_addCreditCard_cardNumberLength',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cardholder Name`
+  String get payment_addCreditCard_cardHolderName {
+    return Intl.message(
+      'Cardholder Name',
+      name: 'payment_addCreditCard_cardHolderName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter cardholder name`
+  String get payment_addCreditCard_cardHolderNameHint {
+    return Intl.message(
+      'Enter cardholder name',
+      name: 'payment_addCreditCard_cardHolderNameHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter cardholder name`
+  String get payment_addCreditCard_cardHolderNameError {
+    return Intl.message(
+      'Please enter cardholder name',
+      name: 'payment_addCreditCard_cardHolderNameError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry Date`
+  String get payment_addCreditCard_expiryDate {
+    return Intl.message(
+      'Expiry Date',
+      name: 'payment_addCreditCard_expiryDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MM/YY`
+  String get payment_addCreditCard_expiryDateHint {
+    return Intl.message(
+      'MM/YY',
+      name: 'payment_addCreditCard_expiryDateHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter expiry date`
+  String get payment_addCreditCard_expiryDateError {
+    return Intl.message(
+      'Please enter expiry date',
+      name: 'payment_addCreditCard_expiryDateError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid expiry date format`
+  String get payment_addCreditCard_expiryDateInvalid {
+    return Intl.message(
+      'Invalid expiry date format',
+      name: 'payment_addCreditCard_expiryDateInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Card has expired`
+  String get payment_addCreditCard_expiryDateExpired {
+    return Intl.message(
+      'Card has expired',
+      name: 'payment_addCreditCard_expiryDateExpired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CVV`
+  String get payment_addCreditCard_cvv {
+    return Intl.message(
+      'CVV',
+      name: 'payment_addCreditCard_cvv',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `•••`
+  String get payment_addCreditCard_cvvHint {
+    return Intl.message(
+      '•••',
+      name: 'payment_addCreditCard_cvvHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter CVV`
+  String get payment_addCreditCard_cvvError {
+    return Intl.message(
+      'Please enter CVV',
+      name: 'payment_addCreditCard_cvvError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid length`
+  String get payment_addCreditCard_cvvLength {
+    return Intl.message(
+      'Invalid length',
+      name: 'payment_addCreditCard_cvvLength',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save this credit card`
+  String get payment_addCreditCard_saveCard {
+    return Intl.message(
+      'Save this credit card',
+      name: 'payment_addCreditCard_saveCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Will be saved to your account for future use`
+  String get payment_addCreditCard_saveToAccount {
+    return Intl.message(
+      'Will be saved to your account for future use',
+      name: 'payment_addCreditCard_saveToAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use once only, will not be saved`
+  String get payment_addCreditCard_useOnce {
+    return Intl.message(
+      'Use once only, will not be saved',
+      name: 'payment_addCreditCard_useOnce',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Add`
+  String get payment_addCreditCard_confirmAdd {
+    return Intl.message(
+      'Confirm Add',
+      name: 'payment_addCreditCard_confirmAdd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Credit card saved`
+  String get payment_addCreditCard_cardSaved {
+    return Intl.message(
+      'Credit card saved',
+      name: 'payment_addCreditCard_cardSaved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Credit card confirmed`
+  String get payment_addCreditCard_cardConfirmed {
+    return Intl.message(
+      'Credit card confirmed',
+      name: 'payment_addCreditCard_cardConfirmed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operation failed, please try again`
+  String get payment_addCreditCard_operationFailed {
+    return Intl.message(
+      'Operation failed, please try again',
+      name: 'payment_addCreditCard_operationFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Credit Card`
+  String get payment_selectCreditCard_title {
+    return Intl.message(
+      'Select Credit Card',
+      name: 'payment_selectCreditCard_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No credit cards`
+  String get payment_selectCreditCard_noCreditCard {
+    return Intl.message(
+      'No credit cards',
+      name: 'payment_selectCreditCard_noCreditCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please add a credit card`
+  String get payment_selectCreditCard_pleaseAddCard {
+    return Intl.message(
+      'Please add a credit card',
+      name: 'payment_selectCreditCard_pleaseAddCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Temporary card (one-time use)`
+  String get payment_selectCreditCard_tempCard {
+    return Intl.message(
+      'Temporary card (one-time use)',
+      name: 'payment_selectCreditCard_tempCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Exp: {date}`
+  String payment_selectCreditCard_expiryDate(Object date) {
+    return Intl.message(
+      'Exp: $date',
+      name: 'payment_selectCreditCard_expiryDate',
+      desc: '',
+      args: [date],
+    );
+  }
+
+  /// `Remove temporary card`
+  String get payment_selectCreditCard_removeTempCard {
+    return Intl.message(
+      'Remove temporary card',
+      name: 'payment_selectCreditCard_removeTempCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Temporary card removed`
+  String get payment_selectCreditCard_tempCardRemoved {
+    return Intl.message(
+      'Temporary card removed',
+      name: 'payment_selectCreditCard_tempCardRemoved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add New Credit Card`
+  String get payment_selectCreditCard_addNewCard {
+    return Intl.message(
+      'Add New Credit Card',
+      name: 'payment_selectCreditCard_addNewCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Payment`
+  String get payment_selectCreditCard_confirmPayment {
+    return Intl.message(
+      'Confirm Payment',
+      name: 'payment_selectCreditCard_confirmPayment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a credit card`
+  String get payment_selectCreditCard_pleaseSelectCard {
+    return Intl.message(
+      'Please select a credit card',
+      name: 'payment_selectCreditCard_pleaseSelectCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment successful`
+  String get payment_selectCreditCard_paymentSuccess {
+    return Intl.message(
+      'Payment successful',
+      name: 'payment_selectCreditCard_paymentSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment failed, please try again`
+  String get payment_selectCreditCard_paymentFailed {
+    return Intl.message(
+      'Payment failed, please try again',
+      name: 'payment_selectCreditCard_paymentFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load credit card list`
+  String get payment_selectCreditCard_loadFailed {
+    return Intl.message(
+      'Failed to load credit card list',
+      name: 'payment_selectCreditCard_loadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Temporary credit card selected`
+  String get payment_selectCreditCard_tempCardSelected {
+    return Intl.message(
+      'Temporary credit card selected',
+      name: 'payment_selectCreditCard_tempCardSelected',
       desc: '',
       args: [],
     );

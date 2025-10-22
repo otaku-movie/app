@@ -4,17 +4,43 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
-import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/router/router.dart';
-import 'package:package_info_plus/package_info_plus.dart';
+import 'package:otaku_movie/utils/seat_cancel_manager.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final String? title;
   
   const MyApp({super.key, this.title});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    
+    // 当应用进入后台或暂停状态时，处理座位取消
+    if (state == AppLifecycleState.paused || 
+        state == AppLifecycleState.detached) {
+      SeatCancelManager.handleAppExit();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
