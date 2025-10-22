@@ -40,19 +40,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m9(total) => "共${total}条回复";
 
-  static String m10(ticketCount) => "${ticketCount}张电影票";
+  static String m10(hours, minutes) => "距离开场还有 ${hours} 小时 ${minutes} 分钟";
 
-  static String m11(date) => "有效期: ${date}";
+  static String m11(minutes, seconds) => "距离开场还有 ${minutes} 分钟 ${seconds} 秒";
 
-  static String m12(maxSeat) => "最大选座数量不能超过${maxSeat}个";
+  static String m12(seconds) => "距离开场还有 ${seconds} 秒";
 
-  static String m13(movieName) => "分享电影票: ${movieName}";
+  static String m13(ticketCount) => "${ticketCount}张电影票";
 
-  static String m14(days) => "还有${days}天";
+  static String m14(date) => "有效期: ${date}";
 
-  static String m15(hours) => "还有${hours}小时";
+  static String m15(maxSeat) => "最大选座数量不能超过${maxSeat}个";
 
-  static String m16(minutes) => "还有${minutes}分钟";
+  static String m16(movieName) => "分享电影票: ${movieName}";
+
+  static String m17(days) => "还有${days}天";
+
+  static String m18(hours) => "还有${hours}小时";
+
+  static String m19(minutes) => "还有${minutes}分钟";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -165,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("已售出"),
         "common_enum_seatType_wheelChair":
             MessageLookupByLibrary.simpleMessage("轮椅座"),
+        "common_loading": MessageLookupByLibrary.simpleMessage("加载中..."),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("日元"),
         "common_unit_point": MessageLookupByLibrary.simpleMessage("分"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("五"),
@@ -289,6 +296,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合计"),
         "movieTicketType_totalPrice":
             MessageLookupByLibrary.simpleMessage("总价"),
+        "orderDetail_countdown_hoursMinutes": m10,
+        "orderDetail_countdown_minutesSeconds": m11,
+        "orderDetail_countdown_seconds": m12,
+        "orderDetail_countdown_started":
+            MessageLookupByLibrary.simpleMessage("已开场"),
+        "orderDetail_countdown_title":
+            MessageLookupByLibrary.simpleMessage("即将开场提醒"),
         "orderDetail_orderCreateTime":
             MessageLookupByLibrary.simpleMessage("订单创建时间"),
         "orderDetail_orderMessage":
@@ -299,15 +313,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_payTime": MessageLookupByLibrary.simpleMessage("支付时间"),
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage("座位信息"),
         "orderDetail_ticketCode": MessageLookupByLibrary.simpleMessage("取票码"),
-        "orderDetail_ticketCount": m10,
+        "orderDetail_ticketCount": m13,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage("订单详情"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("评论"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("订单号"),
         "orderList_title": MessageLookupByLibrary.simpleMessage("订单列表"),
-        "payResult_success": MessageLookupByLibrary.simpleMessage(
-            "您的订单已经支付完成，请在以下时间之前到达以下地点，祝您观影愉快。"),
+        "payResult_qrCodeTip":
+            MessageLookupByLibrary.simpleMessage("请凭此二维码或取票码前往影院取票"),
+        "payResult_success": MessageLookupByLibrary.simpleMessage("支付成功"),
         "payResult_ticketCode": MessageLookupByLibrary.simpleMessage("取票码"),
         "payResult_title": MessageLookupByLibrary.simpleMessage("支付完成"),
+        "payResult_viewMyTickets":
+            MessageLookupByLibrary.simpleMessage("查看我的电影票"),
         "payment_addCreditCard_cardConfirmed":
             MessageLookupByLibrary.simpleMessage("信用卡信息已确认"),
         "payment_addCreditCard_cardHolderName":
@@ -360,7 +377,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("添加新信用卡"),
         "payment_selectCreditCard_confirmPayment":
             MessageLookupByLibrary.simpleMessage("确认支付"),
-        "payment_selectCreditCard_expiryDate": m11,
+        "payment_selectCreditCard_expiryDate": m14,
         "payment_selectCreditCard_loadFailed":
             MessageLookupByLibrary.simpleMessage("加载信用卡列表失败"),
         "payment_selectCreditCard_noCreditCard":
@@ -437,7 +454,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("座位选择已取消"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
-        "selectSeat_maxSelectSeatWarn": m12,
+        "selectSeat_maxSelectSeatWarn": m15,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("请选择座位"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("地址"),
@@ -448,7 +465,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noData": MessageLookupByLibrary.simpleMessage("暂无电影票"),
         "ticket_noDataTip": MessageLookupByLibrary.simpleMessage("快去购买电影票吧！"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("座位数"),
-        "ticket_shareTicket": m13,
+        "ticket_shareTicket": m16,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("放映时间"),
         "ticket_status_cancelled": MessageLookupByLibrary.simpleMessage("已取消"),
         "ticket_status_expired": MessageLookupByLibrary.simpleMessage("已过期"),
@@ -459,9 +476,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage("张票"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("时间格式错误"),
-        "ticket_time_remaining_days": m14,
-        "ticket_time_remaining_hours": m15,
-        "ticket_time_remaining_minutes": m16,
+        "ticket_time_remaining_days": m17,
+        "ticket_time_remaining_hours": m18,
+        "ticket_time_remaining_minutes": m19,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("即将开始"),
         "ticket_time_unknown": MessageLookupByLibrary.simpleMessage("时间未知"),

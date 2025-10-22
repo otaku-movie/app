@@ -49,7 +49,9 @@ final GoRouter routerConfig = GoRouter(
           path: '/home',
           name: 'home',
           builder: (BuildContext context, GoRouterState state) {
-            return const Home();
+            final tabParam = state.uri.queryParameters['tab'];
+            final initialTab = tabParam != null ? int.tryParse(tabParam) : null;
+            return Home(initialTab: initialTab);
           },
         ),
          GoRoute(

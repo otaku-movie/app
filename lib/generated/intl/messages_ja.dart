@@ -40,19 +40,25 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m9(total) => "合計 ${total} 件の返信";
 
-  static String m10(ticketCount) => "映画チケット ${ticketCount} 枚";
+  static String m10(hours, minutes) => "上映開始まであと ${hours} 時間 ${minutes} 分";
 
-  static String m11(date) => "有効期限: ${date}";
+  static String m11(minutes, seconds) => "上映開始まであと ${minutes} 分 ${seconds} 秒";
 
-  static String m12(maxSeat) => "最大${maxSeat}席までお選びいただけます";
+  static String m12(seconds) => "上映開始まであと ${seconds} 秒";
 
-  static String m13(movieName) => "映画チケットをシェア: ${movieName}";
+  static String m13(ticketCount) => "映画チケット ${ticketCount} 枚";
 
-  static String m14(days) => "あと${days}日";
+  static String m14(date) => "有効期限: ${date}";
 
-  static String m15(hours) => "あと${hours}時間";
+  static String m15(maxSeat) => "最大${maxSeat}席までお選びいただけます";
 
-  static String m16(minutes) => "あと${minutes}分";
+  static String m16(movieName) => "映画チケットをシェア: ${movieName}";
+
+  static String m17(days) => "あと${days}日";
+
+  static String m18(hours) => "あと${hours}時間";
+
+  static String m19(minutes) => "あと${minutes}分";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -167,6 +173,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("販売済み"),
         "common_enum_seatType_wheelChair":
             MessageLookupByLibrary.simpleMessage("車椅子席"),
+        "common_loading": MessageLookupByLibrary.simpleMessage("読み込み中..."),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("円"),
         "common_unit_point": MessageLookupByLibrary.simpleMessage("点"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("金"),
@@ -297,6 +304,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合計"),
         "movieTicketType_totalPrice":
             MessageLookupByLibrary.simpleMessage("合計金額"),
+        "orderDetail_countdown_hoursMinutes": m10,
+        "orderDetail_countdown_minutesSeconds": m11,
+        "orderDetail_countdown_seconds": m12,
+        "orderDetail_countdown_started":
+            MessageLookupByLibrary.simpleMessage("上映開始済み"),
+        "orderDetail_countdown_title":
+            MessageLookupByLibrary.simpleMessage("まもなく上映開始"),
         "orderDetail_orderCreateTime":
             MessageLookupByLibrary.simpleMessage("注文作成日時"),
         "orderDetail_orderMessage":
@@ -308,15 +322,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage("座席情報"),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("チケットコード"),
-        "orderDetail_ticketCount": m10,
+        "orderDetail_ticketCount": m13,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage("注文詳細"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("コメント"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("注文番号"),
         "orderList_title": MessageLookupByLibrary.simpleMessage("注文一覧"),
-        "payResult_success": MessageLookupByLibrary.simpleMessage(
-            "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。良い映画鑑賞をお楽しみください。"),
+        "payResult_qrCodeTip": MessageLookupByLibrary.simpleMessage(
+            "このQRコードまたはチケットコードで劇場でチケットを受け取ってください"),
+        "payResult_success": MessageLookupByLibrary.simpleMessage("支払い成功"),
         "payResult_ticketCode": MessageLookupByLibrary.simpleMessage("チケットコード"),
         "payResult_title": MessageLookupByLibrary.simpleMessage("支払い完了"),
+        "payResult_viewMyTickets":
+            MessageLookupByLibrary.simpleMessage("マイチケットを見る"),
         "payment_addCreditCard_cardConfirmed":
             MessageLookupByLibrary.simpleMessage("クレジットカード情報が確認されました"),
         "payment_addCreditCard_cardHolderName":
@@ -369,7 +386,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("新しいクレジットカードを追加"),
         "payment_selectCreditCard_confirmPayment":
             MessageLookupByLibrary.simpleMessage("支払い確認"),
-        "payment_selectCreditCard_expiryDate": m11,
+        "payment_selectCreditCard_expiryDate": m14,
         "payment_selectCreditCard_loadFailed":
             MessageLookupByLibrary.simpleMessage("クレジットカード一覧の読み込みに失敗しました"),
         "payment_selectCreditCard_noCreditCard":
@@ -447,7 +464,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("座席選択がキャンセルされました"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("座席を確定する"),
-        "selectSeat_maxSelectSeatWarn": m12,
+        "selectSeat_maxSelectSeatWarn": m15,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
@@ -459,7 +476,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("チケットを購入してください！"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("座席数"),
-        "ticket_shareTicket": m13,
+        "ticket_shareTicket": m16,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("上映時間"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("キャンセル済み"),
@@ -471,9 +488,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage("枚のチケット"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("時間形式エラー"),
-        "ticket_time_remaining_days": m14,
-        "ticket_time_remaining_hours": m15,
-        "ticket_time_remaining_minutes": m16,
+        "ticket_time_remaining_days": m17,
+        "ticket_time_remaining_hours": m18,
+        "ticket_time_remaining_minutes": m19,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("まもなく開始"),
         "ticket_time_unknown": MessageLookupByLibrary.simpleMessage("時間不明"),

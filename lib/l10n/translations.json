@@ -356,6 +356,11 @@
     }
   },
   "common": {
+    "loading": {
+      "zh": "加载中...",
+      "ja": "読み込み中...",
+      "en": "Loading..."
+    },
     "components": {
       "easyRefresh": {
         "refresh": {
@@ -1313,6 +1318,33 @@
       "ja": "注文詳細",
       "en": "Order Detail"
     },
+    "countdown": {
+      "title": {
+        "zh": "即将开场提醒",
+        "ja": "まもなく上映開始",
+        "en": "Showtime Reminder"
+      },
+      "started": {
+        "zh": "已开场",
+        "ja": "上映開始済み",
+        "en": "Started"
+      },
+      "hoursMinutes": {
+        "zh": "距离开场还有 {hours} 小时 {minutes} 分钟",
+        "ja": "上映開始まであと {hours} 時間 {minutes} 分",
+        "en": "{hours} hours {minutes} minutes until showtime"
+      },
+      "minutesSeconds": {
+        "zh": "距离开场还有 {minutes} 分钟 {seconds} 秒",
+        "ja": "上映開始まであと {minutes} 分 {seconds} 秒",
+        "en": "{minutes} minutes {seconds} seconds until showtime"
+      },
+      "seconds": {
+        "zh": "距离开场还有 {seconds} 秒",
+        "ja": "上映開始まであと {seconds} 秒",
+        "en": "{seconds} seconds until showtime"
+      }
+    },
     "ticketCode": {
       "zh": "取票码",
       "ja": "チケットコード",
@@ -1387,14 +1419,24 @@
       "en": "Payment Successful"
     },
     "success": {
-      "zh": "您的订单已经支付完成，请在以下时间之前到达以下地点，祝您观影愉快。",
-      "ja": "ご注文の支払いは完了しましたので、下記の時間までに下記の場所にお越しください。良い映画鑑賞をお楽しみください。",
-      "en": "Your order has been paid. Please arrive at the following location before the specified time. Enjoy your movie."
+      "zh": "支付成功",
+      "ja": "支払い成功",
+      "en": "Payment Successful"
     },
     "ticketCode": {
       "zh": "取票码",
       "ja": "チケットコード",
       "en": "Ticket Collection Code"
+    },
+    "qrCodeTip": {
+      "zh": "请凭此二维码或取票码前往影院取票",
+      "ja": "このQRコードまたはチケットコードで劇場でチケットを受け取ってください",
+      "en": "Please use this QR code or ticket code to collect your tickets at the cinema"
+    },
+    "viewMyTickets": {
+      "zh": "查看我的电影票",
+      "ja": "マイチケットを見る",
+      "en": "View My Tickets"
     }
   },
   "userProfile": {

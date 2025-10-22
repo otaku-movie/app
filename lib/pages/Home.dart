@@ -4,24 +4,26 @@ import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/tab/CinemaList.dart';
 import 'package:otaku_movie/pages/tab/Ticket.dart';
 import 'package:otaku_movie/pages/user/User.dart';
-import 'package:otaku_movie/pages/setting.dart';
 import 'package:otaku_movie/controller/DictController.dart';
-import '../controller/LanguageController.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  final int? initialTab;
+  
+  const Home({super.key, this.initialTab});
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<Home> with SingleTickerProviderStateMixin {
-  int currentIndex = 0;
+  late int currentIndex;
   
   @override
   void initState() {
     super.initState();
+    // 使用传入的 initialTab 或默认为 0
+    currentIndex = widget.initialTab ?? 0;
   }
 
 

@@ -1,24 +1,16 @@
-import 'dart:async';
-
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
-import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
-import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
 import 'package:otaku_movie/response/order/order_detail_response.dart';
-import 'package:otaku_movie/utils/index.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 class OrderList extends StatefulWidget {
   const OrderList({super.key});
@@ -78,10 +70,50 @@ class _PageState extends State<OrderList> {
     super.dispose();
   }
 
+  // 根据订单状态获取颜色
+  Color _getOrderStateColor(int? code) {
+    switch (code) {
+      case 1: // created - 已创建（蓝色）
+        return const Color(0xFF1989FA);
+      case 2: // succeed - 已完成（绿色）
+        return const Color(0xFF07C160);
+      case 3: // failed - 失败（红色）
+        return const Color(0xFFEE0A24);
+      case 4: // canceledOrder - 已取消（灰色）
+        return const Color(0xFF969799);
+      case 5: // timeout - 超时（橙色）
+        return const Color(0xFFFF976A);
+      default:
+        return const Color(0xFF323233);
+    }
+  }
+
+  // 构建订单状态标签
+  Widget _buildOrderStateTag(int? code) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: _getOrderStateColor(code).withOpacity(0.1),
+        borderRadius: BorderRadius.circular(6.r),
+      ),
+      child: DefaultTextStyle(
+        style: TextStyle(
+          fontSize: 24.sp,
+          color: _getOrderStateColor(code),
+          fontWeight: FontWeight.w500,
+        ),
+        child: Dict(
+          name: 'orderState',
+          code: code,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF7F8FA),
       appBar: CustomAppBar(
          title: Text(S.of(context).orderList_title, style: const TextStyle(color: Colors.white)),
       ),
@@ -107,163 +139,267 @@ class _PageState extends State<OrderList> {
                 });
               },
               child: Container(
-              padding: EdgeInsets.all(20.w),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Colors.grey.shade300)
-                )
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 10.h),
-                    child: Row(
+                margin: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                padding: EdgeInsets.all(24.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.03),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 订单号和状态
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${S.of(context).orderList_orderNumber}：${item.id ?? ''}', style: TextStyle(fontSize: 28.sp)),
-                        Dict(
-                          name: 'orderState',
-                          code: item.orderState,
-                        )
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.receipt_long,
+                              size: 28.sp,
+                              color: const Color(0xFF969799),
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              '${S.of(context).orderList_orderNumber}：${item.id ?? ''}',
+                              style: TextStyle(
+                                fontSize: 26.sp,
+                                color: const Color(0xFF969799),
+                              ),
+                            ),
+                          ],
+                        ),
+                        _buildOrderStateTag(item.orderState)
                       ],
                     ),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(right: 20.w),
-                        color: Colors.grey.shade200,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: CustomExtendedImage(
-                            item.moviePoster ?? '',
-                            width: 220.w,
-                            height: 260.h,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: SizedBox(
-                          height: 265.h,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        item.movieName ?? '',
-                                        style: TextStyle(
-                                          fontSize: 36.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  RichText(
-                                    text: TextSpan(
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        color: Colors.black54
-                                      ),
-                                      children: [
-                                        // 日期部分
-                                        TextSpan(
-                                          text: item.date ?? '',
-                                        ),
-                                        // 星期几部分
-                                        TextSpan(
-                                          text: '（${getDay(item.date ?? '', context)}）',
-                                        ),
-                                        // 时间段部分
-                                        TextSpan(
-                                          text: ' ${item.startTime} ~ ${item.endTime} ${item.specName}',
-                                        )],
-                                      )
-                                    ),
-                                    SizedBox(height: 4.h),
-                                    Text(
-                                      "${item.cinemaName}（${item.theaterHallName}）",
-                                      style: TextStyle(fontSize: 24.sp, color: Colors.grey.shade600),
-                                    ),
-                                    SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Wrap(
-                                        spacing: 6,
-                                        children: item.seat == null ? [] : item.seat!.map((item) {
-                                          return ElevatedButton(
-                                            style: ButtonStyle(
-                                              minimumSize: WidgetStateProperty.all(Size(0, 50.h)),
-                                              textStyle: WidgetStateProperty.all(TextStyle(fontSize: 20.sp)),
-                                              side: WidgetStateProperty.all(const BorderSide(width: 2, color: Color(0xffffffff))),
-                                              padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 15.0, vertical: 0.0)),
-                                              shape: WidgetStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(20.0), // 调整圆角大小
-                                                ), 
-                                              ),
-                                            ),
-                                            
-                                            onPressed: () {},
-                                            child: Text('${item.seatName}（${item.movieTicketTypeName}）'),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
                     
-                                  ],
-                                ),
-                                 
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text('${item.orderTotal}${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 40.sp)),
-                                      // Text('${S.of(context).common_unit_jpy}', style: TextStyle(color: Colors.red, fontSize: 32.sp))
-                                    ],
-                                  ),
-                                  SizedBox(width: 16.w),
-                                  // ignore: unrelated_type_equality_checks
-                                  item.orderState == OrderState.succeed ? SizedBox(
-                                    width: 120.w,
-                                    height: 50.h,                  
-                                    child: MaterialButton(
-                                      // padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                                      color: const Color.fromARGB(255, 2, 162, 255),
-                                      textColor: Colors.white,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(50)),
-                                      ),
-                                      onPressed: () {
-                                        // context.pushNamed('commentDetail');
-                                      },
-                                      child: Text(
-                                        S.of(context).orderList_comment,
-                                        style: TextStyle(color: Colors.white, fontSize: 28.sp),
-                                      ),
-                                    ),
-                                  ) : const SizedBox(),
-                                ],
-                              )
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      child: Divider(
+                        color: const Color(0xFFEBEDF0),
+                        height: 1,
+                      ),
+                    ),
+                    
+                    // 电影信息
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 电影海报
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
                             ],
                           ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: CustomExtendedImage(
+                              item.moviePoster ?? '',
+                              width: 200.w,
+                              height: 240.h,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                        
+                        SizedBox(width: 20.w),
+                        
+                        // 电影详情
+                        Expanded(
+                          child: SizedBox(
+                            height: 240.h,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // 电影名称
+                                    Text(
+                                      item.movieName ?? '',
+                                      style: TextStyle(
+                                        fontSize: 32.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: const Color(0xFF323233),
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 12.h),
+                                    
+                                    // 放映时间
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 12.w,
+                                        vertical: 6.h,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFF7F8FA),
+                                        borderRadius: BorderRadius.circular(6.r),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.access_time,
+                                            size: 20.sp,
+                                            color: const Color(0xFF969799),
+                                          ),
+                                          SizedBox(width: 4.w),
+                                          Flexible(
+                                            child: Text(
+                                              '${item.date ?? ''} ${item.startTime}',
+                                              style: TextStyle(
+                                                fontSize: 22.sp,
+                                                color: const Color(0xFF646566),
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    
+                                    SizedBox(height: 8.h),
+                                    
+                                    // 影院信息
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.location_on,
+                                          size: 20.sp,
+                                          color: const Color(0xFF969799),
+                                        ),
+                                        SizedBox(width: 4.w),
+                                        Expanded(
+                                          child: Text(
+                                            item.cinemaName ?? '',
+                                            style: TextStyle(
+                                              fontSize: 22.sp,
+                                              color: const Color(0xFF646566),
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    
+                                    // 座位信息
+                                    if (item.seat != null && item.seat!.isNotEmpty)
+                                      Padding(
+                                        padding: EdgeInsets.only(top: 8.h),
+                                        child: Wrap(
+                                          spacing: 6.w,
+                                          runSpacing: 6.h,
+                                          children: item.seat!.take(3).map((seat) {
+                                            return Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w,
+                                                vertical: 4.h,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFF1989FA).withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(6.r),
+                                              ),
+                                              child: Text(
+                                                seat.seatName ?? '',
+                                                style: TextStyle(
+                                                  fontSize: 20.sp,
+                                                  color: const Color(0xFF1989FA),
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                                
+                                // 价格和操作按钮
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    // 价格
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '${item.orderTotal}',
+                                            style: TextStyle(
+                                              fontSize: 36.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xFFEE0A24),
+                                              fontFamily: 'Poppins',
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: ' ${S.of(context).common_unit_jpy}',
+                                            style: TextStyle(
+                                              fontSize: 24.sp,
+                                              color: const Color(0xFFEE0A24),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    
+                                    // 评论按钮
+                                    if (item.orderState == OrderState.succeed)
+                                      Container(
+                                        height: 50.h,
+                                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              const Color(0xFF1989FA),
+                                              const Color(0xFF1989FA).withOpacity(0.9),
+                                            ],
+                                          ),
+                                          borderRadius: BorderRadius.circular(25.r),
+                                        ),
+                                        child: MaterialButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            // context.pushNamed('commentDetail');
+                                          },
+                                          child: Text(
+                                            S.of(context).orderList_comment,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 26.sp,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            )
             );
           },
         ),

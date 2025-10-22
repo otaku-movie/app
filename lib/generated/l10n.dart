@@ -650,6 +650,16 @@ class S {
     );
   }
 
+  /// `Loading...`
+  String get common_loading {
+    return Intl.message(
+      'Loading...',
+      name: 'common_loading',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pull to refresh`
   String get common_components_easyRefresh_refresh_dragText {
     return Intl.message(
@@ -2160,6 +2170,56 @@ class S {
     );
   }
 
+  /// `Showtime Reminder`
+  String get orderDetail_countdown_title {
+    return Intl.message(
+      'Showtime Reminder',
+      name: 'orderDetail_countdown_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Started`
+  String get orderDetail_countdown_started {
+    return Intl.message(
+      'Started',
+      name: 'orderDetail_countdown_started',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{hours} hours {minutes} minutes until showtime`
+  String orderDetail_countdown_hoursMinutes(Object hours, Object minutes) {
+    return Intl.message(
+      '$hours hours $minutes minutes until showtime',
+      name: 'orderDetail_countdown_hoursMinutes',
+      desc: '',
+      args: [hours, minutes],
+    );
+  }
+
+  /// `{minutes} minutes {seconds} seconds until showtime`
+  String orderDetail_countdown_minutesSeconds(Object minutes, Object seconds) {
+    return Intl.message(
+      '$minutes minutes $seconds seconds until showtime',
+      name: 'orderDetail_countdown_minutesSeconds',
+      desc: '',
+      args: [minutes, seconds],
+    );
+  }
+
+  /// `{seconds} seconds until showtime`
+  String orderDetail_countdown_seconds(Object seconds) {
+    return Intl.message(
+      '$seconds seconds until showtime',
+      name: 'orderDetail_countdown_seconds',
+      desc: '',
+      args: [seconds],
+    );
+  }
+
   /// `Ticket Collection Code`
   String get orderDetail_ticketCode {
     return Intl.message(
@@ -2260,10 +2320,10 @@ class S {
     );
   }
 
-  /// `Your order has been paid. Please arrive at the following location before the specified time. Enjoy your movie.`
+  /// `Payment Successful`
   String get payResult_success {
     return Intl.message(
-      'Your order has been paid. Please arrive at the following location before the specified time. Enjoy your movie.',
+      'Payment Successful',
       name: 'payResult_success',
       desc: '',
       args: [],
@@ -2275,6 +2335,26 @@ class S {
     return Intl.message(
       'Ticket Collection Code',
       name: 'payResult_ticketCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please use this QR code or ticket code to collect your tickets at the cinema`
+  String get payResult_qrCodeTip {
+    return Intl.message(
+      'Please use this QR code or ticket code to collect your tickets at the cinema',
+      name: 'payResult_qrCodeTip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View My Tickets`
+  String get payResult_viewMyTickets {
+    return Intl.message(
+      'View My Tickets',
+      name: 'payResult_viewMyTickets',
       desc: '',
       args: [],
     );
