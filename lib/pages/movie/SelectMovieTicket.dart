@@ -7,6 +7,7 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/cinema/movie_ticket_type_response.dart';
 import 'package:otaku_movie/response/movie/user_select_seat_data_response.dart';
 import 'package:otaku_movie/utils/toast.dart';
+import 'package:otaku_movie/utils/seat_cancel_manager.dart';
 
 import '../../api/index.dart';
 import '../../utils/index.dart';
@@ -83,6 +84,162 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
          title: Text(S.of(context).movieTicketType_title, style: const TextStyle(color: Colors.white)),
+         onBackButtonPressed: () async {
+           // 显示确认对话框（Vant 风格）
+           final shouldCancel = await showDialog<bool>(
+             context: context,
+             barrierDismissible: false,
+             builder: (BuildContext context) {
+               return Center(
+                 child: Container(
+                   width: 640.w,
+                   margin: EdgeInsets.symmetric(horizontal: 32.w),
+                   decoration: BoxDecoration(
+                     color: Colors.white,
+                     borderRadius: BorderRadius.circular(32.r),
+                   ),
+                   child: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     children: [
+                      // 标题
+                      Padding(
+                        padding: EdgeInsets.only(top: 52.h, bottom: 16.h),
+                        child: Text(
+                          S.of(context).seatSelection_cancelSeatTitle,
+                          style: TextStyle(
+                            fontSize: 36.sp,
+                            fontWeight: FontWeight.normal,
+                            color: const Color(0xFF323233),
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
+                      ),
+                      
+                      // 内容
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 48.w),
+                        child: Text(
+                          S.of(context).seatSelection_cancelSeatConfirm,
+                          style: TextStyle(
+                            fontSize: 28.sp,
+                            color: const Color(0xFF646566),
+                            height: 1.5,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.none,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                       
+                       SizedBox(height: 48.h),
+                       
+                       // 按钮组 - Vant 风格的横向分割按钮
+                       Container(
+                         decoration: BoxDecoration(
+                           border: Border(
+                             top: BorderSide(
+                               color: const Color(0xFFEBEDF0),
+                               width: 1,
+                             ),
+                           ),
+                         ),
+                         child: Row(
+                           children: [
+                             // 取消按钮
+                             Expanded(
+                               child: Material(
+                                 color: Colors.transparent,
+                                 child: InkWell(
+                                   onTap: () {
+                                     Navigator.of(context).pop(false);
+                                   },
+                                   borderRadius: BorderRadius.only(
+                                     bottomLeft: Radius.circular(32.r),
+                                   ),
+                                  child: Container(
+                                    height: 100.h,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      S.of(context).confirmOrder_continuePay,
+                                      style: TextStyle(
+                                        fontSize: 32.sp,
+                                        color: const Color(0xFF323233),
+                                        fontWeight: FontWeight.w500,
+                                        decoration: TextDecoration.none,
+                                      ),
+                                    ),
+                                  ),
+                                 ),
+                               ),
+                             ),
+                             
+                             // 分割线
+                             Container(
+                               width: 1,
+                               height: 100.h,
+                               color: const Color(0xFFEBEDF0),
+                             ),
+                             
+                             // 确认按钮
+                             Expanded(
+                               child: Material(
+                                 color: Colors.transparent,
+                                 child: InkWell(
+                                   onTap: () {
+                                     Navigator.of(context).pop(true);
+                                   },
+                                   borderRadius: BorderRadius.only(
+                                     bottomRight: Radius.circular(32.r),
+                                   ),
+                                  child: Container(
+                                    height: 100.h,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      S.of(context).confirmOrder_confirmCancel,
+                                      style: TextStyle(
+                                        fontSize: 32.sp,
+                                        color: const Color(0xFFEE0A24),
+                                        fontWeight: FontWeight.w600,
+                                        decoration: TextDecoration.none,
+                                      ),
+                                    ),
+                                  ),
+                                 ),
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                     ],
+                   ),
+                 ),
+               );
+             },
+           );
+
+           if (!mounted) return;
+           
+           if (shouldCancel == true) {
+             // 用户确认取消，清除座位选择
+             SeatCancelManager.clearSeatSelection();
+             ToastService.showSuccess(S.of(context).seatSelection_seatCanceled);
+             
+             if (!mounted) return;
+             
+             // 返回到座位选择页面
+             if (data.movieShowTimeId != null && data.theaterHallId != null) {
+               context.pushReplacementNamed(
+                 'selectSeat',
+                 queryParameters: {
+                   'id': data.movieShowTimeId.toString(),
+                   'theaterHallId': data.theaterHallId.toString(),
+                 }
+               );
+             } else {
+               Navigator.of(context).pop();
+             }
+           }
+         },
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -555,10 +712,11 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
               ],
             ),
             child: SafeArea(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              bottom: false,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   // 价格信息
                   Expanded(
                     child: Column(
