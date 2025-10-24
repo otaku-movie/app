@@ -11,7 +11,7 @@ CinemaMovieShowTimeDetailResponse _$CinemaMovieShowTimeDetailResponseFromJson(
     CinemaMovieShowTimeDetailResponse(
       cinemaId: (json['cinemaId'] as num?)?.toInt(),
       cinemaName: json['cinemaName'] as String?,
-      cinemaAddress: json['cinemaAddress'] as String?,
+      cinemaFullAddress: json['cinemaFullAddress'] as String?,
       cinemaTel: json['cinemaTel'] as String?,
       data: (json['data'] as List<dynamic>?)
           ?.map((e) => CinemaMovieShowTimeDetailResponseDatum.fromJson(
@@ -24,7 +24,7 @@ Map<String, dynamic> _$CinemaMovieShowTimeDetailResponseToJson(
     <String, dynamic>{
       'cinemaId': instance.cinemaId,
       'cinemaName': instance.cinemaName,
-      'cinemaAddress': instance.cinemaAddress,
+      'cinemaFullAddress': instance.cinemaFullAddress,
       'cinemaTel': instance.cinemaTel,
       'data': instance.data?.map((e) => e.toJson()).toList(),
     };
@@ -55,6 +55,15 @@ TheaterHallShowTime _$TheaterHallShowTimeFromJson(Map<String, dynamic> json) =>
       startTime: json['startTime'] as String?,
       endTime: json['endTime'] as String?,
       specName: json['specName'] as String?,
+      movieShowTimeTags: (json['movieShowTimeTags'] as List<dynamic>?)
+          ?.map((e) => ShowTimeTag.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      showTimeTags: (json['showTimeTags'] as List<dynamic>?)
+          ?.map((e) => ShowTimeTag.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      subtitle: (json['subtitle'] as List<dynamic>?)
+          ?.map((e) => ShowTimeSubtitle.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$TheaterHallShowTimeToJson(
@@ -66,4 +75,33 @@ Map<String, dynamic> _$TheaterHallShowTimeToJson(
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'specName': instance.specName,
+      'movieShowTimeTags':
+          instance.movieShowTimeTags?.map((e) => e.toJson()).toList(),
+      'showTimeTags': instance.showTimeTags?.map((e) => e.toJson()).toList(),
+      'subtitle': instance.subtitle?.map((e) => e.toJson()).toList(),
+    };
+
+ShowTimeTag _$ShowTimeTagFromJson(Map<String, dynamic> json) => ShowTimeTag(
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+    );
+
+Map<String, dynamic> _$ShowTimeTagToJson(ShowTimeTag instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+    };
+
+ShowTimeSubtitle _$ShowTimeSubtitleFromJson(Map<String, dynamic> json) =>
+    ShowTimeSubtitle(
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+      code: json['code'] as String?,
+    );
+
+Map<String, dynamic> _$ShowTimeSubtitleToJson(ShowTimeSubtitle instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'code': instance.code,
     };

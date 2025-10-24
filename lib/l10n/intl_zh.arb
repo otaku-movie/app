@@ -14,7 +14,7 @@
   "search_removeHistoryConfirm_cancel": "取消",
   "search_level": "分级",
   "showTimeDetail_address": "地址",
-  "showTimeDetail_buy": "购票",
+  "showTimeDetail_buy": "选座",
   "showTimeDetail_time": "分",
   "cinemaDetail_tel": "联系方式",
   "cinemaDetail_address": "地址",
@@ -75,6 +75,9 @@
   "ticket_buyTickets": "去购票",
   "ticket_shareTicket": "分享电影票: {movieName}",
   "common_loading": "加载中...",
+  "common_error_title": "出错了",
+  "common_error_message": "数据加载失败，请稍后重试",
+  "common_retry": "重新加载",
   "common_components_easyRefresh_refresh_dragText": "下拉刷新",
   "common_components_easyRefresh_refresh_armedText": "松开刷新",
   "common_components_easyRefresh_refresh_readyText": "正在刷新...",
@@ -120,6 +123,25 @@
   "login_password_verify_notNull": "密码不能为空",
   "login_password_verify_isValid": "密码必须为8-16位，包含数字、字母和下划线",
   "login_loginButton": "登录",
+  "login_welcomeText": "欢迎回来，请登录您的账户",
+  "login_or": "或",
+  "login_googleLogin": "使用 Google 登录",
+  "login_forgotPassword": "忘记密码？",
+  "login_forgotPasswordTitle": "忘记密码",
+  "login_forgotPasswordDescription": "输入您的邮箱地址，我们将发送验证码给您",
+  "login_emailAddress": "邮箱地址",
+  "login_newPassword": "新密码",
+  "login_sendVerificationCode": "发送验证码",
+  "login_resetPassword": "重置密码",
+  "login_rememberPassword": "想起密码了？",
+  "login_backToLogin": "返回登录",
+  "login_emailRequired": "请输入邮箱",
+  "login_emailInvalid": "请输入有效的邮箱地址",
+  "login_verificationCodeRequired": "请输入验证码",
+  "login_newPasswordRequired": "请输入新密码",
+  "login_passwordTooShort": "密码至少需要6位",
+  "login_verificationCodeSent": "验证码已发送至您的邮箱",
+  "login_passwordResetSuccess": "密码重置成功",
   "login_verificationCode": "验证码",
   "login_sendVerifyCodeButton": "发送验证码",
   "login_noAccount": "还没有注册账号？",
@@ -175,6 +197,20 @@
   "movieDetail_detail_staff": "工作人员",
   "movieDetail_detail_character": "角色",
   "movieDetail_detail_comment": "评论",
+  "movieDetail_detail_duration_unknown": "未知",
+  "movieDetail_detail_duration_minutes": "分钟",
+  "movieDetail_detail_duration_hours": "小时",
+  "movieDetail_detail_duration_hoursMinutes": "{hours}小时{minutes}分钟",
+  "@movieDetail_detail_duration_hoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "movieDetail_detail_totalReplyMessage": "共{total}条回复",
   "@movieDetail_detail_totalReplyMessage": {
     "placeholders": {
@@ -361,5 +397,21 @@
   "cinemaList_selectSeat_pleaseSelectSeats": "请选择座位",
   "cinemaList_selectSeat_confirmSelection": "确认选择 {count} 个座位",
   "cinemaList_selectSeat_seatsSelected": "已选择 {count} 个座位",
-  "cinemaList_selectSeat_dateFormat": "yyyy年MM月dd日"
+  "cinemaList_selectSeat_dateFormat": "yyyy年MM月dd日",
+  "forgotPassword_title": "忘记密码",
+  "forgotPassword_description": "输入您的邮箱地址，我们将发送验证码给您",
+  "forgotPassword_emailAddress": "邮箱地址",
+  "forgotPassword_verificationCode": "验证码",
+  "forgotPassword_newPassword": "新密码",
+  "forgotPassword_sendVerificationCode": "发送验证码",
+  "forgotPassword_resetPassword": "重置密码",
+  "forgotPassword_rememberPassword": "想起密码了？",
+  "forgotPassword_backToLogin": "返回登录",
+  "forgotPassword_emailRequired": "请输入邮箱",
+  "forgotPassword_emailInvalid": "请输入有效的邮箱地址",
+  "forgotPassword_verificationCodeRequired": "请输入验证码",
+  "forgotPassword_newPasswordRequired": "请输入新密码",
+  "forgotPassword_passwordTooShort": "密码至少需要6位",
+  "forgotPassword_verificationCodeSent": "验证码已发送至您的邮箱",
+  "forgotPassword_passwordResetSuccess": "密码重置成功"
 }

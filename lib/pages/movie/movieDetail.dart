@@ -22,6 +22,7 @@ import 'package:otaku_movie/response/movie/movieList/character.dart';
 import 'package:otaku_movie/response/movie/movieList/comment/comment_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
 import 'package:otaku_movie/response/movie/movie_staff.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetail extends StatefulWidget {
@@ -434,74 +435,151 @@ class _PageState extends State<MovieDetail> {
     }).toList();
   }
 
-  bool isValidDate(String date) {
-    RegExp regExp = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+
+  String _formatDuration(String? timeString) {
+    if (timeString == null || timeString.isEmpty) {
+      return S.of(context).movieDetail_detail_duration_unknown;
+    }
     
-    return regExp.hasMatch(date);
+    try {
+      int minutes = int.parse(timeString);
+      
+      if (minutes < 60) {
+        return '${minutes}${S.of(context).movieDetail_detail_duration_minutes}';
+      } else {
+        int hours = minutes ~/ 60;
+        int remainingMinutes = minutes % 60;
+        
+        if (remainingMinutes == 0) {
+          return '${hours}${S.of(context).movieDetail_detail_duration_hours}';
+        } else {
+          return S.of(context).movieDetail_detail_duration_hoursMinutes(hours, remainingMinutes);
+        }
+      }
+    } catch (e) {
+      return S.of(context).movieDetail_detail_duration_unknown;
+    }
   }
 
-  getWeekday (String date) {
-    try {
-      // 尝试解析日期字符串
-      DateTime parsedDate = DateTime.parse(date);
-      
-      // 检查是否是有效的 yyyy-MM-dd 格式
-      parsedDate.toString().startsWith(date);
-
-      List<String> weekDays = [
-        'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
-      ];
-
-     return weekDays[parsedDate.weekday - 1];
-    } catch (e) {
-      return '';  // 解析失败，说明无效
-    }
+  Widget _buildInfoRow(String label, String value, {Widget? customValue}) {
+    return Padding(
+      padding: EdgeInsets.only(top: 8.h),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 160.w,
+            child: Text(
+              '$label：',
+              style: TextStyle(
+                fontSize: 28.sp,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ),
+          if (customValue != null)
+            customValue
+          else
+            Expanded(
+              child: Text(
+                value,
+                style: TextStyle(
+                  fontSize: 28.sp,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
   }
 
   Widget buildHelloMovieGuide(List<HelloMovieResponse>? helloMovie) {
-    if (helloMovie == null) {
+    if (helloMovie == null || helloMovie.isEmpty) {
       return Container();
     }
 
-    HelloMovieResponse? audio = data.helloMovie?.firstWhere((guide) => guide.code == HelloMovieGuide.audio.code, orElse: () => HelloMovieResponse());
-    HelloMovieResponse? sub = data.helloMovie?.firstWhere((guide) => guide.code == HelloMovieGuide.sub.code, orElse: () => HelloMovieResponse());
+    HelloMovieResponse? audio = data.helloMovie?.firstWhere(
+      (guide) => guide.code == HelloMovieGuide.audio.code, 
+      orElse: () => HelloMovieResponse()
+    );
+    HelloMovieResponse? sub = data.helloMovie?.firstWhere(
+      (guide) => guide.code == HelloMovieGuide.sub.code, 
+      orElse: () => HelloMovieResponse()
+    );
 
-    return Space(
-      direction: 'row',
-      right: 15.h,
-      children: [
-        Space(
-          right: 15.w,
-          children: [
-          HelloMovie(
-            guideData: data.helloMovie, 
-            type: HelloMovieGuide.audio,
-            width: 70.w,
-          ),
+    // 检查是否有有效数据
+    bool hasAudio = audio?.date != null && audio!.date!.isNotEmpty;
+    bool hasSub = sub?.date != null && sub!.date!.isNotEmpty;
+
+    if (!hasAudio && !hasSub) {
+      return Container();
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          // 音轨信息
+          if (hasAudio)
+            Container(
+              margin: EdgeInsets.only(right: 12.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  HelloMovie(
+                    guideData: data.helloMovie, 
+                    type: HelloMovieGuide.audio,
+                    width: 50.w,
+                  ),
+                  SizedBox(width: 6.w),
+                  Text(
+                    DateFormatUtil.formatDate(audio?.date, context),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           
-          audio?.date == null ? const Text('') :  Text(
-           (audio?.date ?? '').substring(5), 
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 28.sp
-          )),
-        ]),
-        Space(
-          right: 15.w,
-          children: [
-          HelloMovie(
-            guideData: data.helloMovie, 
-            type: HelloMovieGuide.sub,
-            width: 70.w,
-          ),
-          sub?.date == null ? const Text('') :  Text(
-            (sub?.date ?? '').substring(5), 
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 28.sp
-            )),
-          ])
-      ],
+          // 字幕信息
+          if (hasSub)
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  HelloMovie(
+                    guideData: data.helloMovie, 
+                    type: HelloMovieGuide.sub,
+                    width: 50.w,
+                  ),
+                  SizedBox(width: 6.w),
+                  Text(
+                    DateFormatUtil.formatDate(sub?.date, context),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -513,63 +591,88 @@ class _PageState extends State<MovieDetail> {
       //    title: Text('鬼灭之刃 无限城篇', style: TextStyle(color: Colors.white)),
       // ),
       bottomNavigationBar: Container(
-      padding: EdgeInsets.all(20.h), // 内边距
-      decoration: BoxDecoration(
-        color: Colors.white, // 背景色
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
           boxShadow: [
-            // 第一层浅阴影
             BoxShadow(
-              color: Colors.white.withOpacity(0.8),
-              blurRadius: 15,
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 20,
               offset: const Offset(0, -5),
-            ),
-            BoxShadow(
-              color: Colors.white.withOpacity(0.5),
-              blurRadius: 15,
-              offset: const Offset(0, 0),
             ),
           ],
         ),
-      child: GestureDetector(
-        onTap: () {
-          context.pushNamed(
-            'showTimeList', 
-            pathParameters: {
-              "id": '${widget.id}'
-            }, 
-            queryParameters: {
-              'movieName': data.name
-            });
-        },
-        child: SizedBox(
-            width: double.infinity,
-            height: 70.h,
-            child: MaterialButton(
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100),
+        child: SafeArea(
+          child: GestureDetector(
+            onTap: () {
+              context.pushNamed(
+                'showTimeList', 
+                pathParameters: {
+                  "id": '${widget.id}'
+                }, 
+                queryParameters: {
+                  'movieName': data.name
+                });
+            },
+            child: Container(
+              width: double.infinity,
+              height: 80.h,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(25.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF1989FA).withOpacity(0.3),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-              onPressed: () {
-                context.pushNamed(
-                  'showTimeList', 
-                  pathParameters: {
-                    "id": '${widget.id}'
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(25.r),
+                  onTap: () {
+                    context.pushNamed(
+                      'showTimeList', 
+                      pathParameters: {
+                        "id": '${widget.id}'
+                      },
+                      queryParameters: {
+                        'movieName': data.name
+                      }
+                    );
                   },
-                  queryParameters: {
-                    'movieName': data.name
-                  }
-                );
-              },
-              child: Text(
-                S.of(context).movieDetail_button_buy,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32.sp,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.movie_outlined,
+                          color: Colors.white,
+                          size: 28.sp,
+                        ),
+                        SizedBox(width: 12.w),
+                        Text(
+                          S.of(context).movieDetail_button_buy,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        )
+        ),
       ),
       body: AppErrorWidget(
         child: NestedScrollView(
@@ -582,7 +685,7 @@ class _PageState extends State<MovieDetail> {
               snap: true,
               pinned: true,
               collapsedHeight: 100.h >= 56.0 ? 100.h : 56.0,
-              expandedHeight: 428.h,
+              expandedHeight: 415.h,
               backgroundColor: Colors.blue,
               title: _showTitle
                     ? Text(
@@ -676,61 +779,129 @@ class _PageState extends State<MovieDetail> {
                         SizedBox(
                           width: 440.w,
                           height: 300.h,
-                          // margin: EdgeInsets.only(right: 20.w),
-                          // decoration: BoxDecoration(
-                          //   border: Border.all(color: Colors.red)
-                          // ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Space(
-                                direction: 'column',
-                                bottom: 5.h,
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // 电影名称
                                   Text(
                                     data.name ?? '',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 32.sp, // 调整文字大小以适配设备
+                                      fontSize: 34.sp,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.3,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          offset: const Offset(0, 2),
+                                          blurRadius: 4,
+                                        ),
+                                      ],
                                     ),
                                     maxLines: 2,
-                                    overflow: TextOverflow.ellipsis, // 超出显示省略号
+                                    overflow: TextOverflow.ellipsis,
                                   ),
+                                  SizedBox(height: 12.h),
+                                  
+                                  // 标签行：分级 + 评分
                                   Row(
                                     children: [
-                                      Rate(
-                                        maxRating: 10.0, // 最大评分
-                                        starSize: 35.w, // 星星大小
-                                        point: data.rate ?? 0,
-                                        readOnly: true,
-                                        // unfilledColor: Colors.grey.shade100,
-                                        onRatingUpdate: (rating) {
-                                          // print("当前评分：$rating");
-                                        },
+                                      // 分级信息
+                                      if (data.levelName != null)
+                                        Container(
+                                          margin: EdgeInsets.only(right: 8.w),
+                                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withOpacity(0.3),
+                                            borderRadius: BorderRadius.circular(16.r),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.shield_outlined,
+                                                color: Colors.white,
+                                                size: 18.sp,
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              Text(
+                                                data.levelName ?? '',
+                                                style: TextStyle(
+                                                  fontSize: 20.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      
+                                      // 评分
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(0.3),
+                                          borderRadius: BorderRadius.circular(16.r),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(
+                                              Icons.star,
+                                              color: Colors.yellow.shade700,
+                                              size: 20.sp,
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            Text(
+                                              '${data.rate ?? 0}',
+                                              style: TextStyle(
+                                                fontSize: 26.sp,
+                                                color: Colors.yellow.shade700,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${S.of(context).common_unit_point}',
+                                              style: TextStyle(
+                                                fontSize: 20.sp,
+                                                color: Colors.white70,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(width: 20.w),
-                                      Text('${data.rate ?? 0}${S.of(context).common_unit_point}', style: TextStyle(
-                                        fontSize: 36.sp,
-                                        color: Colors.yellow.shade700
-                                      ),)
                                     ],
                                   ),
-                                  Text(
-                                    data.startDate == null
-                                      ? S.of(context).movieDetail_detail_noDate  // 如果 startDate 为 null，显示 "没有日期"
-                                      : isValidDate(data.startDate ?? '') 
-                                          ? '${data.startDate ?? ''} (${getWeekday(data.startDate ?? '')})'  // 如果是有效日期格式，显示日期和星期几
-                                          : data.startDate ?? '',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                    ),
+                                  SizedBox(height: 10.h),
+                                  
+                                  // 上映日期
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today_outlined,
+                                        color: Colors.white70,
+                                        size: 16.sp,
+                                      ),
+                                      SizedBox(width: 6.w),
+                                      Text(
+                                        data.startDate == null
+                                          ? S.of(context).movieDetail_detail_noDate
+                                          : DateFormatUtil.formatDate(data.startDate, context),
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 22.sp,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  // SizedBox(height: 10.h),
+                                  SizedBox(height: 10.h),
 
-                                  buildHelloMovieGuide(data.helloMovie),                       
-                                 
+                                  // HelloMovie 指南
+                                  buildHelloMovieGuide(data.helloMovie),
                                 ],
                               ),
                               // Space(
@@ -814,159 +985,215 @@ class _PageState extends State<MovieDetail> {
                         ), textAlign: TextAlign.justify,),
                       ),
                       
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 5.h),
-                        child:  Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(S.of(context).movieDetail_detail_basicMessage, style: TextStyle(
-                            // color: Colors.grey.shade700,
-                            fontSize: 36.sp,
-                            fontWeight: FontWeight.bold
-                          )),
-                          // Icon(Icons.arrow_forward_ios, size: 36.sp)
-                        ],
-                      )
-                      ),
-                      Wrap(
-                        runSpacing: 10.h,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded( // 确保文本能够适配父级布局
-                                child: Text(
-                                  '${S.of(context).movieDetail_detail_originalName}：${data.originalName ?? ''}',
-                                  style: TextStyle(
-                                    fontSize: 28.sp,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                  overflow: TextOverflow.ellipsis, // 设置溢出显示省略号
-                                  maxLines: 2, // 限制为单行
-                                  textAlign: TextAlign.justify,
-                                ),
-                              ),
-                            ],
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20.h, top: 20.h),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF7F8FA),
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(
+                            color: const Color(0xFF1989FA).withOpacity(0.1),
+                            width: 1,
                           ),
-                          Row(children: [
-                              Text('${S.of(context).movieDetail_detail_time}：${data.time ?? ''}', style: TextStyle(
-                                fontSize: 28.sp,
-                                color: Colors.grey.shade600
-                              ))
-                            ]),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                            Text('${S.of(context).movieDetail_detail_spec}：', style: TextStyle(
-                              fontSize: 28.sp,
-                              color: Colors.grey.shade600
-                            ),),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Wrap(
-                                  spacing: 6,
-                                  children: data.spec == null ? [] : data.spec!.map((item) {
-                                    return Container(
-                                      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(255, 193, 196, 202),
-                                        borderRadius: BorderRadius.circular(50)
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
-                                    );
-                                  }).toList(),
-                                )
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(8.w),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF1989FA).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8.r),
                               ),
-                            )
-                            
-                          ]),
-                          Row(children: [
-                            Text('${S.of(context).movieDetail_detail_tags}：', style: TextStyle(
-                              fontSize: 28.sp,
-                              color: Colors.grey.shade600
-                            )),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Wrap(
-                                  spacing: 6,
-                                  children: data.tags == null ? [] : data.tags!.map((item) {
-                                    return Container(
-                                      padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 25.w),
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(255, 193, 196, 202),
-                                        borderRadius: BorderRadius.circular(50)
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: Text(item.name ?? '', style: TextStyle(fontSize: 24.sp, color: Colors.white)),
-                                    );
-                                  }).toList(),
-                                )
+                              child: Icon(
+                                Icons.info_outline,
+                                color: const Color(0xFF1989FA),
+                                size: 24.sp,
                               ),
-                            )
-                          ]),
-                          Row(children: [
-                            Text('${S.of(context).movieDetail_detail_homepage}：', style: TextStyle(
-                              fontSize: 28.sp,
-                              color: Colors.grey.shade600
-                            )),
-                            GestureDetector(
-                              onTap: () async {
-                                String url = data.homePage ?? '';
-
-                                if (await canLaunchUrl(Uri.parse(url))) {
-                                  await launchUrl(
-                                    Uri.parse(url),
-                                    mode: LaunchMode.externalApplication, // 打开外部浏览器
-                                  );
-                                } else {
-                                  // ScaffoldMessenger.of(context).showSnackBar(
-                                  //   SnackBar(content: Text('无法打开链接: $url')),
-                                  // );
-                                }
-                              },
-                              child: SizedBox(
-                                width: 610.w,
-                                child: Text(data.homePage ?? '', style: const TextStyle(
-                                color: Color.fromARGB(255, 5, 32, 239)
-                              ), overflow:TextOverflow.ellipsis),
-                              ) 
-                            )
-                          ]),
-                          Row(children: [
-                            Text('${S.of(context).movieDetail_detail_state}：', style: TextStyle(
-                              fontSize: 28.sp,
-                              color: Colors.grey.shade600
-                            )),
-                            Dict(
-                              name: 'releaseStatus',
-                              code: data.status,
-                            )
-                          ]),
-                          Container(
-                            child: RichText(
-                              text: TextSpan(
+                            ),
+                            SizedBox(width: 12.w),
+                            Text(
+                              S.of(context).movieDetail_detail_basicMessage,
+                              style: TextStyle(
+                                fontSize: 32.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF323233),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 原名
+                          _buildInfoRow(
+                            S.of(context).movieDetail_detail_originalName,
+                            data.originalName ?? '',
+                          ),
+                          // 时长
+                          _buildInfoRow(
+                            S.of(context).movieDetail_detail_time,
+                            _formatDuration(data.time?.toString()),
+                          ),
+                          // 上映规格
+                          if (data.spec != null && data.spec!.isNotEmpty)
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  TextSpan(
-                                    text: '${S.of(context).movieDetail_detail_level}：', // 显示电影级别的标题
-                                    style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Colors.grey.shade600,
+                                  SizedBox(
+                                    width: 160.w,
+                                    child: Text(
+                                      '${S.of(context).movieDetail_detail_spec}：',
+                                      style: TextStyle(
+                                        fontSize: 28.sp,
+                                        color: Colors.grey.shade600,
+                                      ),
                                     ),
                                   ),
-                                  data.levelName == null ? const TextSpan() : TextSpan(
-                                    text: '${data.levelName}（${data.levelDescription}）', // 显示电影级别的名字和描述
-                                    style: TextStyle(
-                                      fontSize: 28.sp,
-                                      color: Colors.black, // 你可以根据需要调整颜色
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: data.spec!.map((item) {
+                                          return Container(
+                                            margin: EdgeInsets.only(right: 8.w),
+                                            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                                            decoration: BoxDecoration(
+                                              gradient: const LinearGradient(
+                                                colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+                                              ),
+                                              borderRadius: BorderRadius.circular(20.r),
+                                            ),
+                                            child: Text(
+                                              item.name ?? '', 
+                                              style: TextStyle(
+                                                fontSize: 22.sp, 
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          )
-                        
+                          // 标签
+                          if (data.tags != null && data.tags!.isNotEmpty)
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 160.w,
+                                    child: Text(
+                                      '${S.of(context).movieDetail_detail_tags}：',
+                                      style: TextStyle(
+                                        fontSize: 28.sp,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: data.tags!.map((item) {
+                                          return Container(
+                                            margin: EdgeInsets.only(right: 8.w),
+                                            padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFF7F8FA),
+                                              borderRadius: BorderRadius.circular(20.r),
+                                              border: Border.all(
+                                                color: const Color(0xFF1989FA).withOpacity(0.3),
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: Text(
+                                              item.name ?? '', 
+                                              style: TextStyle(
+                                                fontSize: 22.sp, 
+                                                color: const Color(0xFF1989FA),
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          // 官网
+                          if (data.homePage != null && data.homePage!.isNotEmpty)
+                            GestureDetector(
+                              onTap: () async {
+                                String url = data.homePage ?? '';
+                                if (await canLaunchUrl(Uri.parse(url))) {
+                                  await launchUrl(
+                                    Uri.parse(url),
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                }
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 8.h),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 160.w,
+                                      child: Text(
+                                        '${S.of(context).movieDetail_detail_homepage}：',
+                                        style: TextStyle(
+                                          fontSize: 28.sp,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        data.homePage ?? '',
+                                        style: TextStyle(
+                                          fontSize: 28.sp,
+                                          color: const Color(0xFF1989FA),
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.open_in_new,
+                                      color: const Color(0xFF1989FA),
+                                      size: 18.sp,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          // 上映状态
+                          _buildInfoRow(
+                            S.of(context).movieDetail_detail_state,
+                            '',
+                            customValue: Dict(
+                              name: 'releaseStatus',
+                              code: data.status,
+                            ),
+                          ),
+                          // 分级
+                          if (data.levelName != null)
+                            _buildInfoRow(
+                              S.of(context).movieDetail_detail_level,
+                              '${data.levelName}${data.levelDescription != null && data.levelDescription!.isNotEmpty ? '（${data.levelDescription}）' : ''}',
+                            ),
                         ],
                       ),
                       ...staffListData.isEmpty ? [] : [

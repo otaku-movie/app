@@ -11,7 +11,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'dart:ui';
 
-import 'package:otaku_movie/response/order/order_detail_response.dart';
+import 'package:otaku_movie/response/ticket/ticket_detail_response.dart';
 
 class Ticket extends StatefulWidget {
   const Ticket({super.key});
@@ -21,7 +21,7 @@ class Ticket extends StatefulWidget {
 }
 
 class _PageState extends State<Ticket> {
-   List<OrderDetailResponse> data = [];
+  List<TicketDetailResponse> data = [];
   int currentPage = 1;
   bool loading = false;
 
@@ -31,17 +31,27 @@ class _PageState extends State<Ticket> {
         loading = true;
       });
     }
-    ApiRequest().request(
-      path: '/user/orderList',
-      method: 'POST',
+    ApiRequest().request<ApiPaginationResponse<TicketDetailResponse>>(
+      path: '/movieOrder/myTickets',
+      method: 'GET',
       data: {
         "page": refresh ? 1 : currentPage + 1,
         "pageSize": 10,
       },
       fromJsonT: (json) {
-        return ApiPaginationResponse<OrderDetailResponse>.fromJson(
+        // 如果json直接是列表
+        if (json is List) {
+          return ApiPaginationResponse<TicketDetailResponse>(
+            page: refresh ? 1 : currentPage + 1,
+            pageSize: 10,
+            total: json.length,
+            list: json.map((item) => TicketDetailResponse.fromJson(item as Map<String, dynamic>)).toList(),
+          );
+        }
+        // 如果json是带分页信息的对象
+        return ApiPaginationResponse<TicketDetailResponse>.fromJson(
           json,
-          (data) => OrderDetailResponse.fromJson(data as Map<String, dynamic>),
+          (data) => TicketDetailResponse.fromJson(data as Map<String, dynamic>),
         );
       },
     ).then((res) {
@@ -184,9 +194,9 @@ class _PageState extends State<Ticket> {
   }
 
 
-  Widget _buildTicketCard(OrderDetailResponse ticket) {
+  Widget _buildTicketCard(TicketDetailResponse ticket) {
     return GestureDetector(
-            onTap: () {
+      onTap: () {
         context.pushNamed(
           'orderDetail',
           queryParameters: {
@@ -195,85 +205,70 @@ class _PageState extends State<Ticket> {
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+        margin: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
         child: Stack(
           children: [
             // 电影票主体
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
-                    blurRadius: 24,
-                    offset: const Offset(0, 12),
+            ClipPath(
+              clipper: TicketClipper(),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white,
+                      Colors.grey.shade50,
+                    ],
                   ),
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
+                  boxShadow: [
+                    // 主阴影 - 更深更大
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.25),
+                      blurRadius: 40,
+                      offset: const Offset(0, 15),
+                      spreadRadius: 0,
+                    ),
+                    // 次级阴影 - 增加深度
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                      spreadRadius: -5,
+                    ),
+                    // 彩色阴影 - 增加质感
+                    BoxShadow(
+                      color: Color(0xFF667EEA).withOpacity(0.15),
+                      blurRadius: 30,
+                      offset: const Offset(0, 10),
+                      spreadRadius: -5,
+                    ),
+                  ],
+                ),
+                child: Column(
                 children: [
                   // 票头部分 - 电影信息
                   Container(
-                    height: 280.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24.r),
-                        topRight: Radius.circular(24.r),
-                      ),
-                    ),
+                    height: 240.h,
                     child: Stack(
                       children: [
-                        // 封面背景
+                        // 电影海报背景（模糊）
                         Positioned.fill(
                           child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(24.r),
-                              topRight: Radius.circular(24.r),
-                            ),
-                            child: CustomExtendedImage(
-                              ticket.moviePoster ?? '',
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        // 模糊效果
-                        Positioned.fill(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(24.r),
-                              topRight: Radius.circular(24.r),
-                            ),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                              child: Container(
-                                color: Colors.transparent,
-                              ),
-                            ),
-                          ),
-                        ),
-                        // 渐变遮罩
-                        Positioned.fill(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(24.r),
-                                topRight: Radius.circular(24.r),
-                              ),
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.black.withOpacity(0.2),
-                                  Colors.black.withOpacity(0.8),
-                                ],
-                              ),
+                            child: Stack(
+                              children: [
+                                CustomExtendedImage(
+                                  ticket.moviePoster ?? '',
+                                  width: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                                BackdropFilter(
+                                  filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+                                  child: Container(
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -283,83 +278,78 @@ class _PageState extends State<Ticket> {
                             padding: EdgeInsets.all(24.w),
                             child: Row(
                               children: [
-                                // 电影海报
+                                // 电影海报（清晰）
                                 Container(
-                                  width: 200.w,
-                                  // height: 220.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.r),
-                            color: Colors.grey.shade300,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.15),
-                                blurRadius: 12,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(16.r),
-                            child: CustomExtendedImage(
-                              ticket.moviePoster ?? '',
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                                  width: 180.w,
+                                  height: 200.h,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.3),
+                                        blurRadius: 15,
+                                        offset: const Offset(0, 5),
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    child: CustomExtendedImage(
+                                      ticket.moviePoster ?? '',
+                                      width: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(width: 20.w),
-                        // 电影信息
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                ticket.movieName ?? '',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 40.sp,
-                                  fontWeight: FontWeight.bold,
+                                SizedBox(width: 24.w),
+                                // 电影信息
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    // mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        ticket.movieName ?? '',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 36.sp,
+                                          fontWeight: FontWeight.bold,
+                                          height: 1.2,
+                                          shadows: [
+                                            Shadow(
+                                              color: Colors.black.withOpacity(0.3),
+                                              offset: Offset(0, 2),
+                                              blurRadius: 4,
+                                            ),
+                                          ],
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      SizedBox(height: 16.h),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.25),
+                                          borderRadius: BorderRadius.circular(20.r),
+                                          border: Border.all(
+                                            color: Colors.white.withOpacity(0.5),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          ticket.specName ?? '',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22.sp,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 10.h),
-                              Text(
-                                ticket.movieName ?? '',
-                                style: TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 28.sp,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(height: 10.h),
-                              Row(
-                                children: [
-                                  _buildTag(ticket.specName ?? ''),
-                                  SizedBox(width: 8.w),
-                                  // _buildTag(ticket.theaterHallLanguage ?? ''),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        // 状态标签
-                        // Container(
-                        //   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-                        //   decoration: BoxDecoration(
-                        //     color: _getStatusColor(ticket.status).withOpacity(0.9),
-                        //     borderRadius: BorderRadius.circular(24.r),
-                        //   ),
-                        //   child: Text(
-                        //     _getStatusText(ticket.status),
-                        //     style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontSize: 26.sp,
-                        //       fontWeight: FontWeight.bold,
-                        //     ),
-                        //   ),
-                        // ),
                               ],
                             ),
                           ),
@@ -368,339 +358,230 @@ class _PageState extends State<Ticket> {
                     ),
                   ),
                   
+                  // 虚线分隔
+                  Container(
+                    height: 1,
+                    child: CustomPaint(
+                      painter: DashedLinePainter(),
+                    ),
+                  ),
+                  
                   // 票身部分 - 核心信息
                   Container(
-                    padding: EdgeInsets.all(28.w),
+                    padding: EdgeInsets.all(32.w),
                     child: Column(
                       children: [
-                        // 影院信息
-                        Container(
-                          padding: EdgeInsets.all(20.w),
-              decoration: BoxDecoration(
-                            color: Colors.grey.shade50,
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: Colors.grey.shade200),
-              ),
-              child: Row(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(12.w),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.shade100,
-                                  borderRadius: BorderRadius.circular(12.r),
-                                ),
-                                child: Icon(Icons.location_on, color: Colors.blue.shade600, size: 24.sp),
+                        // 影院和影厅信息
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10.w),
+                              decoration: BoxDecoration(
+                                color: Color(0xFF667EEA).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10.r),
                               ),
-                              SizedBox(width: 16.w),
+                              child: Icon(
+                                Icons.location_city_rounded,
+                                color: Color(0xFF667EEA),
+                                size: 32.sp,
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    ticket.cinemaName ?? '',
+                                    style: TextStyle(
+                                      fontSize: 30.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF323233),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    ticket.theaterHallName ?? '',
+                                    style: TextStyle(
+                                      fontSize: 24.sp,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        
+                        SizedBox(height: 24.h),
+                        
+                        // 时间信息 - 简约风格
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          // decoration: BoxDecoration(
+                          //   color: Colors.grey.shade100,
+                          //   borderRadius: BorderRadius.circular(16.r),
+                          // ),
+                          child: Row(
+                            children: [
+                              // 日期
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                                    Text(
-                                      ticket.cinemaName ?? '',
-                                      style: TextStyle(
-                    fontSize: 28.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4.h),
-                                    Text(
-                                      ticket.cinemaFullAddress ?? '',
-                                      style: TextStyle(
-                                        fontSize: 22.sp,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.blue.shade50,
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  border: Border.all(color: Colors.blue.shade200),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.movie, color: Colors.blue.shade700, size: 18.sp),
-                                    SizedBox(width: 6.w),
-                                    Text(
-                                      ticket.theaterHallName ?? '',
-                                      style: TextStyle(
-                                        fontSize: 22.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.blue.shade800,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        
-                        SizedBox(height: 20.h),
-                        
-                        // 放映时间和票数信息 - 简洁现代设计
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 4.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16.r),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.08),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              // 放映时间 - 主要信息
-                              Container(
-                                padding: EdgeInsets.all(24.w),
-                                child: Column(
-                                  children: [
-                                    // 时间标题
                                     Row(
                                       children: [
-                                        Container(
-                                          width: 4.w,
-                                          height: 24.h,
-                                          decoration: BoxDecoration(
-                                            color: Colors.blue.shade600,
-                                            borderRadius: BorderRadius.circular(2.r),
-                                          ),
-                                        ),
-                                        SizedBox(width: 12.w),
+                                        Icon(Icons.calendar_today_rounded, size: 20.sp, color: Colors.grey.shade600),
+                                        SizedBox(width: 8.w),
                                         Text(
                                           S.of(context).ticket_showTime,
                                           style: TextStyle(
-                                            fontSize: 20.sp,
-                                            color: Colors.grey.shade800,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 16.h),
-                                    
-                                    // 时间信息
-                                    Row(
-                                      children: [
-                                        // 左侧：日期和星期
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                _formatShowTime(ticket.date, ticket.startTime),
-                                                style: TextStyle(
-                                                  fontSize: 24.sp,
-                                                  color: Colors.grey.shade800,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              SizedBox(height: 4.h),
-                                              Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.blue.shade50,
-                                                  borderRadius: BorderRadius.circular(8.r),
-                                                ),
-                                                child: Text(
-                                                  _formatWeekday(ticket.date, ticket.startTime),
-                                                  style: TextStyle(
-                                                    fontSize: 16.sp,
-                                                    color: Colors.blue.shade700,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        
-                                        // 右侧：时间
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              _formatTime(ticket.startTime),
-                                              style: TextStyle(
-                                                fontSize: 48.sp,
-                                                color: Colors.blue.shade700,
-                                                fontWeight: FontWeight.bold,
-                                                letterSpacing: 2.0,
-                                              ),
-                                            ),
-                                            SizedBox(height: 4.h),
-                                            Text(
-                                              '${S.of(context).ticket_endTime} ${_formatTime(ticket.endTime)}',
-                                              style: TextStyle(
-                                                fontSize: 18.sp,
-                                                color: Colors.grey.shade600,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              
-                              // 分割线
-                              Container(
-                                height: 1.h,
-                                margin: EdgeInsets.symmetric(horizontal: 24.w),
-                                color: Colors.grey.shade200,
-                              ),
-                              
-                              // 票数信息
-                              Container(
-                                padding: EdgeInsets.all(24.w),
-                                child: Row(
-                                  children: [
-                                    // 左侧：票数标签
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 4.w,
-                                              height: 20.h,
-                                              decoration: BoxDecoration(
-                                                color: Colors.green.shade600,
-                                                borderRadius: BorderRadius.circular(2.r),
-                                              ),
-                                            ),
-                                            SizedBox(width: 12.w),
-                                            Text(
-                                              S.of(context).ticket_ticketCount,
-                                              style: TextStyle(
-                                                fontSize: 18.sp,
-                                                color: Colors.grey.shade800,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 12.h),
-                                        Text(
-                                          S.of(context).ticket_totalPurchased,
-                                          style: TextStyle(
-                                            fontSize: 16.sp,
+                                            fontSize: 22.sp,
                                             color: Colors.grey.shade600,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    
-                                    // 右侧：票数数字
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            '${ticket.seat?.length ?? 0}',
-                                            style: TextStyle(
-                                              fontSize: 48.sp,
-                                              color: Colors.green.shade700,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            S.of(context).ticket_tickets,
-                                            style: TextStyle(
-                                              fontSize: 18.sp,
-                                              color: Colors.green.shade600,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      _formatShowTime(ticket.date, ticket.startTime),
+                                      style: TextStyle(
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF323233),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              
-                              // 上映时间提示
-                              if (_isNearShowTime(ticket.date, ticket.startTime)) ...[
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(24.w, 0, 24.w, 24.w),
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange.shade50,
-                                    borderRadius: BorderRadius.circular(12.r),
-                                    border: Border.all(color: Colors.orange.shade200),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.access_time, color: Colors.orange.shade600, size: 18.sp),
-                                      SizedBox(width: 8.w),
-                                      Text(
-                                        '${_getTimeRemaining(ticket.date, ticket.startTime)}后开始',
-                                        style: TextStyle(
-                                          fontSize: 16.sp,
-                                          color: Colors.orange.shade700,
-                                          fontWeight: FontWeight.w600,
+                              // 时间
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF667EEA).withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(6.r),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.access_time_rounded,
+                                          size: 16.sp,
+                                          color: Color(0xFF667EEA),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(width: 4.w),
+                                        Text(
+                                          '开场',
+                                          style: TextStyle(
+                                            fontSize: 18.sp,
+                                            color: Color(0xFF667EEA),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 8.h),
+                                  Text(
+                                    _formatTime(ticket.startTime),
+                                    style: TextStyle(
+                                      fontSize: 48.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF667EEA),
+                                      letterSpacing: 2,
+                                      height: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
+                        ),
+                        
+                        SizedBox(height: 16.h),
+                        
+                       
+                        
+                        SizedBox(height: 16.h),
+                        
+                        // 座位信息
+                        Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(10.w),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFFF6B6B).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              child: Icon(
+                                Icons.event_seat_rounded,
+                                color: Color(0xFFFF6B6B),
+                                size: 32.sp,
+                              ),
+                            ),
+                            SizedBox(width: 16.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    S.of(context).ticket_ticketCount,
+                                    style: TextStyle(
+                                      fontSize: 22.sp,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  Text(
+                                    '${ticket.seat?.length ?? 0} ${S.of(context).ticket_tickets}',
+                                    style: TextStyle(
+                                      fontSize: 28.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF323233),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
                 ],
+                ),
               ),
             ),
             
-            // 点击提示
-            Positioned(
-              top: 16.h,
-              right: 16.w,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.touch_app,
-                      color: Colors.white,
-                      size: 18.sp,
-                    ),
-                    SizedBox(width: 6.w),
-                            Text(
-                              S.of(context).ticket_tapToView,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                ],
-              ),
-            ),
-          ),
+            // QR码图标装饰（右上角）
+            // Positioned(
+            //   top: 20.h,
+            //   right: 20.w,
+            //   child: Container(
+            //     padding: EdgeInsets.all(8.w),
+            //     decoration: BoxDecoration(
+            //       color: Colors.white.withOpacity(0.9),
+            //       borderRadius: BorderRadius.circular(8.r),
+            //       boxShadow: [
+            //         BoxShadow(
+            //           color: Colors.black.withOpacity(0.1),
+            //           blurRadius: 8,
+            //           offset: Offset(0, 2),
+            //         ),
+            //       ],
+            //     ),
+            //     child: Icon(
+            //       Icons.qr_code_rounded,
+            //       color: Color(0xFF667EEA),
+            //       size: 32.sp,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -763,7 +644,7 @@ class _PageState extends State<Ticket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.grey.shade200,
       appBar: CustomAppBar(
         title: S.of(context).home_ticket,
         backgroundColor: Colors.blue,
@@ -777,7 +658,7 @@ class _PageState extends State<Ticket> {
           ),
         ],
       ),
-      body: loading
+      body: loading && data.isEmpty
           ? Center(
               child: CircularProgressIndicator(),
             )
@@ -830,8 +711,12 @@ class _PageState extends State<Ticket> {
                 )
               : EasyRefresh.builder(
                   header: customHeader(context),
+                  footer: customFooter(context),
                   onRefresh: () async {
-                    getData();
+                    getData(refresh: true);
+                  },
+                  onLoad: () async {
+                    getData(refresh: false);
                   },
                   childBuilder: (context, physics) {
                     return ListView.builder(
@@ -845,4 +730,87 @@ class _PageState extends State<Ticket> {
                 ),
     );
   }
+}
+
+// 电影票裁剪器 - 创建锯齿边缘效果
+class TicketClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    double radius = 20.0;
+    double notchRadius = 15.0;
+    double notchPosition = size.height * 0.42; // 锯齿位置在42%处
+
+    // 从左上角开始
+    path.moveTo(radius, 0);
+    
+    // 顶部边缘
+    path.lineTo(size.width - radius, 0);
+    path.quadraticBezierTo(size.width, 0, size.width, radius);
+    
+    // 右侧边缘到锯齿位置
+    path.lineTo(size.width, notchPosition - notchRadius);
+    
+    // 右侧半圆锯齿（凹进去）
+    path.arcToPoint(
+      Offset(size.width, notchPosition + notchRadius),
+      radius: Radius.circular(notchRadius),
+      clockwise: false,
+    );
+    
+    // 右侧边缘继续到底部
+    path.lineTo(size.width, size.height - radius);
+    path.quadraticBezierTo(size.width, size.height, size.width - radius, size.height);
+    
+    // 底部边缘
+    path.lineTo(radius, size.height);
+    path.quadraticBezierTo(0, size.height, 0, size.height - radius);
+    
+    // 左侧边缘到锯齿位置
+    path.lineTo(0, notchPosition + notchRadius);
+    
+    // 左侧半圆锯齿（凹进去）
+    path.arcToPoint(
+      Offset(0, notchPosition - notchRadius),
+      radius: Radius.circular(notchRadius),
+      clockwise: false,
+    );
+    
+    // 左侧边缘继续到顶部
+    path.lineTo(0, radius);
+    path.quadraticBezierTo(0, 0, radius, 0);
+    
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+// 虚线画笔
+class DashedLinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.grey.shade400
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+
+    const dashWidth = 10.0;
+    const dashSpace = 8.0;
+    double startX = 20.0; // 从左边距开始
+
+    while (startX < size.width - 20.0) { // 到右边距结束
+      canvas.drawLine(
+        Offset(startX, 0),
+        Offset(startX + dashWidth, 0),
+        paint,
+      );
+      startX += dashWidth + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

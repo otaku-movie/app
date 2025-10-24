@@ -7,14 +7,15 @@ import 'package:otaku_movie/generated/l10n.dart';
 ClassicHeader customHeader (BuildContext context) {
   return ClassicHeader(
     textStyle: TextStyle(
-      color: Colors.grey.shade400,    // 修改文本颜色
-      fontSize: 28.sp,        // 修改字体大小
+      color: const Color(0xFF1989FA),    // 蓝色主题色
+      fontSize: 24.sp,        // 调整字体大小
+      fontWeight: FontWeight.w500,
     ),
     iconTheme: IconThemeData(
-      color: Colors.grey.shade500,   // 修改图标颜色
-      size: 46.sp,           // 修改图标大小
+      color: const Color(0xFF1989FA),   // 蓝色主题色
+      size: 32.sp,           // 调整图标大小
     ),
-    succeededIcon: const Icon(Icons.check, color: Colors.green),
+    succeededIcon: const Icon(Icons.check_circle, color: Color(0xFF1989FA)),
     showMessage: false,          // 关闭上次更新时间
     dragText: S.of(context).common_components_easyRefresh_refresh_dragText,          // 下拉时的文本
     armedText: S.of(context).common_components_easyRefresh_refresh_armedText,         // 达到刷新条件时的文本
@@ -28,6 +29,16 @@ ClassicHeader customHeader (BuildContext context) {
 
 ClassicFooter customFooter (BuildContext context) {
   return ClassicFooter(
+    textStyle: TextStyle(
+      color: const Color(0xFF1989FA),    // 蓝色主题色
+      fontSize: 24.sp,        // 调整字体大小
+      fontWeight: FontWeight.w500,
+    ),
+    iconTheme: IconThemeData(
+      color: const Color(0xFF1989FA),   // 蓝色主题色
+      size: 32.sp,           // 调整图标大小
+    ),
+    succeededIcon: const Icon(Icons.check_circle, color: Color(0xFF1989FA)),
     showMessage: false,          // 关闭上次更新时间
     dragText: S.of(context).common_components_easyRefresh_loadMore_dragText, // 上拉加载更多
     armedText: S.of(context).common_components_easyRefresh_loadMore_armedText, // 松开加载更多

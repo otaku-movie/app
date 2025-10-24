@@ -84,70 +84,95 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
         final isActive = _activeFilterIndex == index;
 
         return Expanded(
-          child: InkWell(
+          child: GestureDetector(
             key: _filterKeys[index],
             onTap: () {
               if (_overlayEntry != null) {
                 if (_activeFilterIndex == index) {
                   _hideDropdown();
                 } else {
-                  setState(() {
-                    _activeFilterIndex = index;
-                    _tempSelected = List.from(selected[filter.key]!);
-                    for (int i = 0; i < _arrowControllers.length; i++) {
-                      if (i == index) {
-                        _arrowControllers[i].forward();
-                      } else {
-                        _arrowControllers[i].reverse();
+                  if (mounted) {
+                    setState(() {
+                      _activeFilterIndex = index;
+                      _tempSelected = List.from(selected[filter.key]!);
+                      for (int i = 0; i < _arrowControllers.length; i++) {
+                        if (i == index) {
+                          _arrowControllers[i].forward();
+                        } else {
+                          _arrowControllers[i].reverse();
+                        }
                       }
-                    }
-                  });
+                    });
+                  }
                   _overlayRebuild?.call(() {});
                 }
               } else {
                 _showDropdown(filter, index);
               }
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-              margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 15.h),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+              margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24.r),
-                color: isActive ? Colors.red.shade50 : Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(20.r),
+                gradient: isActive 
+                  ? LinearGradient(
+                      colors: [const Color(0xFFFF6B6B), const Color(0xFFEE5A6F)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : null,
+                color: isActive ? null : Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: isActive 
+                      ? const Color(0xFFFF6B6B).withOpacity(0.3) 
+                      : Colors.black.withOpacity(0.05),
+                    blurRadius: isActive ? 8 : 4,
+                    offset: Offset(0, isActive ? 3 : 2),
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    filter.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: isActive ? Colors.red : Colors.black87,
-                      fontSize: 28.sp,
+                  Flexible(
+                    child: Text(
+                      filter.title,
+                      style: TextStyle(
+                        fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
+                        color: isActive ? Colors.white : const Color(0xFF323233),
+                        fontSize: 26.sp,
+                        letterSpacing: 0.5,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   if (display.isNotEmpty) ...[
-                    SizedBox(width: 12.w),
+                    SizedBox(width: 8.w),
                     Flexible(
                       child: Text(
                         display,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 20.sp,
+                          color: isActive ? Colors.white.withOpacity(0.9) : const Color(0xFFFF6B6B),
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
                   ],
+                  SizedBox(width: 4.w),
                   AnimatedBuilder(
                     animation: _arrowControllers[index],
                     builder: (context, child) {
                       return Transform.rotate(
                         angle: _arrowControllers[index].value * 3.14159 * 2,
                         child: Icon(
-                          Icons.arrow_drop_down,
-                          size: 32.sp,
-                          color: isActive ? Colors.redAccent : Colors.black54,
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 28.sp,
+                          color: isActive ? Colors.white : Colors.grey.shade600,
                         ),
                       );
                     },
@@ -163,15 +188,26 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    // 清理下拉菜单，但不调用setState
+    if (_activeFilterIndex != null && _activeFilterIndex! < _arrowControllers.length) {
+      _arrowControllers[_activeFilterIndex!].reverse();
+    }
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+    _activeFilterIndex = null;
+    
+    _overlayRebuild = null; // 清除回调引用，防止内存泄漏
+    _nestedTabController?.dispose();
+    _nestedTabController = null;
     for (var c in _arrowControllers) {
       c.dispose();
     }
-    _nestedTabController?.dispose();
     super.dispose();
   }
 
   void _showDropdown(FilterOption filter, int index) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return; // 添加 mounted 检查
       _tempSelected = List.from(selected[filter.key]!);
       _activeFilterIndex = index;
       _arrowControllers[index].forward();
@@ -199,13 +235,17 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
         _nestedTabController?.dispose();
         _nestedTabController = TabController(length: 3, vsync: this, initialIndex: 0);
         _nestedTabController!.addListener(() {
-          _overlayRebuild?.call(() {});
+          if (mounted) {
+            _overlayRebuild?.call(() {});
+          }
         });
       }
 
       _overlayEntry = _createOverlayEntry(filter, offset, size, index);
       Overlay.of(context).insert(_overlayEntry!);
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
   }
 
@@ -243,13 +283,15 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
   }
 
   void _hideDropdown() {
-    if (_activeFilterIndex != null) {
+    if (_activeFilterIndex != null && _activeFilterIndex! < _arrowControllers.length) {
       _arrowControllers[_activeFilterIndex!].reverse();
     }
     _overlayEntry?.remove();
     _overlayEntry = null;
     _activeFilterIndex = null;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   OverlayEntry _createOverlayEntry(FilterOption filter, Offset offset, Size size, int index) {
@@ -282,8 +324,12 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                     minHeight: 100,
                   ),
                   child: StatefulBuilder(
-                    builder: (context, setState) {
-                      _overlayRebuild = setState;
+                    builder: (context, overlaySetState) {
+                      _overlayRebuild = (fn) {
+                        if (mounted) {
+                          overlaySetState(fn);
+                        }
+                      };
                       final activeFilter = widget.filters[_activeFilterIndex ?? index];
 
                       if (activeFilter.nested) {
@@ -352,7 +398,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                                     ),
                                     onPressed: () {
                                       if (activeFilter.multi) {
-                                        selected[activeFilter.key] = List<String>.from(_tempSelected ?? []);
+                                        selected[activeFilter.key] = List<String>.from(_tempSelected);
                                       } else {
                                         selected[activeFilter.key] = _tempSelected;
                                       }

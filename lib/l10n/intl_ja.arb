@@ -14,7 +14,7 @@
   "search_removeHistoryConfirm_cancel": "キャンセル",
   "search_level": "映倫",
   "showTimeDetail_address": "アドレス",
-  "showTimeDetail_buy": "チケット購入",
+  "showTimeDetail_buy": "座席選択",
   "showTimeDetail_time": "分",
   "cinemaDetail_tel": "連絡先",
   "cinemaDetail_address": "アドレス",
@@ -75,6 +75,9 @@
   "ticket_buyTickets": "チケットを購入",
   "ticket_shareTicket": "映画チケットをシェア: {movieName}",
   "common_loading": "読み込み中...",
+  "common_error_title": "エラーが発生しました",
+  "common_error_message": "データの読み込みに失敗しました。後でもう一度お試しください",
+  "common_retry": "再読み込み",
   "common_components_easyRefresh_refresh_dragText": "下に引っ張って更新",
   "common_components_easyRefresh_refresh_armedText": "更新するために離してください",
   "common_components_easyRefresh_refresh_readyText": "更新中...",
@@ -120,6 +123,25 @@
   "login_password_verify_notNull": "パスワードを入力してください",
   "login_password_verify_isValid": "8〜16文字の英数字とアンダースコアを含めてください",
   "login_loginButton": "ログイン",
+  "login_welcomeText": "おかえりなさい、アカウントにログインしてください",
+  "login_or": "または",
+  "login_googleLogin": "Googleでログイン",
+  "login_forgotPassword": "パスワードを忘れましたか？",
+  "login_forgotPasswordTitle": "パスワードを忘れた",
+  "login_forgotPasswordDescription": "メールアドレスを入力してください。確認コードをお送りします",
+  "login_emailAddress": "メールアドレス",
+  "login_newPassword": "新しいパスワード",
+  "login_sendVerificationCode": "認証コードを送信",
+  "login_resetPassword": "パスワードをリセット",
+  "login_rememberPassword": "パスワードを思い出しましたか？",
+  "login_backToLogin": "ログインに戻る",
+  "login_emailRequired": "メールアドレスを入力してください",
+  "login_emailInvalid": "有効なメールアドレスを入力してください",
+  "login_verificationCodeRequired": "認証コードを入力してください",
+  "login_newPasswordRequired": "新しいパスワードを入力してください",
+  "login_passwordTooShort": "パスワードは6文字以上である必要があります",
+  "login_verificationCodeSent": "認証コードがメールに送信されました",
+  "login_passwordResetSuccess": "パスワードリセットが成功しました",
   "login_verificationCode": "認証コード",
   "login_sendVerifyCodeButton": "認証コードを送信",
   "login_noAccount": "アカウントをお持ちでない方はこちら",
@@ -175,6 +197,20 @@
   "movieDetail_detail_staff": "スタッフ",
   "movieDetail_detail_character": "キャラクター",
   "movieDetail_detail_comment": "コメント",
+  "movieDetail_detail_duration_unknown": "不明",
+  "movieDetail_detail_duration_minutes": "分",
+  "movieDetail_detail_duration_hours": "時間",
+  "movieDetail_detail_duration_hoursMinutes": "{hours}時間{minutes}分",
+  "@movieDetail_detail_duration_hoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "movieDetail_detail_totalReplyMessage": "合計 {total} 件の返信",
   "@movieDetail_detail_totalReplyMessage": {
     "placeholders": {
@@ -361,5 +397,21 @@
   "cinemaList_selectSeat_pleaseSelectSeats": "座席を選択してください",
   "cinemaList_selectSeat_confirmSelection": "{count} 席の選択を確認",
   "cinemaList_selectSeat_seatsSelected": "{count} 席を選択しました",
-  "cinemaList_selectSeat_dateFormat": "yyyy年MM月dd日"
+  "cinemaList_selectSeat_dateFormat": "yyyy年MM月dd日",
+  "forgotPassword_title": "パスワードを忘れた",
+  "forgotPassword_description": "メールアドレスを入力してください。認証コードをお送りします",
+  "forgotPassword_emailAddress": "メールアドレス",
+  "forgotPassword_verificationCode": "認証コード",
+  "forgotPassword_newPassword": "新しいパスワード",
+  "forgotPassword_sendVerificationCode": "認証コードを送信",
+  "forgotPassword_resetPassword": "パスワードをリセット",
+  "forgotPassword_rememberPassword": "パスワードを思い出しましたか？",
+  "forgotPassword_backToLogin": "ログインに戻る",
+  "forgotPassword_emailRequired": "メールアドレスを入力してください",
+  "forgotPassword_emailInvalid": "有効なメールアドレスを入力してください",
+  "forgotPassword_verificationCodeRequired": "認証コードを入力してください",
+  "forgotPassword_newPasswordRequired": "新しいパスワードを入力してください",
+  "forgotPassword_passwordTooShort": "パスワードは6文字以上である必要があります",
+  "forgotPassword_verificationCodeSent": "認証コードがメールに送信されました",
+  "forgotPassword_passwordResetSuccess": "パスワードリセットが成功しました"
 }

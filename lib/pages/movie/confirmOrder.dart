@@ -157,7 +157,7 @@ class _PageState extends State<ConfirmOrder> {
     try {
       // 调用取消订单接口
       await ApiRequest().request(
-        path: '/api/movieOrder/cancel',
+        path: '/movieOrder/cancel',
         method: 'POST',
         data: {
           'orderId': int.parse(widget.id!),
@@ -363,20 +363,16 @@ class _PageState extends State<ConfirmOrder> {
           ),
           child: Center(
             child: Container(
-              width: 50.w,
-              height: 28.h,
+              width: 60.w,
+              height: 40.h,
+              padding: EdgeInsets.all(6.w),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(4.r),
               ),
-              child: ClipRect(
-                child: SvgPicture.asset(
-                  'assets/icons/pay/visa.svg',
-                  width: 50.w,
-                  height: 28.h,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.center,
-                ),
+              child: SvgPicture.asset(
+                'assets/icons/pay/visa.svg',
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -727,7 +723,7 @@ class _PageState extends State<ConfirmOrder> {
                                               text: formatTime(
                                                 timeString: data.date,
                                                 format: S.of(context).cinemaList_selectSeat_dateFormat,
-                                              ),
+                                          ),
                                           ),
                                           TextSpan(
                                             text: '（${getDay(data.date ?? '', context)}）',
@@ -765,7 +761,7 @@ class _PageState extends State<ConfirmOrder> {
                                         color: Colors.orange.shade600,
                                       ),
                                       SizedBox(width: 8.w),
-                                    Text(
+                                Text(
                                         '${data.startTime} ~ ${data.endTime}',
                                         style: TextStyle(
                                           fontSize: 22.sp,
@@ -857,151 +853,127 @@ class _PageState extends State<ConfirmOrder> {
                     Container(
                       width: double.infinity,
                       margin: EdgeInsets.only(top: 20.h, bottom: 20.h),
+                      padding: EdgeInsets.all(24.w),
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.grey.shade50,
-                            Colors.grey.shade100,
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(20.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            blurRadius: 15,
-                            offset: Offset(0, 5),
-                          ),
-                        ],
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(color: Colors.grey.shade200, width: 1),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(20.w),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 标题区域
-                            Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(12.w),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue.shade100,
-                                    borderRadius: BorderRadius.circular(16.r),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.blue.withOpacity(0.1),
-                                        blurRadius: 6,
-                                        offset: Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Icon(
-                                    Icons.event_seat,
-                                    size: 24.sp,
-                                    color: Colors.blue.shade700,
-                                  ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 标题
+                          Row(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10.w),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFF667EEA).withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10.r),
                                 ),
-                                SizedBox(width: 16.w),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        S.of(context).confirmOrder_selectedSeats,
-                                        style: TextStyle(
-                                          fontSize: 22.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey.shade800,
-                                        ),
+                                child: Icon(
+                                  Icons.event_seat_rounded,
+                                  size: 24.sp,
+                                  color: Color(0xFF667EEA),
                                 ),
-                                 SizedBox(height: 4.h),
-                                Text(
-                                        S.of(context).confirmOrder_seatCount(data.seat?.length ?? 0),
-                                        style: TextStyle(
-                                          fontSize: 16.sp,
-                                          color: Colors.grey.shade600,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                              ),
+                              SizedBox(width: 12.w),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      S.of(context).confirmOrder_selectedSeats,
+                                      style: TextStyle(
+                                        fontSize: 24.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF323233),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20.h),
-                            // 座位列表
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                              child: Row(
-                                    children: data.seat == null ? [] : data.seat!.map((item) {
-                                  return Container(
-                                    margin: EdgeInsets.only(right: 16.w),
-                                    padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          Colors.blue.shade100,
-                                          Colors.blue.shade200,
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.circular(20.r),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.blue.withOpacity(0.15),
-                                          blurRadius: 8,
-                                          offset: Offset(0, 3),
-                                        ),
-                                      ],
                                     ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        // 座位号
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      S.of(context).confirmOrder_seatCount(data.seat?.length ?? 0),
+                                      style: TextStyle(
+                                        fontSize: 20.sp,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          
+                          SizedBox(height: 20.h),
+                          
+                          // 分隔线
+                          Container(
+                            height: 1,
+                            color: Colors.grey.shade200,
+                          ),
+                          
+                          SizedBox(height: 20.h),
+                          
+                          // 座位列表
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: data.seat == null ? [] : data.seat!.map((item) {
+                                return Container(
+                                  margin: EdgeInsets.only(right: 12.w),
+                                  padding: EdgeInsets.all(16.w),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFF8F9FA),
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    border: Border.all(
+                                      color: Color(0xFF667EEA).withOpacity(0.1),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // 座位图标
+                                      Icon(
+                                        Icons.chair_rounded,
+                                        color: Color(0xFF667EEA),
+                                        size: 32.sp,
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      // 座位号
+                                      Text(
+                                        '${item.seatName}',
+                                        style: TextStyle(
+                                          fontSize: 24.sp,
+                                          color: Color(0xFF323233),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      if (item.movieTicketTypeName != null) ...[
+                                        SizedBox(height: 8.h),
                                         Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0.7),
-                                            borderRadius: BorderRadius.circular(12.r),
+                                            color: Color(0xFF667EEA).withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(8.r),
                                           ),
                                           child: Text(
-                                            '${item.seatName}',
+                                            '${item.movieTicketTypeName}',
                                             style: TextStyle(
-                                              fontSize: 20.sp,
-                                              color: Colors.blue.shade800,
-                                              fontWeight: FontWeight.bold,
-                                            ), 
+                                              fontSize: 18.sp,
+                                              color: Color(0xFF667EEA),
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
-                                        if (item.movieTicketTypeName != null) ...[
-                                          SizedBox(height: 8.h),
-                                          Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white.withOpacity(0.5),
-                                              borderRadius: BorderRadius.circular(10.r),
-                                            ),
-                                            child: Text(
-                                              '${item.movieTicketTypeName}',
-                                              style: TextStyle(
-                                                fontSize: 14.sp,
-                                                color: Colors.blue.shade700,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        ],
                                       ],
-                                    ),
-                                      );
-                                    }).toList(),
+                                    ],
                                   ),
+                                );
+                              }).toList(),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                     
@@ -1101,8 +1073,8 @@ class _PageState extends State<ConfirmOrder> {
                                 ),
                                 child: Container(
                                   padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
-                                  child: Row(
-                                    children: [
+                          child: Row(
+                            children: [
                                       // 支付方式图标
                                       Container(
                                         width: 50.w,
@@ -1270,12 +1242,12 @@ class _PageState extends State<ConfirmOrder> {
 
                       try {
                         await ApiRequest().request<dynamic>(
-                          path: '/movieOrder/pay',
-                          method: 'POST', 
-                          data: {
-                            'orderId': data.id,
-                            'payId': defaultPay
-                          },
+                        path: '/movieOrder/pay',
+                        method: 'POST', 
+                        data: {
+                          'orderId': data.id,
+                          'payId': defaultPay
+                        },
                           fromJsonT: (json) => json,
                         );
                         
@@ -1284,9 +1256,9 @@ class _PageState extends State<ConfirmOrder> {
                             payLoading = false;
                           });
                           
-                          context.pushNamed('paySuccess', queryParameters: {
-                            'orderId': '${data.id}'
-                          });
+                        context.pushNamed('paySuccess', queryParameters: {
+                          'orderId': '${data.id}'
+                        });
                         }
                       } catch (e) {
                         if (mounted) {
@@ -1303,7 +1275,7 @@ class _PageState extends State<ConfirmOrder> {
                       children: [
                               if (payLoading) ...[
                                 LoadingAnimationWidget.hexagonDots(
-                                  color: Colors.white,
+                          color: Colors.white,
                                   size: 24.w,
                                 ),
                                 SizedBox(width: 10.w),
@@ -1322,10 +1294,10 @@ class _PageState extends State<ConfirmOrder> {
                                   fontSize: 28.sp,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: 'Poppins',
-                                ),
-                              ),
-                            ],
-                          ),
+                  ),
+                ),
+              ],
+            ),
                         ),
                     ),
                   ),

@@ -713,10 +713,10 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
             ),
             child: SafeArea(
               bottom: false,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                   // 价格信息
                   Expanded(
                     child: Column(

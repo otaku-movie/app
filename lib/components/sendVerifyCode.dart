@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:otaku_movie/api/index.dart';
-import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/verify_code_response.dart';
 
@@ -115,65 +112,144 @@ class _PageState extends State<SendVerifyCode> {
     return Row(
       children: [
         Expanded(
-          child: TextField(
-            controller: verificationCodeController,
-            decoration: InputDecoration(
-              labelText: S.of(context).login_verificationCode,
-              border: const OutlineInputBorder(),
-              prefixIcon: const Icon(Icons.confirmation_number),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue, width: 2),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade400, width: 1),
-              ),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
             ),
-            keyboardType: TextInputType.number,
-            style: const TextStyle(height: 1),
-             onTap: widget.onTap,
-            onChanged: widget.onChange,
-            onSubmitted: widget.onSubmit,
+            child: TextField(
+              controller: verificationCodeController,
+              decoration: InputDecoration(
+                labelText: S.of(context).login_verificationCode,
+                labelStyle: TextStyle(
+                  color: const Color(0xFF969799),
+                  fontSize: 24.sp,
+                ),
+                prefixIcon: Container(
+                  margin: EdgeInsets.all(12.w),
+                  padding: EdgeInsets.all(8.w),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1989FA).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Icon(
+                    Icons.security_outlined,
+                    color: const Color(0xFF1989FA),
+                    size: 24.sp,
+                  ),
+                ),
+                filled: true,
+                fillColor: const Color(0xFFF7F8FA),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.r),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16.r),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF1989FA),
+                    width: 2,
+                  ),
+                ),
+                contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+              ),
+              keyboardType: TextInputType.number,
+              style: TextStyle(
+                fontSize: 28.sp,
+                color: const Color(0xFF323233),
+                height: 1.2,
+              ),
+              onTap: widget.onTap,
+              onChanged: widget.onChange,
+              onSubmitted: widget.onSubmit,
+            ),
           ),
         ),
-        SizedBox(width: 20.w),
-       
+        SizedBox(width: 16.w),
+        
         GestureDetector(
           onTap: send ? null : sendVerificationCode,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
-            decoration: send ? BoxDecoration(
-              color: const Color.fromRGBO(0, 0, 0, 0.04),
-              border: Border.all(color: const Color(0XFFd9d9d9)),
-              borderRadius: BorderRadius.circular(4),
-            ) :  BoxDecoration(
-              color: loading ? Colors.blue[200] : const Color.fromARGB(255, 2, 162, 255),
-              border: Border.all(color: (loading ? Colors.blue[200] : const Color.fromARGB(255, 2, 162, 255)) ?? Colors.blue),
-              borderRadius: BorderRadius.circular(4),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+            decoration: BoxDecoration(
+              gradient: send ? null : const LinearGradient(
+                colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              color: send ? const Color(0xFFF7F8FA) : null,
+              borderRadius: BorderRadius.circular(16.r),
+              border: send ? Border.all(
+                color: const Color(0xFFE5E5E5),
+                width: 1,
+              ) : null,
+              boxShadow: send ? null : [
+                BoxShadow(
+                  color: const Color(0xFF1989FA).withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             constraints: BoxConstraints(
-              minWidth: 150.w, // 最小宽度
+              minWidth: 140.w,
+              minHeight: 60.h,
             ),
             child: Center(
-              child: send ? Text(
-                '${_countdown}s',
-                style: TextStyle(
-                    color: const Color.fromRGBO(0, 0, 0, 0.25),
-                    fontSize: 32.sp),
-              ) :  Space(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      right: 20.w,
-                      children: [
-                        loading ? LoadingAnimationWidget.hexagonDots(
-                          color: Colors.white,
-                          size: 50.w,
-                        ) : Container(),
-                        Text(
-                          widget.sendText,
-                          style: TextStyle(color: Colors.white, fontSize: 32.sp),
-                        ),
-                      ]
+              child: send ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.timer_outlined,
+                    color: const Color(0xFF969799),
+                    size: 20.sp,
+                  ),
+                  SizedBox(width: 4.w),
+                  Text(
+                    '${_countdown}s',
+                    style: TextStyle(
+                      color: const Color(0xFF969799),
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w500,
                     ),
+                  ),
+                ],
+              ) : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (loading) ...[
+                    SizedBox(
+                      width: 20.sp,
+                      height: 20.sp,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                  ],
+                  Icon(
+                    Icons.send_outlined,
+                    color: Colors.white,
+                    size: 20.sp,
+                  ),
+                  SizedBox(width: 6.w),
+                  Text(
+                    widget.sendText,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

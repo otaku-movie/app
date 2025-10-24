@@ -9,7 +9,7 @@ class CinemaMovieShowTimeDetailResponse {
     
     final String? cinemaName;
     
-    final String? cinemaAddress;
+    final String? cinemaFullAddress;
     
     final String? cinemaTel;
     
@@ -18,7 +18,7 @@ class CinemaMovieShowTimeDetailResponse {
     CinemaMovieShowTimeDetailResponse({
         this.cinemaId,
         this.cinemaName,
-        this.cinemaAddress,
+        this.cinemaFullAddress,
         this.cinemaTel,
         this.data,
     });
@@ -60,16 +60,57 @@ class TheaterHallShowTime {
 
     final String? specName;
 
+    final List<ShowTimeTag>? movieShowTimeTags;
+    
+    final List<ShowTimeTag>? showTimeTags;
+
+    final List<ShowTimeSubtitle>? subtitle;
+
     TheaterHallShowTime({
         this.id,
         this.theaterHallId,
         this.theaterHallName,
         this.startTime,
         this.endTime,
-        this.specName
+        this.specName,
+        this.movieShowTimeTags,
+        this.showTimeTags,
+        this.subtitle,
     });
 
     factory TheaterHallShowTime.fromJson(Map<String, dynamic> json) => _$TheaterHallShowTimeFromJson(json);
 
     Map<String, dynamic> toJson() => _$TheaterHallShowTimeToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.none)
+class ShowTimeTag {
+    final int? id;
+    final String? name;
+
+    ShowTimeTag({
+        this.id,
+        this.name,
+    });
+
+    factory ShowTimeTag.fromJson(Map<String, dynamic> json) => _$ShowTimeTagFromJson(json);
+
+    Map<String, dynamic> toJson() => _$ShowTimeTagToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.none)
+class ShowTimeSubtitle {
+    final int? id;
+    final String? name;
+    final String? code;
+
+    ShowTimeSubtitle({
+        this.id,
+        this.name,
+        this.code,
+    });
+
+    factory ShowTimeSubtitle.fromJson(Map<String, dynamic> json) => _$ShowTimeSubtitleFromJson(json);
+
+    Map<String, dynamic> toJson() => _$ShowTimeSubtitleToJson(this);
 }

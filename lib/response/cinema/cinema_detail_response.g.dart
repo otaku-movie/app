@@ -11,7 +11,7 @@ CinemaDetailResponse _$CinemaDetailResponseFromJson(
     CinemaDetailResponse(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
-      description: json['description'] as String?,
+      description: json['description'],
       address: json['address'] as String?,
       fullAddress: json['fullAddress'] as String?,
       tel: json['tel'] as String?,
@@ -23,6 +23,9 @@ CinemaDetailResponse _$CinemaDetailResponseFromJson(
       spec: (json['spec'] as List<dynamic>?)
           ?.map((e) => Spec.fromJson(e as Map<String, dynamic>))
           .toList(),
+      regionId: (json['regionId'] as num?)?.toInt(),
+      prefectureId: (json['prefectureId'] as num?)?.toInt(),
+      cityId: (json['cityId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$CinemaDetailResponseToJson(
@@ -40,16 +43,21 @@ Map<String, dynamic> _$CinemaDetailResponseToJson(
       'brandId': instance.brandId,
       'brandName': instance.brandName,
       'spec': instance.spec?.map((e) => e.toJson()).toList(),
+      'regionId': instance.regionId,
+      'prefectureId': instance.prefectureId,
+      'cityId': instance.cityId,
     };
 
 Spec _$SpecFromJson(Map<String, dynamic> json) => Spec(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
-      plusPrice: (json['plusPrice'] as num?)?.toInt(),
+      description: json['description'],
+      plusPrice: json['plusPrice'],
     );
 
 Map<String, dynamic> _$SpecToJson(Spec instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'description': instance.description,
       'plusPrice': instance.plusPrice,
     };

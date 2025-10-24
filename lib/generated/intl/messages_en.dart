@@ -38,29 +38,31 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m8(language) => "Translate to ${language}";
 
-  static String m9(total) => "Total ${total} replies";
+  static String m9(hours, minutes) => "${hours}h ${minutes}m";
 
-  static String m10(hours, minutes) =>
+  static String m10(total) => "Total ${total} replies";
+
+  static String m11(hours, minutes) =>
       "${hours} hours ${minutes} minutes until showtime";
 
-  static String m11(minutes, seconds) =>
+  static String m12(minutes, seconds) =>
       "${minutes} minutes ${seconds} seconds until showtime";
 
-  static String m12(seconds) => "${seconds} seconds until showtime";
+  static String m13(seconds) => "${seconds} seconds until showtime";
 
-  static String m13(ticketCount) => "${ticketCount} Movie Tickets";
+  static String m14(ticketCount) => "${ticketCount} Movie Tickets";
 
-  static String m14(date) => "Exp: ${date}";
+  static String m15(date) => "Exp: ${date}";
 
-  static String m15(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
+  static String m16(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
 
-  static String m16(movieName) => "Share movie ticket: ${movieName}";
+  static String m17(movieName) => "Share movie ticket: ${movieName}";
 
-  static String m17(days) => "${days} days left";
+  static String m18(days) => "${days} days left";
 
-  static String m18(hours) => "${hours} hours left";
+  static String m19(hours) => "${hours} hours left";
 
-  static String m19(minutes) => "${minutes} minutes left";
+  static String m20(minutes) => "${minutes} minutes left";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -181,7 +183,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Sold"),
         "common_enum_seatType_wheelChair":
             MessageLookupByLibrary.simpleMessage("Wheelchair Seat"),
+        "common_error_message": MessageLookupByLibrary.simpleMessage(
+            "Failed to load data, please try again later"),
+        "common_error_title": MessageLookupByLibrary.simpleMessage("Error"),
         "common_loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+        "common_retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("JPY"),
         "common_unit_point": MessageLookupByLibrary.simpleMessage("point"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("Fri"),
@@ -218,27 +224,99 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmOrder_title":
             MessageLookupByLibrary.simpleMessage("Confirm Order"),
         "confirmOrder_total": MessageLookupByLibrary.simpleMessage("Total"),
+        "forgotPassword_backToLogin":
+            MessageLookupByLibrary.simpleMessage("Back to Login"),
+        "forgotPassword_description": MessageLookupByLibrary.simpleMessage(
+            "Enter your email address and we will send you a verification code"),
+        "forgotPassword_emailAddress":
+            MessageLookupByLibrary.simpleMessage("Email Address"),
+        "forgotPassword_emailInvalid": MessageLookupByLibrary.simpleMessage(
+            "Please enter a valid email address"),
+        "forgotPassword_emailRequired":
+            MessageLookupByLibrary.simpleMessage("Please enter your email"),
+        "forgotPassword_newPassword":
+            MessageLookupByLibrary.simpleMessage("New Password"),
+        "forgotPassword_newPasswordRequired":
+            MessageLookupByLibrary.simpleMessage(
+                "Please enter your new password"),
+        "forgotPassword_passwordResetSuccess":
+            MessageLookupByLibrary.simpleMessage("Password reset successful"),
+        "forgotPassword_passwordTooShort": MessageLookupByLibrary.simpleMessage(
+            "Password must be at least 6 characters"),
+        "forgotPassword_rememberPassword":
+            MessageLookupByLibrary.simpleMessage("Remember your password?"),
+        "forgotPassword_resetPassword":
+            MessageLookupByLibrary.simpleMessage("Reset Password"),
+        "forgotPassword_sendVerificationCode":
+            MessageLookupByLibrary.simpleMessage("Send Verification Code"),
+        "forgotPassword_title":
+            MessageLookupByLibrary.simpleMessage("Forgot Password"),
+        "forgotPassword_verificationCode":
+            MessageLookupByLibrary.simpleMessage("Verification Code"),
+        "forgotPassword_verificationCodeRequired":
+            MessageLookupByLibrary.simpleMessage(
+                "Please enter verification code"),
+        "forgotPassword_verificationCodeSent":
+            MessageLookupByLibrary.simpleMessage(
+                "Verification code has been sent to your email"),
         "home_cinema": MessageLookupByLibrary.simpleMessage("cinema"),
         "home_home": MessageLookupByLibrary.simpleMessage("home"),
         "home_me": MessageLookupByLibrary.simpleMessage("my page"),
         "home_ticket": MessageLookupByLibrary.simpleMessage("My Ticket"),
+        "login_backToLogin":
+            MessageLookupByLibrary.simpleMessage("Back to Login"),
+        "login_emailAddress":
+            MessageLookupByLibrary.simpleMessage("Email Address"),
+        "login_emailInvalid": MessageLookupByLibrary.simpleMessage(
+            "Please enter a valid email address"),
+        "login_emailRequired":
+            MessageLookupByLibrary.simpleMessage("Please enter your email"),
         "login_email_text": MessageLookupByLibrary.simpleMessage("Email"),
         "login_email_verify_isValid":
             MessageLookupByLibrary.simpleMessage("Invalid email address"),
         "login_email_verify_notNull":
             MessageLookupByLibrary.simpleMessage("Email cannot be empty"),
+        "login_forgotPassword":
+            MessageLookupByLibrary.simpleMessage("Forgot password?"),
+        "login_forgotPasswordDescription": MessageLookupByLibrary.simpleMessage(
+            "Enter your email address and we\'ll send you a verification code"),
+        "login_forgotPasswordTitle":
+            MessageLookupByLibrary.simpleMessage("Forgot Password"),
+        "login_googleLogin":
+            MessageLookupByLibrary.simpleMessage("Sign in with Google"),
         "login_loginButton": MessageLookupByLibrary.simpleMessage("Login"),
+        "login_newPassword":
+            MessageLookupByLibrary.simpleMessage("New Password"),
+        "login_newPasswordRequired": MessageLookupByLibrary.simpleMessage(
+            "Please enter your new password"),
         "login_noAccount":
             MessageLookupByLibrary.simpleMessage("Don\'t have an account?"),
+        "login_or": MessageLookupByLibrary.simpleMessage("or"),
+        "login_passwordResetSuccess":
+            MessageLookupByLibrary.simpleMessage("Password reset successful"),
+        "login_passwordTooShort": MessageLookupByLibrary.simpleMessage(
+            "Password must be at least 6 characters"),
         "login_password_text": MessageLookupByLibrary.simpleMessage("Password"),
         "login_password_verify_isValid": MessageLookupByLibrary.simpleMessage(
             "Password must be 8-16 characters with letters, numbers, and underscores"),
         "login_password_verify_notNull":
             MessageLookupByLibrary.simpleMessage("Password cannot be empty"),
+        "login_rememberPassword":
+            MessageLookupByLibrary.simpleMessage("Remember your password?"),
+        "login_resetPassword":
+            MessageLookupByLibrary.simpleMessage("Reset Password"),
+        "login_sendVerificationCode":
+            MessageLookupByLibrary.simpleMessage("Send Verification Code"),
         "login_sendVerifyCodeButton":
             MessageLookupByLibrary.simpleMessage("Send Verification Code"),
         "login_verificationCode":
             MessageLookupByLibrary.simpleMessage("Verification Code"),
+        "login_verificationCodeRequired": MessageLookupByLibrary.simpleMessage(
+            "Please enter the verification code"),
+        "login_verificationCodeSent": MessageLookupByLibrary.simpleMessage(
+            "Verification code has been sent to your email"),
+        "login_welcomeText": MessageLookupByLibrary.simpleMessage(
+            "Welcome back, please log in to your account"),
         "movieDetail_button_buy":
             MessageLookupByLibrary.simpleMessage("Buy Ticket"),
         "movieDetail_button_saw":
@@ -257,6 +335,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Character"),
         "movieDetail_detail_comment":
             MessageLookupByLibrary.simpleMessage("Comment"),
+        "movieDetail_detail_duration_hours":
+            MessageLookupByLibrary.simpleMessage("hours"),
+        "movieDetail_detail_duration_hoursMinutes": m9,
+        "movieDetail_detail_duration_minutes":
+            MessageLookupByLibrary.simpleMessage("minutes"),
+        "movieDetail_detail_duration_unknown":
+            MessageLookupByLibrary.simpleMessage("Unknown"),
         "movieDetail_detail_homepage":
             MessageLookupByLibrary.simpleMessage("Official Website"),
         "movieDetail_detail_level":
@@ -274,7 +359,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("Tags"),
         "movieDetail_detail_time":
             MessageLookupByLibrary.simpleMessage("Duration"),
-        "movieDetail_detail_totalReplyMessage": m9,
+        "movieDetail_detail_totalReplyMessage": m10,
         "movieDetail_writeComment":
             MessageLookupByLibrary.simpleMessage("Write Comment"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("Buy Ticket"),
@@ -324,9 +409,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("Total"),
         "movieTicketType_totalPrice":
             MessageLookupByLibrary.simpleMessage("Total Price"),
-        "orderDetail_countdown_hoursMinutes": m10,
-        "orderDetail_countdown_minutesSeconds": m11,
-        "orderDetail_countdown_seconds": m12,
+        "orderDetail_countdown_hoursMinutes": m11,
+        "orderDetail_countdown_minutesSeconds": m12,
+        "orderDetail_countdown_seconds": m13,
         "orderDetail_countdown_started":
             MessageLookupByLibrary.simpleMessage("Started"),
         "orderDetail_countdown_title":
@@ -347,7 +432,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Seat Information"),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("Ticket Collection Code"),
-        "orderDetail_ticketCount": m13,
+        "orderDetail_ticketCount": m14,
         "orderDetail_title":
             MessageLookupByLibrary.simpleMessage("Order Detail"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("Comment"),
@@ -420,7 +505,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Add New Credit Card"),
         "payment_selectCreditCard_confirmPayment":
             MessageLookupByLibrary.simpleMessage("Confirm Payment"),
-        "payment_selectCreditCard_expiryDate": m14,
+        "payment_selectCreditCard_expiryDate": m15,
         "payment_selectCreditCard_loadFailed":
             MessageLookupByLibrary.simpleMessage(
                 "Failed to load credit card list"),
@@ -513,13 +598,13 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Seat selection canceled"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
-        "selectSeat_maxSelectSeatWarn": m15,
+        "selectSeat_maxSelectSeatWarn": m16,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("Please select a seat"),
         "showTimeDetail_address":
             MessageLookupByLibrary.simpleMessage("Address"),
         "showTimeDetail_buy":
-            MessageLookupByLibrary.simpleMessage("Buy Ticket"),
+            MessageLookupByLibrary.simpleMessage("Select Seat"),
         "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("minutes"),
         "ticket_buyTickets":
             MessageLookupByLibrary.simpleMessage("Buy Tickets"),
@@ -529,7 +614,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("Buy tickets now!"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("Seat Count"),
-        "ticket_shareTicket": m16,
+        "ticket_shareTicket": m17,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("Show Time"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("Cancelled"),
@@ -544,9 +629,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage(" tickets"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("Time format error"),
-        "ticket_time_remaining_days": m17,
-        "ticket_time_remaining_hours": m18,
-        "ticket_time_remaining_minutes": m19,
+        "ticket_time_remaining_days": m18,
+        "ticket_time_remaining_hours": m19,
+        "ticket_time_remaining_minutes": m20,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("Starting soon"),
         "ticket_time_unknown":

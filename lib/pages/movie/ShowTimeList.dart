@@ -191,7 +191,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
       initialIndex: 0,
       length: tabLength > 0 ? tabLength : 1, // 至少为1，防止TabController报错
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF7F8FA),
         appBar: CustomAppBar(
           title: widget.movieName,
           bottom: (data.isNotEmpty && _tabController != null)
@@ -201,12 +201,17 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   isScrollable: true,
                   labelPadding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 0.h),
                   labelColor: Colors.white,
-                  unselectedLabelColor: Colors.white70,
-                  indicatorColor: Colors.blue,
+                  unselectedLabelColor: Colors.white.withOpacity(0.6),
+                  labelStyle: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600),
+                  unselectedLabelStyle: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.normal),
+                  indicator: UnderlineTabIndicator(
+                    borderSide: const BorderSide(width: 3, color: Colors.white),
+                    insets: EdgeInsets.symmetric(horizontal: 20.w),
+                  ),
                 )
               : null,
-          backgroundColor: Colors.blue,
-          titleTextStyle: TextStyle(color: Colors.white, fontSize: 36.sp),
+          backgroundColor: const Color(0xFF1989FA),
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 36.sp, fontWeight: FontWeight.w600),
         ),
         body: Column(
           mainAxisSize: MainAxisSize.min,
@@ -283,41 +288,94 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                                     );
                                   },
                                   child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          width: 1.0,
-                                          color: Color(0XFFe6e6e6),
+                                    margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                                    padding: EdgeInsets.all(16.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                    child: Space(
-                                      direction: "column",
-                                      bottom: 8.h,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Wrap(
-                                              spacing: 4.w,
-                                              children: [
-                                                Text(children.cinemaName ?? '', style: TextStyle(fontSize: 36.sp)),
-                                                const Icon(Icons.star, color: Color(0xFFebb21b)),
-                                              ],
+                                            Expanded(
+                                              child: Text(
+                                                children.cinemaName ?? '',
+                                                style: TextStyle(
+                                                  fontSize: 30.sp,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: const Color(0xFF323233),
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
-                                            Wrap(
-                                              spacing: 4.w,
-                                              crossAxisAlignment: WrapCrossAlignment.center,
-                                              children: [
-                                                Text('3.7km', style: TextStyle(fontSize: 28.sp, color: Colors.grey.shade600)),
-                                                Icon(Icons.arrow_forward_ios, size: 36.sp, color: Colors.grey.shade600),
-                                              ],
+                                            SizedBox(width: 12.w),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                                              decoration: BoxDecoration(
+                                                color: const Color(0xFF1989FA).withOpacity(0.1),
+                                                borderRadius: BorderRadius.circular(20.r),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    Icons.location_on_outlined,
+                                                    size: 16.sp,
+                                                    color: const Color(0xFF1989FA),
+                                                  ),
+                                                  SizedBox(width: 4.w),
+                                                  Text(
+                                                    '3.7km',
+                                                    style: TextStyle(
+                                                      fontSize: 22.sp,
+                                                      color: const Color(0xFF1989FA),
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            Icon(
+                                              Icons.arrow_forward_ios,
+                                              size: 20.sp,
+                                              color: Colors.grey.shade400,
                                             ),
                                           ],
                                         ),
-                                        Text(children.cinemaAddress ?? '', style: TextStyle(color: Colors.grey.shade400)),
+                                        SizedBox(height: 12.h),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.place_outlined,
+                                              size: 18.sp,
+                                              color: Colors.grey.shade500,
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Expanded(
+                                              child: Text(
+                                                children.cinemaAddress ?? '',
+                                                style: TextStyle(
+                                                  fontSize: 24.sp,
+                                                  color: Colors.grey.shade600,
+                                                  height: 1.4,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ),

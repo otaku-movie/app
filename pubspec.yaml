@@ -82,6 +82,8 @@ dependencies:
   # 获取应用的基本信息
   package_info_plus: ^8.1.3
   image_editor: ^1.6.0
+  # 谷歌登录
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   json_serializable: ^6.8.0

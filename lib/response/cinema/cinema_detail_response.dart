@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'dart:convert';
 
 part 'cinema_detail_response.g.dart';
 
@@ -10,7 +9,7 @@ class CinemaDetailResponse {
     
     final String? name;
     
-    final String? description;
+    final dynamic description; // 改为 dynamic，因为后端可能返回数字或字符串
     
     final String? address;
     final String? fullAddress;
@@ -28,6 +27,10 @@ class CinemaDetailResponse {
     final String? brandName;
     
     final List<Spec>? spec;
+    
+    final int? regionId;
+    final int? prefectureId;
+    final int? cityId;
 
     CinemaDetailResponse({
         this.id,
@@ -42,6 +45,9 @@ class CinemaDetailResponse {
         this.brandId,
         this.brandName,
         this.spec,
+        this.regionId,
+        this.prefectureId,
+        this.cityId,
     });
 
     factory CinemaDetailResponse.fromJson(Map<String, dynamic> json) => _$CinemaDetailResponseFromJson(json);
@@ -56,11 +62,14 @@ class Spec {
     
     final String? name;
     
-    final int? plusPrice;
+    final dynamic description; // 改为 dynamic
+    
+    final dynamic plusPrice; // 改为 dynamic，因为后端可能返回字符串或数字
 
     Spec({
         this.id,
         this.name,
+        this.description,
         this.plusPrice,
     });
 

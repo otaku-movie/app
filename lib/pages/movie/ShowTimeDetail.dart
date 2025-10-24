@@ -4,18 +4,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_show_time_detail_response.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_showing_response.dart';
-import 'package:otaku_movie/response/response.dart';
 import '../../generated/l10n.dart';
-
-import '../../controller/LanguageController.dart';
-import 'package:get/get.dart'; // Ensure this import is present
-import 'package:extended_image/extended_image.dart';
 
 class ShowTimeDetail extends StatefulWidget {
   final String? cinemaId;
@@ -28,13 +22,56 @@ class ShowTimeDetail extends StatefulWidget {
 }
 
 class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
-  late TabController _tabController;
+  TabController? _tabController;
   CarouselSliderController carouselSliderController = CarouselSliderController();
 
   int currentMovieIndex = 0;
   List<Widget> tabWidget = [];
   CinemaMovieShowTimeDetailResponse data = CinemaMovieShowTimeDetailResponse();
   List<CinemaMovieShowingResponse> cinemaMovieShowingList = [];
+  bool is24HourFormat = true; // 默认使用24小时制
+
+  // 转换时间格式（24小时制 <-> 30小时制）
+  String convertTimeFormat(String? time) {
+    if (time == null || time.isEmpty) return '';
+    
+    try {
+      final parts = time.split(':');
+      if (parts.length < 2) return time;
+      
+      int hour = int.parse(parts[0]);
+      final minute = parts[1];
+      
+      if (!is24HourFormat) {
+        // 转换为30小时制：凌晨0-5点显示为24-29点
+        if (hour >= 0 && hour <= 5) {
+          hour += 24;
+        }
+      }
+      
+      return '$hour:$minute';
+    } catch (e) {
+      return time;
+    }
+  }
+
+  // 格式化电影时长（分钟 -> 小时分钟）
+  String _formatDuration(int? minutes) {
+    if (minutes == null || minutes == 0) return '';
+    
+    if (minutes < 60) {
+      return '${minutes}${S.of(context).showTimeDetail_time}';
+    } else {
+      int hours = minutes ~/ 60;
+      int remainingMinutes = minutes % 60;
+      
+      if (remainingMinutes == 0) {
+        return '${hours}小时';
+      } else {
+        return '${hours}小时${remainingMinutes}分钟';
+      }
+    }
+  }
 
   getData(int movieId) {
     ApiRequest().request(
@@ -50,7 +87,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     ).then((res) {
           if (res.data != null) {
             if (_tabController != null) {
-            _tabController.dispose();
+            _tabController!.dispose();
         }
         // _tabController.dispose();
         setState(() {
@@ -103,8 +140,6 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
-    _tabController = TabController(length: 0, vsync: this);
     
     if (widget.movieId != null) {
       getData(int.parse(widget.movieId!));
@@ -116,7 +151,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -244,7 +279,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                   movie.time == null 
                   ? const TextSpan(text: '') 
                   : TextSpan(
-                    text: '  ${movie.time ?? ''}${S.of(context).showTimeDetail_time}',
+                    text: '  ${_formatDuration(movie.time)}',
                   ),
                 ],
               )
@@ -256,7 +291,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF7F8FA),
       body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
@@ -281,6 +316,47 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                         GoRouter.of(context).pop();
                       },
                     ),
+                    actions: [
+                      // 时间格式切换按钮
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     setState(() {
+                      //       is24HourFormat = !is24HourFormat;
+                      //     });
+                      //   },
+                      //   child: Container(
+                      //     margin: EdgeInsets.only(right: 16.w),
+                      //     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.white.withOpacity(0.2),
+                      //       borderRadius: BorderRadius.circular(20.r),
+                      //       border: Border.all(
+                      //         color: Colors.white.withOpacity(0.5),
+                      //         width: 1,
+                      //       ),
+                      //     ),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //       children: [
+                      //         Icon(
+                      //           Icons.schedule,
+                      //           color: Colors.white,
+                      //           size: 18.sp,
+                      //         ),
+                      //         SizedBox(width: 4.w),
+                      //         Text(
+                      //           is24HourFormat ? '24h' : '30h',
+                      //           style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontSize: 24.sp,
+                      //             fontWeight: FontWeight.w600,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
                     flexibleSpace: FlexibleSpaceBar(
                       background: Stack(
                         clipBehavior: Clip.none,
@@ -321,18 +397,66 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // 地址信息
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: Text(
-                                    '${S.of(context).showTimeDetail_address}：${data.cinemaAddress ?? ''}',
-                                    style: const TextStyle(color: Colors.white),
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(8.w),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.15),
+                                          borderRadius: BorderRadius.circular(8.r),
+                                        ),
+                                        child: Icon(
+                                          Icons.location_on_outlined,
+                                          color: Colors.white,
+                                          size: 20.sp,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      Expanded(
+                                        child: Text(
+                                          data.cinemaFullAddress ?? '',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24.sp,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
+                                // 电话信息
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: Text(
-                                    '${S.of(context).cinemaDetail_tel}：${data.cinemaTel}',
-                                    style: const TextStyle(color: Colors.white),
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.all(8.w),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.15),
+                                          borderRadius: BorderRadius.circular(8.r),
+                                        ),
+                                        child: Icon(
+                                          Icons.phone_outlined,
+                                          color: Colors.white,
+                                          size: 20.sp,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      Text(
+                                        data.cinemaTel ?? '',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 24.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 SizedBox(height: 50.h),
@@ -395,101 +519,279 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                       item.data![index];
 
                                   return Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          width: 1.0,
-                                          color: Color(0XFFe6e6e6),
+                                    margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                                    padding: EdgeInsets.all(20.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(16.r),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.05),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 2),
                                         ),
-                                      ),
+                                      ],
                                     ),
-                                    child: Space(
-                                      direction: 'column',
-                                      
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                        // 时间和影厅信息行
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                            '${children.startTime} ~ ${children.endTime}',
-                                              style: TextStyle(fontSize: 28.sp)),
-                                             
-                                          ]
-                                        ),
-                                       
-                                        
-                                        // Wrap(
-                                        //   spacing: 20.w,
-                                        //   children: ['舞台挨拶', '日本語字幕'].map((item) {
-                                        //     return Container(
-                                        //       padding: EdgeInsets.symmetric(vertical: 8.w, horizontal: 20.w),
-                                        //       decoration: BoxDecoration(
-                                        //         border: Border.all(color: Colors.grey.shade400),
-                                        //         borderRadius: BorderRadius.circular(6),
-                                        //       ),
-                                        //       child: Text(item, style: TextStyle(fontSize: 24.sp)),
-                                        //     );
-                                        //   }).toList(),
-                                        // ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width -
-                                              30,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
+                                            // 左侧：时间信息
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  
-                                                  Text(children.theaterHallName ??''),
-                                                  Text('（${children.specName}）'),
+                                                  // 时间展示
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        convertTimeFormat(children.startTime),
+                                                        style: TextStyle(
+                                                          fontSize: 44.sp,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: const Color(0xFF323233),
+                                                          height: 1,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                                                        child: Container(
+                                                          width: 20.w,
+                                                          height: 2.h,
+                                                          color: Colors.grey.shade300,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        convertTimeFormat(children.endTime),
+                                                        style: TextStyle(
+                                                          fontSize: 28.sp,
+                                                          color: Colors.grey.shade500,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 16.h),
+                                                  // 影厅和规格信息
+                                                  Wrap(
+                                                    spacing: 8.w,
+                                                    runSpacing: 8.h,
+                                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                                    children: [
+                                                      // 影厅
+                                                      Container(
+                                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                                        decoration: BoxDecoration(
+                                                          color: const Color(0xFF1989FA).withOpacity(0.1),
+                                                          borderRadius: BorderRadius.circular(8.r),
+                                                          border: Border.all(
+                                                            color: const Color(0xFF1989FA).withOpacity(0.3),
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.meeting_room_rounded,
+                                                              size: 18.sp,
+                                                              color: const Color(0xFF1989FA),
+                                                            ),
+                                                            SizedBox(width: 6.w),
+                                                            Text(
+                                                              children.theaterHallName ?? '',
+                                                              style: TextStyle(
+                                                                fontSize: 24.sp,
+                                                                color: const Color(0xFF1989FA),
+                                                                fontWeight: FontWeight.w600,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      // 规格
+                                                      Container(
+                                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                                        decoration: BoxDecoration(
+                                                          gradient: LinearGradient(
+                                                            colors: [
+                                                              const Color(0xFFFFD700).withOpacity(0.2),
+                                                              const Color(0xFFFFA500).withOpacity(0.2),
+                                                            ],
+                                                          ),
+                                                          borderRadius: BorderRadius.circular(8.r),
+                                                          border: Border.all(
+                                                            color: const Color(0xFFFFA500).withOpacity(0.5),
+                                                            width: 1,
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            Icon(
+                                                              Icons.high_quality_rounded,
+                                                              size: 18.sp,
+                                                              color: const Color(0xFFFFA500),
+                                                            ),
+                                                            SizedBox(width: 6.w),
+                                                            Text(
+                                                              children.specName ?? '',
+                                                              style: TextStyle(
+                                                                fontSize: 22.sp,
+                                                                color: const Color(0xFFFFA500),
+                                                                fontWeight: FontWeight.w600,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ],
                                               ),
-                                              MaterialButton(
-                                                // height: 50.h,
-                                                // padding: EdgeInsets.symmetric(horizontal: 5.w),
-                                                color: const Color.fromARGB(
-                                                    255, 5, 136, 243), // 按钮颜色
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(
-                                                              50)), // 按钮圆角
+                                            ),
+                                            // 右侧：购票按钮
+                                            GestureDetector(
+                                              onTap: () {
+                                                context.pushNamed(
+                                                  'selectSeat',
+                                                  queryParameters: {
+                                                    "id": '${children.id}',
+                                                    "theaterHallId": '${children.theaterHallId}'
+                                                  }
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                                                decoration: BoxDecoration(
+                                                  gradient: const LinearGradient(
+                                                    colors: [Color(0xFF1989FA), Color(0xFF0E6FD8)],
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(25.r),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: const Color(0xFF1989FA).withOpacity(0.3),
+                                                      blurRadius: 8,
+                                                      offset: const Offset(0, 4),
+                                                    ),
+                                                  ],
                                                 ),
-                                                elevation: 0,
-                                                onPressed: () {
-                                                  context.pushNamed(
-                                                      'selectSeat',
-                                                      queryParameters: {
-                                                        "id": '${children.id}',
-                                                        "theaterHallId":
-                                                            '${children.theaterHallId}'
-                                                      });
-                                                },
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize
-                                                      .min, // 让按钮根据内容自适应宽度
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
                                                   children: [
+                                                    Icon(
+                                                      Icons.event_seat,
+                                                      color: Colors.white,
+                                                      size: 28.sp,
+                                                    ),
+                                                    SizedBox(height: 4.h),
                                                     Text(
-                                                      S
-                                                          .of(context)
-                                                          .showTimeDetail_buy,
+                                                      S.of(context).showTimeDetail_buy,
                                                       style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 32.sp,
+                                                        fontSize: 24.sp,
+                                                        fontWeight: FontWeight.w600,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
+                                        // 特殊标签和字幕（如果有）
+                                        if ((children.showTimeTags != null && children.showTimeTags!.isNotEmpty) ||
+                                            (children.subtitle != null && children.subtitle!.isNotEmpty))
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 16.h),
+                                            child: Wrap(
+                                              spacing: 8.w,
+                                              runSpacing: 8.h,
+                                              children: [
+                                                // 特殊标签
+                                                if (children.showTimeTags != null)
+                                                  ...children.showTimeTags!.map((tag) {
+                                                    return Container(
+                                                      height: 32.h,
+                                                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                                                      decoration: BoxDecoration(
+                                                        gradient: const LinearGradient(
+                                                          colors: [Color(0xFFFF6B6B), Color(0xFFEE5A6F)],
+                                                        ),
+                                                        borderRadius: BorderRadius.circular(6.r),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: const Color(0xFFFF6B6B).withOpacity(0.2),
+                                                            blurRadius: 4,
+                                                            offset: const Offset(0, 2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.local_activity,
+                                                            color: Colors.white,
+                                                            size: 16.sp,
+                                                          ),
+                                                          SizedBox(width: 4.w),
+                                                          Text(
+                                                            tag.name ?? '',
+                                                            style: TextStyle(
+                                                              fontSize: 20.sp,
+                                                              color: Colors.white,
+                                                              fontWeight: FontWeight.w600,
+                                                              height: 1,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                                // 字幕信息
+                                                if (children.subtitle != null)
+                                                  ...children.subtitle!.map((sub) {
+                                                    return Container(
+                                                      height: 32.h,
+                                                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(0xFFFFA500).withOpacity(0.1),
+                                                        borderRadius: BorderRadius.circular(6.r),
+                                                        border: Border.all(
+                                                          color: const Color(0xFFFFA500),
+                                                          width: 1,
+                                                        ),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.subtitles_outlined,
+                                                            color: const Color(0xFFFFA500),
+                                                            size: 16.sp,
+                                                          ),
+                                                          SizedBox(width: 4.w),
+                                                          Text(
+                                                            sub.name ?? '',
+                                                            style: TextStyle(
+                                                              fontSize: 20.sp,
+                                                              color: const Color(0xFFFFA500),
+                                                              fontWeight: FontWeight.w600,
+                                                              height: 1,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }).toList(),
+                                              ],
+                                            ),
+                                          ),
                                       ],
                                     ),
                                   );
@@ -506,3 +808,4 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     );
   }
 }
+

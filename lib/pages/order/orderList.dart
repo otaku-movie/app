@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
@@ -119,17 +120,22 @@ class _PageState extends State<OrderList> {
       ),
       
       body: AppErrorWidget(
-        loading:  loading,
-        child: EasyRefresh(
-        header: const ClassicHeader(),
-        footer: const ClassicFooter(),
-        // onRefresh: _onRefresh,
-        // onLoad: _onLoad,
-        child: ListView.builder(
-          // physics: physics,
-          shrinkWrap: true,
-          itemCount: data.length,
-          itemBuilder: (context, index) {
+        loading: loading && data.isEmpty,
+        child: EasyRefresh.builder(
+          header: customHeader(context),
+          footer: customFooter(context),
+          onRefresh: () async {
+            getData(refresh: true);
+          },
+          onLoad: () async {
+            getData(refresh: false);
+          },
+          childBuilder: (context, physics) {
+            return ListView.builder(
+              physics: physics,
+              shrinkWrap: true,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
             OrderDetailResponse item = data[index];
 
             return GestureDetector(
@@ -401,9 +407,10 @@ class _PageState extends State<OrderList> {
                 ),
               ),
             );
+              },
+            );
           },
         ),
-      ),
       ),
     );
   }

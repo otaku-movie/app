@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/FilterBar.dart';
+import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/cinema/cinemaList.dart';
 import 'package:otaku_movie/response/area_response.dart';
@@ -28,6 +30,8 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   Map<String, dynamic> filterParams = {};
   TextEditingController searchController = TextEditingController();
   Placemark? location;
+  ScrollController scrollController = ScrollController();
+  bool showAppBarShadow = false;
 
   @override
   bool get wantKeepAlive => true;
@@ -38,11 +42,30 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
     getData();
     getAreaTree();
     getLocation();
+    
+    // 添加滚动监听
+    scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!mounted) return;
+    
+    if (scrollController.offset > 10 && !showAppBarShadow) {
+      setState(() {
+        showAppBarShadow = true;
+      });
+    } else if (scrollController.offset <= 10 && showAppBarShadow) {
+      setState(() {
+        showAppBarShadow = false;
+      });
+    }
   }
 
   @override
   void dispose() {
+    scrollController.removeListener(_onScroll);
     searchController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -253,6 +276,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
     }
     
     return ListView.builder(
+      controller: scrollController,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       itemCount: displayData.length,
       itemBuilder: (context, index) {
@@ -263,24 +287,29 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   }
 
   Widget _buildCinemaCard(CinemaListResponse cinema) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.r),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return GestureDetector(
+      onTap: () {
+        // 跳转到影院详情页
+        context.pushNamed('cinemaDetail', queryParameters: {'id': cinema.id.toString()});
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20.h),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 20,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.r),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             // 影院头部信息
             Container(
               padding: EdgeInsets.all(24.w),
@@ -337,18 +366,25 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                   // 地址信息
                   Row(
                     children: [
-                      Icon(
-                        Icons.place_rounded,
-                        size: 18.sp,
-                        color: Colors.grey.shade600,
+                      Container(
+                        padding: EdgeInsets.all(6.w),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1989FA).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                        child: Icon(
+                          Icons.place_rounded,
+                          size: 20.sp,
+                          color: const Color(0xFF1989FA),
+                        ),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 10.w),
                       Expanded(
                         child: Text(
                           cinema.fullAddress ?? '',
                           style: TextStyle(
-                            fontSize: 15.sp,
-                            color: Colors.grey.shade700,
+                            fontSize: 24.sp,
+                            color: const Color(0xFF646566),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -389,18 +425,25 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                   // 电影列表标题
                   Row(
                     children: [
-                      Icon(
-                        Icons.movie_rounded,
-                        size: 20.sp,
-                        color: Colors.grey.shade700,
+                      Container(
+                        padding: EdgeInsets.all(6.w),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEE5A6F).withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                        child: Icon(
+                          Icons.movie_rounded,
+                          size: 20.sp,
+                          color: const Color(0xFFEE5A6F),
+                        ),
                       ),
-                      SizedBox(width: 8.w),
+                      SizedBox(width: 10.w),
                       Text(
                         S.of(context).cinemaList_movies_nowShowing,
                         style: TextStyle(
                           fontSize: 28.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade800,
+                          color: const Color(0xFF323233),
                         ),
                       ),
                       Spacer(),
@@ -462,46 +505,52 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                         ];
                         
                         final movie = movies[index];
-                        return Container(
-                          width: (MediaQuery.of(context).size.width - 60.w) / 4, // 考虑间距的宽度
-                          height: 280.h, // 添加高度限制，确保卡片有固定高度
-                          margin: EdgeInsets.only(right: 12.w),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // 电影海报
-                              Container(
-                                width: (MediaQuery.of(context).size.width - 60.w) / 4,
-                                height: 200.h, // 添加高度限制，防止没有数据时布局问题
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  color: Colors.grey.shade100, // 使用淡灰色背景
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
+                        return GestureDetector(
+                          onTap: () {
+                            // TODO: 跳转到电影详情页，需要传入实际的电影ID
+                            // context.pushNamed('movieDetail', pathParameters: {'id': movie['id'].toString()});
+                            print('点击电影: ${movie['title']}');
+                          },
+                          child: Container(
+                            width: (MediaQuery.of(context).size.width - 60.w) / 4, // 考虑间距的宽度
+                            height: 280.h, // 添加高度限制，确保卡片有固定高度
+                            margin: EdgeInsets.only(right: 12.w),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // 电影海报
+                                Container(
+                                  width: (MediaQuery.of(context).size.width - 60.w) / 4,
+                                  height: 200.h, // 添加高度限制，防止没有数据时布局问题
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    color: Colors.grey.shade100, // 使用淡灰色背景
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    child: Image.asset(
+                                      movie['poster']!,
+                                      fit: BoxFit.contain, // 保持图片比例，不变形
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Container(
+                                          color: Colors.grey.shade300,
+                                          child: Icon(
+                                            Icons.movie_rounded,
+                                            color: Colors.grey.shade600,
+                                            size: 32.sp,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  child: Image.asset(
-                                    movie['poster']!,
-                                    fit: BoxFit.contain, // 保持图片比例，不变形
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        color: Colors.grey.shade300,
-                                        child: Icon(
-                                          Icons.movie_rounded,
-                                          color: Colors.grey.shade600,
-                                          size: 32.sp,
-                                        ),
-                                      );
-                                    },
                                   ),
                                 ),
-                              ),
                               SizedBox(height: 6.h), // 减少间距
 
                               // 电影标题
@@ -559,7 +608,8 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                                   ],
                                 ),
                               ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },
@@ -657,6 +707,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
           ],
         ),
       ),
+      ),
     );
   }
 
@@ -686,43 +737,41 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          S.of(context).cinemaList_title,
-          style: TextStyle(
-            fontSize: 24.sp,
-            fontWeight: FontWeight.w700,
-            color: Colors.grey.shade900,
-          ),
+      backgroundColor: const Color(0xFFF7F8FA),
+      appBar: CustomAppBar(
+        title: S.of(context).cinemaList_title,
+        titleTextStyle: TextStyle(
+          fontSize: 32.sp,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
         ),
-        centerTitle: false,
-        titleSpacing: 20.w,
       ),
       body: Column(
           children: [
           // 搜索和筛选区域
-          Container(
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+            padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 16.h),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.grey.shade50,
                   Colors.white,
+                  Colors.grey.shade50,
                 ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 20,
-                  offset: const Offset(0, 5),
-                ),
-              ],
+              boxShadow: showAppBarShadow
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.15),
+                      blurRadius: 20,
+                      offset: const Offset(0, 6),
+                      spreadRadius: 0,
+                    ),
+                  ]
+                : [],
             ),
             child: Column(
               children: [
@@ -730,73 +779,40 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                 if (location?.subLocality != null && location!.subLocality!.isNotEmpty)
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-                    margin: EdgeInsets.only(bottom: 24.h),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                    margin: EdgeInsets.only(bottom: 16.h),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.blue.shade50, Colors.blue.shade100],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                      color: const Color(0xFF1989FA).withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(
+                        color: const Color(0xFF1989FA).withOpacity(0.15),
+                        width: 1,
                       ),
-                      borderRadius: BorderRadius.circular(20.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.blue.withOpacity(0.15),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
                     ),
                     child: Row(
           children: [
                         Container(
-                          padding: EdgeInsets.all(12.w),
+                          padding: EdgeInsets.all(8.w),
                           decoration: BoxDecoration(
-                            color: Colors.blue.shade600,
-                            borderRadius: BorderRadius.circular(12.r),
+                            color: const Color(0xFF1989FA),
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
                           child: Icon(
                             Icons.location_on_rounded,
                             color: Colors.white,
-                            size: 20.sp,
+                            size: 24.sp,
                           ),
                         ),
-                        SizedBox(width: 16.w),
+                        SizedBox(width: 12.w),
                         Expanded(
               child: Text(
                             location!.subLocality!,
                             style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.blue.shade800,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 26.sp,
+                              color: const Color(0xFF323233),
+                              fontWeight: FontWeight.w600,
                             ),
                             overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade600,
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Icons.my_location_rounded,
-                                color: Colors.white,
-                                size: 16.sp,
-                              ),
-                              SizedBox(width: 6.w),
-                              Text(
-                                '定位',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
               ),
             ),
           ],
@@ -808,55 +824,49 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                   children: [
                     // 地区筛选按钮
                     GestureDetector(
-                onTap: () {
+                      onTap: () {
+                        if (!mounted) return;
                         setState(() {
-                          showFilterBar = true;
-                  });
-                },
+                          showFilterBar = !showFilterBar;
+                        });
+                      },
                 child: Container(
-                        height: 60.h,
-                        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                        height: 56.h,
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: showFilterBar 
-                              ? [Colors.blue.shade600, Colors.blue.shade700]
-                              : [Colors.grey.shade100, Colors.grey.shade200],
+                          color: showFilterBar 
+                            ? const Color(0xFF1989FA)
+                            : Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(
+                            color: showFilterBar 
+                              ? const Color(0xFF1989FA)
+                              : Colors.grey.shade200,
+                            width: 1,
                           ),
-                          borderRadius: BorderRadius.circular(30.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: showFilterBar 
-                                ? Colors.blue.withOpacity(0.3)
-                                : Colors.grey.withOpacity(0.2),
-                              blurRadius: 15,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: [
+                  children: [
                             Icon(
                               Icons.tune_rounded,
-                              color: showFilterBar ? Colors.white : Colors.grey.shade600,
-                              size: 22.sp,
+                              color: showFilterBar ? Colors.white : const Color(0xFF646566),
+                              size: 24.sp,
                             ),
-                            SizedBox(width: 12.w),
+                            SizedBox(width: 8.w),
                             Text(
                               location?.subLocality ?? '全部地区',
                               style: TextStyle(
-                                color: showFilterBar ? Colors.white : Colors.grey.shade700,
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
+                                color: showFilterBar ? Colors.white : const Color(0xFF323233),
+                                fontSize: 26.sp,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                            SizedBox(width: 8.w),
+                            SizedBox(width: 4.w),
                             Icon(
                               Icons.keyboard_arrow_down_rounded,
-                              color: showFilterBar ? Colors.white : Colors.grey.shade600,
-                              size: 20.sp,
+                              color: showFilterBar ? Colors.white : const Color(0xFF646566),
+                              size: 22.sp,
                             ),
                           ],
                         ),
@@ -866,59 +876,62 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                     SizedBox(width: 12.w),
                     
                     // 搜索框
-                        Expanded(
+                    Expanded(
                       child: Container(
-                        height: 60.h,
+                        height: 56.h,
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30.r),
-                          border: Border.all(color: Colors.grey.shade300, width: 1.5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.08),
-                              blurRadius: 20,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: Colors.grey.shade200, width: 1),
                         ),
                         child: TextField(
                           controller: searchController,
                           maxLines: 1,
                           textAlignVertical: TextAlignVertical.center,
+                          cursorColor: const Color(0xFF1989FA),
+                          cursorWidth: 2,
                           style: TextStyle(
-                            color: Colors.grey.shade800,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF323233),
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
                           ),
-                          onChanged: _performSearch,
+                          onChanged: (value) {
+                            if (mounted) {
+                              _performSearch(value);
+                            }
+                          },
                           decoration: InputDecoration(
                             hintText: S.of(context).cinemaList_search_hint,
                             hintStyle: TextStyle(
-                              color: Colors.grey.shade500,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF969799),
+                              fontSize: 26.sp,
+                              fontWeight: FontWeight.normal,
+                              height: 1.2,
                             ),
-                            prefixIcon: Container(
-                              padding: EdgeInsets.all(4.w),
-                              child: Icon(
-                                Icons.search_rounded,
-                                color: Colors.grey.shade600,
-                                size: 24.sp,
-                              ),
+                            prefixIcon: Icon(
+                              Icons.search_rounded,
+                              color: const Color(0xFF646566),
+                              size: 26.sp,
                             ),
                             suffixIcon: searchController.text.isNotEmpty
                               ? GestureDetector(
-                                  onTap: _clearSearch,
+                                  onTap: () {
+                                    if (mounted) {
+                                      _clearSearch();
+                                    }
+                                  },
                                   child: Icon(
                                     Icons.clear_rounded,
-                                    color: Colors.grey.shade600,
-                                    size: 20.sp,
+                                    color: const Color(0xFF969799),
+                                    size: 22.sp,
                                   ),
                                 )
                               : null,
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 0),
                             isDense: true,
+                            isCollapsed: true,
                           ),
                         ),
                       ),
@@ -928,46 +941,35 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                 
                 // 筛选栏 - 只在showFilterBar为true时显示
                 if (showFilterBar) ...[
-                  SizedBox(height: 24.h),
+                  SizedBox(height: 16.h),
                   areaTreeList.isEmpty 
                     ? Container(
-                        height: 56.h,
-                        padding: EdgeInsets.symmetric(horizontal: 24.w),
+                        height: 52.h,
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.blue.shade50, Colors.blue.shade100],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(28.r),
-                          border: Border.all(color: Colors.blue.shade200, width: 1.5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue.withOpacity(0.1),
-                              blurRadius: 12,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: Colors.grey.shade200, width: 1),
                         ),
                         child: Center(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(
-                                width: 24.sp,
-                                height: 24.sp,
+                                width: 20.sp,
+                                height: 20.sp,
                                 child: CircularProgressIndicator(
-                                  strokeWidth: 3,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade600),
+                                  strokeWidth: 2.5,
+                                  valueColor: AlwaysStoppedAnimation<Color>(const Color(0xFF1989FA)),
                                 ),
                               ),
-                              SizedBox(width: 16.w),
+                              SizedBox(width: 12.w),
                               Text(
                                 S.of(context).cinemaList_filter_loading,
                                 style: TextStyle(
-                                  fontSize: 18.sp,
-                                  color: Colors.blue.shade700,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24.sp,
+                                  color: const Color(0xFF646566),
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -976,20 +978,9 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                       )
                     : Container(
                         decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Colors.grey.shade50, Colors.white],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(20.r),
-                          border: Border.all(color: Colors.grey.shade300, width: 1.5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.15),
-                              blurRadius: 15,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: Colors.grey.shade200, width: 1),
                         ),
                         child: FilterBar(
                           filters: [
@@ -1013,13 +1004,17 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
           // 搜索结果统计
           if (isSearching)
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              margin: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 0),
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               decoration: BoxDecoration(
-                color: filteredData.isEmpty ? Colors.orange.shade50 : Colors.blue.shade50,
+                color: filteredData.isEmpty 
+                  ? const Color(0xFFFF976A).withOpacity(0.1)
+                  : const Color(0xFF1989FA).withOpacity(0.08),
                 borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(
-                  color: filteredData.isEmpty ? Colors.orange.shade200 : Colors.blue.shade200, 
+                  color: filteredData.isEmpty 
+                    ? const Color(0xFFFF976A).withOpacity(0.3)
+                    : const Color(0xFF1989FA).withOpacity(0.2), 
                   width: 1
                 ),
               ),
@@ -1027,49 +1022,38 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                 children: [
                   Icon(
                     filteredData.isEmpty ? Icons.search_off_rounded : Icons.search_rounded,
-                    color: filteredData.isEmpty ? Colors.orange.shade600 : Colors.blue.shade600,
-                    size: 18.sp,
+                    color: filteredData.isEmpty ? const Color(0xFFFF976A) : const Color(0xFF1989FA),
+                    size: 22.sp,
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 10.w),
                   Expanded(
                     child: Text(
                       filteredData.isEmpty 
                         ? S.of(context).cinemaList_search_results_notFound
                         : S.of(context).cinemaList_search_results_found(filteredData.length),
                       style: TextStyle(
-                        fontSize: 18.sp,
-                        color: filteredData.isEmpty ? Colors.orange.shade800 : Colors.blue.shade800,
+                        fontSize: 24.sp,
+                        color: const Color(0xFF323233),
                         fontWeight: FontWeight.w500,
                               ), 
                             ),
                           ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 10.w),
                   GestureDetector(
                     onTap: _clearSearch,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                       decoration: BoxDecoration(
-                        color: filteredData.isEmpty ? Colors.orange.shade600 : Colors.blue.shade600,
-                        borderRadius: BorderRadius.circular(16.r),
+                        color: filteredData.isEmpty ? const Color(0xFFFF976A) : const Color(0xFF1989FA),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.clear_rounded,
-                            color: Colors.white,
-                            size: 16.sp,
-                          ),
-                          SizedBox(width: 4.w),
-                          Text(
-                            S.of(context).cinemaList_search_clear,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        S.of(context).cinemaList_search_clear,
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
                                     ),
                                   ),
                                 ),

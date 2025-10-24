@@ -14,7 +14,7 @@
   "search_removeHistoryConfirm_cancel": "Cancel",
   "search_level": "Level",
   "showTimeDetail_address": "Address",
-  "showTimeDetail_buy": "Buy Ticket",
+  "showTimeDetail_buy": "Select Seat",
   "showTimeDetail_time": "minutes",
   "cinemaDetail_tel": "TEL",
   "cinemaDetail_address": "Address",
@@ -75,6 +75,9 @@
   "ticket_buyTickets": "Buy Tickets",
   "ticket_shareTicket": "Share movie ticket: {movieName}",
   "common_loading": "Loading...",
+  "common_error_title": "Error",
+  "common_error_message": "Failed to load data, please try again later",
+  "common_retry": "Retry",
   "common_components_easyRefresh_refresh_dragText": "Pull to refresh",
   "common_components_easyRefresh_refresh_armedText": "Release to refresh",
   "common_components_easyRefresh_refresh_readyText": "Refreshing...",
@@ -120,6 +123,25 @@
   "login_password_verify_notNull": "Password cannot be empty",
   "login_password_verify_isValid": "Password must be 8-16 characters with letters, numbers, and underscores",
   "login_loginButton": "Login",
+  "login_welcomeText": "Welcome back, please log in to your account",
+  "login_or": "or",
+  "login_googleLogin": "Sign in with Google",
+  "login_forgotPassword": "Forgot password?",
+  "login_forgotPasswordTitle": "Forgot Password",
+  "login_forgotPasswordDescription": "Enter your email address and we'll send you a verification code",
+  "login_emailAddress": "Email Address",
+  "login_newPassword": "New Password",
+  "login_sendVerificationCode": "Send Verification Code",
+  "login_resetPassword": "Reset Password",
+  "login_rememberPassword": "Remember your password?",
+  "login_backToLogin": "Back to Login",
+  "login_emailRequired": "Please enter your email",
+  "login_emailInvalid": "Please enter a valid email address",
+  "login_verificationCodeRequired": "Please enter the verification code",
+  "login_newPasswordRequired": "Please enter your new password",
+  "login_passwordTooShort": "Password must be at least 6 characters",
+  "login_verificationCodeSent": "Verification code has been sent to your email",
+  "login_passwordResetSuccess": "Password reset successful",
   "login_verificationCode": "Verification Code",
   "login_sendVerifyCodeButton": "Send Verification Code",
   "login_noAccount": "Don't have an account?",
@@ -175,6 +197,20 @@
   "movieDetail_detail_staff": "Staff",
   "movieDetail_detail_character": "Character",
   "movieDetail_detail_comment": "Comment",
+  "movieDetail_detail_duration_unknown": "Unknown",
+  "movieDetail_detail_duration_minutes": "minutes",
+  "movieDetail_detail_duration_hours": "hours",
+  "movieDetail_detail_duration_hoursMinutes": "{hours}h {minutes}m",
+  "@movieDetail_detail_duration_hoursMinutes": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "movieDetail_detail_totalReplyMessage": "Total {total} replies",
   "@movieDetail_detail_totalReplyMessage": {
     "placeholders": {
@@ -361,5 +397,21 @@
   "cinemaList_selectSeat_pleaseSelectSeats": "Please select seats",
   "cinemaList_selectSeat_confirmSelection": "Confirm selection of {count} seats",
   "cinemaList_selectSeat_seatsSelected": "Selected {count} seats",
-  "cinemaList_selectSeat_dateFormat": "MMM dd, yyyy"
+  "cinemaList_selectSeat_dateFormat": "MMM dd, yyyy",
+  "forgotPassword_title": "Forgot Password",
+  "forgotPassword_description": "Enter your email address and we will send you a verification code",
+  "forgotPassword_emailAddress": "Email Address",
+  "forgotPassword_verificationCode": "Verification Code",
+  "forgotPassword_newPassword": "New Password",
+  "forgotPassword_sendVerificationCode": "Send Verification Code",
+  "forgotPassword_resetPassword": "Reset Password",
+  "forgotPassword_rememberPassword": "Remember your password?",
+  "forgotPassword_backToLogin": "Back to Login",
+  "forgotPassword_emailRequired": "Please enter your email",
+  "forgotPassword_emailInvalid": "Please enter a valid email address",
+  "forgotPassword_verificationCodeRequired": "Please enter verification code",
+  "forgotPassword_newPasswordRequired": "Please enter your new password",
+  "forgotPassword_passwordTooShort": "Password must be at least 6 characters",
+  "forgotPassword_verificationCodeSent": "Verification code has been sent to your email",
+  "forgotPassword_passwordResetSuccess": "Password reset successful"
 }

@@ -95,8 +95,8 @@ class _PageState extends State<PaySuccess> {
       onWillPop: () async => false, // 禁用返回
       child: Scaffold(
         backgroundColor: const Color(0xFFF7F8FA),
-        appBar: CustomAppBar(
-          title: Text(S.of(context).payResult_title, style: const TextStyle(color: Colors.white)),
+      appBar: CustomAppBar(
+         title: Text(S.of(context).payResult_title, style: const TextStyle(color: Colors.white)),
           showBackButton: false, // 隐藏返回按钮
         ),
         body: loading
@@ -142,7 +142,7 @@ class _PageState extends State<PaySuccess> {
                 child: Column(
                   children: [
                     // 成功图标
-                    Container(
+              Container(
                       width: 140.w,
                       height: 140.w,
                       decoration: BoxDecoration(
@@ -169,7 +169,7 @@ class _PageState extends State<PaySuccess> {
                     // 支付金额
                     RichText(
                       text: TextSpan(
-                        children: [
+                children: [
                           TextSpan(
                             text: '${data.orderTotal}',
                             style: TextStyle(
@@ -195,10 +195,10 @@ class _PageState extends State<PaySuccess> {
               
               SizedBox(height: 24.h),
               // 订单信息卡片
-              Container(
+                  Container(
                 padding: EdgeInsets.all(24.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
@@ -210,19 +210,19 @@ class _PageState extends State<PaySuccess> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                      children: [
                     // 影院信息
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                            children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {
-                              context.pushNamed('cinemaDetail', queryParameters: {
-                                'id': '${data.cinemaId}'
-                              });
-                            },
+                                onTap: () {
+                                  context.pushNamed('cinemaDetail', queryParameters: {
+                                    'id': '${data.cinemaId}'
+                                  });
+                                },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -250,12 +250,12 @@ class _PageState extends State<PaySuccess> {
                         ),
                         SizedBox(width: 16.w),
                         Row(
-                          children: [
+                                children: [
                             // 电话图标
-                            GestureDetector(
-                              onTap: () async {
-                                await callTel('+81-080-1234-5678');
-                              },
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await callTel('+81-080-1234-5678');
+                                    },
                               child: Container(
                                 width: 60.w,
                                 height: 60.w,
@@ -272,12 +272,12 @@ class _PageState extends State<PaySuccess> {
                             ),
                             SizedBox(width: 12.w),
                             // 地图图标
-                            GestureDetector(
-                              onTap: () async {
+                                  GestureDetector(
+                                    onTap: () async {
                                 double latitude = 31.2304;
                                 double longitude = 121.4737;
-                                await callMap(latitude, longitude);
-                              },
+                                      await callMap(latitude, longitude);
+                                    },
                               child: Container(
                                 width: 60.w,
                                 height: 60.w,
@@ -311,15 +311,15 @@ class _PageState extends State<PaySuccess> {
                     // 电影信息
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                            children: [
                         // 电影海报
-                        GestureDetector(
-                          onTap: () {
-                            context.pushNamed('movieDetail', pathParameters: {
-                              'id': '${data.movieId}'
-                            });
-                          },
-                          child: Container(
+                              GestureDetector(
+                                onTap: () {
+                                  context.pushNamed('movieDetail', pathParameters: {
+                                    'id': '${data.movieId}'
+                                  });
+                                },
+                                child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12.r),
                               boxShadow: [
@@ -330,42 +330,42 @@ class _PageState extends State<PaySuccess> {
                                 ),
                               ],
                             ),
-                            child: ClipRRect(
+                                  child: ClipRRect(
                               borderRadius: BorderRadius.circular(12.r),
-                              child: CustomExtendedImage(
-                                data.moviePoster ?? '',
+                                    child: CustomExtendedImage(
+                                      data.moviePoster ?? '',
                                 width: 180.w,
                                 height: 240.h,
-                                fit: BoxFit.cover,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                        
+                              
                         SizedBox(width: 20.w),
                         
                         // 电影详情
-                        Expanded(
-                          child: SizedBox(
+                              Expanded(
+                                child: SizedBox(
                             height: 240.h,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
                                     // 电影名称
-                                    Text(
-                                      data.movieName ?? '',
-                                      style: TextStyle(
+                                          Text(
+                                            data.movieName ?? '',
+                                            style: TextStyle(
                                         fontSize: 32.sp,
                                         fontWeight: FontWeight.w600,
                                         color: const Color(0xFF323233),
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                     SizedBox(height: 16.h),
                                     
                                     // 放映时间
@@ -408,7 +408,7 @@ class _PageState extends State<PaySuccess> {
                                       Padding(
                                         padding: EdgeInsets.only(top: 8.h),
                                         child: Row(
-                                          children: [
+                                              children: [
                                             // 影厅名称
                                             if (data.theaterHallName != null && data.theaterHallName!.isNotEmpty)
                                               Container(
@@ -465,24 +465,24 @@ class _PageState extends State<PaySuccess> {
                                       ),
                                   ],
                                 ),
-                              ],
-                            ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              ),
               
               SizedBox(height: 24.h),
               
               // 座位信息卡片
-              Container(
-                width: double.infinity,
+                    Container(
+                      width: double.infinity,
                 padding: EdgeInsets.all(24.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
@@ -497,7 +497,7 @@ class _PageState extends State<PaySuccess> {
                   children: [
                     // 标题
                     Row(
-                      children: [
+                        children: [
                         Icon(
                           Icons.event_seat,
                           size: 32.sp,
@@ -528,8 +528,8 @@ class _PageState extends State<PaySuccess> {
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
                             Row(
                               children: [
                                 Container(
@@ -570,20 +570,20 @@ class _PageState extends State<PaySuccess> {
                             ),
                           ],
                         ),
-                      );
-                    }),
+                            );
+                          }),
                   ],
                 ),
-              ),
+                    ),
               
               SizedBox(height: 24.h),
               
               // 二维码取票卡片
-              Container(
+                    Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(32.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
@@ -598,7 +598,7 @@ class _PageState extends State<PaySuccess> {
                     // 二维码标题
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                          children: [
                         Icon(
                           Icons.qr_code_2,
                           size: 32.sp,
@@ -655,7 +655,7 @@ class _PageState extends State<PaySuccess> {
                     SizedBox(height: 32.h),
                     
                     // 取票码
-                    Container(
+                            Container(
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 24.w),
                       decoration: BoxDecoration(
@@ -720,7 +720,7 @@ class _PageState extends State<PaySuccess> {
                 child: Container(
                   width: double.infinity,
                   height: 88.h,
-                  decoration: BoxDecoration(
+                              decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
                         const Color(0xFF1989FA),

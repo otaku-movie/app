@@ -79,9 +79,9 @@
       "en": "Address"
     },
     "buy": {
-      "zh": "购票",
-      "ja": "チケット購入",
-      "en": "Buy Ticket"
+      "zh": "选座",
+      "ja": "座席選択",
+      "en": "Select Seat"
     },
     "time": {
       "zh": "分",
@@ -361,6 +361,21 @@
       "ja": "読み込み中...",
       "en": "Loading..."
     },
+    "error_title": {
+      "zh": "出错了",
+      "ja": "エラーが発生しました",
+      "en": "Error"
+    },
+    "error_message": {
+      "zh": "数据加载失败，请稍后重试",
+      "ja": "データの読み込みに失敗しました。後でもう一度お試しください",
+      "en": "Failed to load data, please try again later"
+    },
+    "retry": {
+      "zh": "重新加载",
+      "ja": "再読み込み",
+      "en": "Retry"
+    },
     "components": {
       "easyRefresh": {
         "refresh": {
@@ -617,6 +632,101 @@
       "zh": "登录",
       "ja": "ログイン",
       "en": "Login"
+    },
+    "welcomeText": {
+      "zh": "欢迎回来，请登录您的账户",
+      "ja": "おかえりなさい、アカウントにログインしてください",
+      "en": "Welcome back, please log in to your account"
+    },
+    "or": {
+      "zh": "或",
+      "ja": "または",
+      "en": "or"
+    },
+    "googleLogin": {
+      "zh": "使用 Google 登录",
+      "ja": "Googleでログイン",
+      "en": "Sign in with Google"
+    },
+    "forgotPassword": {
+      "zh": "忘记密码？",
+      "ja": "パスワードを忘れましたか？",
+      "en": "Forgot password?"
+    },
+    "forgotPasswordTitle": {
+      "zh": "忘记密码",
+      "ja": "パスワードを忘れた",
+      "en": "Forgot Password"
+    },
+    "forgotPasswordDescription": {
+      "zh": "输入您的邮箱地址，我们将发送验证码给您",
+      "ja": "メールアドレスを入力してください。確認コードをお送りします",
+      "en": "Enter your email address and we'll send you a verification code"
+    },
+    "emailAddress": {
+      "zh": "邮箱地址",
+      "ja": "メールアドレス",
+      "en": "Email Address"
+    },
+    "newPassword": {
+      "zh": "新密码",
+      "ja": "新しいパスワード",
+      "en": "New Password"
+    },
+    "sendVerificationCode": {
+      "zh": "发送验证码",
+      "ja": "認証コードを送信",
+      "en": "Send Verification Code"
+    },
+    "resetPassword": {
+      "zh": "重置密码",
+      "ja": "パスワードをリセット",
+      "en": "Reset Password"
+    },
+    "rememberPassword": {
+      "zh": "想起密码了？",
+      "ja": "パスワードを思い出しましたか？",
+      "en": "Remember your password?"
+    },
+    "backToLogin": {
+      "zh": "返回登录",
+      "ja": "ログインに戻る",
+      "en": "Back to Login"
+    },
+    "emailRequired": {
+      "zh": "请输入邮箱",
+      "ja": "メールアドレスを入力してください",
+      "en": "Please enter your email"
+    },
+    "emailInvalid": {
+      "zh": "请输入有效的邮箱地址",
+      "ja": "有効なメールアドレスを入力してください",
+      "en": "Please enter a valid email address"
+    },
+    "verificationCodeRequired": {
+      "zh": "请输入验证码",
+      "ja": "認証コードを入力してください",
+      "en": "Please enter the verification code"
+    },
+    "newPasswordRequired": {
+      "zh": "请输入新密码",
+      "ja": "新しいパスワードを入力してください",
+      "en": "Please enter your new password"
+    },
+    "passwordTooShort": {
+      "zh": "密码至少需要6位",
+      "ja": "パスワードは6文字以上である必要があります",
+      "en": "Password must be at least 6 characters"
+    },
+    "verificationCodeSent": {
+      "zh": "验证码已发送至您的邮箱",
+      "ja": "認証コードがメールに送信されました",
+      "en": "Verification code has been sent to your email"
+    },
+    "passwordResetSuccess": {
+      "zh": "密码重置成功",
+      "ja": "パスワードリセットが成功しました",
+      "en": "Password reset successful"
     },
     "verificationCode": {
       "zh": "验证码",
@@ -893,6 +1003,58 @@
         "zh": "评论",
         "ja": "コメント",
         "en": "Comment"
+      },
+      "duration": {
+        "unknown": {
+          "zh": "未知",
+          "ja": "不明",
+          "en": "Unknown"
+        },
+        "minutes": {
+          "zh": "分钟",
+          "ja": "分",
+          "en": "minutes"
+        },
+        "hours": {
+          "zh": "小时",
+          "ja": "時間",
+          "en": "hours"
+        },
+        "hoursMinutes": {
+          "zh": {
+            "text": "{hours}小时{minutes}分钟",
+            "placeholders": {
+              "hours": {
+                "type": "int"
+              },
+              "minutes": {
+                "type": "int"
+              }
+            }
+          },
+          "ja": {
+            "text": "{hours}時間{minutes}分",
+            "placeholders": {
+              "hours": {
+                "type": "int"
+              },
+              "minutes": {
+                "type": "int"
+              }
+            }
+          },
+          "en": {
+            "text": "{hours}h {minutes}m",
+            "placeholders": {
+              "hours": {
+                "type": "int"
+              },
+              "minutes": {
+                "type": "int"
+              }
+            }
+          }
+        }
       },
       "totalReplyMessage": {
         "zh": {
@@ -1809,6 +1971,88 @@
         "ja": "yyyy年MM月dd日",
         "en": "MMM dd, yyyy"
       }
+    }
+  },
+  "forgotPassword": {
+    "title": {
+      "zh": "忘记密码",
+      "ja": "パスワードを忘れた",
+      "en": "Forgot Password"
+    },
+    "description": {
+      "zh": "输入您的邮箱地址，我们将发送验证码给您",
+      "ja": "メールアドレスを入力してください。認証コードをお送りします",
+      "en": "Enter your email address and we will send you a verification code"
+    },
+    "emailAddress": {
+      "zh": "邮箱地址",
+      "ja": "メールアドレス",
+      "en": "Email Address"
+    },
+    "verificationCode": {
+      "zh": "验证码",
+      "ja": "認証コード",
+      "en": "Verification Code"
+    },
+    "newPassword": {
+      "zh": "新密码",
+      "ja": "新しいパスワード",
+      "en": "New Password"
+    },
+    "sendVerificationCode": {
+      "zh": "发送验证码",
+      "ja": "認証コードを送信",
+      "en": "Send Verification Code"
+    },
+    "resetPassword": {
+      "zh": "重置密码",
+      "ja": "パスワードをリセット",
+      "en": "Reset Password"
+    },
+    "rememberPassword": {
+      "zh": "想起密码了？",
+      "ja": "パスワードを思い出しましたか？",
+      "en": "Remember your password?"
+    },
+    "backToLogin": {
+      "zh": "返回登录",
+      "ja": "ログインに戻る",
+      "en": "Back to Login"
+    },
+    "emailRequired": {
+      "zh": "请输入邮箱",
+      "ja": "メールアドレスを入力してください",
+      "en": "Please enter your email"
+    },
+    "emailInvalid": {
+      "zh": "请输入有效的邮箱地址",
+      "ja": "有効なメールアドレスを入力してください",
+      "en": "Please enter a valid email address"
+    },
+    "verificationCodeRequired": {
+      "zh": "请输入验证码",
+      "ja": "認証コードを入力してください",
+      "en": "Please enter verification code"
+    },
+    "newPasswordRequired": {
+      "zh": "请输入新密码",
+      "ja": "新しいパスワードを入力してください",
+      "en": "Please enter your new password"
+    },
+    "passwordTooShort": {
+      "zh": "密码至少需要6位",
+      "ja": "パスワードは6文字以上である必要があります",
+      "en": "Password must be at least 6 characters"
+    },
+    "verificationCodeSent": {
+      "zh": "验证码已发送至您的邮箱",
+      "ja": "認証コードがメールに送信されました",
+      "en": "Verification code has been sent to your email"
+    },
+    "passwordResetSuccess": {
+      "zh": "密码重置成功",
+      "ja": "パスワードリセットが成功しました",
+      "en": "Password reset successful"
     }
   }
 }

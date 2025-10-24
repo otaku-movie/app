@@ -141,8 +141,8 @@ class _PageState extends State<OrderDetail> {
                     ),
                   ),
                   child: Row(
-                    children: [
-                      Container(
+                children: [
+                  Container(
                         width: 60.w,
                         height: 60.w,
                         decoration: BoxDecoration(
@@ -186,8 +186,8 @@ class _PageState extends State<OrderDetail> {
               // 订单信息卡片
               Container(
                 padding: EdgeInsets.all(24.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
@@ -199,12 +199,12 @@ class _PageState extends State<OrderDetail> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                    children: [
                     // 影院信息
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                          children: [
                         Expanded(
                           child: GestureDetector(
                               onTap: () {
@@ -323,10 +323,10 @@ class _PageState extends State<OrderDetail> {
                                 width: 220.w,
                                 height: 240.h,
                                   fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
-                        ),
                         
                         SizedBox(width: 20.w),
                         
@@ -351,7 +351,7 @@ class _PageState extends State<OrderDetail> {
                                         ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
-                                    ),
+                                      ),
                                     SizedBox(height: 16.h),
                                     
                                     // 放映时间
@@ -614,7 +614,7 @@ class _PageState extends State<OrderDetail> {
                       }),
                   ],
                 ),
-              ),
+                ),
               
               // 二维码取票卡片
                 Container(
@@ -693,10 +693,10 @@ class _PageState extends State<OrderDetail> {
                     SizedBox(height: 32.h),
                     
                     // 取票码
-                    Container(
+              Container(
                       width: double.infinity,
                       padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 24.w),
-                      decoration: BoxDecoration(
+                decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
                             const Color(0xFFF7F8FA),
@@ -711,7 +711,7 @@ class _PageState extends State<OrderDetail> {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
+                children: [
                           Text(
                             '${S.of(context).orderDetail_ticketCode}：',
                             style: TextStyle(

@@ -407,15 +407,29 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     );
 
     Widget locked = buildContainer(
-      borderColor: const Color.fromARGB(255, 255, 0, 247),
+      color: const Color(0xFFFFF3E0),
+      borderColor: const Color(0xFFFFA726),
       margin: margin,
-      child: child,
+      child: Center(
+        child: Icon(
+          Icons.lock_outline,
+          color: const Color(0xFFFFA726),
+          size: finalWidth * 0.6,
+        ),
+      ),
     );
 
     Widget sold = buildContainer(
-      borderColor: Colors.red[400],
+      color: const Color(0xFFFFEBEE),
+      borderColor: const Color(0xFFEF5350),
       margin: margin,
-      child: child,
+      child: Center(
+        child: Icon(
+          Icons.close,
+          color: const Color(0xFFEF5350),
+          size: finalWidth * 0.7,
+        ),
+      ),
     );
     Widget available = buildContainer(
       borderColor: Color.fromARGB(255, 0, 135, 252),

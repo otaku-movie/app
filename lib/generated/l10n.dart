@@ -190,10 +190,10 @@ class S {
     );
   }
 
-  /// `Buy Ticket`
+  /// `Select Seat`
   String get showTimeDetail_buy {
     return Intl.message(
-      'Buy Ticket',
+      'Select Seat',
       name: 'showTimeDetail_buy',
       desc: '',
       args: [],
@@ -660,6 +660,36 @@ class S {
     );
   }
 
+  /// `Error`
+  String get common_error_title {
+    return Intl.message(
+      'Error',
+      name: 'common_error_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load data, please try again later`
+  String get common_error_message {
+    return Intl.message(
+      'Failed to load data, please try again later',
+      name: 'common_error_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get common_retry {
+    return Intl.message(
+      'Retry',
+      name: 'common_retry',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pull to refresh`
   String get common_components_easyRefresh_refresh_dragText {
     return Intl.message(
@@ -1110,6 +1140,196 @@ class S {
     );
   }
 
+  /// `Welcome back, please log in to your account`
+  String get login_welcomeText {
+    return Intl.message(
+      'Welcome back, please log in to your account',
+      name: 'login_welcomeText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `or`
+  String get login_or {
+    return Intl.message(
+      'or',
+      name: 'login_or',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in with Google`
+  String get login_googleLogin {
+    return Intl.message(
+      'Sign in with Google',
+      name: 'login_googleLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot password?`
+  String get login_forgotPassword {
+    return Intl.message(
+      'Forgot password?',
+      name: 'login_forgotPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot Password`
+  String get login_forgotPasswordTitle {
+    return Intl.message(
+      'Forgot Password',
+      name: 'login_forgotPasswordTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email address and we'll send you a verification code`
+  String get login_forgotPasswordDescription {
+    return Intl.message(
+      'Enter your email address and we\'ll send you a verification code',
+      name: 'login_forgotPasswordDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email Address`
+  String get login_emailAddress {
+    return Intl.message(
+      'Email Address',
+      name: 'login_emailAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Password`
+  String get login_newPassword {
+    return Intl.message(
+      'New Password',
+      name: 'login_newPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Verification Code`
+  String get login_sendVerificationCode {
+    return Intl.message(
+      'Send Verification Code',
+      name: 'login_sendVerificationCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Password`
+  String get login_resetPassword {
+    return Intl.message(
+      'Reset Password',
+      name: 'login_resetPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remember your password?`
+  String get login_rememberPassword {
+    return Intl.message(
+      'Remember your password?',
+      name: 'login_rememberPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to Login`
+  String get login_backToLogin {
+    return Intl.message(
+      'Back to Login',
+      name: 'login_backToLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your email`
+  String get login_emailRequired {
+    return Intl.message(
+      'Please enter your email',
+      name: 'login_emailRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid email address`
+  String get login_emailInvalid {
+    return Intl.message(
+      'Please enter a valid email address',
+      name: 'login_emailInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the verification code`
+  String get login_verificationCodeRequired {
+    return Intl.message(
+      'Please enter the verification code',
+      name: 'login_verificationCodeRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your new password`
+  String get login_newPasswordRequired {
+    return Intl.message(
+      'Please enter your new password',
+      name: 'login_newPasswordRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least 6 characters`
+  String get login_passwordTooShort {
+    return Intl.message(
+      'Password must be at least 6 characters',
+      name: 'login_passwordTooShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code has been sent to your email`
+  String get login_verificationCodeSent {
+    return Intl.message(
+      'Verification code has been sent to your email',
+      name: 'login_verificationCodeSent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password reset successful`
+  String get login_passwordResetSuccess {
+    return Intl.message(
+      'Password reset successful',
+      name: 'login_passwordResetSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Verification Code`
   String get login_verificationCode {
     return Intl.message(
@@ -1517,6 +1737,46 @@ class S {
       name: 'movieDetail_detail_comment',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Unknown`
+  String get movieDetail_detail_duration_unknown {
+    return Intl.message(
+      'Unknown',
+      name: 'movieDetail_detail_duration_unknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `minutes`
+  String get movieDetail_detail_duration_minutes {
+    return Intl.message(
+      'minutes',
+      name: 'movieDetail_detail_duration_minutes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `hours`
+  String get movieDetail_detail_duration_hours {
+    return Intl.message(
+      'hours',
+      name: 'movieDetail_detail_duration_hours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{hours}h {minutes}m`
+  String movieDetail_detail_duration_hoursMinutes(int hours, int minutes) {
+    return Intl.message(
+      '${hours}h ${minutes}m',
+      name: 'movieDetail_detail_duration_hoursMinutes',
+      desc: '',
+      args: [hours, minutes],
     );
   }
 
@@ -3035,6 +3295,166 @@ class S {
     return Intl.message(
       'MMM dd, yyyy',
       name: 'cinemaList_selectSeat_dateFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot Password`
+  String get forgotPassword_title {
+    return Intl.message(
+      'Forgot Password',
+      name: 'forgotPassword_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email address and we will send you a verification code`
+  String get forgotPassword_description {
+    return Intl.message(
+      'Enter your email address and we will send you a verification code',
+      name: 'forgotPassword_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email Address`
+  String get forgotPassword_emailAddress {
+    return Intl.message(
+      'Email Address',
+      name: 'forgotPassword_emailAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification Code`
+  String get forgotPassword_verificationCode {
+    return Intl.message(
+      'Verification Code',
+      name: 'forgotPassword_verificationCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Password`
+  String get forgotPassword_newPassword {
+    return Intl.message(
+      'New Password',
+      name: 'forgotPassword_newPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Verification Code`
+  String get forgotPassword_sendVerificationCode {
+    return Intl.message(
+      'Send Verification Code',
+      name: 'forgotPassword_sendVerificationCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Password`
+  String get forgotPassword_resetPassword {
+    return Intl.message(
+      'Reset Password',
+      name: 'forgotPassword_resetPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remember your password?`
+  String get forgotPassword_rememberPassword {
+    return Intl.message(
+      'Remember your password?',
+      name: 'forgotPassword_rememberPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to Login`
+  String get forgotPassword_backToLogin {
+    return Intl.message(
+      'Back to Login',
+      name: 'forgotPassword_backToLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your email`
+  String get forgotPassword_emailRequired {
+    return Intl.message(
+      'Please enter your email',
+      name: 'forgotPassword_emailRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid email address`
+  String get forgotPassword_emailInvalid {
+    return Intl.message(
+      'Please enter a valid email address',
+      name: 'forgotPassword_emailInvalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter verification code`
+  String get forgotPassword_verificationCodeRequired {
+    return Intl.message(
+      'Please enter verification code',
+      name: 'forgotPassword_verificationCodeRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter your new password`
+  String get forgotPassword_newPasswordRequired {
+    return Intl.message(
+      'Please enter your new password',
+      name: 'forgotPassword_newPasswordRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least 6 characters`
+  String get forgotPassword_passwordTooShort {
+    return Intl.message(
+      'Password must be at least 6 characters',
+      name: 'forgotPassword_passwordTooShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code has been sent to your email`
+  String get forgotPassword_verificationCodeSent {
+    return Intl.message(
+      'Verification code has been sent to your email',
+      name: 'forgotPassword_verificationCodeSent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password reset successful`
+  String get forgotPassword_passwordResetSuccess {
+    return Intl.message(
+      'Password reset successful',
+      name: 'forgotPassword_passwordResetSuccess',
       desc: '',
       args: [],
     );
