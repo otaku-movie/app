@@ -474,58 +474,7 @@ class _PageState extends State<ConfirmOrder> {
         title: Text(S.of(context).confirmOrder_title, style: const TextStyle(color: Colors.white)),
         onBackButtonPressed: () async {
           // 显示确认对话框
-          final shouldCancel = await showDialog<bool>(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                title: Text(
-                  S.of(context).confirmOrder_cancelOrder,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                content: Text(
-                  S.of(context).confirmOrder_cancelOrderConfirm,
-                  style: const TextStyle(fontSize: 16),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: Text(
-                      S.of(context).confirmOrder_continuePay,
-                      style: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red.shade600,
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      S.of(context).confirmOrder_confirmCancel,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
+          final shouldCancel = await SeatCancelManager.showCancelOrderDialog(context);
 
           if (shouldCancel == true) {
             // 用户确认取消，调用取消订单接口
