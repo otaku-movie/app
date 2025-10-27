@@ -8,6 +8,7 @@ import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/user/user_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
@@ -22,6 +23,8 @@ class _PageState extends State<UserInfo> {
   
   String langName = '';
   String token = '';
+  String currentVersion = '';
+  bool isCheckingUpdate = false;
   
   void updateLangName () {
     Map<String, String> lang = languageController.lang.firstWhere(
@@ -31,6 +34,525 @@ class _PageState extends State<UserInfo> {
     setState(() {
       langName = '${lang['name']}';
     });
+  }
+
+  // 获取当前版本信息
+  Future<void> _getCurrentVersion() async {
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      setState(() {
+        currentVersion = packageInfo.version;
+      });
+    } catch (e) {
+      setState(() {
+        currentVersion = '1.0.0';
+      });
+    }
+  }
+
+  // 检查更新
+  Future<void> _checkUpdate() async {
+    if (isCheckingUpdate) return;
+    
+    setState(() {
+      isCheckingUpdate = true;
+    });
+
+    try {
+      // 这里可以调用API检查更新
+      // 模拟检查过程
+      await Future.delayed(const Duration(seconds: 2));
+      
+      // 显示更新对话框
+      _showUpdateDialog();
+    } catch (e) {
+      // 显示错误提示
+      _showErrorDialog();
+    } finally {
+      setState(() {
+        isCheckingUpdate = false;
+      });
+    }
+  }
+
+  // 显示更新对话框
+  void _showUpdateDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(24.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white,
+                  Colors.grey.shade50,
+                ],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 标题图标和文字
+                Container(
+                  width: 60.w,
+                  height: 60.w,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue.shade400, Colors.blue.shade600],
+                    ),
+                    borderRadius: BorderRadius.circular(30.r),
+                  ),
+                  child: Icon(
+                    Icons.system_update,
+                    color: Colors.white,
+                    size: 30.sp,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  S.of(context).user_checkUpdate,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  S.of(context).user_updateAvailable,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24.h),
+                
+                // 版本信息卡片
+                Container(
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade50,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: Colors.blue.shade200),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.of(context).user_currentVersion,
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            currentVersion,
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade800,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            S.of(context).user_latestVersion,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade100,
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Text(
+                              '1.1.0',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green.shade700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                
+                // 按钮
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: Text(
+                          S.of(context).user_cancel,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _showUpdateProgress();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade600,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          elevation: 2,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.download, size: 18.sp),
+                            SizedBox(width: 4.w),
+                            Text(
+                              S.of(context).user_update,
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 显示更新进度
+  void _showUpdateProgress() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(32.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white,
+                  Colors.grey.shade50,
+                ],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 进度图标
+                Container(
+                  width: 80.w,
+                  height: 80.w,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.blue.shade400, Colors.blue.shade600],
+                    ),
+                    borderRadius: BorderRadius.circular(40.r),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 3,
+                      ),
+                      Icon(
+                        Icons.download,
+                        color: Colors.white,
+                        size: 32.sp,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                Text(
+                  S.of(context).user_updating,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  S.of(context).user_updateProgress,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24.h),
+                
+                // 进度条
+                Container(
+                  width: double.infinity,
+                  height: 6.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade200,
+                    borderRadius: BorderRadius.circular(3.r),
+                  ),
+                  child: LinearProgressIndicator(
+                    backgroundColor: Colors.transparent,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue.shade600),
+                    borderRadius: BorderRadius.circular(3.r),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    // 模拟更新过程
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.of(context).pop();
+      _showUpdateSuccess();
+    });
+  }
+
+  // 显示更新成功
+  void _showUpdateSuccess() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(32.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white,
+                  Colors.green.shade50,
+                ],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 成功图标
+                Container(
+                  width: 80.w,
+                  height: 80.w,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.green.shade400, Colors.green.shade600],
+                    ),
+                    borderRadius: BorderRadius.circular(40.r),
+                  ),
+                  child: Icon(
+                    Icons.check_circle,
+                    color: Colors.white,
+                    size: 40.sp,
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                Text(
+                  S.of(context).user_updateSuccess,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  S.of(context).user_updateSuccessMessage,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade600,
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      elevation: 2,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.check, size: 18.sp),
+                        SizedBox(width: 4.w),
+                        Text(
+                          S.of(context).user_ok,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // 显示错误对话框
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(32.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.white,
+                  Colors.red.shade50,
+                ],
+              ),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 错误图标
+                Container(
+                  width: 80.w,
+                  height: 80.w,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.red.shade400, Colors.red.shade600],
+                    ),
+                    borderRadius: BorderRadius.circular(40.r),
+                  ),
+                  child: Icon(
+                    Icons.error,
+                    color: Colors.white,
+                    size: 40.sp,
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                Text(
+                  S.of(context).user_updateError,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  S.of(context).user_updateErrorMessage,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24.h),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red.shade600,
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(vertical: 12.h),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      elevation: 2,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.close, size: 18.sp),
+                        SizedBox(width: 4.w),
+                        Text(
+                          S.of(context).user_ok,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
   void _showActionSheet(BuildContext context) {
     showModalBottomSheet(
@@ -74,6 +596,7 @@ class _PageState extends State<UserInfo> {
     super.initState();
     getData();
     updateLangName();
+    _getCurrentVersion();
   }
 
   @override
@@ -372,10 +895,12 @@ class _PageState extends State<UserInfo> {
           ),
           _buildDivider(),
           _buildModernListTile(
-            icon: Icons.check,
+            icon: isCheckingUpdate ? Icons.hourglass_empty : Icons.system_update,
             title: S.of(context).user_checkUpdate,
-            trailing: '1.0.0',
-            onTap: () {},
+            trailing: isCheckingUpdate 
+                ? CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(Colors.blue))
+                : Text(currentVersion.isNotEmpty ? currentVersion : '1.0.0'),
+            onTap: _checkUpdate,
           ),
           _buildDivider(),
           _buildModernListTile(
@@ -398,7 +923,7 @@ class _PageState extends State<UserInfo> {
   Widget _buildModernListTile({
     required IconData icon,
     required String title,
-    String? trailing,
+    dynamic trailing,
     required VoidCallback onTap,
     Color? textColor,
   }) {
@@ -435,13 +960,15 @@ class _PageState extends State<UserInfo> {
                 ),
               ),
               if (trailing != null) ...[
-                Text(
-                  trailing,
-                  style: TextStyle(
-                    fontSize: 22.sp,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
+                trailing is String 
+                  ? Text(
+                      trailing,
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                    )
+                  : trailing as Widget,
                 SizedBox(width: 8.w),
               ],
               Icon(
