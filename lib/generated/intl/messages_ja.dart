@@ -20,55 +20,135 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ja';
 
-  static String m0(seatCount) => "${seatCount}席";
+  static String m0(count) => "あと ${count} 回の上映があります...";
 
-  static String m1(count) => "${count} 件の関連映画館が見つかりました";
+  static String m1(seatCount) => "${seatCount}席";
 
-  static String m2(count) => "${count} 席の選択を確認";
+  static String m2(count) => "${count} 件の関連映画館が見つかりました";
 
-  static String m3(count) => "${count} 席を選択しました";
+  static String m3(count) => "${count} 席の選択を確認";
 
-  static String m4(reply) => "${reply} に返信";
+  static String m4(count) => "${count} 席を選択しました";
 
-  static String m5(total) => "合計 ${total} 件の返信";
+  static String m5(reply) => "${reply} に返信";
 
-  static String m6(count) => "${count}席";
+  static String m6(total) => "合計 ${total} 件の返信";
 
-  static String m7(reply) => "@${reply} に返信";
+  static String m7(count) => "${count}席";
 
-  static String m8(language) => "${language}へ翻訳";
+  static String m8(reply) => "@${reply} に返信";
 
-  static String m9(hours, minutes) => "${hours}時間${minutes}分";
+  static String m9(language) => "${language}へ翻訳";
 
-  static String m10(total) => "合計 ${total} 件の返信";
+  static String m10(hours, minutes) => "${hours}時間${minutes}分";
 
-  static String m11(hours, minutes) => "上映開始まであと ${hours} 時間 ${minutes} 分";
+  static String m11(total) => "合計 ${total} 件の返信";
 
-  static String m12(minutes, seconds) => "上映開始まであと ${minutes} 分 ${seconds} 秒";
+  static String m12(hours, minutes) => "上映開始まであと ${hours} 時間 ${minutes} 分";
 
-  static String m13(seconds) => "上映開始まであと ${seconds} 秒";
+  static String m13(minutes, seconds) => "上映開始まであと ${minutes} 分 ${seconds} 秒";
 
-  static String m14(ticketCount) => "映画チケット ${ticketCount} 枚";
+  static String m14(seconds) => "上映開始まであと ${seconds} 秒";
 
-  static String m15(date) => "有効期限: ${date}";
+  static String m15(ticketCount) => "映画チケット ${ticketCount} 枚";
 
-  static String m16(maxSeat) => "最大${maxSeat}席までお選びいただけます";
+  static String m16(date) => "有効期限: ${date}";
 
-  static String m17(movieName) => "映画チケットをシェア: ${movieName}";
+  static String m17(maxSeat) => "最大${maxSeat}席までお選びいただけます";
 
-  static String m18(days) => "あと${days}日";
+  static String m18(movieName) => "映画チケットをシェア: ${movieName}";
 
-  static String m19(hours) => "あと${hours}時間";
+  static String m19(days) => "あと${days}日";
 
-  static String m20(minutes) => "あと${minutes}分";
+  static String m20(hours) => "あと${hours}時間";
+
+  static String m21(minutes) => "あと${minutes}分";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "about_components_filterBar_confirm":
+            MessageLookupByLibrary.simpleMessage("確認"),
+        "about_components_filterBar_pleaseSelect":
+            MessageLookupByLibrary.simpleMessage("選択してください"),
+        "about_components_filterBar_reset":
+            MessageLookupByLibrary.simpleMessage("リセット"),
+        "about_components_sendVerifyCode_success":
+            MessageLookupByLibrary.simpleMessage("認証コードが送信されました"),
+        "about_components_showTimeList_all":
+            MessageLookupByLibrary.simpleMessage("すべて"),
+        "about_components_showTimeList_moreShowTimes": m0,
+        "about_components_showTimeList_noData":
+            MessageLookupByLibrary.simpleMessage("まだデータがありません"),
+        "about_components_showTimeList_noShowTimeInfo":
+            MessageLookupByLibrary.simpleMessage("上映時間情報がありません"),
+        "about_components_showTimeList_seatStatus_available":
+            MessageLookupByLibrary.simpleMessage("余裕あり"),
+        "about_components_showTimeList_seatStatus_limited":
+            MessageLookupByLibrary.simpleMessage("残りわずか"),
+        "about_components_showTimeList_seatStatus_soldOut":
+            MessageLookupByLibrary.simpleMessage("完売"),
+        "about_components_showTimeList_unnamed":
+            MessageLookupByLibrary.simpleMessage("名前なし"),
+        "about_copyright":
+            MessageLookupByLibrary.simpleMessage("© 2025 Otaku Movie 全著作権所有"),
+        "about_description": MessageLookupByLibrary.simpleMessage(
+            "映画愛好家に便利なチケット購入体験を提供することに専念しています。"),
+        "about_login_email_text":
+            MessageLookupByLibrary.simpleMessage("メールアドレス"),
+        "about_login_email_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("有効なメールアドレスを入力してください"),
+        "about_login_email_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("メールアドレスを入力してください"),
+        "about_login_forgotPassword":
+            MessageLookupByLibrary.simpleMessage("パスワードを忘れましたか？"),
+        "about_login_googleLogin":
+            MessageLookupByLibrary.simpleMessage("Googleでログイン"),
+        "about_login_loginButton": MessageLookupByLibrary.simpleMessage("ログイン"),
+        "about_login_noAccount":
+            MessageLookupByLibrary.simpleMessage("アカウントをお持ちでない方は？"),
+        "about_login_or": MessageLookupByLibrary.simpleMessage("または"),
+        "about_login_password_text":
+            MessageLookupByLibrary.simpleMessage("パスワード"),
+        "about_login_password_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("パスワードは6文字以上で入力してください"),
+        "about_login_password_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("パスワードを入力してください"),
+        "about_login_verificationCode":
+            MessageLookupByLibrary.simpleMessage("認証コード"),
+        "about_login_welcomeText":
+            MessageLookupByLibrary.simpleMessage("おかえりなさい"),
+        "about_movieShowList_dropdown_area":
+            MessageLookupByLibrary.simpleMessage("地域"),
+        "about_movieShowList_dropdown_screenSpec":
+            MessageLookupByLibrary.simpleMessage("上映仕様"),
+        "about_movieShowList_dropdown_subtitle":
+            MessageLookupByLibrary.simpleMessage("字幕"),
+        "about_privacy_policy":
+            MessageLookupByLibrary.simpleMessage("プライバシーポリシーを表示"),
+        "about_register_haveAccount":
+            MessageLookupByLibrary.simpleMessage("アカウントをお持ちの方は？"),
+        "about_register_loginHere":
+            MessageLookupByLibrary.simpleMessage("今すぐログイン"),
+        "about_register_passwordNotMatchRepeatPassword":
+            MessageLookupByLibrary.simpleMessage("パスワードが一致しません"),
+        "about_register_registerButton":
+            MessageLookupByLibrary.simpleMessage("登録"),
+        "about_register_repeatPassword_text":
+            MessageLookupByLibrary.simpleMessage("パスワード確認"),
+        "about_register_send": MessageLookupByLibrary.simpleMessage("送信"),
+        "about_register_username_text":
+            MessageLookupByLibrary.simpleMessage("ユーザー名"),
+        "about_register_username_verify_notNull":
+            MessageLookupByLibrary.simpleMessage("ユーザー名を入力してください"),
+        "about_register_verifyCode_verify_isValid":
+            MessageLookupByLibrary.simpleMessage("認証コードの形式が正しくありません"),
+        "about_title": MessageLookupByLibrary.simpleMessage("について"),
+        "about_version": MessageLookupByLibrary.simpleMessage("バージョン"),
         "cinemaDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
         "cinemaDetail_homepage": MessageLookupByLibrary.simpleMessage("ホームページ"),
         "cinemaDetail_maxSelectSeat":
             MessageLookupByLibrary.simpleMessage("利用可能な座席数"),
-        "cinemaDetail_seatCount": m0,
+        "cinemaDetail_seatCount": m1,
         "cinemaDetail_showing": MessageLookupByLibrary.simpleMessage("上映中"),
         "cinemaDetail_specialSpecPrice":
             MessageLookupByLibrary.simpleMessage("特別上映料金"),
@@ -97,30 +177,30 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaList_search_clear": MessageLookupByLibrary.simpleMessage("クリア"),
         "cinemaList_search_hint":
             MessageLookupByLibrary.simpleMessage("映画館名または住所を検索"),
-        "cinemaList_search_results_found": m1,
+        "cinemaList_search_results_found": m2,
         "cinemaList_search_results_notFound":
             MessageLookupByLibrary.simpleMessage(
                 "関連する映画館が見つかりません。他のキーワードをお試しください"),
-        "cinemaList_selectSeat_confirmSelection": m2,
+        "cinemaList_selectSeat_confirmSelection": m3,
         "cinemaList_selectSeat_dateFormat":
             MessageLookupByLibrary.simpleMessage("yyyy年MM月dd日"),
         "cinemaList_selectSeat_pleaseSelectSeats":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
-        "cinemaList_selectSeat_seatsSelected": m3,
+        "cinemaList_selectSeat_seatsSelected": m4,
         "cinemaList_selectSeat_selectedSeats":
             MessageLookupByLibrary.simpleMessage("選択済み座席"),
         "cinemaList_title": MessageLookupByLibrary.simpleMessage("近くの映画館"),
         "commentDetail_comment_button":
             MessageLookupByLibrary.simpleMessage("返信"),
-        "commentDetail_comment_placeholder": m4,
+        "commentDetail_comment_placeholder": m5,
         "commentDetail_replyComment":
             MessageLookupByLibrary.simpleMessage("コメント返信"),
         "commentDetail_title": MessageLookupByLibrary.simpleMessage("コメント詳細"),
-        "commentDetail_totalReplyMessage": m5,
+        "commentDetail_totalReplyMessage": m6,
         "common_components_cropper_actions_flip":
-            MessageLookupByLibrary.simpleMessage("フリップ"),
+            MessageLookupByLibrary.simpleMessage("反転"),
         "common_components_cropper_actions_redo":
-            MessageLookupByLibrary.simpleMessage("やり直す"),
+            MessageLookupByLibrary.simpleMessage("やり直し"),
         "common_components_cropper_actions_reset":
             MessageLookupByLibrary.simpleMessage("リセット"),
         "common_components_cropper_actions_rotateLeft":
@@ -142,11 +222,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_components_easyRefresh_loadMore_processedText":
             MessageLookupByLibrary.simpleMessage("読み込み完了"),
         "common_components_easyRefresh_loadMore_processingText":
-            MessageLookupByLibrary.simpleMessage("読み込み中..."),
+            MessageLookupByLibrary.simpleMessage("読み込んでいます..."),
         "common_components_easyRefresh_loadMore_readyText":
-            MessageLookupByLibrary.simpleMessage("さらに読み込む準備"),
+            MessageLookupByLibrary.simpleMessage("読み込み中..."),
         "common_components_easyRefresh_refresh_armedText":
-            MessageLookupByLibrary.simpleMessage("更新するために離してください"),
+            MessageLookupByLibrary.simpleMessage("更新のために離してください"),
         "common_components_easyRefresh_refresh_dragText":
             MessageLookupByLibrary.simpleMessage("下に引っ張って更新"),
         "common_components_easyRefresh_refresh_failedText":
@@ -159,20 +239,20 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("更新しています..."),
         "common_components_easyRefresh_refresh_readyText":
             MessageLookupByLibrary.simpleMessage("更新中..."),
-        "common_components_sendVerifyCode_send":
-            MessageLookupByLibrary.simpleMessage("検証コードを送信"),
+        "common_components_filterBar_confirm":
+            MessageLookupByLibrary.simpleMessage("確認"),
+        "common_components_filterBar_pleaseSelect":
+            MessageLookupByLibrary.simpleMessage("選択してください"),
+        "common_components_filterBar_reset":
+            MessageLookupByLibrary.simpleMessage("リセット"),
         "common_components_sendVerifyCode_success":
             MessageLookupByLibrary.simpleMessage("認証コードが送信されました"),
         "common_enum_seatType_coupleSeat":
-            MessageLookupByLibrary.simpleMessage("カップルシート"),
-        "common_enum_seatType_disabled":
-            MessageLookupByLibrary.simpleMessage("選択不可"),
+            MessageLookupByLibrary.simpleMessage("カップル席"),
         "common_enum_seatType_locked":
-            MessageLookupByLibrary.simpleMessage("ロック済み"),
-        "common_enum_seatType_selected":
-            MessageLookupByLibrary.simpleMessage("選択済み"),
+            MessageLookupByLibrary.simpleMessage("ロック"),
         "common_enum_seatType_sold":
-            MessageLookupByLibrary.simpleMessage("販売済み"),
+            MessageLookupByLibrary.simpleMessage("売り切れ"),
         "common_enum_seatType_wheelChair":
             MessageLookupByLibrary.simpleMessage("車椅子席"),
         "common_error_message": MessageLookupByLibrary.simpleMessage(
@@ -183,13 +263,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_retry": MessageLookupByLibrary.simpleMessage("再読み込み"),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("円"),
         "common_unit_point": MessageLookupByLibrary.simpleMessage("点"),
-        "common_week_friday": MessageLookupByLibrary.simpleMessage("金"),
-        "common_week_monday": MessageLookupByLibrary.simpleMessage("月"),
-        "common_week_saturday": MessageLookupByLibrary.simpleMessage("土"),
-        "common_week_sunday": MessageLookupByLibrary.simpleMessage("日"),
-        "common_week_thursday": MessageLookupByLibrary.simpleMessage("木"),
-        "common_week_tuesday": MessageLookupByLibrary.simpleMessage("火"),
-        "common_week_wednesday": MessageLookupByLibrary.simpleMessage("水"),
+        "common_week_friday": MessageLookupByLibrary.simpleMessage("金曜日"),
+        "common_week_monday": MessageLookupByLibrary.simpleMessage("月曜日"),
+        "common_week_saturday": MessageLookupByLibrary.simpleMessage("土曜日"),
+        "common_week_sunday": MessageLookupByLibrary.simpleMessage("日曜日"),
+        "common_week_thursday": MessageLookupByLibrary.simpleMessage("木曜日"),
+        "common_week_tuesday": MessageLookupByLibrary.simpleMessage("火曜日"),
+        "common_week_wednesday": MessageLookupByLibrary.simpleMessage("水曜日"),
         "confirmOrder_cancelOrder":
             MessageLookupByLibrary.simpleMessage("注文をキャンセル"),
         "confirmOrder_cancelOrderConfirm": MessageLookupByLibrary.simpleMessage(
@@ -206,7 +286,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmOrder_orderCanceled":
             MessageLookupByLibrary.simpleMessage("注文がキャンセルされました"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支払いへ"),
-        "confirmOrder_seatCount": m6,
+        "confirmOrder_seatCount": m7,
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage("支払い方法を選択してください"),
         "confirmOrder_selectedSeats":
@@ -214,6 +294,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmOrder_timeInfo": MessageLookupByLibrary.simpleMessage("時間情報"),
         "confirmOrder_title": MessageLookupByLibrary.simpleMessage("注文確認"),
         "confirmOrder_total": MessageLookupByLibrary.simpleMessage("合計"),
+        "enum_seatType_coupleSeat":
+            MessageLookupByLibrary.simpleMessage("カップルシート"),
+        "enum_seatType_disabled": MessageLookupByLibrary.simpleMessage("選択不可"),
+        "enum_seatType_locked": MessageLookupByLibrary.simpleMessage("ロック済み"),
+        "enum_seatType_selected": MessageLookupByLibrary.simpleMessage("選択済み"),
+        "enum_seatType_sold": MessageLookupByLibrary.simpleMessage("販売済み"),
+        "enum_seatType_wheelChair":
+            MessageLookupByLibrary.simpleMessage("車椅子席"),
         "forgotPassword_backToLogin":
             MessageLookupByLibrary.simpleMessage("ログインに戻る"),
         "forgotPassword_description": MessageLookupByLibrary.simpleMessage(
@@ -307,8 +395,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_comment_delete":
             MessageLookupByLibrary.simpleMessage("削除"),
         "movieDetail_comment_reply": MessageLookupByLibrary.simpleMessage("返信"),
-        "movieDetail_comment_replyTo": m7,
-        "movieDetail_comment_translate": m8,
+        "movieDetail_comment_replyTo": m8,
+        "movieDetail_comment_translate": m9,
         "movieDetail_detail_basicMessage":
             MessageLookupByLibrary.simpleMessage("基本情報"),
         "movieDetail_detail_character":
@@ -317,7 +405,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("コメント"),
         "movieDetail_detail_duration_hours":
             MessageLookupByLibrary.simpleMessage("時間"),
-        "movieDetail_detail_duration_hoursMinutes": m9,
+        "movieDetail_detail_duration_hoursMinutes": m10,
         "movieDetail_detail_duration_minutes":
             MessageLookupByLibrary.simpleMessage("分"),
         "movieDetail_detail_duration_unknown":
@@ -337,7 +425,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映状況"),
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("タグ"),
         "movieDetail_detail_time": MessageLookupByLibrary.simpleMessage("上映時間"),
-        "movieDetail_detail_totalReplyMessage": m10,
+        "movieDetail_detail_totalReplyMessage": m11,
         "movieDetail_writeComment":
             MessageLookupByLibrary.simpleMessage("コメントを書く"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("チケット購入"),
@@ -384,9 +472,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合計"),
         "movieTicketType_totalPrice":
             MessageLookupByLibrary.simpleMessage("合計金額"),
-        "orderDetail_countdown_hoursMinutes": m11,
-        "orderDetail_countdown_minutesSeconds": m12,
-        "orderDetail_countdown_seconds": m13,
+        "orderDetail_countdown_hoursMinutes": m12,
+        "orderDetail_countdown_minutesSeconds": m13,
+        "orderDetail_countdown_seconds": m14,
         "orderDetail_countdown_started":
             MessageLookupByLibrary.simpleMessage("上映開始済み"),
         "orderDetail_countdown_title":
@@ -402,7 +490,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "orderDetail_seatMessage": MessageLookupByLibrary.simpleMessage("座席情報"),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("チケットコード"),
-        "orderDetail_ticketCount": m14,
+        "orderDetail_ticketCount": m15,
         "orderDetail_title": MessageLookupByLibrary.simpleMessage("注文詳細"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("コメント"),
         "orderList_orderNumber": MessageLookupByLibrary.simpleMessage("注文番号"),
@@ -466,7 +554,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("新しいクレジットカードを追加"),
         "payment_selectCreditCard_confirmPayment":
             MessageLookupByLibrary.simpleMessage("支払い確認"),
-        "payment_selectCreditCard_expiryDate": m15,
+        "payment_selectCreditCard_expiryDate": m16,
         "payment_selectCreditCard_loadFailed":
             MessageLookupByLibrary.simpleMessage("クレジットカード一覧の読み込みに失敗しました"),
         "payment_selectCreditCard_noCreditCard":
@@ -544,11 +632,17 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("座席選択がキャンセルされました"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("座席を確定する"),
-        "selectSeat_maxSelectSeatWarn": m16,
+        "selectSeat_maxSelectSeatWarn": m17,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("座席を選択してください"),
         "showTimeDetail_address": MessageLookupByLibrary.simpleMessage("アドレス"),
         "showTimeDetail_buy": MessageLookupByLibrary.simpleMessage("座席選択"),
+        "showTimeDetail_seatStatus_available":
+            MessageLookupByLibrary.simpleMessage("座席余裕あり"),
+        "showTimeDetail_seatStatus_soldOut":
+            MessageLookupByLibrary.simpleMessage("完売"),
+        "showTimeDetail_seatStatus_tight":
+            MessageLookupByLibrary.simpleMessage("座席残りわずか"),
         "showTimeDetail_time": MessageLookupByLibrary.simpleMessage("分"),
         "ticket_buyTickets": MessageLookupByLibrary.simpleMessage("チケットを購入"),
         "ticket_endTime": MessageLookupByLibrary.simpleMessage("予想終了時間"),
@@ -556,7 +650,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("チケットを購入してください！"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("座席数"),
-        "ticket_shareTicket": m17,
+        "ticket_shareTicket": m18,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("上映時間"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("キャンセル済み"),
@@ -568,9 +662,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage("枚のチケット"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("時間形式エラー"),
-        "ticket_time_remaining_days": m18,
-        "ticket_time_remaining_hours": m19,
-        "ticket_time_remaining_minutes": m20,
+        "ticket_time_remaining_days": m19,
+        "ticket_time_remaining_hours": m20,
+        "ticket_time_remaining_minutes": m21,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("まもなく開始"),
         "ticket_time_unknown": MessageLookupByLibrary.simpleMessage("時間不明"),
@@ -589,7 +683,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_time_weekdays_wednesday":
             MessageLookupByLibrary.simpleMessage("水曜日"),
         "ticket_totalPurchased": MessageLookupByLibrary.simpleMessage("合計購入"),
+        "unit_jpy": MessageLookupByLibrary.simpleMessage("円"),
+        "unit_point": MessageLookupByLibrary.simpleMessage("点"),
         "userProfile_avatar": MessageLookupByLibrary.simpleMessage("アバター"),
+        "userProfile_edit_tip":
+            MessageLookupByLibrary.simpleMessage("保存ボタンをクリックして変更を保存"),
         "userProfile_edit_username_placeholder":
             MessageLookupByLibrary.simpleMessage("ユーザー名を入力してください"),
         "userProfile_edit_username_verify_notNull":
@@ -601,7 +699,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "userProfile_title": MessageLookupByLibrary.simpleMessage("個人情報"),
         "userProfile_username": MessageLookupByLibrary.simpleMessage("ユーザー名"),
         "user_about": MessageLookupByLibrary.simpleMessage("アプリについて"),
+        "user_cancel": MessageLookupByLibrary.simpleMessage("キャンセル"),
         "user_checkUpdate": MessageLookupByLibrary.simpleMessage("アップデート確認"),
+        "user_currentVersion": MessageLookupByLibrary.simpleMessage("現在のバージョン"),
         "user_data_characterCount":
             MessageLookupByLibrary.simpleMessage("キャラクター数"),
         "user_data_orderCount": MessageLookupByLibrary.simpleMessage("注文数"),
@@ -610,11 +710,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_data_watchHistory": MessageLookupByLibrary.simpleMessage("鑑賞履歴"),
         "user_editProfile": MessageLookupByLibrary.simpleMessage("プロフィール編集"),
         "user_language": MessageLookupByLibrary.simpleMessage("言語"),
+        "user_latestVersion": MessageLookupByLibrary.simpleMessage("最新バージョン"),
         "user_logout": MessageLookupByLibrary.simpleMessage("ログアウト"),
+        "user_ok": MessageLookupByLibrary.simpleMessage("OK"),
         "user_privateAgreement":
             MessageLookupByLibrary.simpleMessage("プライバシーポリシー"),
         "user_registerTime": MessageLookupByLibrary.simpleMessage("登録日時"),
         "user_title": MessageLookupByLibrary.simpleMessage("マイページ"),
+        "user_update": MessageLookupByLibrary.simpleMessage("更新"),
+        "user_updateAvailable":
+            MessageLookupByLibrary.simpleMessage("新しいバージョンが見つかりました。今すぐ更新しますか？"),
+        "user_updateError": MessageLookupByLibrary.simpleMessage("更新失敗"),
+        "user_updateErrorMessage": MessageLookupByLibrary.simpleMessage(
+            "更新中にエラーが発生しました。後でもう一度お試しください。"),
+        "user_updateProgress":
+            MessageLookupByLibrary.simpleMessage("更新をダウンロード中です。お待ちください..."),
+        "user_updateSuccess": MessageLookupByLibrary.simpleMessage("更新成功"),
+        "user_updateSuccessMessage":
+            MessageLookupByLibrary.simpleMessage("アプリが最新バージョンに正常に更新されました！"),
+        "user_updating": MessageLookupByLibrary.simpleMessage("更新中"),
         "writeComment_hint":
             MessageLookupByLibrary.simpleMessage("コメントを入力してください..."),
         "writeComment_release": MessageLookupByLibrary.simpleMessage("リリース"),
