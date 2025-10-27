@@ -95,8 +95,7 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
+            Container(
               padding: EdgeInsets.all(6.w),
               decoration: BoxDecoration(
                 color: isSelected ? const Color(0xFF1989FA).withOpacity(0.1) : Colors.transparent,
@@ -127,11 +126,7 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
     setState(() {
       currentIndex = index;
     });
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    _pageController.jumpToPage(index);
   }
 
   void _onPageChanged(int index) {
