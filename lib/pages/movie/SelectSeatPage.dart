@@ -533,9 +533,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                         child: Text(
                           S.of(context).seatSelection_cancelSeatTitle,
                           style: TextStyle(
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 38.sp,
+                            fontWeight: FontWeight.bold,
                             color: const Color(0xFF323233),
+                            decoration: TextDecoration.none,
                           ),
                         ),
                       ),
@@ -546,9 +547,11 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                         child: Text(
                           S.of(context).seatSelection_cancelSeatConfirm,
                           style: TextStyle(
-                            fontSize: 28.sp,
-                            color: const Color(0xFF646566),
-                            height: 1.6,
+                            fontSize: 32.sp,
+                            color: Colors.black38,
+                            fontWeight: FontWeight.normal,
+                            // height: 1,
+                            decoration: TextDecoration.none,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -588,6 +591,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                         fontSize: 32.sp,
                                         color: const Color(0xFF323233),
                                         fontWeight: FontWeight.w500,
+                                        decoration: TextDecoration.none,
                                       ),
                                     ),
                                   ),
@@ -622,6 +626,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                         fontSize: 32.sp,
                                         color: const Color(0xFFEE0A24),
                                         fontWeight: FontWeight.w600,
+                                        decoration: TextDecoration.none,
                                       ),
                                     ),
                                   ),

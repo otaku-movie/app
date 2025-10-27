@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -41,61 +42,165 @@ class SeatCancelManager {
     return selectedSeats != null && selectedSeats.isNotEmpty;
   }
 
-  /// 显示取消座位确认对话框
-  static Future<bool> showCancelSeatDialog(BuildContext context) async {
+  /// 显示统一的取消确认对话框
+  static Future<bool> showCancelDialog(BuildContext context, {
+    required String title,
+    required String content,
+    required String cancelText,
+    required String confirmText,
+  }) async {
     final result = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Text(
-            S.of(context).seatSelection_cancelSeatTitle,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+        return Center(
+          child: Container(
+            width: 640.w,
+            margin: EdgeInsets.symmetric(horizontal: 32.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(32.r),
             ),
-          ),
-          content: Text(
-            S.of(context).seatSelection_cancelSeatConfirm,
-            style: const TextStyle(fontSize: 16),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(
-                S.of(context).seatSelection_cancel,
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 标题
+                Padding(
+                  padding: EdgeInsets.only(top: 52.h, bottom: 16.h),
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF323233),
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade600,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                
+                // 内容
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 24.h),
+                  child: Text(
+                    content,
+                    style: TextStyle(
+                      fontSize: 28.sp,
+                      color: Colors.black,
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              child: Text(
-                S.of(context).seatSelection_confirm,
-                style: const TextStyle(fontSize: 16),
-              ),
+                
+                SizedBox(height: 24.h),
+                
+                // 按钮组 - Vant 风格的横向分割按钮
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: const Color(0xFFEBEDF0),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      // 取消按钮
+                      Expanded(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(32.r),
+                            ),
+                            child: Container(
+                              height: 100.h,
+                              alignment: Alignment.center,
+                              child: Text(
+                                cancelText,
+                                style: TextStyle(
+                                  fontSize: 32.sp,
+                                  color: const Color(0xFF323233),
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      
+                      // 分割线
+                      Container(
+                        width: 1,
+                        height: 100.h,
+                        color: const Color(0xFFEBEDF0),
+                      ),
+                      
+                      // 确认按钮
+                      Expanded(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop(true);
+                            },
+                            borderRadius: BorderRadius.only(
+                              bottomRight: Radius.circular(32.r),
+                            ),
+                            child: Container(
+                              height: 100.h,
+                              alignment: Alignment.center,
+                              child: Text(
+                                confirmText,
+                                style: TextStyle(
+                                  fontSize: 32.sp,
+                                  color: const Color(0xFFEE0A24),
+                                  fontWeight: FontWeight.w600,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );
     return result ?? false;
+  }
+
+  /// 显示取消座位确认对话框
+  static Future<bool> showCancelSeatDialog(BuildContext context) async {
+    return await showCancelDialog(
+      context,
+      title: S.of(context).seatSelection_cancelSeatTitle,
+      content: S.of(context).seatSelection_cancelSeatConfirm,
+      cancelText: S.of(context).confirmOrder_continuePay,
+      confirmText: S.of(context).confirmOrder_confirmCancel,
+    );
+  }
+
+  /// 显示取消订单确认对话框
+  static Future<bool> showCancelOrderDialog(BuildContext context) async {
+    return await showCancelDialog(
+      context,
+      title: S.of(context).confirmOrder_cancelOrder,
+      content: S.of(context).confirmOrder_cancelOrderConfirm,
+      cancelText: S.of(context).confirmOrder_continuePay,
+      confirmText: S.of(context).confirmOrder_confirmCancel,
+    );
   }
 
   /// 取消座位选择
@@ -141,7 +246,10 @@ class SeatCancelManager {
     }
 
     // 显示确认对话框
-    final shouldCancel = await showCancelSeatDialog(context);
+    final shouldCancel = orderId != null 
+        ? await showCancelOrderDialog(context)
+        : await showCancelSeatDialog(context);
+        
     if (shouldCancel == true) {
       if (orderId != null) {
         // 用户确认取消，调用取消订单接口
