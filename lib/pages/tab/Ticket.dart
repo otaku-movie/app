@@ -6,6 +6,7 @@ import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
@@ -24,61 +25,91 @@ class _PageState extends State<Ticket> {
   List<TicketDetailResponse> data = [];
   int currentPage = 1;
   bool loading = false;
-
-  void getData({bool refresh = true}) {
+  bool error = false;
+  bool hasMore = true; // 是否还有更多数据
+  int totalCount = 0; // 总条数
+  late EasyRefreshController easyRefreshController;
+  Future<void> getData({bool refresh = true}) async {
     if (mounted) {
       setState(() {
         loading = true;
+        error = false;
       });
     }
-    ApiRequest().request<ApiPaginationResponse<TicketDetailResponse>>(
-      path: '/movieOrder/myTickets',
-      method: 'GET',
-      data: {
-        "page": refresh ? 1 : currentPage + 1,
-        "pageSize": 10,
-      },
-      fromJsonT: (json) {
-        // 如果json直接是列表
-        if (json is List) {
-          return ApiPaginationResponse<TicketDetailResponse>(
-            page: refresh ? 1 : currentPage + 1,
-            pageSize: 10,
-            total: json.length,
-            list: json.map((item) => TicketDetailResponse.fromJson(item as Map<String, dynamic>)).toList(),
+    try {
+      final res = await ApiRequest().request<ApiPaginationResponse<TicketDetailResponse>>(
+        path: '/movieOrder/myTickets',
+        method: 'POST',
+        data: {
+          "page": refresh ? 1 : currentPage,
+          "pageSize": 10,
+        },
+        fromJsonT: (json) {
+          // 如果json直接是列表
+          if (json is List) {
+            return ApiPaginationResponse<TicketDetailResponse>(
+              page: refresh ? 1 : currentPage,
+              pageSize: 10,
+              total: json.length,
+              list: json.map((item) => TicketDetailResponse.fromJson(item as Map<String, dynamic>)).toList(),
+            );
+          }
+          // 如果json是带分页信息的对象
+          return ApiPaginationResponse<TicketDetailResponse>.fromJson(
+            json,
+            (data) => TicketDetailResponse.fromJson(data as Map<String, dynamic>),
           );
-        }
-        // 如果json是带分页信息的对象
-        return ApiPaginationResponse<TicketDetailResponse>.fromJson(
-          json,
-          (data) => TicketDetailResponse.fromJson(data as Map<String, dynamic>),
-        );
-      },
-    ).then((res) {
+        },
+      );
+
       if (mounted) {
         setState(() {
           if (refresh) {
             data = res.data?.list ?? [];
-            currentPage = 1;
+            currentPage = 2; // 下次加载第2页
+            totalCount = res.data?.total ?? 0; // 获取总条数
+            hasMore = data.length < totalCount; // 当前数据条数小于总条数说明还有更多
           } else {
-            data.addAll(res.data?.list ?? []);
-            currentPage++;
+            // 只有在有新数据时才添加
+            if (res.data?.list != null && res.data!.list!.isNotEmpty) {
+              data.addAll(res.data!.list!);
+              currentPage++;
+              hasMore = data.length < totalCount; // 当前数据条数小于总条数说明还有更多
+            } else {
+              hasMore = false; // 没有数据了
+            }
           }
         });
       }
-    }).whenComplete(() {
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          error = true;
+        });
+      }
+    } finally {
       if (mounted) {
         setState(() {
           loading = false;
         });
       }
-    });
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    easyRefreshController = EasyRefreshController(
+      controlFinishRefresh: true,
+      controlFinishLoad: true,
+    );
     getData();
+  }
+
+  @override
+  void dispose() {
+    easyRefreshController.dispose();
+    super.dispose();
   }
 
 
@@ -133,7 +164,7 @@ class _PageState extends State<Ticket> {
       final dateTime = DateTime.parse('$dateString $timeString');
       final jiffy = Jiffy.parseFromDateTime(dateTime);
       final weekday = _getWeekdayText(dateTime.weekday);
-      return '${jiffy.format(pattern: 'MM月dd日')} $weekday';
+      return '${jiffy.format(pattern: 'yyyy年MM月dd日')} $weekday';
     } catch (e) {
       return S.of(context).ticket_time_formatError;
     }
@@ -194,9 +225,9 @@ class _PageState extends State<Ticket> {
   }
 
 
-  Widget _buildTicketCard(TicketDetailResponse ticket) {
+  Widget _buildTicketCard(TicketDetailResponse ticket, int index) {
     return GestureDetector(
-      onTap: () {
+            onTap: () {
         context.pushNamed(
           'orderDetail',
           queryParameters: {
@@ -248,6 +279,7 @@ class _PageState extends State<Ticket> {
                 child: Column(
                 children: [
                   // 票头部分 - 电影信息
+                 
                   Container(
                     height: 240.h,
                     child: Stack(
@@ -328,25 +360,6 @@ class _PageState extends State<Ticket> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       SizedBox(height: 16.h),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.25),
-                                          borderRadius: BorderRadius.circular(20.r),
-                                          border: Border.all(
-                                            color: Colors.white.withOpacity(0.5),
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          ticket.specName ?? '',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 22.sp,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -402,12 +415,43 @@ class _PageState extends State<Ticket> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   SizedBox(height: 4.h),
-                                  Text(
-                                    ticket.theaterHallName ?? '',
-                                    style: TextStyle(
-                                      fontSize: 24.sp,
-                                      color: Colors.grey.shade600,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        ticket.theaterHallName ?? '',
+                                        style: TextStyle(
+                                          fontSize: 24.sp,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      if (ticket.specName != null && ticket.specName!.isNotEmpty) ...[
+                                        SizedBox(width: 12.w),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+                                            ),
+                                            borderRadius: BorderRadius.circular(12.r),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Color(0xFFFFD700).withOpacity(0.3),
+                                                blurRadius: 8,
+                                                offset: Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Text(
+                                            ticket.specName!,
+                                            style: TextStyle(
+                                              fontSize: 20.sp,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ],
                               ),
@@ -462,11 +506,11 @@ class _PageState extends State<Ticket> {
                                 children: [
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-                                    decoration: BoxDecoration(
+              decoration: BoxDecoration(
                                       color: Color(0xFF667EEA).withOpacity(0.1),
                                       borderRadius: BorderRadius.circular(6.r),
-                                    ),
-                                    child: Row(
+              ),
+              child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Icon(
@@ -488,11 +532,11 @@ class _PageState extends State<Ticket> {
                                   ),
                                   SizedBox(height: 8.h),
                                   Text(
-                                    _formatTime(ticket.startTime),
+                                    "${_formatTime(ticket.startTime)} ~ ${_formatTime(ticket.endTime)}",
                                     style: TextStyle(
-                                      fontSize: 48.sp,
+                                      fontSize: 32.sp,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF667EEA),
+                                      color: const Color(0xFF667EEA),
                                       letterSpacing: 2,
                                       height: 1,
                                     ),
@@ -528,7 +572,7 @@ class _PageState extends State<Ticket> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                children: [
                                   Text(
                                     S.of(context).ticket_ticketCount,
                                     style: TextStyle(
@@ -540,7 +584,7 @@ class _PageState extends State<Ticket> {
                                   Text(
                                     '${ticket.seat?.length ?? 0} ${S.of(context).ticket_tickets}',
                                     style: TextStyle(
-                                      fontSize: 28.sp,
+                    fontSize: 28.sp,
                                       fontWeight: FontWeight.bold,
                                       color: Color(0xFF323233),
                                     ),
@@ -554,9 +598,9 @@ class _PageState extends State<Ticket> {
                     ),
                   ),
                 ],
-                ),
               ),
             ),
+          ),
             
             // QR码图标装饰（右上角）
             // Positioned(
@@ -658,12 +702,12 @@ class _PageState extends State<Ticket> {
           ),
         ],
       ),
-      body: loading && data.isEmpty
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : data.isEmpty
-              ? Center(
+      
+      body: AppErrorWidget(
+        loading: loading,
+        error: error,
+        empty: !loading && !error && data.isEmpty,
+        emptyWidget: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -708,27 +752,38 @@ class _PageState extends State<Ticket> {
                       ),
                     ],
                   ),
-                )
-              : EasyRefresh.builder(
+                ),
+        child: EasyRefresh.builder(
+                  controller: easyRefreshController,
                   header: customHeader(context),
-                  footer: customFooter(context),
+                  footer: customFooter(context), // 始终显示footer
                   onRefresh: () async {
-                    getData(refresh: true);
+                    await getData(refresh: true);
+                    easyRefreshController.finishRefresh(IndicatorResult.success);
                   },
                   onLoad: () async {
-                    getData(refresh: false);
+                    if (hasMore) {
+                      await getData(refresh: false);
+                      if (hasMore) {
+                        easyRefreshController.finishLoad(IndicatorResult.success, true);
+                      } else {
+                        easyRefreshController.finishLoad(IndicatorResult.noMore, true);
+                      }
+                    } else {
+                      easyRefreshController.finishLoad(IndicatorResult.noMore, true);
+                    }
                   },
                   childBuilder: (context, physics) {
                     return ListView.builder(
                       physics: physics,
                       itemCount: data.length,
                       itemBuilder: (context, index) {
-                        return _buildTicketCard(data[index]);
+                        return _buildTicketCard(data[index], index);
                       },
                     );
                   },
                 ),
-    );
+    ));
   }
 }
 
