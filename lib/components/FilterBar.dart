@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../generated/l10n.dart';
 
 class FilterValue {
   final String id;
@@ -49,6 +50,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
   int? _activeFilterIndex;
   late List<AnimationController> _arrowControllers;
   void Function(void Function())? _overlayRebuild;
+  bool _isConfirming = false; // 添加确认状态标志
 
   // 三级选中ID
   String? selected1;
@@ -68,7 +70,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
       widget.filters.length,
       (index) => AnimationController(
         vsync: this,
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 150), // 减少动画时间
         lowerBound: 0,
         upperBound: 0.5,
       ),
@@ -77,11 +79,19 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(widget.filters.length, (index) {
+    return PopScope(
+      canPop: _overlayEntry == null,
+      onPopInvoked: (didPop) {
+        if (!didPop && _overlayEntry != null) {
+          _hideDropdown();
+        }
+      },
+      child: Row(
+        children: List.generate(widget.filters.length, (index) {
         final filter = widget.filters[index];
         final display = _getDisplayText(filter);
         final isActive = _activeFilterIndex == index;
+        final hasSelection = display.isNotEmpty; // 有选中值时高亮
 
         return Expanded(
           child: GestureDetector(
@@ -94,7 +104,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                   if (mounted) {
                     setState(() {
                       _activeFilterIndex = index;
-                      _tempSelected = List.from(selected[filter.key]!);
+                      _tempSelected = List.from(selected[filter.key] ?? []);
                       for (int i = 0; i < _arrowControllers.length; i++) {
                         if (i == index) {
                           _arrowControllers[i].forward();
@@ -111,26 +121,18 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
               }
             },
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-              margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
+              duration: const Duration(milliseconds: 150), // 减少动画时间
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
+              // margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                gradient: isActive 
-                  ? LinearGradient(
-                      colors: [const Color(0xFFFF6B6B), const Color(0xFFEE5A6F)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    )
-                  : null,
-                color: isActive ? null : Colors.white,
+                color: (isActive || hasSelection) ? Color(0xFFFF6B6B) : Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: isActive 
+                    color: (isActive || hasSelection)
                       ? const Color(0xFFFF6B6B).withOpacity(0.3) 
                       : Colors.black.withOpacity(0.05),
-                    blurRadius: isActive ? 8 : 4,
-                    offset: Offset(0, isActive ? 3 : 2),
+                    blurRadius: (isActive || hasSelection) ? 8 : 4,
+                    offset: Offset(0, (isActive || hasSelection) ? 3 : 2),
                   ),
                 ],
               ),
@@ -141,8 +143,8 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                     child: Text(
                       filter.title,
                       style: TextStyle(
-                        fontWeight: isActive ? FontWeight.w700 : FontWeight.w600,
-                        color: isActive ? Colors.white : const Color(0xFF323233),
+                        fontWeight: (isActive || hasSelection) ? FontWeight.w700 : FontWeight.w600,
+                        color: (isActive || hasSelection) ? Colors.white : const Color(0xFF323233),
                         fontSize: 26.sp,
                         letterSpacing: 0.5,
                       ),
@@ -156,7 +158,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                         display,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: isActive ? Colors.white.withOpacity(0.9) : const Color(0xFFFF6B6B),
+                          color: (isActive || hasSelection) ? Colors.white : const Color(0xFFFF6B6B),
                           fontSize: 22.sp,
                           fontWeight: FontWeight.w500,
                         ),
@@ -172,7 +174,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                         child: Icon(
                           Icons.keyboard_arrow_down_rounded,
                           size: 28.sp,
-                          color: isActive ? Colors.white : Colors.grey.shade600,
+                          color: (isActive || hasSelection) ? Colors.white : Colors.grey.shade600,
                         ),
                       );
                     },
@@ -183,6 +185,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
           ),
         );
       }),
+      ),
     );
   }
 
@@ -206,12 +209,21 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
   }
 
   void _showDropdown(FilterOption filter, int index) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return; // 添加 mounted 检查
-      _tempSelected = List.from(selected[filter.key]!);
-      _activeFilterIndex = index;
-      _arrowControllers[index].forward();
+    // 立即更新状态，提供即时反馈
+    if (!mounted) return;
+    _tempSelected = List.from(selected[filter.key] ?? []);
+    _activeFilterIndex = index;
+    _arrowControllers[index].forward();
 
+    // 立即更新UI状态
+    if (mounted) {
+      setState(() {});
+    }
+
+    // 使用微任务而不是PostFrameCallback，更快响应
+    Future.microtask(() {
+      if (!mounted) return;
+      
       final key = _filterKeys[index];
       final ctx = key.currentContext;
       if (ctx == null) return;
@@ -226,15 +238,15 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
         selected3 = null;
 
         // ⚠️ 查找已有选中项（如果有）
-        if (selected[filter.key]!.isNotEmpty) {
-          String lastId = selected[filter.key]!.last;
+        if ((selected[filter.key] ?? []).isNotEmpty) {
+          String lastId = (selected[filter.key] ?? []).last;
           _resolveSelectedIds(filter.values, lastId);
         }
 
         // ⚠️ 新建 TabController，并强制 index = 0
         _nestedTabController?.dispose();
         _nestedTabController = TabController(length: 3, vsync: this, initialIndex: 0);
-        _nestedTabController!.addListener(() {
+        _nestedTabController?.addListener(() {
           if (mounted) {
             _overlayRebuild?.call(() {});
           }
@@ -247,6 +259,47 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
         setState(() {});
       }
     });
+  }
+
+  void _confirmSelection(FilterOption filter) {
+    if (_isConfirming) return; // 防止重复确认
+    _isConfirming = true;
+    
+    if (filter.nested) {
+      // 嵌套筛选确认逻辑
+      List<String> selectedIds = [];
+      if (selected1 != null) selectedIds.add(selected1!);
+      if (selected2 != null) selectedIds.add(selected2!);
+      if (selected3 != null) selectedIds.add(selected3!);
+      
+      selected[filter.key] = selectedIds;
+    } else {
+      // 普通筛选确认逻辑
+      if (filter.multi) {
+        selected[filter.key] = List<String>.from(_tempSelected);
+      } else {
+        selected[filter.key] = _tempSelected;
+      }
+    }
+    
+    // 先隐藏下拉菜单，避免闪烁
+    _hideDropdown();
+    
+    // 延迟执行回调，确保UI更新完成后再触发父组件状态更新
+    Future.microtask(() {
+      widget.onConfirm(selected);
+      _isConfirming = false; // 重置确认状态
+    });
+  }
+
+  bool _canConfirm(FilterOption filter) {
+    if (filter.nested) {
+      // 嵌套筛选至少需要选择到第二级
+      return selected2 != null;
+    } else {
+      // 普通筛选至少需要选择一个选项
+      return _tempSelected.isNotEmpty;
+    }
   }
 
   void _resolveSelectedIds(List<FilterValue> values, String targetId) {
@@ -289,6 +342,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
     _overlayEntry?.remove();
     _overlayEntry = null;
     _activeFilterIndex = null;
+    // 只在必要时调用setState，避免不必要的重建
     if (mounted) {
       setState(() {});
     }
@@ -301,13 +355,20 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
       builder: (context) {
         return Stack(
           children: [
-            Positioned.fill(
+            // 遮罩只覆盖筛选框下方的区域，不遮挡header和筛选框
+            Positioned(
+              left: 0,
               top: offset.dy + size.height,
+              right: 0,
+              bottom: 0,
               child: GestureDetector(
                 onTap: _hideDropdown,
-                child: Container(color: Colors.black.withOpacity(0.5)),
+                child: Container(
+                  color: Colors.black.withOpacity(0.3),
+                ),
               ),
             ),
+            // 弹窗内容
             Positioned(
               left: 0,
               top: offset.dy + size.height,
@@ -350,7 +411,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                                           color: isSelected ? Colors.red : Colors.black87)),
                                   trailing: isSelected ? const Icon(Icons.check, color: Colors.red) : null,
                                   onTap: () {
-                                    _overlayRebuild!(() {
+                                    _overlayRebuild?.call(() {
                                       if (activeFilter.multi) {
                                         isSelected ? _tempSelected.remove(value.id) : _tempSelected.add(value.id);
                                       } else {
@@ -379,7 +440,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     onPressed: () {
-                                      _overlayRebuild!(() => _tempSelected.clear());
+                                      _overlayRebuild?.call(() => _tempSelected.clear());
                                     },
                                     child: Text('重置'),
                                   ),
@@ -388,7 +449,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                                 Expanded(
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
+                                      backgroundColor: _canConfirm(activeFilter) ? Colors.red : Colors.grey.shade300,
                                       foregroundColor: Colors.white,
                                       padding:
                                           EdgeInsets.symmetric(vertical: 12.h),
@@ -396,15 +457,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                                         borderRadius: BorderRadius.circular(50.r),
                                       ),
                                     ),
-                                    onPressed: () {
-                                      if (activeFilter.multi) {
-                                        selected[activeFilter.key] = List<String>.from(_tempSelected);
-                                      } else {
-                                        selected[activeFilter.key] = _tempSelected;
-                                      }
-                                      widget.onConfirm(selected);
-                                      _hideDropdown();
-                                    },
+                                    onPressed: _canConfirm(activeFilter) ? () => _confirmSelection(activeFilter) : null,
                                     child: Text('确认'),
                                   ),
                                 )
@@ -438,87 +491,96 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
 
   return Column(
     children: [
-      TabBar(
-        controller: _nestedTabController,
-        isScrollable: true,
-        labelColor: Colors.red,
-        unselectedLabelColor: Colors.black,
-        indicatorColor: Colors.red,
-        indicatorWeight: 3,
-        dividerColor: Colors.grey.shade200,
-        onTap: (index) {
-          // 禁止点击未解锁的Tab
-          if (index == 1 && (!hasLevel2 || selected1 == null)) {
-            _nestedTabController!.animateTo(0);
-            return;
-          }
-          if (index == 2 && (!hasLevel3 || selected2 == null)) {
-            _nestedTabController!.animateTo(hasLevel2 && selected1 != null ? 1 : 0);
-            return;
-          }
-        },
-        tabs: <Widget>[
-          Tab(text: selected1 != null ? _getNameById(selected1!, filter.values) : '请选择'),
-          Tab(text: (selected2 != null && hasLevel2) ? _getNameById(selected2!, filter.values) : '请选择'),
-          Tab(text: (selected3 != null && hasLevel3) ? _getNameById(selected3!, filter.values) : '请选择'),
-        ],
-      ),
-      Expanded(
-        child: TabBarView(
+      if (_nestedTabController != null) ...[
+        TabBar(
           controller: _nestedTabController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            ListView(
-              children: level1List.map<Widget>((item) {
-                final isSelected = selected1 == item.id;
-                return ListTile(
-                  title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
-                  onTap: () {
-                    _overlayRebuild?.call(() {
-                      selected1 = item.id;
-                      selected2 = null;
-                      selected3 = null;
-                      _nestedTabController!.animateTo( hasLevel2 ? 1 : 0 );
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-            hasLevel2
-                ? ListView(
-                    children: level2List.map<Widget>((item) {
-                      final isSelected = selected2 == item.id;
-                      return ListTile(
-                        title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
-                        onTap: () {
-                          _overlayRebuild?.call(() {
-                            selected2 = item.id;
-                            selected3 = null;
-                            _nestedTabController!.animateTo(hasLevel3 ? 2 : 1);
-                          });
-                        },
-                      );
-                    }).toList(),
-                  )
-                : Center(child: Text('暂无数据')),
-            hasLevel3
-                ? ListView(
-                    children: level3List.map<Widget>((item) {
-                      final isSelected = selected3 == item.id;
-                      return ListTile(
-                        title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
-                        onTap: () {
-                          _overlayRebuild?.call(() {
-                            selected3 = item.id;
-                          });
-                        },
-                      );
-                    }).toList(),
-                  )
-                : Center(child: Text('暂无数据')),
+          isScrollable: true,
+          labelColor: Colors.red,
+          unselectedLabelColor: Colors.black,
+          indicatorColor: Colors.red,
+          indicatorWeight: 3,
+          dividerColor: Colors.grey.shade200,
+          onTap: (index) {
+            // 禁止点击未解锁的Tab
+            if (index == 1 && (!hasLevel2 || selected1 == null)) {
+              _nestedTabController?.animateTo(0);
+              return;
+            }
+            if (index == 2 && (!hasLevel3 || selected2 == null)) {
+              _nestedTabController?.animateTo(hasLevel2 && selected1 != null ? 1 : 0);
+              return;
+            }
+          },
+          tabs: <Widget>[
+            Tab(text: selected1 != null ? _getNameById(selected1!, filter.values) : S.of(context).common_components_filterBar_pleaseSelect),
+            Tab(text: (selected2 != null && hasLevel2) ? _getNameById(selected2!, filter.values) : S.of(context).common_components_filterBar_pleaseSelect),
+            Tab(text: (selected3 != null && hasLevel3) ? _getNameById(selected3!, filter.values) : S.of(context).common_components_filterBar_pleaseSelect),
           ],
         ),
-      ),
+        Expanded(
+          child: TabBarView(
+            controller: _nestedTabController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              ListView(
+                children: level1List.map<Widget>((item) {
+                  final isSelected = selected1 == item.id;
+                  return ListTile(
+                    title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                    onTap: () {
+                      _overlayRebuild?.call(() {
+                        selected1 = item.id;
+                        selected2 = null;
+                        selected3 = null;
+                        _nestedTabController?.animateTo( hasLevel2 ? 1 : 0 );
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+              hasLevel2
+                  ? ListView(
+                      children: level2List.map<Widget>((item) {
+                        final isSelected = selected2 == item.id;
+                        return ListTile(
+                          title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                          onTap: () {
+                            _overlayRebuild?.call(() {
+                              selected2 = item.id;
+                              selected3 = null;
+                              _nestedTabController?.animateTo(hasLevel3 ? 2 : 1);
+                            });
+                          },
+                        );
+                      }).toList(),
+                    )
+                  : Center(child: Text('暂无数据')),
+              hasLevel3
+                  ? ListView(
+                      children: level3List.map<Widget>((item) {
+                        final isSelected = selected3 == item.id;
+                        return ListTile(
+                          title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                          onTap: () {
+                            _overlayRebuild?.call(() {
+                              selected3 = item.id;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    )
+                  : Center(child: Text('暂无数据')),
+            ],
+          ),
+        ),
+      ] else ...[
+        // 如果TabController还没有初始化，显示加载状态
+        Expanded(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      ],
       Divider(height: 1, color: Colors.grey.shade200),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
@@ -541,33 +603,22 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                     selected3 = null;
                   });
                 },
-                child: Text('重置'),
+                child: Text(S.of(context).common_components_filterBar_reset),
               ),
             ),
             SizedBox(width: 16.w),
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
+                  backgroundColor: _canConfirm(filter) ? Colors.red : Colors.grey.shade300,
                   foregroundColor: Colors.white,
                   padding: EdgeInsets.symmetric(vertical: 12.h),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50.r),
                   ),
                 ),
-                onPressed: (selected2 != null)
-                    ? () {
-                        List<String> selectedIds = [];
-                        if (selected1 != null) selectedIds.add(selected1!);
-                        if (selected2 != null) selectedIds.add(selected2!);
-                        if (selected3 != null) selectedIds.add(selected3!);
-
-                        selected[filter.key] = selectedIds;
-                        widget.onConfirm(selected);
-                        _hideDropdown();
-                      }
-                    : null,
-                child: const Text('确认'),
+                onPressed: _canConfirm(filter) ? () => _confirmSelection(filter) : null,
+                child: Text(S.of(context).common_components_filterBar_confirm),
               ),
             )
           ],
