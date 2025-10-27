@@ -73,6 +73,47 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     }
   }
 
+  // 获取座位状态信息
+  Map<String, dynamic> _getSeatStatusInfo(TheaterHallShowTime showTime) {
+    int seatStatus = showTime.seatStatus ?? 0;
+    int availableSeats = showTime.availableSeats ?? 0;
+    int totalSeats = showTime.totalSeats ?? 0;
+    
+    String statusText;
+    Color statusColor;
+    IconData statusIcon;
+    
+    switch (seatStatus) {
+      case 0: // 充足
+        statusText = S.of(context).showTimeDetail_seatStatus_available;
+        statusColor = Colors.green;
+        statusIcon = Icons.check_circle_outline;
+        break;
+      case 1: // 紧张
+        statusText = S.of(context).showTimeDetail_seatStatus_tight;
+        statusColor = Colors.orange;
+        statusIcon = Icons.warning_amber_outlined;
+        break;
+      case 2: // 售罄
+        statusText = S.of(context).showTimeDetail_seatStatus_soldOut;
+        statusColor = Colors.red;
+        statusIcon = Icons.cancel_outlined;
+        break;
+      default:
+        statusText = S.of(context).showTimeDetail_seatStatus_available;
+        statusColor = Colors.green;
+        statusIcon = Icons.check_circle_outline;
+    }
+    
+    return {
+      'text': statusText,
+      'color': statusColor,
+      'icon': statusIcon,
+      'availableSeats': availableSeats,
+      'totalSeats': totalSeats,
+    };
+  }
+
   getData(int movieId) {
     ApiRequest().request(
       path: '/app/cinema/movie/showTime',
@@ -648,6 +689,53 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                             ),
                                                           ],
                                                         ),
+                                                      ),
+                                                      // 座位状态
+                                                      Builder(
+                                                        builder: (context) {
+                                                          final seatInfo = _getSeatStatusInfo(children);
+                                                          return Container(
+                                                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                                            decoration: BoxDecoration(
+                                                              color: seatInfo['color'].withOpacity(0.1),
+                                                              borderRadius: BorderRadius.circular(8.r),
+                                                              border: Border.all(
+                                                                color: seatInfo['color'].withOpacity(0.3),
+                                                                width: 1,
+                                                              ),
+                                                            ),
+                                                            child: Row(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                Icon(
+                                                                  seatInfo['icon'],
+                                                                  size: 18.sp,
+                                                                  color: seatInfo['color'],
+                                                                ),
+                                                                SizedBox(width: 6.w),
+                                                                Text(
+                                                                  seatInfo['text'],
+                                                                  style: TextStyle(
+                                                                    fontSize: 22.sp,
+                                                                    color: seatInfo['color'],
+                                                                    fontWeight: FontWeight.w600,
+                                                                  ),
+                                                                ),
+                                                                if (seatInfo['availableSeats'] > 0 && seatInfo['totalSeats'] > 0) ...[
+                                                                  SizedBox(width: 4.w),
+                                                                  Text(
+                                                                    '(${seatInfo['availableSeats']}/${seatInfo['totalSeats']})',
+                                                                    style: TextStyle(
+                                                                      fontSize: 20.sp,
+                                                                      color: seatInfo['color'].withOpacity(0.7),
+                                                                      fontWeight: FontWeight.w500,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
                                                       ),
                                                     ],
                                                   ),

@@ -66,6 +66,11 @@ class TheaterHallShowTime {
 
     final List<ShowTimeSubtitle>? subtitle;
 
+    // 添加座位状态相关字段
+    final int? seatStatus; // 座位状态：0-充足，1-紧张，2-售罄
+    final int? availableSeats; // 可用座位数
+    final int? totalSeats; // 总座位数
+
     TheaterHallShowTime({
         this.id,
         this.theaterHallId,
@@ -76,6 +81,9 @@ class TheaterHallShowTime {
         this.movieShowTimeTags,
         this.showTimeTags,
         this.subtitle,
+        this.seatStatus,
+        this.availableSeats,
+        this.totalSeats,
     });
 
     factory TheaterHallShowTime.fromJson(Map<String, dynamic> json) => _$TheaterHallShowTimeFromJson(json);

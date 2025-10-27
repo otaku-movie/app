@@ -29,13 +29,13 @@ class Cinema {
     
     final String? cinemaAddress;
     
-    final List<Time>? time;
+    final List<ShowTime>? showTimes;
 
     Cinema({
         this.cinemaId,
         this.cinemaName,
         this.cinemaAddress,
-        this.time,
+        this.showTimes,
     });
 
     factory Cinema.fromJson(Map<String, dynamic> json) => _$CinemaFromJson(json);
@@ -44,18 +44,51 @@ class Cinema {
 }
 
 @JsonSerializable(fieldRename: FieldRename.none)
-class Time {
-    
-    final DateTime? startTime;
-    
-    final DateTime? endTime;
+class ShowTime {
+    @JsonKey(name: "id")
+    int? id;
+    @JsonKey(name: "theaterHallId")
+    int? theaterHallId;
+    @JsonKey(name: "theaterHallName")
+    String? theaterHallName;
+    @JsonKey(name: "startTime")
+    DateTime? startTime;
+    @JsonKey(name: "endTime")
+    DateTime? endTime;
+    @JsonKey(name: "specName")
+    String? specName;
+    @JsonKey(name: "totalSeats")
+    int? totalSeats;
+    @JsonKey(name: "selectedSeats")
+    int? selectedSeats;
+    @JsonKey(name: "availableSeats")
+    int? availableSeats;
+    @JsonKey(name: "subtitleId")
+    dynamic subtitleId;
+    @JsonKey(name: "showTimeTagId")
+    dynamic showTimeTagId;
+    @JsonKey(name: "subtitle")
+    dynamic subtitle;
+    @JsonKey(name: "showTimeTags")
+    dynamic showTimeTags;
 
-    Time({
+    ShowTime({
+        this.id,
+        this.theaterHallId,
+        this.theaterHallName,
         this.startTime,
         this.endTime,
+        this.specName,
+        this.totalSeats,
+        this.selectedSeats,
+        this.availableSeats,
+        this.subtitleId,
+        this.showTimeTagId,
+        this.subtitle,
+        this.showTimeTags,
     });
 
-    factory Time.fromJson(Map<String, dynamic> json) => _$TimeFromJson(json);
+    factory ShowTime.fromJson(Map<String, dynamic> json) => _$ShowTimeFromJson(json);
 
-    Map<String, dynamic> toJson() => _$TimeToJson(this);
+    Map<String, dynamic> toJson() => _$ShowTimeToJson(this);
 }
