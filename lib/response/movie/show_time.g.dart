@@ -24,8 +24,8 @@ Cinema _$CinemaFromJson(Map<String, dynamic> json) => Cinema(
       cinemaId: (json['cinemaId'] as num?)?.toInt(),
       cinemaName: json['cinemaName'] as String?,
       cinemaAddress: json['cinemaAddress'] as String?,
-      time: (json['time'] as List<dynamic>?)
-          ?.map((e) => Time.fromJson(e as Map<String, dynamic>))
+      showTimes: (json['showTimes'] as List<dynamic>?)
+          ?.map((e) => ShowTime.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -33,19 +33,41 @@ Map<String, dynamic> _$CinemaToJson(Cinema instance) => <String, dynamic>{
       'cinemaId': instance.cinemaId,
       'cinemaName': instance.cinemaName,
       'cinemaAddress': instance.cinemaAddress,
-      'time': instance.time?.map((e) => e.toJson()).toList(),
+      'showTimes': instance.showTimes?.map((e) => e.toJson()).toList(),
     };
 
-Time _$TimeFromJson(Map<String, dynamic> json) => Time(
+ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
+      id: (json['id'] as num?)?.toInt(),
+      theaterHallId: (json['theaterHallId'] as num?)?.toInt(),
+      theaterHallName: json['theaterHallName'] as String?,
       startTime: json['startTime'] == null
           ? null
           : DateTime.parse(json['startTime'] as String),
       endTime: json['endTime'] == null
           ? null
           : DateTime.parse(json['endTime'] as String),
+      specName: json['specName'] as String?,
+      totalSeats: (json['totalSeats'] as num?)?.toInt(),
+      selectedSeats: (json['selectedSeats'] as num?)?.toInt(),
+      availableSeats: (json['availableSeats'] as num?)?.toInt(),
+      subtitleId: json['subtitleId'],
+      showTimeTagId: json['showTimeTagId'],
+      subtitle: json['subtitle'],
+      showTimeTags: json['showTimeTags'],
     );
 
-Map<String, dynamic> _$TimeToJson(Time instance) => <String, dynamic>{
+Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
+      'id': instance.id,
+      'theaterHallId': instance.theaterHallId,
+      'theaterHallName': instance.theaterHallName,
       'startTime': instance.startTime?.toIso8601String(),
       'endTime': instance.endTime?.toIso8601String(),
+      'specName': instance.specName,
+      'totalSeats': instance.totalSeats,
+      'selectedSeats': instance.selectedSeats,
+      'availableSeats': instance.availableSeats,
+      'subtitleId': instance.subtitleId,
+      'showTimeTagId': instance.showTimeTagId,
+      'subtitle': instance.subtitle,
+      'showTimeTags': instance.showTimeTags,
     };
