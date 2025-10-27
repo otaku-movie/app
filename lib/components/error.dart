@@ -6,6 +6,8 @@ import 'package:otaku_movie/generated/l10n.dart';
 class AppErrorWidget extends StatefulWidget {
   final bool loading;
   final bool error;
+  final bool empty;
+  final Widget? emptyWidget;
   final Widget child;
   final VoidCallback? onRetry;
   final String? errorMessage;
@@ -14,6 +16,8 @@ class AppErrorWidget extends StatefulWidget {
     super.key,
     this.loading = false,
     this.error = false, 
+    this.empty = false,
+    this.emptyWidget,
     required this.child,
     this.onRetry,
     this.errorMessage,
@@ -48,8 +52,11 @@ class _PageState extends State<AppErrorWidget> {
           ],
         ),
       );
-    } 
-    
+    }
+
+    if (widget.empty) {
+      return widget.emptyWidget ?? Container();
+    }
     if (widget.error) {
       return Center(
         child: Container(
@@ -102,7 +109,7 @@ class _PageState extends State<AppErrorWidget> {
                 ElevatedButton.icon(
                   onPressed: widget.onRetry,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF667EEA),
+                    backgroundColor: const Color(0xFF667EEA),
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
                     shape: RoundedRectangleBorder(
