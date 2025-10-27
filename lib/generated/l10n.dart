@@ -210,6 +210,36 @@ class S {
     );
   }
 
+  /// `Seats Available`
+  String get showTimeDetail_seatStatus_available {
+    return Intl.message(
+      'Seats Available',
+      name: 'showTimeDetail_seatStatus_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seats Limited`
+  String get showTimeDetail_seatStatus_tight {
+    return Intl.message(
+      'Seats Limited',
+      name: 'showTimeDetail_seatStatus_tight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sold Out`
+  String get showTimeDetail_seatStatus_soldOut {
+    return Intl.message(
+      'Sold Out',
+      name: 'showTimeDetail_seatStatus_soldOut',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `TEL`
   String get cinemaDetail_tel {
     return Intl.message(
@@ -690,6 +720,96 @@ class S {
     );
   }
 
+  /// `JPY`
+  String get common_unit_jpy {
+    return Intl.message(
+      'JPY',
+      name: 'common_unit_jpy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `pts`
+  String get common_unit_point {
+    return Intl.message(
+      'pts',
+      name: 'common_unit_point',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Crop the picture`
+  String get common_components_cropper_title {
+    return Intl.message(
+      'Crop the picture',
+      name: 'common_components_cropper_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rotate Left`
+  String get common_components_cropper_actions_rotateLeft {
+    return Intl.message(
+      'Rotate Left',
+      name: 'common_components_cropper_actions_rotateLeft',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rotate Right`
+  String get common_components_cropper_actions_rotateRight {
+    return Intl.message(
+      'Rotate Right',
+      name: 'common_components_cropper_actions_rotateRight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Flip`
+  String get common_components_cropper_actions_flip {
+    return Intl.message(
+      'Flip',
+      name: 'common_components_cropper_actions_flip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Undo`
+  String get common_components_cropper_actions_undo {
+    return Intl.message(
+      'Undo',
+      name: 'common_components_cropper_actions_undo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redo`
+  String get common_components_cropper_actions_redo {
+    return Intl.message(
+      'Redo',
+      name: 'common_components_cropper_actions_redo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset`
+  String get common_components_cropper_actions_reset {
+    return Intl.message(
+      'Reset',
+      name: 'common_components_cropper_actions_reset',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pull to refresh`
   String get common_components_easyRefresh_refresh_dragText {
     return Intl.message(
@@ -780,10 +900,10 @@ class S {
     );
   }
 
-  /// `Ready to load more`
+  /// `Loading...`
   String get common_components_easyRefresh_loadMore_readyText {
     return Intl.message(
-      'Ready to load more',
+      'Loading...',
       name: 'common_components_easyRefresh_loadMore_readyText',
       desc: '',
       args: [],
@@ -830,86 +950,6 @@ class S {
     );
   }
 
-  /// `Crop the picture`
-  String get common_components_cropper_title {
-    return Intl.message(
-      'Crop the picture',
-      name: 'common_components_cropper_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rotate Left`
-  String get common_components_cropper_actions_rotateLeft {
-    return Intl.message(
-      'Rotate Left',
-      name: 'common_components_cropper_actions_rotateLeft',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Rotate Right`
-  String get common_components_cropper_actions_rotateRight {
-    return Intl.message(
-      'Rotate Right',
-      name: 'common_components_cropper_actions_rotateRight',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Flip`
-  String get common_components_cropper_actions_flip {
-    return Intl.message(
-      'Flip',
-      name: 'common_components_cropper_actions_flip',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Undo`
-  String get common_components_cropper_actions_undo {
-    return Intl.message(
-      'Undo',
-      name: 'common_components_cropper_actions_undo',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Redo`
-  String get common_components_cropper_actions_redo {
-    return Intl.message(
-      'Redo',
-      name: 'common_components_cropper_actions_redo',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Reset`
-  String get common_components_cropper_actions_reset {
-    return Intl.message(
-      'Reset',
-      name: 'common_components_cropper_actions_reset',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Send Verification Code`
-  String get common_components_sendVerifyCode_send {
-    return Intl.message(
-      'Send Verification Code',
-      name: 'common_components_sendVerifyCode_send',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Verification code sent successfully`
   String get common_components_sendVerifyCode_success {
     return Intl.message(
@@ -920,41 +960,121 @@ class S {
     );
   }
 
-  /// `Couple Seat`
-  String get common_enum_seatType_coupleSeat {
+  /// `Please select`
+  String get common_components_filterBar_pleaseSelect {
     return Intl.message(
-      'Couple Seat',
-      name: 'common_enum_seatType_coupleSeat',
+      'Please select',
+      name: 'common_components_filterBar_pleaseSelect',
       desc: '',
       args: [],
     );
   }
 
-  /// `Wheelchair Seat`
+  /// `Reset`
+  String get common_components_filterBar_reset {
+    return Intl.message(
+      'Reset',
+      name: 'common_components_filterBar_reset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get common_components_filterBar_confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'common_components_filterBar_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monday`
+  String get common_week_monday {
+    return Intl.message(
+      'Monday',
+      name: 'common_week_monday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tuesday`
+  String get common_week_tuesday {
+    return Intl.message(
+      'Tuesday',
+      name: 'common_week_tuesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wednesday`
+  String get common_week_wednesday {
+    return Intl.message(
+      'Wednesday',
+      name: 'common_week_wednesday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thursday`
+  String get common_week_thursday {
+    return Intl.message(
+      'Thursday',
+      name: 'common_week_thursday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friday`
+  String get common_week_friday {
+    return Intl.message(
+      'Friday',
+      name: 'common_week_friday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saturday`
+  String get common_week_saturday {
+    return Intl.message(
+      'Saturday',
+      name: 'common_week_saturday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sunday`
+  String get common_week_sunday {
+    return Intl.message(
+      'Sunday',
+      name: 'common_week_sunday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wheelchair`
   String get common_enum_seatType_wheelChair {
     return Intl.message(
-      'Wheelchair Seat',
+      'Wheelchair',
       name: 'common_enum_seatType_wheelChair',
       desc: '',
       args: [],
     );
   }
 
-  /// `Disabled`
-  String get common_enum_seatType_disabled {
+  /// `Couple Seat`
+  String get common_enum_seatType_coupleSeat {
     return Intl.message(
-      'Disabled',
-      name: 'common_enum_seatType_disabled',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Selected`
-  String get common_enum_seatType_selected {
-    return Intl.message(
-      'Selected',
-      name: 'common_enum_seatType_selected',
+      'Couple Seat',
+      name: 'common_enum_seatType_coupleSeat',
       desc: '',
       args: [],
     );
@@ -980,91 +1100,501 @@ class S {
     );
   }
 
-  /// `Mon`
-  String get common_week_monday {
+  /// `About`
+  String get about_title {
     return Intl.message(
-      'Mon',
-      name: 'common_week_monday',
+      'About',
+      name: 'about_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Tue`
-  String get common_week_tuesday {
+  /// `Version`
+  String get about_version {
     return Intl.message(
-      'Tue',
-      name: 'common_week_tuesday',
+      'Version',
+      name: 'about_version',
       desc: '',
       args: [],
     );
   }
 
-  /// `Wed`
-  String get common_week_wednesday {
+  /// `Committed to providing convenient ticket purchasing experience for movie enthusiasts.`
+  String get about_description {
     return Intl.message(
-      'Wed',
-      name: 'common_week_wednesday',
+      'Committed to providing convenient ticket purchasing experience for movie enthusiasts.',
+      name: 'about_description',
       desc: '',
       args: [],
     );
   }
 
-  /// `Thu`
-  String get common_week_thursday {
+  /// `View Privacy Policy`
+  String get about_privacy_policy {
     return Intl.message(
-      'Thu',
-      name: 'common_week_thursday',
+      'View Privacy Policy',
+      name: 'about_privacy_policy',
       desc: '',
       args: [],
     );
   }
 
-  /// `Fri`
-  String get common_week_friday {
+  /// `© 2025 Otaku Movie All Rights Reserved`
+  String get about_copyright {
     return Intl.message(
-      'Fri',
-      name: 'common_week_friday',
+      '© 2025 Otaku Movie All Rights Reserved',
+      name: 'about_copyright',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sat`
-  String get common_week_saturday {
+  /// `Verification code sent successfully`
+  String get about_components_sendVerifyCode_success {
     return Intl.message(
-      'Sat',
-      name: 'common_week_saturday',
+      'Verification code sent successfully',
+      name: 'about_components_sendVerifyCode_success',
       desc: '',
       args: [],
     );
   }
 
-  /// `Sun`
-  String get common_week_sunday {
+  /// `Please select`
+  String get about_components_filterBar_pleaseSelect {
     return Intl.message(
-      'Sun',
-      name: 'common_week_sunday',
+      'Please select',
+      name: 'about_components_filterBar_pleaseSelect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset`
+  String get about_components_filterBar_reset {
+    return Intl.message(
+      'Reset',
+      name: 'about_components_filterBar_reset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get about_components_filterBar_confirm {
+    return Intl.message(
+      'Confirm',
+      name: 'about_components_filterBar_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get about_components_showTimeList_all {
+    return Intl.message(
+      'All',
+      name: 'about_components_showTimeList_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unnamed`
+  String get about_components_showTimeList_unnamed {
+    return Intl.message(
+      'Unnamed',
+      name: 'about_components_showTimeList_unnamed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data yet`
+  String get about_components_showTimeList_noData {
+    return Intl.message(
+      'No data yet',
+      name: 'about_components_showTimeList_noData',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No showtime information`
+  String get about_components_showTimeList_noShowTimeInfo {
+    return Intl.message(
+      'No showtime information',
+      name: 'about_components_showTimeList_noShowTimeInfo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `There are {count} more showtimes...`
+  String about_components_showTimeList_moreShowTimes(Object count) {
+    return Intl.message(
+      'There are $count more showtimes...',
+      name: 'about_components_showTimeList_moreShowTimes',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Sold Out`
+  String get about_components_showTimeList_seatStatus_soldOut {
+    return Intl.message(
+      'Sold Out',
+      name: 'about_components_showTimeList_seatStatus_soldOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limited`
+  String get about_components_showTimeList_seatStatus_limited {
+    return Intl.message(
+      'Limited',
+      name: 'about_components_showTimeList_seatStatus_limited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available`
+  String get about_components_showTimeList_seatStatus_available {
+    return Intl.message(
+      'Available',
+      name: 'about_components_showTimeList_seatStatus_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification Code`
+  String get about_login_verificationCode {
+    return Intl.message(
+      'Verification Code',
+      name: 'about_login_verificationCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email cannot be empty`
+  String get about_login_email_verify_notNull {
+    return Intl.message(
+      'Email cannot be empty',
+      name: 'about_login_email_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a valid email address`
+  String get about_login_email_verify_isValid {
+    return Intl.message(
+      'Please enter a valid email address',
+      name: 'about_login_email_verify_isValid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get about_login_email_text {
+    return Intl.message(
+      'Email',
+      name: 'about_login_email_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password cannot be empty`
+  String get about_login_password_verify_notNull {
+    return Intl.message(
+      'Password cannot be empty',
+      name: 'about_login_password_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least 6 characters`
+  String get about_login_password_verify_isValid {
+    return Intl.message(
+      'Password must be at least 6 characters',
+      name: 'about_login_password_verify_isValid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get about_login_password_text {
+    return Intl.message(
+      'Password',
+      name: 'about_login_password_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login`
+  String get about_login_loginButton {
+    return Intl.message(
+      'Login',
+      name: 'about_login_loginButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome Back`
+  String get about_login_welcomeText {
+    return Intl.message(
+      'Welcome Back',
+      name: 'about_login_welcomeText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Forgot Password?`
+  String get about_login_forgotPassword {
+    return Intl.message(
+      'Forgot Password?',
+      name: 'about_login_forgotPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `or`
+  String get about_login_or {
+    return Intl.message(
+      'or',
+      name: 'about_login_or',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login with Google`
+  String get about_login_googleLogin {
+    return Intl.message(
+      'Login with Google',
+      name: 'about_login_googleLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don't have an account?`
+  String get about_login_noAccount {
+    return Intl.message(
+      'Don\'t have an account?',
+      name: 'about_login_noAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Register`
+  String get about_register_registerButton {
+    return Intl.message(
+      'Register',
+      name: 'about_register_registerButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Username cannot be empty`
+  String get about_register_username_verify_notNull {
+    return Intl.message(
+      'Username cannot be empty',
+      name: 'about_register_username_verify_notNull',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Username`
+  String get about_register_username_text {
+    return Intl.message(
+      'Username',
+      name: 'about_register_username_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Password`
+  String get about_register_repeatPassword_text {
+    return Intl.message(
+      'Confirm Password',
+      name: 'about_register_repeatPassword_text',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match`
+  String get about_register_passwordNotMatchRepeatPassword {
+    return Intl.message(
+      'Passwords do not match',
+      name: 'about_register_passwordNotMatchRepeatPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid verification code format`
+  String get about_register_verifyCode_verify_isValid {
+    return Intl.message(
+      'Invalid verification code format',
+      name: 'about_register_verifyCode_verify_isValid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send`
+  String get about_register_send {
+    return Intl.message(
+      'Send',
+      name: 'about_register_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already have an account?`
+  String get about_register_haveAccount {
+    return Intl.message(
+      'Already have an account?',
+      name: 'about_register_haveAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login here`
+  String get about_register_loginHere {
+    return Intl.message(
+      'Login here',
+      name: 'about_register_loginHere',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Area`
+  String get about_movieShowList_dropdown_area {
+    return Intl.message(
+      'Area',
+      name: 'about_movieShowList_dropdown_area',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Screen Spec`
+  String get about_movieShowList_dropdown_screenSpec {
+    return Intl.message(
+      'Screen Spec',
+      name: 'about_movieShowList_dropdown_screenSpec',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subtitle`
+  String get about_movieShowList_dropdown_subtitle {
+    return Intl.message(
+      'Subtitle',
+      name: 'about_movieShowList_dropdown_subtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Couple Seat`
+  String get enum_seatType_coupleSeat {
+    return Intl.message(
+      'Couple Seat',
+      name: 'enum_seatType_coupleSeat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wheelchair Seat`
+  String get enum_seatType_wheelChair {
+    return Intl.message(
+      'Wheelchair Seat',
+      name: 'enum_seatType_wheelChair',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disabled`
+  String get enum_seatType_disabled {
+    return Intl.message(
+      'Disabled',
+      name: 'enum_seatType_disabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Selected`
+  String get enum_seatType_selected {
+    return Intl.message(
+      'Selected',
+      name: 'enum_seatType_selected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Locked`
+  String get enum_seatType_locked {
+    return Intl.message(
+      'Locked',
+      name: 'enum_seatType_locked',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sold`
+  String get enum_seatType_sold {
+    return Intl.message(
+      'Sold',
+      name: 'enum_seatType_sold',
       desc: '',
       args: [],
     );
   }
 
   /// `point`
-  String get common_unit_point {
+  String get unit_point {
     return Intl.message(
       'point',
-      name: 'common_unit_point',
+      name: 'unit_point',
       desc: '',
       args: [],
     );
   }
 
   /// `JPY`
-  String get common_unit_jpy {
+  String get unit_jpy {
     return Intl.message(
       'JPY',
-      name: 'common_unit_jpy',
+      name: 'unit_jpy',
       desc: '',
       args: [],
     );
@@ -2390,6 +2920,126 @@ class S {
     );
   }
 
+  /// `Current Version`
+  String get user_currentVersion {
+    return Intl.message(
+      'Current Version',
+      name: 'user_currentVersion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Latest Version`
+  String get user_latestVersion {
+    return Intl.message(
+      'Latest Version',
+      name: 'user_latestVersion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New version found. Update now?`
+  String get user_updateAvailable {
+    return Intl.message(
+      'New version found. Update now?',
+      name: 'user_updateAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get user_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'user_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get user_update {
+    return Intl.message(
+      'Update',
+      name: 'user_update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Updating`
+  String get user_updating {
+    return Intl.message(
+      'Updating',
+      name: 'user_updating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Downloading update, please wait...`
+  String get user_updateProgress {
+    return Intl.message(
+      'Downloading update, please wait...',
+      name: 'user_updateProgress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update Successful`
+  String get user_updateSuccess {
+    return Intl.message(
+      'Update Successful',
+      name: 'user_updateSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `App has been successfully updated to the latest version!`
+  String get user_updateSuccessMessage {
+    return Intl.message(
+      'App has been successfully updated to the latest version!',
+      name: 'user_updateSuccessMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update Failed`
+  String get user_updateError {
+    return Intl.message(
+      'Update Failed',
+      name: 'user_updateError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An error occurred during update. Please try again later.`
+  String get user_updateErrorMessage {
+    return Intl.message(
+      'An error occurred during update. Please try again later.',
+      name: 'user_updateErrorMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `OK`
+  String get user_ok {
+    return Intl.message(
+      'OK',
+      name: 'user_ok',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Order List`
   String get orderList_title {
     return Intl.message(
@@ -2675,6 +3325,16 @@ class S {
     return Intl.message(
       'Save',
       name: 'userProfile_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click save button to save changes`
+  String get userProfile_edit_tip {
+    return Intl.message(
+      'Click save button to save changes',
+      name: 'userProfile_edit_tip',
       desc: '',
       args: [],
     );

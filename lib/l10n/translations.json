@@ -87,6 +87,23 @@
       "zh": "分",
       "ja": "分",
       "en": "minutes"
+    },
+    "seatStatus": {
+      "available": {
+        "zh": "座位充足",
+        "ja": "座席余裕あり",
+        "en": "Seats Available"
+      },
+      "tight": {
+        "zh": "座位紧张",
+        "ja": "座席残りわずか",
+        "en": "Seats Limited"
+      },
+      "soldOut": {
+        "zh": "已售罄",
+        "ja": "完売",
+        "en": "Sold Out"
+      }
     }
   },
   "cinemaDetail": {
@@ -356,6 +373,7 @@
     }
   },
   "common": {
+    
     "loading": {
       "zh": "加载中...",
       "ja": "読み込み中...",
@@ -376,7 +394,56 @@
       "ja": "再読み込み",
       "en": "Retry"
     },
+    "unit_jpy": {
+      "zh": "日元",
+      "ja": "円",
+      "en": "JPY"
+    },
+    "unit_point": {
+      "zh": "分",
+      "ja": "点",
+      "en": "pts"
+    },
     "components": {
+      "cropper": {
+        "title": {
+          "zh": "裁剪",
+          "ja": "写真をトリミングする",
+          "en": "Crop the picture"
+        },
+        "actions": {
+          "rotateLeft": {
+            "zh": "向左旋转",
+            "ja": "左へ回転",
+            "en": "Rotate Left"
+          },
+          "rotateRight": {
+            "zh": "向右旋转",
+            "ja": "右へ回転",
+            "en": "Rotate Right"
+          },
+          "flip": {
+            "zh": "翻转",
+            "ja": "反転",
+            "en": "Flip"
+          },
+          "undo": {
+            "zh": "撤销",
+            "ja": "元に戻す",
+            "en": "Undo"
+          },
+          "redo": {
+            "zh": "重做",
+            "ja": "やり直し",
+            "en": "Redo"
+          },
+          "reset": {
+            "zh": "重置",
+            "ja": "リセット",
+            "en": "Reset"
+          }
+        }
+      },
       "easyRefresh": {
         "refresh": {
           "dragText": {
@@ -386,7 +453,7 @@
           },
           "armedText": {
             "zh": "松开刷新",
-            "ja": "更新するために離してください",
+            "ja": "更新のために離してください",
             "en": "Release to refresh"
           },
           "readyText": {
@@ -427,13 +494,13 @@
             "en": "Release to load more"
           },
           "readyText": {
-            "zh": "准备加载更多",
-            "ja": "さらに読み込む準備",
-            "en": "Ready to load more"
+            "zh": "正在加载...",
+            "ja": "読み込み中...",
+            "en": "Loading..."
           },
           "processingText": {
             "zh": "加载中...",
-            "ja": "読み込み中...",
+            "ja": "読み込んでいます...",
             "en": "Loading..."
           },
           "processedText": {
@@ -453,60 +520,343 @@
           }
         }
       },
-      "cropper": {
-        "title": {
-          "zh": "裁剪",
-          "ja": "写真をトリミングする",
-          "en": "Crop the picture"
-        },
-        "actions": {
-          "rotateLeft": {
-            "zh": "向左旋转",
-            "ja": "左へ回転",
-            "en": "Rotate Left"
-          },
-          "rotateRight": {
-            "zh": "向右旋转",
-            "ja": "右へ回転",
-            "en": "Rotate Right"
-          },
-          "flip": {
-            "zh": "翻转",
-            "ja": "フリップ",
-            "en": "Flip"
-          },
-          "undo": {
-            "zh": "撤销",
-            "ja": "元に戻す",
-            "en": "Undo"
-          },
-          "redo": {
-            "zh": "恢复撤销",
-            "ja": "やり直す",
-            "en": "Redo"
-          },
-          "reset": {
-            "zh": "重置",
-            "ja": "リセット",
-            "en": "Reset"
-          }
-        }
-      },
       "sendVerifyCode": {
-        "send": {
-          "zh": "发送验证码",
-          "ja": "検証コードを送信",
-          "en": "Send Verification Code"
-        },
         "success": {
           "zh": "验证码发送成功",
           "ja": "認証コードが送信されました",
           "en": "Verification code sent successfully"
         }
+      },
+      "filterBar": {
+        "pleaseSelect": {
+          "zh": "请选择",
+          "ja": "選択してください",
+          "en": "Please select"
+        },
+        "reset": {
+          "zh": "重置",
+          "ja": "リセット",
+          "en": "Reset"
+        },
+        "confirm": {
+          "zh": "确认",
+          "ja": "確認",
+          "en": "Confirm"
+        }
+      }
+    },
+    "week": {
+      "monday": {
+        "zh": "周一",
+        "ja": "月曜日",
+        "en": "Monday"
+      },
+      "tuesday": {
+        "zh": "周二",
+        "ja": "火曜日",
+        "en": "Tuesday"
+      },
+      "wednesday": {
+        "zh": "周三",
+        "ja": "水曜日",
+        "en": "Wednesday"
+      },
+      "thursday": {
+        "zh": "周四",
+        "ja": "木曜日",
+        "en": "Thursday"
+      },
+      "friday": {
+        "zh": "周五",
+        "ja": "金曜日",
+        "en": "Friday"
+      },
+      "saturday": {
+        "zh": "周六",
+        "ja": "土曜日",
+        "en": "Saturday"
+      },
+      "sunday": {
+        "zh": "周日",
+        "ja": "日曜日",
+        "en": "Sunday"
       }
     },
     "enum": {
       "seatType": {
+        "wheelChair": {
+          "zh": "轮椅座",
+          "ja": "車椅子席",
+          "en": "Wheelchair"
+        },
+        "coupleSeat": {
+          "zh": "情侣座",
+          "ja": "カップル席",
+          "en": "Couple Seat"
+        },
+        "locked": {
+          "zh": "锁定",
+          "ja": "ロック",
+          "en": "Locked"
+        },
+        "sold": {
+          "zh": "已售",
+          "ja": "売り切れ",
+          "en": "Sold"
+        }
+      }
+    }
+  },
+  "about": {
+    "title": {
+      "zh": "关于",
+      "ja": "について",
+      "en": "About"
+    },
+    "version": {
+      "zh": "版本号",
+      "ja": "バージョン",
+      "en": "Version"
+    },
+    "description": {
+      "zh": "致力于为电影爱好者提供便捷的购票体验。",
+      "ja": "映画愛好家に便利なチケット購入体験を提供することに専念しています。",
+      "en": "Committed to providing convenient ticket purchasing experience for movie enthusiasts."
+    },
+    "privacy_policy": {
+      "zh": "查看隐私协议",
+      "ja": "プライバシーポリシーを表示",
+      "en": "View Privacy Policy"
+    },
+    "copyright": {
+      "zh": "© 2025 Otaku Movie 版权所有",
+      "ja": "© 2025 Otaku Movie 全著作権所有",
+      "en": "© 2025 Otaku Movie All Rights Reserved"
+    },
+    "components": {
+      "sendVerifyCode": {
+        "success": {
+          "zh": "验证码发送成功",
+          "ja": "認証コードが送信されました",
+          "en": "Verification code sent successfully"
+        }
+      },
+      "filterBar": {
+        "pleaseSelect": {
+          "zh": "请选择",
+          "ja": "選択してください",
+          "en": "Please select"
+        },
+        "reset": {
+          "zh": "重置",
+          "ja": "リセット",
+          "en": "Reset"
+        },
+        "confirm": {
+          "zh": "确认",
+          "ja": "確認",
+          "en": "Confirm"
+        }
+      },
+      "showTimeList": {
+        "all": {
+          "zh": "全部",
+          "ja": "すべて",
+          "en": "All"
+        },
+        "unnamed": {
+          "zh": "未命名",
+          "ja": "名前なし",
+          "en": "Unnamed"
+        },
+        "noData": {
+          "zh": "暂无数据",
+          "ja": "まだデータがありません",
+          "en": "No data yet"
+        },
+        "noShowTimeInfo": {
+          "zh": "暂无场次信息",
+          "ja": "上映時間情報がありません",
+          "en": "No showtime information"
+        },
+        "moreShowTimes": {
+          "zh": "还有 {count} 个场次...",
+          "ja": "あと {count} 回の上映があります...",
+          "en": "There are {count} more showtimes..."
+        },
+        "seatStatus": {
+          "soldOut": {
+            "zh": "售罄",
+            "ja": "完売",
+            "en": "Sold Out"
+          },
+          "limited": {
+            "zh": "紧张",
+            "ja": "残りわずか",
+            "en": "Limited"
+          },
+          "available": {
+            "zh": "充足",
+            "ja": "余裕あり",
+            "en": "Available"
+          }
+        }
+      }
+    },
+    "login": {
+      "verificationCode": {
+        "zh": "验证码",
+        "ja": "認証コード",
+        "en": "Verification Code"
+      },
+      "email": {
+        "verify": {
+          "notNull": {
+            "zh": "邮箱不能为空",
+            "ja": "メールアドレスを入力してください",
+            "en": "Email cannot be empty"
+          },
+          "isValid": {
+            "zh": "请输入有效的邮箱地址",
+            "ja": "有効なメールアドレスを入力してください",
+            "en": "Please enter a valid email address"
+          }
+        },
+        "text": {
+          "zh": "邮箱",
+          "ja": "メールアドレス",
+          "en": "Email"
+        }
+      },
+      "password": {
+        "verify": {
+          "notNull": {
+            "zh": "密码不能为空",
+            "ja": "パスワードを入力してください",
+            "en": "Password cannot be empty"
+          },
+          "isValid": {
+            "zh": "密码长度至少6位",
+            "ja": "パスワードは6文字以上で入力してください",
+            "en": "Password must be at least 6 characters"
+          }
+        },
+        "text": {
+          "zh": "密码",
+          "ja": "パスワード",
+          "en": "Password"
+        }
+      },
+      "loginButton": {
+        "zh": "登录",
+        "ja": "ログイン",
+        "en": "Login"
+      },
+      "welcomeText": {
+        "zh": "欢迎回来",
+        "ja": "おかえりなさい",
+        "en": "Welcome Back"
+      },
+      "forgotPassword": {
+        "zh": "忘记密码？",
+        "ja": "パスワードを忘れましたか？",
+        "en": "Forgot Password?"
+      },
+      "or": {
+        "zh": "或",
+        "ja": "または",
+        "en": "or"
+      },
+      "googleLogin": {
+        "zh": "Google登录",
+        "ja": "Googleでログイン",
+        "en": "Login with Google"
+      },
+      "noAccount": {
+        "zh": "还没有账号？",
+        "ja": "アカウントをお持ちでない方は？",
+        "en": "Don't have an account?"
+      }
+    },
+    "register": {
+      "registerButton": {
+        "zh": "注册",
+        "ja": "登録",
+        "en": "Register"
+      },
+      "username": {
+        "verify": {
+          "notNull": {
+            "zh": "用户名不能为空",
+            "ja": "ユーザー名を入力してください",
+            "en": "Username cannot be empty"
+          }
+        },
+        "text": {
+          "zh": "用户名",
+          "ja": "ユーザー名",
+          "en": "Username"
+        }
+      },
+      "repeatPassword": {
+        "text": {
+          "zh": "确认密码",
+          "ja": "パスワード確認",
+          "en": "Confirm Password"
+        }
+      },
+      "passwordNotMatchRepeatPassword": {
+        "zh": "两次密码输入不一致",
+        "ja": "パスワードが一致しません",
+        "en": "Passwords do not match"
+      },
+      "verifyCode": {
+        "verify": {
+          "isValid": {
+            "zh": "验证码格式不正确",
+            "ja": "認証コードの形式が正しくありません",
+            "en": "Invalid verification code format"
+          }
+        }
+      },
+      "send": {
+        "zh": "发送",
+        "ja": "送信",
+        "en": "Send"
+      },
+      "haveAccount": {
+        "zh": "已有账号？",
+        "ja": "アカウントをお持ちの方は？",
+        "en": "Already have an account?"
+      },
+      "loginHere": {
+        "zh": "立即登录",
+        "ja": "今すぐログイン",
+        "en": "Login here"
+      }
+    },
+    "movieShowList": {
+      "dropdown": {
+        "area": {
+          "zh": "地区",
+          "ja": "地域",
+          "en": "Area"
+        },
+        "screenSpec": {
+          "zh": "放映规格",
+          "ja": "上映仕様",
+          "en": "Screen Spec"
+        },
+        "subtitle": {
+          "zh": "字幕",
+          "ja": "字幕",
+          "en": "Subtitle"
+        }
+      }
+    }
+  },
+  "enum": {
+    "seatType": {
         "coupleSeat": {
           "zh": "情侣座",
           "ja": "カップルシート",
@@ -537,56 +887,18 @@
           "ja": "販売済み",
           "en": "Sold"
         }
-      }
+    }
+  },
+  "unit": {
+    "point": {
+      "zh": "分",
+      "ja": "点",
+      "en": "point"
     },
-    "week": {
-      "monday": {
-        "zh": "一",
-        "ja": "月",
-        "en": "Mon"
-      },
-      "tuesday": {
-        "zh": "二",
-        "ja": "火",
-        "en": "Tue"
-      },
-      "wednesday": {
-        "zh": "三",
-        "ja": "水",
-        "en": "Wed"
-      },
-      "thursday": {
-        "zh": "四",
-        "ja": "木",
-        "en": "Thu"
-      },
-      "friday": {
-        "zh": "五",
-        "ja": "金",
-        "en": "Fri"
-      },
-      "saturday": {
-        "zh": "六",
-        "ja": "土",
-        "en": "Sat"
-      },
-      "sunday": {
-        "zh": "日",
-        "ja": "日",
-        "en": "Sun"
-      }
-    },
-    "unit": {
-      "point": {
-        "zh": "分",
-        "ja": "点",
-        "en": "point"
-      },
-      "jpy": {
-        "zh": "日元",
-        "ja": "円",
-        "en": "JPY"
-      }
+    "jpy": {
+      "zh": "日元",
+      "ja": "円",
+      "en": "JPY"
     }
   },
   "login": {
@@ -1455,6 +1767,66 @@
       "zh": "退出登录",
       "ja": "ログアウト",
       "en": "Logout"
+    },
+    "currentVersion": {
+      "zh": "当前版本",
+      "ja": "現在のバージョン",
+      "en": "Current Version"
+    },
+    "latestVersion": {
+      "zh": "最新版本",
+      "ja": "最新バージョン",
+      "en": "Latest Version"
+    },
+    "updateAvailable": {
+      "zh": "发现新版本，是否立即更新？",
+      "ja": "新しいバージョンが見つかりました。今すぐ更新しますか？",
+      "en": "New version found. Update now?"
+    },
+    "cancel": {
+      "zh": "取消",
+      "ja": "キャンセル",
+      "en": "Cancel"
+    },
+    "update": {
+      "zh": "更新",
+      "ja": "更新",
+      "en": "Update"
+    },
+    "updating": {
+      "zh": "正在更新",
+      "ja": "更新中",
+      "en": "Updating"
+    },
+    "updateProgress": {
+      "zh": "正在下载更新，请稍候...",
+      "ja": "更新をダウンロード中です。お待ちください...",
+      "en": "Downloading update, please wait..."
+    },
+    "updateSuccess": {
+      "zh": "更新成功",
+      "ja": "更新成功",
+      "en": "Update Successful"
+    },
+    "updateSuccessMessage": {
+      "zh": "应用已成功更新到最新版本！",
+      "ja": "アプリが最新バージョンに正常に更新されました！",
+      "en": "App has been successfully updated to the latest version!"
+    },
+    "updateError": {
+      "zh": "更新失败",
+      "ja": "更新失敗",
+      "en": "Update Failed"
+    },
+    "updateErrorMessage": {
+      "zh": "更新过程中出现错误，请稍后重试。",
+      "ja": "更新中にエラーが発生しました。後でもう一度お試しください。",
+      "en": "An error occurred during update. Please try again later."
+    },
+    "ok": {
+      "zh": "确定",
+      "ja": "OK",
+      "en": "OK"
     }
   },
   "orderList": {
@@ -1633,6 +2005,11 @@
       "en": "Save"
     },
     "edit": {
+      "tip": {
+        "zh": "点击保存按钮保存更改",
+        "ja": "保存ボタンをクリックして変更を保存",
+        "en": "Click save button to save changes"
+      },
       "username": {
         "placeholder": {
           "zh": "请输入用户名",
@@ -2056,3 +2433,4 @@
     }
   }
 }
+
