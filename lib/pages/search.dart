@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:easy_refresh/easy_refresh.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
@@ -19,9 +16,7 @@ import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
-import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
-import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Search extends StatefulWidget {
@@ -41,6 +36,19 @@ class _PageState extends State<Search> {
   bool loading = false;
   bool loadFinished  = false;
   List<MovieResponse> data = [];
+
+  /// 判断是否为预售（上映时间未到）
+  bool _isPresale(String? startDate) {
+    if (startDate == null || startDate.isEmpty) return false;
+    
+    try {
+      final releaseDate = DateTime.parse(startDate);
+      final now = DateTime.now();
+      return releaseDate.isAfter(now);
+    } catch (e) {
+      return false;
+    }
+  }
 
   @override
   void initState() {
@@ -81,15 +89,17 @@ class _PageState extends State<Search> {
           ToastService.showInfo(S.of(context).search_noData);
         }
         setState(() {
-          if (list.isNotEmpty && !loadFinished) {
-            data.addAll(list); // 追加数据
-          } 
           if (page == 1) {
+            // 第一页：重置数据
             data = list;
+          } else {
+            // 非第一页：追加数据
+            if (list.isNotEmpty) {
+              data.addAll(list);
+            }
           }
           currentPage = page;
           loadFinished = list.isEmpty; // 更新加载完成标志
-          
         });
 
         easyRefreshController.finishLoad(
@@ -102,6 +112,18 @@ class _PageState extends State<Search> {
         loading = false;
       });
     });
+  }
+
+  /// 删除单个搜索历史记录
+  void _removeSearchHistoryItem(String item) {
+    setState(() {
+      searchHistoryList.remove(item);
+    });
+    
+    // 更新本地存储
+    if (sharedPreferences != null) {
+      sharedPreferences!.setStringList('searchHistoryList', searchHistoryList);
+    }
   }
 
   @override
@@ -119,7 +141,7 @@ class _PageState extends State<Search> {
           dialogBackgroundColor: Colors.white
         ),
         child: CupertinoAlertDialog(
-        // Set the background color of the dialog
+        // Set the background color of the dialog2
         //  White background
         title: Text(
           S.of(context).search_removeHistoryConfirm_title,
@@ -181,50 +203,136 @@ class _PageState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     Widget searchHistoryWidget = Container(
-        padding: EdgeInsets.all(20.w),
+        padding: EdgeInsets.all(24.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...searchHistoryList.isEmpty ? [] : [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(S.of(context).search_history),
-                  IconButton(
-                    onPressed: () {
-                      _showConfirmationDialog(context);
-                    }, 
-                    icon: Icon(Icons.delete, color: Colors.red.shade500, size:  40.w)
-                  )
-              ]),
-              
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 0.h),
-                child: Wrap(
-                  spacing: 30.w,
-                  runSpacing: 25.w,
-                  children: searchHistoryList.map((item) {
-                    return GestureDetector(
+              // 标题栏
+              Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8.w),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1989FA).withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          child: Icon(
+                            Icons.history_rounded,
+                            color: const Color(0xFF1989FA),
+                            size: 24.sp,
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Text(
+                          S.of(context).search_history,
+                          style: TextStyle(
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ],
+                    ),
+                    GestureDetector(
                       onTap: () {
-                        setState(() {
-                          searchController.text = item;
-                          loading = true;
-                        });
-                        // 关闭键盘弹窗
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        search();
+                        _showConfirmationDialog(context);
                       },
                       child: Container(
+                        padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(50.w)
+                          color: Colors.red.shade50,
+                          borderRadius: BorderRadius.circular(8.r),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 30.w),
-                        child: Text(item, style: TextStyle(fontSize: 26.sp)),
+                        child: Icon(
+                          Icons.delete_outline_rounded,
+                          color: Colors.red.shade400,
+                          size: 28.sp,
+                        ),
                       ),
-                    );
-                  }).toList(),
+                    ),
+                  ],
                 ),
+              ),
+              
+              // 历史记录标签
+              Wrap(
+                spacing: 12.w,
+                runSpacing: 12.h,
+                children: searchHistoryList.map((item) {
+                  return Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.r),
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                    ),
+                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              searchController.text = item;
+                              loading = true;
+                            });
+                            // 关闭键盘弹窗
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            search();
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.search_rounded,
+                                color: Colors.grey.shade400,
+                                size: 24.sp,
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                item,
+                                style: TextStyle(
+                                  fontSize: 26.sp,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        GestureDetector(
+                          onTap: () {
+                            _removeSearchHistoryItem(item);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(4.w),
+                            child: Icon(
+                              Icons.close_rounded,
+                              color: Colors.grey.shade400,
+                              size: 26.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
               ),
             ]
           ],
@@ -233,38 +341,80 @@ class _PageState extends State<Search> {
     
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: CustomAppBar(
         title: Row(
           children: [
             Expanded(
-              child: Input(
-                controller: searchController,
-                height: 55.h,
-                horizontalPadding: 35.w,
-                placeholder: S.of(context).search_placeholder,
-                placeholderStyle: TextStyle(color: Colors.grey.shade500, fontSize: 28.sp),
-                textStyle: const TextStyle(color: Colors.black),
-                backgroundColor: Colors.white,
-                borderRadius: BorderRadius.circular(50),
-                suffixIcon: searchController.text.isEmpty 
-                    ? Icon(Icons.search_outlined, color: Colors.grey.shade500)
-                    : IconButton(
-                      onPressed: () {
-                        setState(() {
-                          searchController.text = '';
-                          data = [];
-                        });
-                        // 关闭键盘弹窗
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      // enableFeedback: false,
-                      icon: Icon(
-                        Icons.clear, 
-                        color: Colors.grey.shade500
-                      )
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(28.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                cursorColor: Colors.grey.shade500,
+                child: Input(
+                  controller: searchController,
+                  height: 52.h,
+                  horizontalPadding: 40.w,
+                  placeholder: S.of(context).search_placeholder,
+                  placeholderStyle: TextStyle(
+                    color: Colors.grey.shade400, 
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  textStyle: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  backgroundColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(28.r),
+                  suffixIcon: searchController.text.isEmpty 
+                      ? Container(
+                          padding: EdgeInsets.all(8.w),
+                          child: Icon(
+                            Icons.search_rounded, 
+                            color: Colors.grey.shade400,
+                            size: 28.sp,
+                          ),
+                        )
+                      : IconButton(
+                        onPressed: () {
+                          setState(() {
+                            searchController.text = '';
+                            data = [];
+                          });
+                          // 关闭键盘弹窗
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                        icon: Container(
+                          padding: EdgeInsets.all(6.w),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.close_rounded, 
+                            color: Colors.grey.shade600,
+                            size: 22.sp,
+                          ),
+                        ),
+                      ),
+                  cursorColor: const Color(0xFF1989FA),
+                  cursorWidth: 2.0,
+                  cursorHeight: 32.h,
+                  cursorRadius: const Radius.circular(2.0),
                 onChange: (val) {
                   setState(() {
                     searchController.text = val;
@@ -272,11 +422,15 @@ class _PageState extends State<Search> {
                 },
                 onSubmit: (val) {
                   if (sharedPreferences != null && val != '') {
-                     searchHistoryList.insert(0, val);
-                      int size = 20;
-                      List<String> top20 = searchHistoryList.sublist(0, searchHistoryList.length < size ? searchHistoryList.length : size);
+                    // 移除已存在的相同搜索记录（如果有的话）
+                    searchHistoryList.remove(val);
+                    // 将新的搜索记录插入到最前面
+                    searchHistoryList.insert(0, val);
+                    
+                    int size = 20;
+                    List<String> top20 = searchHistoryList.sublist(0, searchHistoryList.length < size ? searchHistoryList.length : size);
 
-                      sharedPreferences!.setStringList('searchHistoryList', top20);
+                    sharedPreferences!.setStringList('searchHistoryList', top20);
 
                     setState(() {
                       searchHistoryList = top20;
@@ -286,6 +440,7 @@ class _PageState extends State<Search> {
                     search();
                   }
                 },
+                ),
               ),
             ),
           ],
@@ -322,11 +477,18 @@ class _PageState extends State<Search> {
 
   Widget _buildMovieItem(BuildContext context, MovieResponse item, index) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
-      decoration: const BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 1.0, color: Color(0xFFE6E6E6)),
-        ),
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Space(
         direction: "row",
@@ -343,19 +505,54 @@ class _PageState extends State<Search> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(8.r),
                     color: Colors.grey.shade200,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(8.r),
                     child: CustomExtendedImage(
                       item.cover ?? '',
                       width: 240.w,
-                      height: 280.h,
-                      fit: BoxFit.cover
+                      height: 260.h,
+                      fit: BoxFit.contain
                     ),
                   ),
                 ),
+                // 预售标签（左上角）
+                if (_isPresale(item.startDate))
+                  Positioned(
+                    top: 8.h,
+                    left: 8.w,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF6B35),
+                        borderRadius: BorderRadius.circular(8.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFF6B35).withOpacity(0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        S.of(context).comingSoon_presale,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -378,14 +575,15 @@ class _PageState extends State<Search> {
             ),
           ),
           SizedBox(
-            height: 275.h,
+            width: 420.w,
+            height: 260.h,
             child: Space(
               direction: "column",
               bottom: 10.h,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildMovieDetails(item),
-                GestureDetector(
+                  GestureDetector(
                   onTap: () {
                     context.pushNamed(
                       'showTimeList', 
@@ -398,15 +596,35 @@ class _PageState extends State<Search> {
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 35.w),
+                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 32.w),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF069EF0),
-                      borderRadius: BorderRadius.circular(50)
-                    
+                      gradient: LinearGradient(
+                        colors: _isPresale(item.startDate) 
+                          ? [const Color(0xFFFF6B35), const Color(0xFFFF8A50)]  // 预售：橙色渐变
+                          : [const Color(0xFF1989FA), const Color(0xFF069EF0)], // 正常：蓝色渐变
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(25.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: (_isPresale(item.startDate) 
+                            ? const Color(0xFFFF6B35) 
+                            : const Color(0xFF1989FA)).withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Text(
-                        S.of(context).movieList_buy,
-                        style: TextStyle(color: Colors.white, fontSize: 30.sp),
+                        _isPresale(item.startDate) 
+                          ? S.of(context).comingSoon_presale
+                          : S.of(context).movieList_buy,
+                        style: TextStyle(
+                          color: Colors.white, 
+                          fontSize: 28.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       )
                   ),
                 )
@@ -419,23 +637,55 @@ class _PageState extends State<Search> {
   }
 
   Widget _buildMovieDetails(MovieResponse item) {
-    return Expanded(
-      // width: 350.w,
-      child: Space(
-        direction: "column",
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          GestureDetector(
-            onTap: () {
-              context.pushNamed('movieDetail',
-                pathParameters: {
-                "id": '${item.id}'
-              });
-            },
-            child: Text(item.name ?? '', style: TextStyle(fontSize: 36.sp)),
+          // 电影标题 - 支持2行显示
+          Flexible(
+            child: GestureDetector(
+              onTap: () {
+                context.pushNamed('movieDetail',
+                  pathParameters: {
+                  "id": '${item.id}'
+                });
+              },
+              child: Text(
+                item.name ?? '', 
+                style: TextStyle(
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                  height: 1.3,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
           ),
-          // Text("监督：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
-          // Text("声优：XXXXX、XXXXX", style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
-          Text('${S.of(context).search_level}：${item.levelName}', style: TextStyle(fontSize: 24.sp, color: Colors.black38)),
+          
+          SizedBox(height: 12.h),
+          
+          // 分级标签 - 固定在底部
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Text(
+              '${S.of(context).search_level}：${item.levelName}', 
+              style: TextStyle(
+                fontSize: 22.sp, 
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w500,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );

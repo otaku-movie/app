@@ -70,6 +70,46 @@ class S {
     );
   }
 
+  /// `Rate this movie`
+  String get writeComment_rateTitle {
+    return Intl.message(
+      'Rate this movie',
+      name: 'writeComment_rateTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share your movie experience`
+  String get writeComment_contentTitle {
+    return Intl.message(
+      'Share your movie experience',
+      name: 'writeComment_contentTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share your experience to help others`
+  String get writeComment_shareExperience {
+    return Intl.message(
+      'Share your experience to help others',
+      name: 'writeComment_shareExperience',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to publish comment, please try again`
+  String get writeComment_publishFailed {
+    return Intl.message(
+      'Failed to publish comment, please try again',
+      name: 'writeComment_publishFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Comment cannot be empty`
   String get writeComment_verify_notNull {
     return Intl.message(
@@ -85,6 +125,16 @@ class S {
     return Intl.message(
       'Please rate the movie',
       name: 'writeComment_verify_notRate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Movie ID cannot be empty`
+  String get writeComment_verify_movieIdEmpty {
+    return Intl.message(
+      'Movie ID cannot be empty',
+      name: 'writeComment_verify_movieIdEmpty',
       desc: '',
       args: [],
     );
@@ -2360,6 +2410,16 @@ class S {
     );
   }
 
+  /// `Write your reply...`
+  String get commentDetail_comment_hint {
+    return Intl.message(
+      'Write your reply...',
+      name: 'commentDetail_comment_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Reply`
   String get commentDetail_comment_button {
     return Intl.message(
@@ -3910,6 +3970,16 @@ class S {
     );
   }
 
+  /// `No movies showing`
+  String get cinemaList_movies_empty {
+    return Intl.message(
+      'No movies showing',
+      name: 'cinemaList_movies_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Selected Seats`
   String get cinemaList_selectSeat_selectedSeats {
     return Intl.message(
@@ -4115,6 +4185,56 @@ class S {
     return Intl.message(
       'Password reset successful',
       name: 'forgotPassword_passwordResetSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Presale`
+  String get comingSoon_presale {
+    return Intl.message(
+      'Presale',
+      name: 'comingSoon_presale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Release`
+  String get comingSoon_releaseDate {
+    return Intl.message(
+      'Release',
+      name: 'comingSoon_releaseDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No movies currently showing`
+  String get comingSoon_noMovies {
+    return Intl.message(
+      'No movies currently showing',
+      name: 'comingSoon_noMovies',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please try again later or pull down to refresh`
+  String get comingSoon_tryLaterOrRefresh {
+    return Intl.message(
+      'Please try again later or pull down to refresh',
+      name: 'comingSoon_tryLaterOrRefresh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pull to refresh`
+  String get comingSoon_pullToRefresh {
+    return Intl.message(
+      'Pull to refresh',
+      name: 'comingSoon_pullToRefresh',
       desc: '',
       args: [],
     );

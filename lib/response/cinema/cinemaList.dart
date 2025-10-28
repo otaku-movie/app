@@ -1,7 +1,30 @@
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'cinemaList.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.none)
+class NowShowingMovie {
+  final int? id;
+  final String? name;
+  final String? poster;
+  final int? time;
+  final String? levelName;
+  final double? rate;
+  final int? totalRatings;
+
+  NowShowingMovie({
+    this.id,
+    this.name,
+    this.poster,
+    this.time,
+    this.levelName,
+    this.rate,
+    this.totalRatings,
+  });
+
+  factory NowShowingMovie.fromJson(Map<String, dynamic> json) => _$NowShowingMovieFromJson(json);
+  Map<String, dynamic> toJson() => _$NowShowingMovieToJson(this);
+}
 
 @JsonSerializable(fieldRename: FieldRename.none)
 class CinemaListResponse {
@@ -29,6 +52,8 @@ class CinemaListResponse {
     
     final List<Spec>? spec;
     
+    final List<NowShowingMovie>? nowShowingMovies;
+    
     double? distance;
 
     CinemaListResponse({
@@ -45,6 +70,7 @@ class CinemaListResponse {
         this.brandId,
         this.brandName,
         this.spec,
+        this.nowShowingMovies,
     });
 
     factory CinemaListResponse.fromJson(Map<String, dynamic> json) => _$CinemaListResponseFromJson(json);

@@ -32,6 +32,8 @@ class MovieResponse {
   final int? levelId;
   final String? levelName;
   final String? levelDescription;
+  final int? presaleShowTimeCount; // 预售场次数量
+  final String? earliestShowTime; //最早场次时间
 
   MovieResponse({
     this.id,
@@ -58,6 +60,8 @@ class MovieResponse {
     this.levelId,
     this.levelName,
     this.levelDescription,
+    this.presaleShowTimeCount,
+    this.earliestShowTime
   });
 
   factory MovieResponse.fromJson(Map<String, dynamic> json) =>

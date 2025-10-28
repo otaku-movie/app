@@ -10,6 +10,26 @@
       "ja": "コメントを入力してください...",
       "en": "Write your comment..."
     },
+    "rateTitle": {
+      "zh": "为这部电影评分",
+      "ja": "この映画を評価する",
+      "en": "Rate this movie"
+    },
+    "contentTitle": {
+      "zh": "写下你的观影感受",
+      "ja": "映画の感想を書いてください",
+      "en": "Share your movie experience"
+    },
+    "shareExperience": {
+      "zh": "分享你的观影体验，帮助其他人做出选择",
+      "ja": "映画体験をシェアして、他の人の選択をサポートしましょう",
+      "en": "Share your experience to help others"
+    },
+    "publishFailed": {
+      "zh": "评论发布失败，请重试",
+      "ja": "コメントの投稿に失敗しました。もう一度お試しください",
+      "en": "Failed to publish comment, please try again"
+    },
     "verify": {
       "notNull": {
         "zh": "评论不能为空",
@@ -20,6 +40,11 @@
         "zh": "请给电影评分",
         "ja": "映画に評価を付けてください",
         "en": "Please rate the movie"
+      },
+      "movieIdEmpty": {
+        "zh": "电影ID不能为空",
+        "ja": "映画IDが空です",
+        "en": "Movie ID cannot be empty"
       }
     },
     "release": {
@@ -1460,6 +1485,11 @@
           }
         }
       },
+      "hint": {
+        "zh": "写下你的回复...",
+        "ja": "返信を入力してください...",
+        "en": "Write your reply..."
+      },
       "button": {
         "zh": "回复",
         "ja": "返信",
@@ -2320,6 +2350,11 @@
         "zh": "正在上映",
         "ja": "上映中",
         "en": "Now Showing"
+      },
+      "empty": {
+        "zh": "暂无上映电影",
+        "ja": "上映中の映画はありません",
+        "en": "No movies showing"
       }
     },
     "selectSeat": {
@@ -2430,6 +2465,33 @@
       "zh": "密码重置成功",
       "ja": "パスワードリセットが成功しました",
       "en": "Password reset successful"
+    }
+  },
+  "comingSoon": {
+    "presale": {
+      "zh": "预售",
+      "ja": "前売り",
+      "en": "Presale"
+    },
+    "releaseDate": {
+      "zh": "上映",
+      "ja": "公開",
+      "en": "Release"
+    },
+    "noMovies": {
+      "zh": "暂无正在上映的电影",
+      "ja": "現在上映中の映画はありません",
+      "en": "No movies currently showing"
+    },
+    "tryLaterOrRefresh": {
+      "zh": "请稍后再试或下拉刷新",
+      "ja": "しばらくしてからもう一度お試しいただくか、下にスワイプして更新してください",
+      "en": "Please try again later or pull down to refresh"
+    },
+    "pullToRefresh": {
+      "zh": "下拉刷新",
+      "ja": "下にスワイプして更新",
+      "en": "Pull to refresh"
     }
   }
 }

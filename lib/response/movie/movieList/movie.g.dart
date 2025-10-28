@@ -38,6 +38,8 @@ MovieResponse _$MovieResponseFromJson(Map<String, dynamic> json) =>
       levelId: (json['levelId'] as num?)?.toInt(),
       levelName: json['levelName'] as String?,
       levelDescription: json['levelDescription'] as String?,
+      presaleShowTimeCount: (json['presaleShowTimeCount'] as num?)?.toInt(),
+      earliestShowTime: json['earliestShowTime'] as String?,
     );
 
 Map<String, dynamic> _$MovieResponseToJson(MovieResponse instance) =>
@@ -66,6 +68,8 @@ Map<String, dynamic> _$MovieResponseToJson(MovieResponse instance) =>
       'levelId': instance.levelId,
       'levelName': instance.levelName,
       'levelDescription': instance.levelDescription,
+      'presaleShowTimeCount': instance.presaleShowTimeCount,
+      'earliestShowTime': instance.earliestShowTime,
     };
 
 Spec _$SpecFromJson(Map<String, dynamic> json) => Spec(

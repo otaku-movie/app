@@ -8,12 +8,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:otaku_movie/api/index.dart';
-import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/HelloMovie.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
-import 'package:otaku_movie/components/rate.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
@@ -176,262 +174,291 @@ class _PageState extends State<MovieDetail> {
     super.dispose();
   }
 
-  List<Widget> generateComment() {
-    return commentListData.map((comment) {
-      return GestureDetector(
-        // onTap: () {
-        //   context.pushNamed(
-        //     'commentDetail',
-        //     queryParameters: {
-        //       "id": '${comment.id}'
-        //     }
-        //   );
-        // },
-        child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20.w),
-        decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(color: Colors.grey.shade200)
-          )
-        ),
+List<Widget> generateComment() {
+   return commentListData.map((comment) {
+     return Container(
+       margin: EdgeInsets.symmetric(horizontal: 0.w, vertical: 8.h),
+       padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 10.h),
+       decoration: BoxDecoration(
+         color: Colors.white,
+         borderRadius: BorderRadius.circular(16.r),
+       ),
         child:  Row(
           crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 80.w,
-            height: 80.w,
-            margin: EdgeInsets.only(right: 20.w),
-            child:  CircleAvatar(
-              radius: 50.0, // 半径
-              backgroundColor: Colors.grey.shade300,
-              backgroundImage: NetworkImage(comment.commentUserAvatar ?? ''),
+            width: 88.w,
+            height: 88.w,
+            margin: EdgeInsets.only(right: 24.w),
+            child: ClipOval(
+              child: comment.commentUserAvatar != null && comment.commentUserAvatar!.isNotEmpty
+                  ? CustomExtendedImage(
+                      comment.commentUserAvatar!,
+                      width: 88.w,
+                      height: 88.w,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      width: 88.w,
+                      height: 88.w,
+                      color: Colors.grey.shade200,
+                      child: Icon(
+                        Icons.person,
+                        size: 40.w,
+                        color: Colors.grey.shade400,
+                      ),
+                    ),
             ),
           ),
-          Container(
-            width: 600.w,
-            // decoration: BoxDecoration(
-            //   border: Border.all(color: Colors.red),
-            // ),
-            child: Wrap(
-              direction: Axis.vertical,
-              spacing: 2.h,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 600.w,
-                  // padding: EdgeInsets.symmetric(vertical: 4.h),
-                  child: Row(
+                // 用户名和评分行
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(comment.commentUserName ?? '', style: TextStyle(
-                      fontSize: 32.sp
-                    )),
-
-                    comment.rate == null || comment.rate!.isZero ? Container() :  Row(
-                      children: [
-                        Rate(
-                          maxRating: 10.0, // 最大评分
-                          starSize: 38.w, // 星星大小
-                          readOnly: true,
-                          point: comment.rate ?? 0
+                    Expanded(
+                      child: Text(
+                        comment.commentUserName ?? '',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
                         ),
-                        SizedBox(
-                          width: 110.w,  // 固定文字容器宽度
-                          child: Text(
-                            '${comment.rate ?? ''}${S.of(context).common_unit_point}',
-                            style: TextStyle(
-                              fontSize: 32.sp, 
-                              color: Colors.yellow.shade800
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    comment.rate == null || comment.rate!.isZero 
+                      ? Container() 
+                      : Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFF6B35), Color(0xFFFF8A50)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
-                            textAlign: TextAlign.center,
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.star_rounded,
+                                color: Colors.white,
+                                size: 20.sp,
+                              ),
+                              SizedBox(width: 4.w),
+                              Text(
+                                '${comment.rate ?? ''}${S.of(context).common_unit_point}',
+                                style: TextStyle(
+                                  fontSize: 24.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    )
-                    
                   ],
                 ),
-                ),
+                SizedBox(height: 8.h),
                 
-                comment.createTime != null ? Text(
+                // 时间
+                if (comment.createTime != null)
+                  Text(
                     Jiffy.parse(comment.createTime ?? '', pattern: 'yyyy-MM-dd HH:mm:ss').fromNow(),
-                    style: TextStyle(color: Colors.grey.shade400, fontSize: 24.sp),
-                  ) : const Text(''),
-                Container(
-                  width: 600.w,
-                  padding: EdgeInsets.symmetric(vertical: 4.h),
-                  child: Text(comment.content ?? '', maxLines: 5, overflow: TextOverflow.ellipsis),
-                ),
-                // SizedBox(height: 5.h),
-                 Space(
-                    right: 20.w,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            comment.like = !comment.like!;
-                            comment.likeCount = comment.like! ? comment.likeCount! + 1 : comment.likeCount! - 1;
-                            if (comment.like! && comment.dislikeCount != 0) {
-                              comment.dislike = false;
-                              comment.dislikeCount = comment.dislikeCount! - 1;
-                            }
-                          });
-                          ApiRequest().request(
-                            path: '/movie/comment/like',
-                            method: 'POST',
-                            data: {
-                              "id": comment.id
-                            },
-                            fromJsonT: (json) {
-                              return json;
-                            },
-                          ).then((res) {
-                            getCommentData();
-                          });
-                        },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Icon(
-                              Icons.thumb_up,
-                              color: comment.like! ? Colors.pink.shade400 : Colors.grey.shade400, 
-                              size: 36.sp
-                            ),
-                            Text('${comment.likeCount}'),
-                        ]),     
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            comment.dislike = !comment.dislike!;
-                            comment.dislikeCount = comment.dislike! ? comment.dislikeCount! + 1 : comment.dislikeCount! - 1;
-                            if (comment.dislike! && comment.likeCount != 0) {
-                              comment.like = false;
-                              comment.likeCount = comment.likeCount! - 1;
-                            }
-                          });
-                          ApiRequest().request(
-                            path: '/movie/comment/dislike',
-                            method: 'POST',
-                            data: {
-                              "id": comment.id
-                            },
-                            fromJsonT: (json) {
-                              return json;
-                            },
-                          ).then((res) {
-                            getCommentData();
-                          });
-                        },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Icon(
-                            Icons.thumb_down,
-                            color: comment.dislike! ? Colors.pink.shade400 : Colors.grey.shade400, size: 36.sp
-                          ),
-                          Text('${comment.dislikeCount ?? 0}'),
-                        ]),     
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          context.pushNamed('commentDetail', queryParameters: {
-                            "id": '${comment.id}',
-                            'movieId': widget.id
-                          });
-                          // setState(() {
-                          //   showReply = !showReply;
-                          //   replyId = data.id;
-                            
-                          //   replyUsernName = type == 'comment' ? data.commentUserName ?? '' : data.replyUserName ?? '';
-
-                          // });
-                          //  _focusNode.requestFocus();
-                        },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Icon(
-                              Icons.comment,
-                              color: Colors.grey.shade400, 
-                              size: 36.sp
-                            ),
-                            Text(S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0), style: TextStyle(color: Colors.grey.shade700)),
-                        ]),     
-                      ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //   },
-                      //   child: Space(
-                      //     right: 10.w,
-                      //     children: [
-                      //       Space(
-                      //       right: 10.w,
-                      //       children: [
-                      //         Icon(
-                      //           Icons.translate,
-                      //         color: Colors.grey.shade400, size: 36.sp
-                      //       ),
-                      //       Text('翻译为日语', style: TextStyle(color: Colors.grey.shade700))
-                      //     ]),
-                      //   ]),     
-                      // ),
-                    ],
+                    style: TextStyle(
+                      color: Colors.grey.shade500,
+                      fontSize: 22.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                // comment.reply == null || comment.reply!.isEmpty ? Container() : GestureDetector(
-                //   onTap: () {
-                //     context.pushNamed(
-                //       'commentDetail',
-                //       queryParameters: {
-                //         "id": '${comment.id}'
-                //       }
-                //     );
-                //   },
-                //   child: Container(
-                //   width: 600.w,
-                //   padding: EdgeInsets.all(15.w),
-                //   margin: EdgeInsets.symmetric(vertical: 20.h),
-                //   decoration: BoxDecoration(
-                //     color: const Color(0xFFe7e7e7),
-                //     borderRadius: BorderRadius.circular(8)
-                //   ),
-                //   child: Space(
-                //     direction: 'column',
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     bottom: 10.h,
-                //     children: [
-                //       ...comment.reply!.map((reply) {
-                //         return Text(
-                //           '${reply.commentUserName}回复@${reply.replyUserName}：${reply.content}', 
-                //           maxLines: 5, 
-                //           overflow: TextOverflow.ellipsis
-                //         );
-                //       }),
-                //       (comment.replyCount ?? 0) > 3 ?  Space(
-                //         children: [
-                //           Padding(
-                //             padding: EdgeInsets.only(top: 10.h),
-                //             child:  Text(
-                //               S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0), style: TextStyle(
-                //                 color: Colors.grey.shade700
-                //               )
-                //             ),
-                //           )
-                //         ]
-                //       ) : Container()
-                //     ]
-                //   ),
-                // ),
-                // ) 
+                SizedBox(height: 12.h),
                 
+                // 评论内容
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                  child: Text(
+                    comment.content ?? '',
+                    style: TextStyle(
+                      fontSize: 26.sp,
+                      color: Colors.black87,
+                      height: 1.5,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    maxLines: 5,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                // 操作按钮行
+                Row(
+                  children: [
+                    // 点赞按钮
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          comment.like = !comment.like!;
+                          comment.likeCount = comment.like! ? comment.likeCount! + 1 : comment.likeCount! - 1;
+                          if (comment.like! && comment.dislikeCount != 0) {
+                            comment.dislike = false;
+                            comment.dislikeCount = comment.dislikeCount! - 1;
+                          }
+                        });
+                        ApiRequest().request(
+                          path: '/movie/comment/like',
+                          method: 'POST',
+                          data: {
+                            "id": comment.id
+                          },
+                          fromJsonT: (json) {
+                            return json;
+                          },
+                        ).then((res) {
+                          getCommentData();
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        decoration: BoxDecoration(
+                          color: comment.like! ? const Color(0xFFFF6B35).withOpacity(0.1) : Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(
+                            color: comment.like! ? const Color(0xFFFF6B35).withOpacity(0.3) : Colors.grey.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              comment.like! ? Icons.thumb_up : Icons.thumb_up_outlined,
+                              color: comment.like! ? const Color(0xFFFF6B35) : Colors.grey.shade500,
+                              size: 20.sp,
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              '${comment.likeCount}',
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                color: comment.like! ? const Color(0xFFFF6B35) : Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    // 踩按钮
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          comment.dislike = !comment.dislike!;
+                          comment.dislikeCount = comment.dislike! ? comment.dislikeCount! + 1 : comment.dislikeCount! - 1;
+                          if (comment.dislike! && comment.likeCount != 0) {
+                            comment.like = false;
+                            comment.likeCount = comment.likeCount! - 1;
+                          }
+                        });
+                        ApiRequest().request(
+                          path: '/movie/comment/dislike',
+                          method: 'POST',
+                          data: {
+                            "id": comment.id
+                          },
+                          fromJsonT: (json) {
+                            return json;
+                          },
+                        ).then((res) {
+                          getCommentData();
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        decoration: BoxDecoration(
+                          color: comment.dislike! ? Colors.red.shade50 : Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(
+                            color: comment.dislike! ? Colors.red.shade200 : Colors.grey.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              comment.dislike! ? Icons.thumb_down : Icons.thumb_down_outlined,
+                              color: comment.dislike! ? Colors.red.shade400 : Colors.grey.shade500,
+                              size: 20.sp,
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              '${comment.dislikeCount ?? 0}',
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                color: comment.dislike! ? Colors.red.shade400 : Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    // 回复按钮
+                    GestureDetector(
+                      onTap: () {
+                        context.pushNamed('commentDetail', queryParameters: {
+                          "id": '${comment.id}',
+                          'movieId': widget.id
+                        });
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(20.r),
+                          border: Border.all(
+                            color: Colors.blue.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.comment_outlined,
+                              color: Colors.blue.shade500,
+                              size: 20.sp,
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              S.of(context).movieDetail_detail_totalReplyMessage(comment.replyCount ?? 0),
+                              style: TextStyle(
+                                fontSize: 22.sp,
+                                color: Colors.blue.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-          )
-          
-        ]
-        )
+          ),
+        ],
       ),
-      );
+    );
     }).toList();
   }
 
@@ -539,7 +566,7 @@ class _PageState extends State<MovieDetail> {
                   ),
                   SizedBox(width: 6.w),
                   Text(
-                    DateFormatUtil.formatDate(audio?.date, context),
+                    DateFormatUtil.formatDate(audio.date, context),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22.sp,
@@ -568,7 +595,7 @@ class _PageState extends State<MovieDetail> {
                   ),
                   SizedBox(width: 6.w),
                   Text(
-                    DateFormatUtil.formatDate(sub?.date, context),
+                    DateFormatUtil.formatDate(sub.date, context),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 22.sp,
@@ -973,7 +1000,7 @@ class _PageState extends State<MovieDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [             
                 Container(
-                  padding: EdgeInsets.only(top: 0.h, left: 20.w, right: 20.w),
+                  padding: EdgeInsets.only(top: 0.h, left: 20.w, right: 20.w, bottom: 50.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -989,10 +1016,10 @@ class _PageState extends State<MovieDetail> {
                         margin: EdgeInsets.only(bottom: 20.h, top: 20.h),
                         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF7F8FA),
+                          // color: const Color(0xFFF7F8FA),
                           borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
-                            color: const Color(0xFF1989FA).withOpacity(0.1),
+                            color: const Color(0xFF1989FA).withOpacity(0.6),
                             width: 1,
                           ),
                         ),
@@ -1164,7 +1191,7 @@ class _PageState extends State<MovieDetail> {
                                         style: TextStyle(
                                           fontSize: 28.sp,
                                           color: const Color(0xFF1989FA),
-                                          decoration: TextDecoration.underline,
+                                          // decoration: TextDecoration.underline,
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
@@ -1314,37 +1341,98 @@ class _PageState extends State<MovieDetail> {
                         ),
                       ],
                       ...commentListData.isEmpty ? [] : [
-                        Padding(
-                          padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
-                          child:  Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${S.of(context).movieDetail_detail_comment}（${data.commentCount ?? 0}）', style: TextStyle(
-                              // color: Colors.grey.shade700,
-                              fontSize: 36.sp,
-                              fontWeight: FontWeight.bold
-                            )),
-                            GestureDetector(
-                              onTap: () {
-                                context.pushNamed('writeComment', queryParameters: {
-                                  'id': widget.id,
-                                  'movieName': data.name,
-                                  'rated': '${data.rated}'
-                                });
-                              },
-                              child: Space(
-                                right: 5.w,
+                        Container(
+                          margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
+                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16.r),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
                                 children: [
-                                Icon( Icons.edit, size: 36.sp, color: Colors.grey.shade500),
-                                Text(S.of(context).movieDetail_writeComment, style: TextStyle(
-                                  color: Colors.grey.shade500
-                                )),
-                              ])
-                            )
-                           
-                          ],
-                        )
+                                  Container(
+                                    padding: EdgeInsets.all(8.w),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF1989FA).withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(8.r),
+                                    ),
+                                    child: Icon(
+                                      Icons.comment_outlined,
+                                      color: const Color(0xFF1989FA),
+                                      size: 24.sp,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    '${S.of(context).movieDetail_detail_comment}（${data.commentCount ?? 0}）', 
+                                    style: TextStyle(
+                                      fontSize: 36.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    )
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  context.pushNamed('writeComment', queryParameters: {
+                                    'id': widget.id,
+                                    'movieName': data.name,
+                                    'rated': '${data.rated}'
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFF6B35).withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(20.r),
+                                    border: Border.all(
+                                      color: const Color(0xFFFF6B35).withOpacity(0.3),
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.edit_outlined,
+                                        size: 20.sp,
+                                        color: const Color(0xFFFF6B35),
+                                      ),
+                                      SizedBox(width: 6.w),
+                                      Text(
+                                        S.of(context).movieDetail_writeComment,
+                                        style: TextStyle(
+                                          color: const Color(0xFFFF6B35),
+                                          fontSize: 24.sp,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        // // 分割线
+                        // Container(
+                        //   margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                        //   height: 1.h,
+                        //   decoration: BoxDecoration(
+                        //     gradient: LinearGradient(
+                        //       colors: [
+                        //         // Colors.transparent,
+                        //         Colors.grey.shade100,
+                        //         // Colors.transparent,
+                        //       ],
+                        //       stops: const [1.0],
+                        //     ),
+                        //   ),
+                        // ),
                         ...generateComment()
                       ]
                     ]

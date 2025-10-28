@@ -2,8 +2,13 @@
   "@@locale": "zh",
   "writeComment_title": "写评论",
   "writeComment_hint": "写下你的评论...",
+  "writeComment_rateTitle": "为这部电影评分",
+  "writeComment_contentTitle": "写下你的观影感受",
+  "writeComment_shareExperience": "分享你的观影体验，帮助其他人做出选择",
+  "writeComment_publishFailed": "评论发布失败，请重试",
   "writeComment_verify_notNull": "评论不能为空",
   "writeComment_verify_notRate": "请给电影评分",
+  "writeComment_verify_movieIdEmpty": "电影ID不能为空",
   "writeComment_release": "发布",
   "search_noData": "暂无数据",
   "search_placeholder": "搜索全部电影",
@@ -290,6 +295,7 @@
       }
     }
   },
+  "commentDetail_comment_hint": "写下你的回复...",
   "commentDetail_comment_button": "回复",
   "movieTicketType_total": "合计",
   "movieTicketType_title": "选择电影票类型",
@@ -459,6 +465,7 @@
   "cinemaList_empty_noSearchResults": "没有找到相关影院",
   "cinemaList_empty_noSearchResultsTip": "请尝试其他关键词",
   "cinemaList_movies_nowShowing": "正在上映",
+  "cinemaList_movies_empty": "暂无上映电影",
   "cinemaList_selectSeat_selectedSeats": "已选座位",
   "cinemaList_selectSeat_pleaseSelectSeats": "请选择座位",
   "cinemaList_selectSeat_confirmSelection": "确认选择 {count} 个座位",
@@ -479,5 +486,10 @@
   "forgotPassword_newPasswordRequired": "请输入新密码",
   "forgotPassword_passwordTooShort": "密码至少需要6位",
   "forgotPassword_verificationCodeSent": "验证码已发送至您的邮箱",
-  "forgotPassword_passwordResetSuccess": "密码重置成功"
+  "forgotPassword_passwordResetSuccess": "密码重置成功",
+  "comingSoon_presale": "预售",
+  "comingSoon_releaseDate": "上映",
+  "comingSoon_noMovies": "暂无正在上映的电影",
+  "comingSoon_tryLaterOrRefresh": "请稍后再试或下拉刷新",
+  "comingSoon_pullToRefresh": "下拉刷新"
 }
