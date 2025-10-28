@@ -2,8 +2,13 @@
   "@@locale": "en",
   "writeComment_title": "Write comment",
   "writeComment_hint": "Write your comment...",
+  "writeComment_rateTitle": "Rate this movie",
+  "writeComment_contentTitle": "Share your movie experience",
+  "writeComment_shareExperience": "Share your experience to help others",
+  "writeComment_publishFailed": "Failed to publish comment, please try again",
   "writeComment_verify_notNull": "Comment cannot be empty",
   "writeComment_verify_notRate": "Please rate the movie",
+  "writeComment_verify_movieIdEmpty": "Movie ID cannot be empty",
   "writeComment_release": "Release",
   "search_noData": "No data yet",
   "search_placeholder": "Search all movies",
@@ -290,6 +295,7 @@
       }
     }
   },
+  "commentDetail_comment_hint": "Write your reply...",
   "commentDetail_comment_button": "Reply",
   "movieTicketType_total": "Total",
   "movieTicketType_title": "Select Movie Ticket Type",
@@ -459,6 +465,7 @@
   "cinemaList_empty_noSearchResults": "No related cinemas found",
   "cinemaList_empty_noSearchResultsTip": "Please try other keywords",
   "cinemaList_movies_nowShowing": "Now Showing",
+  "cinemaList_movies_empty": "No movies showing",
   "cinemaList_selectSeat_selectedSeats": "Selected Seats",
   "cinemaList_selectSeat_pleaseSelectSeats": "Please select seats",
   "cinemaList_selectSeat_confirmSelection": "Confirm selection of {count} seats",
@@ -479,5 +486,10 @@
   "forgotPassword_newPasswordRequired": "Please enter your new password",
   "forgotPassword_passwordTooShort": "Password must be at least 6 characters",
   "forgotPassword_verificationCodeSent": "Verification code has been sent to your email",
-  "forgotPassword_passwordResetSuccess": "Password reset successful"
+  "forgotPassword_passwordResetSuccess": "Password reset successful",
+  "comingSoon_presale": "Presale",
+  "comingSoon_releaseDate": "Release",
+  "comingSoon_noMovies": "No movies currently showing",
+  "comingSoon_tryLaterOrRefresh": "Please try again later or pull down to refresh",
+  "comingSoon_pullToRefresh": "Pull to refresh"
 }

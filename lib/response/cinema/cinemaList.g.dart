@@ -6,6 +6,28 @@ part of 'cinemaList.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+NowShowingMovie _$NowShowingMovieFromJson(Map<String, dynamic> json) =>
+    NowShowingMovie(
+      id: (json['id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+      poster: json['poster'] as String?,
+      time: (json['time'] as num?)?.toInt(),
+      levelName: json['levelName'] as String?,
+      rate: (json['rate'] as num?)?.toDouble(),
+      totalRatings: (json['totalRatings'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$NowShowingMovieToJson(NowShowingMovie instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'poster': instance.poster,
+      'time': instance.time,
+      'levelName': instance.levelName,
+      'rate': instance.rate,
+      'totalRatings': instance.totalRatings,
+    };
+
 CinemaListResponse _$CinemaListResponseFromJson(Map<String, dynamic> json) =>
     CinemaListResponse(
       id: (json['id'] as num?)?.toInt(),
@@ -23,6 +45,9 @@ CinemaListResponse _$CinemaListResponseFromJson(Map<String, dynamic> json) =>
       spec: (json['spec'] as List<dynamic>?)
           ?.map((e) => Spec.fromJson(e as Map<String, dynamic>))
           .toList(),
+      nowShowingMovies: (json['nowShowingMovies'] as List<dynamic>?)
+          ?.map((e) => NowShowingMovie.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
@@ -39,6 +64,8 @@ Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
       'brandId': instance.brandId,
       'brandName': instance.brandName,
       'spec': instance.spec?.map((e) => e.toJson()).toList(),
+      'nowShowingMovies':
+          instance.nowShowingMovies?.map((e) => e.toJson()).toList(),
       'distance': instance.distance,
     };
 

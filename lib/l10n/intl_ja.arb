@@ -2,8 +2,13 @@
   "@@locale": "ja",
   "writeComment_title": "コメントを書く",
   "writeComment_hint": "コメントを入力してください...",
+  "writeComment_rateTitle": "この映画を評価する",
+  "writeComment_contentTitle": "映画の感想を書いてください",
+  "writeComment_shareExperience": "映画体験をシェアして、他の人の選択をサポートしましょう",
+  "writeComment_publishFailed": "コメントの投稿に失敗しました。もう一度お試しください",
   "writeComment_verify_notNull": "コメントを入力してください",
   "writeComment_verify_notRate": "映画に評価を付けてください",
+  "writeComment_verify_movieIdEmpty": "映画IDが空です",
   "writeComment_release": "リリース",
   "search_noData": "まだデータがありません",
   "search_placeholder": "すべての映画を検索",
@@ -290,6 +295,7 @@
       }
     }
   },
+  "commentDetail_comment_hint": "返信を入力してください...",
   "commentDetail_comment_button": "返信",
   "movieTicketType_total": "合計",
   "movieTicketType_title": "映画チケットの種類を選択してください",
@@ -459,6 +465,7 @@
   "cinemaList_empty_noSearchResults": "関連する映画館が見つかりません",
   "cinemaList_empty_noSearchResultsTip": "他のキーワードをお試しください",
   "cinemaList_movies_nowShowing": "上映中",
+  "cinemaList_movies_empty": "上映中の映画はありません",
   "cinemaList_selectSeat_selectedSeats": "選択済み座席",
   "cinemaList_selectSeat_pleaseSelectSeats": "座席を選択してください",
   "cinemaList_selectSeat_confirmSelection": "{count} 席の選択を確認",
@@ -479,5 +486,10 @@
   "forgotPassword_newPasswordRequired": "新しいパスワードを入力してください",
   "forgotPassword_passwordTooShort": "パスワードは6文字以上である必要があります",
   "forgotPassword_verificationCodeSent": "認証コードがメールに送信されました",
-  "forgotPassword_passwordResetSuccess": "パスワードリセットが成功しました"
+  "forgotPassword_passwordResetSuccess": "パスワードリセットが成功しました",
+  "comingSoon_presale": "前売り",
+  "comingSoon_releaseDate": "公開",
+  "comingSoon_noMovies": "現在上映中の映画はありません",
+  "comingSoon_tryLaterOrRefresh": "しばらくしてからもう一度お試しいただくか、下にスワイプして更新してください",
+  "comingSoon_pullToRefresh": "下にスワイプして更新"
 }

@@ -10,6 +10,7 @@ import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 
 class NowShowing extends StatefulWidget {
 
@@ -30,6 +31,19 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   bool error = false;
   bool loadFinished  = false;
  // 视图模式：false为列表，true为网格
+
+  /// 判断是否为预售（上映时间未到）
+  bool _isPresale(String? startDate) {
+    if (startDate == null || startDate.isEmpty) return false;
+    
+    try {
+      final releaseDate = DateTime.parse(startDate);
+      final now = DateTime.now();
+      return releaseDate.isAfter(now);
+    } catch (e) {
+      return false;
+    }
+  }
 
   void getData({int page = 1}) {
     ApiRequest().request(
@@ -187,6 +201,34 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                       ),
                     ),
                   ),
+                  // 预售标签（左上角）
+                  if (_isPresale(item.startDate))
+                    Positioned(
+                      top: 8.h,
+                      left: 8.w,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFF6B35),
+                          borderRadius: BorderRadius.circular(8.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFFFF6B35).withOpacity(0.3),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          S.of(context).comingSoon_presale,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
                   // 音频/字幕标签
                   if (item.helloMovie != null) ...[
                     Positioned(
@@ -281,6 +323,40 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           ),
         SizedBox(height: 16.h),
         
+        // 上映日期（预售时显示）
+        if (_isPresale(item.startDate) && item.startDate != null)
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF6B35).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(6.r),
+              border: Border.all(
+                color: const Color(0xFFFF6B35).withOpacity(0.3),
+                width: 1,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.schedule_outlined,
+                  size: 20.sp,
+                  color: const Color(0xFFFF6B35),
+                ),
+                SizedBox(width: 6.w),
+                Text(
+                  '${DateFormatUtil.formatDate(item.startDate, context)} ${S.of(context).comingSoon_releaseDate}',
+                  style: TextStyle(
+                    fontSize: 22.sp,
+                    color: const Color(0xFFFF6B35),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        if (_isPresale(item.startDate)) SizedBox(height: 16.h),
+        
         // 规格标签
         if (item.spec != null && item.spec!.isNotEmpty)
           Wrap(
@@ -313,19 +389,27 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildActionButton(BuildContext context, MovieNowShowingResponse item) {
+    final isPresale = _isPresale(item.startDate);
+    final buttonColors = isPresale 
+      ? [const Color(0xFFFF6B35), const Color(0xFFFF8A50)]  // 预售：橙色渐变
+      : [const Color(0xFF1989FA), const Color(0xFF069EF0)]; // 正常：蓝色渐变
+    final shadowColor = isPresale 
+      ? const Color(0xFFFF6B35) 
+      : const Color(0xFF1989FA);
+    
     return Container(
       width: double.infinity,
       height: 80.h,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+        gradient: LinearGradient(
+          colors: buttonColors,
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1989FA).withOpacity(0.3),
+            color: shadowColor.withOpacity(0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -357,7 +441,9 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                 ),
                 SizedBox(width: 8.w),
                 Text(
-                  S.of(context).movieList_buy,
+                  _isPresale(item.startDate) 
+                    ? S.of(context).comingSoon_presale
+                    : S.of(context).movieList_buy,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 28.sp,
@@ -391,7 +477,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           ),
           SizedBox(height: 24.h),
           Text(
-            '暂无正在上映的电影',
+            S.of(context).comingSoon_noMovies,
             style: TextStyle(
               fontSize: 28.sp,
               color: const Color(0xFF323233),
@@ -400,7 +486,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           ),
           SizedBox(height: 12.h),
           Text(
-            '请稍后再试或下拉刷新',
+            S.of(context).comingSoon_tryLaterOrRefresh,
             style: TextStyle(
               fontSize: 24.sp,
               color: const Color(0xFF969799),
@@ -415,7 +501,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
               borderRadius: BorderRadius.circular(25.r),
             ),
             child: Text(
-              '下拉刷新',
+              S.of(context).comingSoon_pullToRefresh,
               style: TextStyle(
                 fontSize: 24.sp,
                 color: Colors.white,

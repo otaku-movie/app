@@ -311,9 +311,11 @@ class _PageState extends State<Ticket> {
                             child: Row(
                               children: [
                                 // 电影海报（清晰）
-                                Container(
-                                  width: 180.w,
-                                  height: 200.h,
+                                AspectRatio(
+                                  aspectRatio: 3 / 4,
+                                  child:  Container(
+                                  // width: 180.w,
+                                  // height: 200.h,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.r),
                                     color: Colors.white,
@@ -334,6 +336,8 @@ class _PageState extends State<Ticket> {
                                     ),
                                   ),
                                 ),
+                                ),
+                               
                                 SizedBox(width: 24.w),
                                 // 电影信息
                                 Expanded(
@@ -793,7 +797,7 @@ class TicketClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     double radius = 20.0;
-    double notchRadius = 15.0;
+    double notchRadius = 10.0;
     double notchPosition = size.height * 0.42; // 锯齿位置在42%处
 
     // 从左上角开始

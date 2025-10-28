@@ -166,6 +166,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaList_filter_title":
             MessageLookupByLibrary.simpleMessage("按区域筛选"),
         "cinemaList_loading": MessageLookupByLibrary.simpleMessage("加载失败，请重试"),
+        "cinemaList_movies_empty":
+            MessageLookupByLibrary.simpleMessage("暂无上映电影"),
         "cinemaList_movies_nowShowing":
             MessageLookupByLibrary.simpleMessage("正在上映"),
         "cinemaList_search_clear": MessageLookupByLibrary.simpleMessage("清除"),
@@ -183,8 +185,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaList_selectSeat_selectedSeats":
             MessageLookupByLibrary.simpleMessage("已选座位"),
         "cinemaList_title": MessageLookupByLibrary.simpleMessage("附近影院"),
+        "comingSoon_noMovies":
+            MessageLookupByLibrary.simpleMessage("暂无正在上映的电影"),
+        "comingSoon_presale": MessageLookupByLibrary.simpleMessage("预售"),
+        "comingSoon_pullToRefresh":
+            MessageLookupByLibrary.simpleMessage("下拉刷新"),
+        "comingSoon_releaseDate": MessageLookupByLibrary.simpleMessage("上映"),
+        "comingSoon_tryLaterOrRefresh":
+            MessageLookupByLibrary.simpleMessage("请稍后再试或下拉刷新"),
         "commentDetail_comment_button":
             MessageLookupByLibrary.simpleMessage("回复"),
+        "commentDetail_comment_hint":
+            MessageLookupByLibrary.simpleMessage("写下你的回复..."),
         "commentDetail_comment_placeholder": m5,
         "commentDetail_replyComment":
             MessageLookupByLibrary.simpleMessage("评论回复"),
@@ -702,9 +714,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_updateSuccessMessage":
             MessageLookupByLibrary.simpleMessage("应用已成功更新到最新版本！"),
         "user_updating": MessageLookupByLibrary.simpleMessage("正在更新"),
+        "writeComment_contentTitle":
+            MessageLookupByLibrary.simpleMessage("写下你的观影感受"),
         "writeComment_hint": MessageLookupByLibrary.simpleMessage("写下你的评论..."),
+        "writeComment_publishFailed":
+            MessageLookupByLibrary.simpleMessage("评论发布失败，请重试"),
+        "writeComment_rateTitle":
+            MessageLookupByLibrary.simpleMessage("为这部电影评分"),
         "writeComment_release": MessageLookupByLibrary.simpleMessage("发布"),
+        "writeComment_shareExperience":
+            MessageLookupByLibrary.simpleMessage("分享你的观影体验，帮助其他人做出选择"),
         "writeComment_title": MessageLookupByLibrary.simpleMessage("写评论"),
+        "writeComment_verify_movieIdEmpty":
+            MessageLookupByLibrary.simpleMessage("电影ID不能为空"),
         "writeComment_verify_notNull":
             MessageLookupByLibrary.simpleMessage("评论不能为空"),
         "writeComment_verify_notRate":

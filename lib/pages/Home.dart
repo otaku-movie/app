@@ -71,12 +71,11 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
             height: 120.h,
             padding: EdgeInsets.symmetric(horizontal: 8.w),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildNavItem(0, Icons.movie_outlined, Icons.movie, S.of(context).home_home),
-                _buildNavItem(1, Icons.confirmation_number_outlined, Icons.confirmation_number, S.of(context).home_ticket),
-                _buildNavItem(2, Icons.theaters_outlined, Icons.theaters, S.of(context).home_cinema),
-                _buildNavItem(3, Icons.person_outline, Icons.person, S.of(context).home_me),
+                Expanded(child: _buildNavItem(0, Icons.movie_outlined, Icons.movie, S.of(context).home_home)),
+                Expanded(child: _buildNavItem(1, Icons.confirmation_number_outlined, Icons.confirmation_number, S.of(context).home_ticket)),
+                Expanded(child: _buildNavItem(2, Icons.theaters_outlined, Icons.theaters, S.of(context).home_cinema)),
+                Expanded(child: _buildNavItem(3, Icons.person_outline, Icons.person, S.of(context).home_me)),
               ],
             ),
           ),
@@ -91,7 +90,8 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
     return GestureDetector(
       onTap: () => _changeTab(index),
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 8.w),
+        height: 120.h,
+        alignment: Alignment.center,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

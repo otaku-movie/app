@@ -8,8 +8,8 @@ import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/Input.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/error.dart';
-import 'package:otaku_movie/components/rate.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -17,9 +17,9 @@ import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/comment/comment_response.dart';
 
 class CommentDetail extends StatefulWidget {
-  String? id;
-  String? movieId;
-  CommentDetail({super.key, this.id, this.movieId});
+  final String? id;
+  final String? movieId;
+  const CommentDetail({super.key, this.id, this.movieId});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -130,10 +130,24 @@ class _CommentDetailPageState extends State<CommentDetail> {
           width: 80.w,
           height: 80.w,
           margin: EdgeInsets.only(right: 20.w),
-          child: CircleAvatar(
-            radius: 50.0, // 半径
-            backgroundColor: Colors.grey.shade300,
-            backgroundImage: NetworkImage(data.commentUserAvatar ?? ''),
+          child: ClipOval(
+            child: data.commentUserAvatar != null && data.commentUserAvatar!.isNotEmpty
+                ? CustomExtendedImage(
+                    data.commentUserAvatar!,
+                    width: 80.w,
+                    height: 80.w,
+                    fit: BoxFit.cover,
+                  )
+                : Container(
+                    width: 80.w,
+                    height: 80.w,
+                    color: Colors.grey.shade300,
+                    child: Icon(
+                      Icons.person,
+                      size: 40.w,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
           ),
         ),
         SizedBox(
@@ -187,9 +201,9 @@ class _CommentDetailPageState extends State<CommentDetail> {
                     ])
                   ),
                   SizedBox(height: 5.h),
-                  Space(
-                    right: 20.w,
+                  Row(
                     children: [
+                      // 点赞按钮
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -214,17 +228,39 @@ class _CommentDetailPageState extends State<CommentDetail> {
                             getReplyData();
                           });
                         },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Icon(
-                              Icons.thumb_up,
-                              color: data.like! ? Colors.pink.shade400 : Colors.grey.shade400, 
-                              size: 36.sp
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                          decoration: BoxDecoration(
+                            color: data.like! ? const Color(0xFFFF6B35).withOpacity(0.1) : Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(
+                              color: data.like! ? const Color(0xFFFF6B35).withOpacity(0.3) : Colors.grey.shade200,
+                              width: 1,
                             ),
-                            Text('${data.likeCount}'),
-                        ]),     
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                data.like! ? Icons.thumb_up : Icons.thumb_up_outlined,
+                                color: data.like! ? const Color(0xFFFF6B35) : Colors.grey.shade500,
+                                size: 20.sp,
+                              ),
+                              SizedBox(width: 6.w),
+                              Text(
+                                '${data.likeCount}',
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  color: data.like! ? const Color(0xFFFF6B35) : Colors.grey.shade600,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
+                      SizedBox(width: 12.w),
+                      // 踩按钮
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -249,17 +285,39 @@ class _CommentDetailPageState extends State<CommentDetail> {
                             getReplyData();
                           });
                         },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Icon(
-                              Icons.thumb_down,
-                              color: data.dislike! ? Colors.pink.shade400 : Colors.grey.shade400, 
-                              size: 36.sp
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                          decoration: BoxDecoration(
+                            color: data.dislike! ? Colors.red.shade50 : Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(
+                              color: data.dislike! ? Colors.red.shade200 : Colors.grey.shade200,
+                              width: 1,
+                            ),
                           ),
-                          Text('${data.dislikeCount}'),
-                        ]),     
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                data.dislike! ? Icons.thumb_down : Icons.thumb_down_outlined,
+                                color: data.dislike! ? Colors.red.shade400 : Colors.grey.shade500,
+                                size: 20.sp,
+                              ),
+                              SizedBox(width: 6.w),
+                              Text(
+                                '${data.dislikeCount ?? 0}',
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  color: data.dislike! ? Colors.red.shade400 : Colors.grey.shade600,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
+                      SizedBox(width: 12.w),
+                      // 回复按钮
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -268,51 +326,44 @@ class _CommentDetailPageState extends State<CommentDetail> {
                           });
                            _focusNode.requestFocus();
                         },
-                        child: Space(
-                          right: 10.w,
-                          children: [
-                            Icon(
-                              Icons.comment,
-                              color: Colors.grey.shade400, 
-                              size: 36.sp
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
                             ),
-                            Text(S.of(context).movieDetail_comment_reply),
-                        ]),     
+                            borderRadius: BorderRadius.circular(22.r),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(2.w),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.reply_rounded,
+                                  color: Colors.white,
+                                  size: 20.sp,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                S.of(context).movieDetail_comment_reply,
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //   },
-                      //   child: Space(
-                      //     right: 10.w,
-                      //     children: [
-                      //       Space(
-                      //       right: 10.w,
-                      //       children: [
-                      //         Icon(
-                      //           Icons.translate,
-                      //         color: Colors.grey.shade400, size: 36.sp
-                      //       ),
-                      //       Text(S.of(context).movieDetail_comment_translate(languageController.locale.value.languageCode), style: TextStyle(color: Colors.grey.shade700))
-                      //     ]),
-                      //   ]),     
-                      // ),
-                      //  GestureDetector(
-                      //   onTap: () {
-                      //   },
-                      //   child: Space(
-                      //     right: 10.w,
-                      //     children: [
-                      //       Space(
-                      //       right: 10.w,
-                      //       children: [
-                      //         Icon(
-                      //           Icons.delete,
-                      //         color: Colors.grey.shade400, size: 36.sp
-                      //       ),
-                      //       Text(S.of(context).movieDetail_comment_delete, style: TextStyle(color: Colors.grey.shade700))
-                      //     ]),
-                      //   ]),     
-                      // ),
                     ],
                   ),
                 ],
@@ -334,124 +385,220 @@ class _CommentDetailPageState extends State<CommentDetail> {
       },
       child: Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF5F7FA),
       appBar: CustomAppBar(
         title: S.of(context).commentDetail_title,
         titleTextStyle: TextStyle(fontSize: 36.sp, color: Colors.white),
       ),
-      bottomNavigationBar: Padding(
+      bottomNavigationBar: !showReply || replyData == null ? null : Container(
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom, // 键盘高度
         ),
-        child:  !showReply ? null :  Container(
-        height: 300.h,
+        child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.r),
+            topRight: Radius.circular(20.r),
+          ),
+          border: Border(
+            top: BorderSide(
               color: Colors.grey.shade200,
-              offset: const Offset(0, -2),
-              blurRadius: 5,
-            )
-          ],
+              width: 1,
+            ),
+          ),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        // color: Colors.grey.shade200,
-        child: Space(
-          right: 20.w,
-          direction: 'column',
-          bottom: 20.h,
+        padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 20.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
+            // 回复标题
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(bottom: 20.h),
+              child: Text(
+                '${S.of(context).commentDetail_comment_placeholder(replyData?.commentUserName ?? '')}',
+                style: TextStyle(
+                  fontSize: 28.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            // 输入框
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade50,
+                borderRadius: BorderRadius.circular(20.r),
+                border: Border.all(
+                  color: Colors.grey.shade200,
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
               child: Input(
                 focusNode: _focusNode,
                 controller: commentInputController,
                 type: 'textarea',
-                maxLines: 5,
-                placeholder: '${S.of(context).commentDetail_comment_placeholder(replyData.commentUserName)}：',
-                placeholderStyle: TextStyle(color: Colors.grey.shade500, fontSize: 28.sp),
-                textStyle: const TextStyle(color: Colors.black),
-                backgroundColor: Colors.white,
-                borderRadius: BorderRadius.circular(4),
+                maxLines: 6,
+                placeholder: S.of(context).commentDetail_comment_hint,
+                placeholderStyle: TextStyle(
+                  color: Colors.grey.shade500, 
+                  fontSize: 26.sp,
+                  fontWeight: FontWeight.w400,
+                ),
+                textStyle: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 26.sp,
+                  height: 1.5,
+                  fontWeight: FontWeight.w400,
+                ),
+                backgroundColor: Colors.transparent,
+                horizontalPadding: 0.w,
+                // borderRadius: BorderRadius.circular(20.r),
                 suffixIcon: commentInputController.text.isNotEmpty 
-                    ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          commentInputController.text = '';
-                        });
-                        // 关闭键盘弹窗
-                        FocusScope.of(context).requestFocus(FocusNode());
-                      },
-                      // enableFeedback: false,
-                      icon: Icon(
-                        Icons.clear, 
-                        color: Colors.grey.shade500
+                    ? Container(
+                        margin: EdgeInsets.only(right: 16.w, top: 16.h),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              commentInputController.text = '';
+                            });
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          },
+                          child: Container(
+                            width: 30.w,
+                            height: 30.w,
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.6),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.close_rounded,
+                              color: Colors.white,
+                              size: 18.sp,
+                            ),
+                          ),
+                        ),
                       )
-                ) : null,
-                cursorColor: Colors.black,
+                    : null,
+                cursorColor: const Color(0xFF1989FA),
                 onChange: (value) => {
                   setState(() {
                     currentReplyLength = value.length;
                   })
                 },
-                onSubmit: (val) {
-
-                },
-              )),
-              Space(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('$currentReplyLength/1000', style: TextStyle(color: Colors.grey.shade500, fontSize: 28.sp)),
-                  GestureDetector(
-                    onTap: () {
-                      String parentReplyId = replyData is Reply && replyData.parentReplyId != null ? '${replyData.parentReplyId}-${replyData.id}' : '${replyData.id}';
-
-                    
-                      ApiRequest().request(
-                        path: '/movie/reply/save',
-                        method: 'POST',
-                        data: {
-                          "movieId": int.parse(widget.movieId ?? ''),
-                          "movieCommentId": int.parse(widget.id ?? ''),
-                          "content": commentInputController.text,
-                          "parentReplyId": parentReplyId,
-                          "replyUserId": replyData.commentUserId
-                        },
-                        fromJsonT: (json) {
-                          return ApiPaginationResponse<Reply>.fromJson(
-                            json,
-                            (data) => Reply.fromJson(data as Map<String, dynamic>),
-                          );
-                        },
-                      ).then((res) async {
-                        setState(() {
-                          commentInputController.text = '';
-                          showReply = false;
-                        });
-                        getReplyData();
-                      });
-                    },
-                    child: Container(
-                      // width: 100.w,
-                      height: 45.h,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(horizontal: 30.w),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Text(
-                        S.of(context).commentDetail_comment_button,
-                        style: TextStyle(color: Colors.white, fontSize: 28.sp),
-                      ),
+                onSubmit: (val) {},
+              ),
+            ),
+            SizedBox(height: 20.h),
+            // 底部操作栏
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // 字数统计
+                Flexible(
+                  child: Text(
+                    '$currentReplyLength/1000',
+                    style: TextStyle(
+                      color: currentReplyLength > 900 
+                        ? const Color(0xFFFF6B35)
+                        : Colors.grey.shade500,
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.w500,
                     ),
-                  )
-                ]
-              )
-              
-            
-          ]
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                // 发送按钮
+                GestureDetector(
+                    onTap: commentInputController.text.trim().isEmpty ? null : () {
+                    String parentReplyId = replyData is Reply && replyData?.parentReplyId != null 
+                      ? '${replyData?.parentReplyId}-${replyData?.id}' 
+                      : '${replyData?.id ?? ''}';
+
+                    ApiRequest().request(
+                      path: '/movie/reply/save',
+                      method: 'POST',
+                      data: {
+                        "movieId": int.parse(widget.movieId ?? ''),
+                        "movieCommentId": int.parse(widget.id ?? ''),
+                        "content": commentInputController.text,
+                        "parentReplyId": parentReplyId,
+                        "replyUserId": replyData?.commentUserId
+                      },
+                      fromJsonT: (json) {
+                        return ApiPaginationResponse<Reply>.fromJson(
+                          json,
+                          (data) => Reply.fromJson(data as Map<String, dynamic>),
+                        );
+                      },
+                    ).then((res) async {
+                      setState(() {
+                        commentInputController.text = '';
+                        showReply = false;
+                      });
+                      getReplyData();
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+                    decoration: BoxDecoration(
+                      gradient: commentInputController.text.trim().isEmpty
+                        ? null
+                        : const LinearGradient(
+                            colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                      color: commentInputController.text.trim().isEmpty
+                        ? Colors.grey.shade200
+                        : null,
+                      borderRadius: BorderRadius.circular(25.r),
+                      border: commentInputController.text.trim().isEmpty
+                        ? Border.all(
+                            color: Colors.grey.shade300,
+                            width: 1,
+                          )
+                        : null,
+                      boxShadow: commentInputController.text.trim().isEmpty
+                        ? null
+                        : [
+                            BoxShadow(
+                              color: const Color(0xFF1989FA).withOpacity(0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                    ),
+                    child: Text(
+                      S.of(context).commentDetail_comment_button,
+                      style: TextStyle(
+                        color: commentInputController.text.trim().isEmpty
+                          ? Colors.grey.shade500
+                          : Colors.white,
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
       ), 
@@ -468,37 +615,87 @@ class _CommentDetailPageState extends State<CommentDetail> {
           getReplyData(page: currentPage + 1);
         },
         child: Container(
-          padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
+          // padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
           child: ListView(
             children: [
-              buildComment(data),
+              // 主评论
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                margin: EdgeInsets.only(bottom: 20.h),
-                
-                child:  replyCount == 0 ? null : Space(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      S.of(context).commentDetail_replyComment, 
-                      style: TextStyle(color: Colors.grey.shade400, fontSize: 28.sp)
-                    ),
-                    Text(
-                      S.of(context).commentDetail_totalReplyMessage(replyCount), 
-                      style: TextStyle(color: Colors.grey.shade400, fontSize: 28.sp)
-                    ),
-                  ]
+                margin: EdgeInsets.only(bottom: 24.h),
+                padding: EdgeInsets.all(20.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
+                child: buildComment(data),
               ),
-              Space(
-                direction: 'column',
-                crossAxisAlignment: CrossAxisAlignment.start,
-                bottom: 10.h,
-                children: [
-                ...replyList.map((reply) {
-                  return buildComment(reply, type: 'reply');
-                }),
-              ]),
+              
+              // 回复标题区域
+              if (replyCount > 0)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                  margin: EdgeInsets.only(bottom: 16.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(6.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1989FA).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Icon(
+                              Icons.comment_outlined,
+                              color: const Color(0xFF1989FA),
+                              size: 20.sp,
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Text(
+                            S.of(context).commentDetail_replyComment,
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 28.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        child: Text(
+                          S.of(context).commentDetail_totalReplyMessage(replyCount),
+                          style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              // 回复列表
+              ...replyList.map((reply) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 12.h),
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: buildComment(reply, type: 'reply'),
+                );
+              }).toList(),
             ],
           ),
         ),

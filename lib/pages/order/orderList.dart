@@ -26,6 +26,26 @@ class _PageState extends State<OrderList> {
   int currentPage = 1;
   bool loading = false;
 
+  /// 将 API 返回的 int 值转换为 OrderState 枚举
+  OrderState? _getOrderState(int? orderState) {
+    if (orderState == null) return null;
+    
+    switch (orderState) {
+      case 1:
+        return OrderState.created;
+      case 2:
+        return OrderState.succeed;
+      case 3:
+        return OrderState.failed;
+      case 4:
+        return OrderState.canceledOrder;
+      case 5:
+        return OrderState.timeout;
+      default:
+        return null;
+    }
+  }
+
   void getData({bool refresh = true}) {
     setState(() {
       loading = true;
@@ -289,7 +309,7 @@ class _PageState extends State<OrderList> {
                                         Icon(
                                           Icons.location_on,
                                           size: 20.sp,
-                                          color: const Color(0xFF969799),
+                                          color: Colors.red,
                                         ),
                                         SizedBox(width: 4.w),
                                         Expanded(
@@ -368,29 +388,56 @@ class _PageState extends State<OrderList> {
                                     ),
                                     
                                     // 评论按钮
-                                    if (item.orderState == OrderState.succeed)
+                                    if (_getOrderState(item.orderState) == OrderState.succeed)
                                       Container(
-                                        height: 50.h,
-                                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                        height: 48.h,
                                         decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              const Color(0xFF1989FA),
-                                              const Color(0xFF1989FA).withOpacity(0.9),
-                                            ],
+                                          gradient: const LinearGradient(
+                                            colors: [Color(0xFFFF6B35), Color(0xFFFF8A50)],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
                                           ),
-                                          borderRadius: BorderRadius.circular(25.r),
+                                          borderRadius: BorderRadius.circular(24.r),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: const Color(0xFFFF6B35).withOpacity(0.3),
+                                              blurRadius: 4,
+                                              offset: const Offset(0, 4),
+                                            ),
+                                          ],
                                         ),
-                                        child: MaterialButton(
-                                          padding: EdgeInsets.zero,
-                                          onPressed: () {
-                                            // context.pushNamed('commentDetail');
-                                          },
-                                          child: Text(
-                                            S.of(context).orderList_comment,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 26.sp,
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.circular(24.r),
+                                            onTap: () {
+                                              context.pushNamed('writeComment', queryParameters: {
+                                                'movieId': '${item.movieId}',
+                                                'movieName': item.movieName ?? '',
+                                              });
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                                              alignment: Alignment.center,
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    Icons.rate_review_outlined,
+                                                    color: Colors.white,
+                                                    size: 20.sp,
+                                                  ),
+                                                  SizedBox(width: 8.w),
+                                                  Text(
+                                                    S.of(context).orderList_comment,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 24.sp,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),

@@ -180,6 +180,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Filter by Area"),
         "cinemaList_loading": MessageLookupByLibrary.simpleMessage(
             "Loading failed, please retry"),
+        "cinemaList_movies_empty":
+            MessageLookupByLibrary.simpleMessage("No movies showing"),
         "cinemaList_movies_nowShowing":
             MessageLookupByLibrary.simpleMessage("Now Showing"),
         "cinemaList_search_clear":
@@ -200,8 +202,19 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Selected Seats"),
         "cinemaList_title":
             MessageLookupByLibrary.simpleMessage("Nearby Cinemas"),
+        "comingSoon_noMovies":
+            MessageLookupByLibrary.simpleMessage("No movies currently showing"),
+        "comingSoon_presale": MessageLookupByLibrary.simpleMessage("Presale"),
+        "comingSoon_pullToRefresh":
+            MessageLookupByLibrary.simpleMessage("Pull to refresh"),
+        "comingSoon_releaseDate":
+            MessageLookupByLibrary.simpleMessage("Release"),
+        "comingSoon_tryLaterOrRefresh": MessageLookupByLibrary.simpleMessage(
+            "Please try again later or pull down to refresh"),
         "commentDetail_comment_button":
             MessageLookupByLibrary.simpleMessage("Reply"),
+        "commentDetail_comment_hint":
+            MessageLookupByLibrary.simpleMessage("Write your reply..."),
         "commentDetail_comment_placeholder": m5,
         "commentDetail_replyComment":
             MessageLookupByLibrary.simpleMessage("Comment Reply"),
@@ -814,11 +827,21 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_updateSuccessMessage": MessageLookupByLibrary.simpleMessage(
             "App has been successfully updated to the latest version!"),
         "user_updating": MessageLookupByLibrary.simpleMessage("Updating"),
+        "writeComment_contentTitle":
+            MessageLookupByLibrary.simpleMessage("Share your movie experience"),
         "writeComment_hint":
             MessageLookupByLibrary.simpleMessage("Write your comment..."),
+        "writeComment_publishFailed": MessageLookupByLibrary.simpleMessage(
+            "Failed to publish comment, please try again"),
+        "writeComment_rateTitle":
+            MessageLookupByLibrary.simpleMessage("Rate this movie"),
         "writeComment_release": MessageLookupByLibrary.simpleMessage("Release"),
+        "writeComment_shareExperience": MessageLookupByLibrary.simpleMessage(
+            "Share your experience to help others"),
         "writeComment_title":
             MessageLookupByLibrary.simpleMessage("Write comment"),
+        "writeComment_verify_movieIdEmpty":
+            MessageLookupByLibrary.simpleMessage("Movie ID cannot be empty"),
         "writeComment_verify_notNull":
             MessageLookupByLibrary.simpleMessage("Comment cannot be empty"),
         "writeComment_verify_notRate":

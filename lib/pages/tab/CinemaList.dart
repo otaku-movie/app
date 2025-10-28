@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/FilterBar.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/cinema/cinemaList.dart';
 import 'package:otaku_movie/response/area_response.dart';
@@ -323,42 +324,42 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                         child: Text(
                           cinema.name ?? '',
                           style: TextStyle(
-                            fontSize: 26.sp,
+                            fontSize: 32.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.grey.shade800,
                           ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.shade50,
-                          borderRadius: BorderRadius.circular(20.r),
-                          border: Border.all(
-                            color: Colors.blue.shade200,
-                            width: 1,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.location_on_rounded,
-                              size: 14.sp,
-                              color: Colors.blue.shade600,
-                            ),
-                            SizedBox(width: 4.w),
-                            Text(
-                              '2.5km',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: Colors.blue.shade700,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-          ],
-        ),
-      ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.blue.shade50,
+                      //     borderRadius: BorderRadius.circular(20.r),
+                      //     border: Border.all(
+                      //       color: Colors.blue.shade200,
+                      //       width: 1,
+                      //     ),
+                      //   ),
+      //                   child: Row(
+      //                     mainAxisSize: MainAxisSize.min,
+      //                     children: [
+      //                       Icon(
+      //                         Icons.location_on_rounded,
+      //                         size: 14.sp,
+      //                         color: Colors.blue.shade600,
+      //                       ),
+      //                       SizedBox(width: 4.w),
+      //                       Text(
+      //                         '2.5km',
+      //                         style: TextStyle(
+      //                           fontSize: 12.sp,
+      //                           color: Colors.blue.shade700,
+      //                           fontWeight: FontWeight.w600,
+      //                         ),
+      //                       ),
+      //     ],
+      //   ),
+      // ),
                     ],
                   ),
                   SizedBox(height: 12.h),
@@ -395,16 +396,17 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                   SizedBox(height: 16.h),
                   
                   // 影院特色标签
-                  Wrap(
-                    spacing: 8.w,
-                    runSpacing: 8.h,
-                    children: [
-                      _buildFeatureTag('IMAX', Colors.red.shade600),
-                      _buildFeatureTag('4DX', Colors.orange.shade600),
-                      _buildFeatureTag('DOLBY', Colors.purple.shade600),
-                      _buildFeatureTag('3D', Colors.green.shade600),
-                    ],
-                  ),
+                  if (cinema.spec != null && cinema.spec!.isNotEmpty)
+                    Wrap(
+                      spacing: 8.w,
+                      runSpacing: 8.h,
+                      children: cinema.spec!.map((spec) {
+                        return _buildFeatureTag(
+                          spec.name ?? '', 
+                          _getSpecColor(spec.name ?? '')
+                        );
+                      }).toList(),
+                    ),
                 ],
               ),
             ),
@@ -492,128 +494,152 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                   // 电影海报列表 - 占满整行
                   SizedBox(
                     height: 280.h, // 保持高度限制以避免布局错误
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 4, // 只显示4部电影
-                      physics: ClampingScrollPhysics(), // 添加物理滚动
-                      itemBuilder: (context, index) {
-                        final movies = [
-                          {'title': '鬼灭之刃', 'poster': 'assets/image/kimetsu-movie.jpg', 'rating': '9.2'},
-                          {'title': '铃芽之旅', 'poster': 'assets/image/lycoris recoil.webp', 'rating': '8.8'},
-                          {'title': '你的名字', 'poster': 'assets/image/raligun.webp', 'rating': '9.0'},
-                          {'title': '天气之子', 'poster': 'assets/image/kimetsu-movie.jpg', 'rating': '8.5'},
-                        ];
-                        
-                        final movie = movies[index];
-                        return GestureDetector(
-                          onTap: () {
-                            // TODO: 跳转到电影详情页，需要传入实际的电影ID
-                            // context.pushNamed('movieDetail', pathParameters: {'id': movie['id'].toString()});
-                            print('点击电影: ${movie['title']}');
-                          },
-                          child: Container(
-                            width: (MediaQuery.of(context).size.width - 60.w) / 4, // 考虑间距的宽度
-                            height: 280.h, // 添加高度限制，确保卡片有固定高度
-                            margin: EdgeInsets.only(right: 12.w),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // 电影海报
-                                Container(
-                                  width: (MediaQuery.of(context).size.width - 60.w) / 4,
-                                  height: 200.h, // 添加高度限制，防止没有数据时布局问题
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12.r),
-                                    color: Colors.grey.shade100, // 使用淡灰色背景
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 2),
+                    child: cinema.nowShowingMovies == null || cinema.nowShowingMovies!.isEmpty
+                        ? Center(
+                            child: Container(
+                              padding: EdgeInsets.all(40.w),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.movie_outlined,
+                                    size: 48.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                  SizedBox(height: 12.h),
+                                  Text(
+                                    S.of(context).cinemaList_movies_empty,
+                                    style: TextStyle(
+                                      fontSize: 24.sp,
+                                      color: Colors.grey.shade500,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: cinema.nowShowingMovies!.length, // 显示全部电影
+                            physics: const ClampingScrollPhysics(), // 添加物理滚动
+                            itemBuilder: (context, index) {
+                              final movie = cinema.nowShowingMovies![index];
+                              return GestureDetector(
+                                onTap: () {
+                                  context.pushNamed('showTimeDetail', pathParameters: {
+                                    'id': '${movie.id}',
+                                    'cinemaId': '${cinema.id}'
+                                  }, queryParameters: {
+                                    'movieName': movie.name ?? '',
+                                    'cinemaName': cinema.name ?? '',
+                                  });
+                                },
+                                child: Container(
+                                  width: 160.w, // 固定宽度，适合显示更多电影
+                                  height: 280.h, // 添加高度限制，确保卡片有固定高度
+                                  margin: EdgeInsets.only(right: 12.w),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      // 电影海报
+                                      Container(
+                                        width: 160.w,
+                                        height: 173.h, // 调整高度以保持与NowShowing相同的比例 (160:173 ≈ 240:260)
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(12.r),
+                                          color: Colors.grey.shade100, // 使用淡灰色背景
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.black.withOpacity(0.1),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(12.r),
+                                          child: movie.poster != null && movie.poster!.isNotEmpty
+                                              ? CustomExtendedImage(
+                                                  movie.poster!,
+                                                  width: 160.w,
+                                                  height: 173.h,
+                                                  fit: BoxFit.contain,
+                                                )
+                                              : Container(
+                                                  color: Colors.grey.shade300,
+                                                  child: Icon(
+                                                    Icons.movie_rounded,
+                                                    color: Colors.grey.shade600,
+                                                    size: 32.sp,
+                                                  ),
+                                                ),
+                                        ),
                                       ),
+                                      SizedBox(height: 6.h), // 减少间距
+
+                                      // 电影标题
+                                      Expanded(
+                                        child: Text(
+                                          movie.name ?? '',
+                                          style: TextStyle(
+                                            fontSize: 24.sp, // 进一步增加字体大小
+                                            color: Colors.grey.shade800,
+                                            fontWeight: FontWeight.w600,
+                                            height: 1.5, // 设置行高
+                                          ),
+                                          maxLines: 2, // 改为1行
+                                          overflow: TextOverflow.ellipsis, // 超出显示省略号
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      SizedBox(height: 6.h),
+                                      // 评分
+                                      if (movie.rate != null && movie.rate! > 0)
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
+                                          decoration: BoxDecoration(
+                                            color: Colors.orange.shade50,
+                                            borderRadius: BorderRadius.circular(24.r),
+                                            border: Border.all(
+                                              color: Colors.orange.shade200,
+                                              width: 2,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.orange.withOpacity(0.2),
+                                                blurRadius: 12,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.star_rounded,
+                                                size: 28.sp,
+                                                color: Colors.orange.shade600,
+                                              ),
+                                              SizedBox(width: 6.w),
+                                              Text(
+                                                movie.rate!.toStringAsFixed(1),
+                                                style: TextStyle(
+                                                  fontSize: 18.sp,
+                                                  color: Colors.orange.shade700,
+                                                  fontWeight: FontWeight.bold,
+                                                  letterSpacing: 0.5,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                     ],
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12.r),
-                                    child: Image.asset(
-                                      movie['poster']!,
-                                      fit: BoxFit.contain, // 保持图片比例，不变形
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Container(
-                                          color: Colors.grey.shade300,
-                                          child: Icon(
-                                            Icons.movie_rounded,
-                                            color: Colors.grey.shade600,
-                                            size: 32.sp,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
                                 ),
-                              SizedBox(height: 6.h), // 减少间距
-
-                              // 电影标题
-                              Expanded(
-                                child: Text(
-                                  movie['title']!,
-                                  style: TextStyle(
-                                    fontSize: 24.sp, // 进一步增加字体大小
-                                    color: Colors.grey.shade800,
-                                    fontWeight: FontWeight.w600,
-                                    height: 1.5, // 设置行高
-                                  ),
-                                  maxLines: 1, // 改为1行
-                                  overflow: TextOverflow.ellipsis, // 超出显示省略号
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              SizedBox(height: 6.h),
-                              // 评分
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
-                                decoration: BoxDecoration(
-                                  color: Colors.orange.shade50,
-                                  borderRadius: BorderRadius.circular(24.r),
-                                  border: Border.all(
-                                    color: Colors.orange.shade200,
-                                    width: 2,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.orange.withOpacity(0.2),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.star_rounded,
-                                      size: 28.sp,
-                                      color: Colors.orange.shade600,
-                                    ),
-                                    SizedBox(width: 6.w),
-                                    Text(
-                                      movie['rating']!,
-                                      style: TextStyle(
-                                        fontSize: 18.sp,
-                                        color: Colors.orange.shade700,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 ],
               ),
@@ -725,12 +751,30 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
       child: Text(
         text,
         style: TextStyle(
-          fontSize: 12.sp,
+          fontSize: 20.sp,
           color: color,
           fontWeight: FontWeight.w600,
         ),
       ),
     );
+  }
+
+  Color _getSpecColor(String specName) {
+    switch (specName.toUpperCase()) {
+      case 'IMAX':
+        return Colors.red.shade600;
+      case '4DX':
+        return Colors.orange.shade600;
+      case 'DOLBY':
+      case 'DOLBY CINEMA':
+        return Colors.purple.shade600;
+      case '3D':
+        return Colors.green.shade600;
+      case '2D':
+        return Colors.blue.shade600;
+      default:
+        return Colors.grey.shade600;
+    }
   }
 
   @override

@@ -23,6 +23,9 @@ class Input extends StatefulWidget {
   final double? horizontalPadding;
   final bool? disabled;
   final Color? cursorColor;
+  final double? cursorWidth;
+  final double? cursorHeight;
+  final Radius? cursorRadius;
   final TextStyle? placeholderStyle;
   final FocusNode? focusNode;
   final int maxLines;
@@ -33,6 +36,9 @@ class Input extends StatefulWidget {
     this.placeholder = '',
     required this.controller,
     this.cursorColor,
+    this.cursorWidth,
+    this.cursorHeight,
+    this.cursorRadius,
     this.suffixIcon,
     this.suffixIconColor,
     this.suffixStyle,
@@ -99,6 +105,9 @@ class _InputState extends State<Input> {
           style: widget.textStyle ??
               const TextStyle(color: Colors.black), // Default text style
           cursorColor: widget.cursorColor,
+          cursorWidth: widget.cursorWidth ?? 2.0,
+          cursorHeight: widget.cursorHeight,
+          cursorRadius: widget.cursorRadius,
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,

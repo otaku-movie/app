@@ -172,6 +172,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("地域でフィルター"),
         "cinemaList_loading":
             MessageLookupByLibrary.simpleMessage("読み込みに失敗しました。再試行してください"),
+        "cinemaList_movies_empty":
+            MessageLookupByLibrary.simpleMessage("上映中の映画はありません"),
         "cinemaList_movies_nowShowing":
             MessageLookupByLibrary.simpleMessage("上映中"),
         "cinemaList_search_clear": MessageLookupByLibrary.simpleMessage("クリア"),
@@ -190,8 +192,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaList_selectSeat_selectedSeats":
             MessageLookupByLibrary.simpleMessage("選択済み座席"),
         "cinemaList_title": MessageLookupByLibrary.simpleMessage("近くの映画館"),
+        "comingSoon_noMovies":
+            MessageLookupByLibrary.simpleMessage("現在上映中の映画はありません"),
+        "comingSoon_presale": MessageLookupByLibrary.simpleMessage("前売り"),
+        "comingSoon_pullToRefresh":
+            MessageLookupByLibrary.simpleMessage("下にスワイプして更新"),
+        "comingSoon_releaseDate": MessageLookupByLibrary.simpleMessage("公開"),
+        "comingSoon_tryLaterOrRefresh": MessageLookupByLibrary.simpleMessage(
+            "しばらくしてからもう一度お試しいただくか、下にスワイプして更新してください"),
         "commentDetail_comment_button":
             MessageLookupByLibrary.simpleMessage("返信"),
+        "commentDetail_comment_hint":
+            MessageLookupByLibrary.simpleMessage("返信を入力してください..."),
         "commentDetail_comment_placeholder": m5,
         "commentDetail_replyComment":
             MessageLookupByLibrary.simpleMessage("コメント返信"),
@@ -729,10 +741,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_updateSuccessMessage":
             MessageLookupByLibrary.simpleMessage("アプリが最新バージョンに正常に更新されました！"),
         "user_updating": MessageLookupByLibrary.simpleMessage("更新中"),
+        "writeComment_contentTitle":
+            MessageLookupByLibrary.simpleMessage("映画の感想を書いてください"),
         "writeComment_hint":
             MessageLookupByLibrary.simpleMessage("コメントを入力してください..."),
+        "writeComment_publishFailed":
+            MessageLookupByLibrary.simpleMessage("コメントの投稿に失敗しました。もう一度お試しください"),
+        "writeComment_rateTitle":
+            MessageLookupByLibrary.simpleMessage("この映画を評価する"),
         "writeComment_release": MessageLookupByLibrary.simpleMessage("リリース"),
+        "writeComment_shareExperience":
+            MessageLookupByLibrary.simpleMessage("映画体験をシェアして、他の人の選択をサポートしましょう"),
         "writeComment_title": MessageLookupByLibrary.simpleMessage("コメントを書く"),
+        "writeComment_verify_movieIdEmpty":
+            MessageLookupByLibrary.simpleMessage("映画IDが空です"),
         "writeComment_verify_notNull":
             MessageLookupByLibrary.simpleMessage("コメントを入力してください"),
         "writeComment_verify_notRate":
