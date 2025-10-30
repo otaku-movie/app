@@ -2640,6 +2640,26 @@ class S {
     );
   }
 
+  /// `No spec info`
+  String get confirmOrder_noSpec {
+    return Intl.message(
+      'No spec info',
+      name: 'confirmOrder_noSpec',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment failed, please try again`
+  String get confirmOrder_payFailed {
+    return Intl.message(
+      'Payment failed, please try again',
+      name: 'confirmOrder_payFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Confirm Order`
   String get confirmOrder_title {
     return Intl.message(
@@ -2790,6 +2810,36 @@ class S {
     );
   }
 
+  /// `Processing order timeout...`
+  String get confirmOrder_orderTimeout {
+    return Intl.message(
+      'Processing order timeout...',
+      name: 'confirmOrder_orderTimeout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order has timed out and been automatically canceled`
+  String get confirmOrder_orderTimeoutMessage {
+    return Intl.message(
+      'Order has timed out and been automatically canceled',
+      name: 'confirmOrder_orderTimeoutMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to process order timeout, please try again`
+  String get confirmOrder_timeoutFailed {
+    return Intl.message(
+      'Failed to process order timeout, please try again',
+      name: 'confirmOrder_timeoutFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancel Seat Selection`
   String get seatSelection_cancelSeatTitle {
     return Intl.message(
@@ -2830,10 +2880,10 @@ class S {
     );
   }
 
-  /// `Seat selection canceled`
+  /// `Selected seats have been canceled`
   String get seatSelection_seatCanceled {
     return Intl.message(
-      'Seat selection canceled',
+      'Selected seats have been canceled',
       name: 'seatSelection_seatCanceled',
       desc: '',
       args: [],

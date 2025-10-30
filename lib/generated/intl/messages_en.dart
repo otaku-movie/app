@@ -311,9 +311,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Continue Payment"),
         "confirmOrder_countdown":
             MessageLookupByLibrary.simpleMessage("Time Remaining"),
+        "confirmOrder_noSpec":
+            MessageLookupByLibrary.simpleMessage("No spec info"),
         "confirmOrder_orderCanceled":
             MessageLookupByLibrary.simpleMessage("Order Canceled"),
+        "confirmOrder_orderTimeout":
+            MessageLookupByLibrary.simpleMessage("Processing order timeout..."),
+        "confirmOrder_orderTimeoutMessage":
+            MessageLookupByLibrary.simpleMessage(
+                "Order has timed out and been automatically canceled"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("Buy"),
+        "confirmOrder_payFailed": MessageLookupByLibrary.simpleMessage(
+            "Payment failed, please try again"),
         "confirmOrder_seatCount": m7,
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage("Select Payment Method"),
@@ -321,6 +330,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Selected Seats"),
         "confirmOrder_timeInfo":
             MessageLookupByLibrary.simpleMessage("Time Information"),
+        "confirmOrder_timeoutFailed": MessageLookupByLibrary.simpleMessage(
+            "Failed to process order timeout, please try again"),
         "confirmOrder_title":
             MessageLookupByLibrary.simpleMessage("Confirm Order"),
         "confirmOrder_total": MessageLookupByLibrary.simpleMessage("Total"),
@@ -704,8 +715,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Cancel Seat Selection"),
         "seatSelection_confirm":
             MessageLookupByLibrary.simpleMessage("Confirm"),
-        "seatSelection_seatCanceled":
-            MessageLookupByLibrary.simpleMessage("Seat selection canceled"),
+        "seatSelection_seatCanceled": MessageLookupByLibrary.simpleMessage(
+            "Selected seats have been canceled"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
         "selectSeat_maxSelectSeatWarn": m17,

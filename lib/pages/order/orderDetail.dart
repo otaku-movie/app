@@ -617,7 +617,7 @@ class _PageState extends State<OrderDetail> {
                 ),
               
               // 二维码取票卡片
-                Container(
+               data.orderState == OrderState.succeed ? Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(32.w),
                     decoration: BoxDecoration(
@@ -734,7 +734,7 @@ class _PageState extends State<OrderDetail> {
                     ),
                   ],
                 ),
-              ),
+              ) : Container(),
               
               // 订单详情卡片
               Container(

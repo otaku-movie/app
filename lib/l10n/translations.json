@@ -1607,6 +1607,8 @@
     }
   },
   "confirmOrder": {
+    "noSpec": { "zh": "无规格信息", "ja": "仕様情報なし", "en": "No spec info" },
+    "payFailed": { "zh": "支付失败，请重试", "ja": "支払いに失敗しました。もう一度お試しください", "en": "Payment failed, please try again" },
     "title": {
       "zh": "确认订单",
       "ja": "注文確認",
@@ -1696,6 +1698,21 @@
       "zh": "取消订单失败，请重试",
       "ja": "注文のキャンセルに失敗しました。再試行してください",
       "en": "Failed to cancel order, please try again"
+    },
+    "orderTimeout": {
+      "zh": "订单超时处理中...",
+      "ja": "注文タイムアウト処理中...",
+      "en": "Processing order timeout..."
+    },
+    "orderTimeoutMessage": {
+      "zh": "订单已超时，已自动取消",
+      "ja": "注文がタイムアウトしました。自動的にキャンセルされました",
+      "en": "Order has timed out and been automatically canceled"
+    },
+    "timeoutFailed": {
+      "zh": "订单超时处理失败，请重试",
+      "ja": "注文タイムアウト処理に失敗しました。再試行してください",
+      "en": "Failed to process order timeout, please try again"
     }
   },
   "seatSelection": {
@@ -1720,9 +1737,9 @@
       "en": "Confirm"
     },
     "seatCanceled": {
-      "zh": "座位选择已取消",
+      "zh": "选择的座位已取消",
       "ja": "座席選択がキャンセルされました",
-      "en": "Seat selection canceled"
+      "en": "Selected seats have been canceled"
     },
     "cancelSeatFailed": {
       "zh": "取消座位选择失败，请重试",

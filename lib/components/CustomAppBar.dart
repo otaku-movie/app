@@ -25,6 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     RouteMatchList  routeMatchList = GoRouter.of(context).routerDelegate.currentConfiguration;
+    List<RouteBase> routes = routeMatchList.routes;
 
     return AppBar(
       title: title is String 

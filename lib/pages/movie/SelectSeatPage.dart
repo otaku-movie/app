@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:otaku_movie/controller/SeatSelectionController.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -132,6 +134,19 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     transformationController = TransformationController();
     getData();
     getSeatData();
+    // 监听清空选座的全局信号
+    try {
+      final seatSelectionController = Get.isRegistered<SeatSelectionController>()
+          ? Get.find<SeatSelectionController>()
+          : Get.put(SeatSelectionController(), permanent: true);
+      seatSelectionController.clearTick.listen((_) {
+        if (!mounted) return;
+        setState(() {
+          selectSeatList.clear();
+          selectSeatSet.clear();
+        });
+      });
+    } catch (_) {}
   }
 
   @override
@@ -505,7 +520,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
         onBackButtonPressed: () async {
           // 处理返回按钮点击
           if (selectSeatList.isEmpty) {
-            // 没有选座，直接返回
+            // 没有选座，直接返回上一页
             Navigator.of(context).pop();
             return;
           }
@@ -655,6 +670,8 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
             ToastService.showSuccess(S.of(context).seatSelection_seatCanceled);
             
             if (!mounted) return;
+            
+            // 取消选座后，直接返回上一页
             Navigator.of(context).pop();
           }
         },

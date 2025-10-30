@@ -17,6 +17,8 @@ import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/utils/seat_cancel_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:get/get.dart';
+import 'package:otaku_movie/controller/SeatSelectionController.dart';
 
 class ConfirmOrder extends StatefulWidget {
   final String? id;
@@ -49,8 +51,8 @@ class _PageState extends State<ConfirmOrder> {
     }
   ];
   
-  int countDown = 15 * 60;
-  int allTime = 15 * 60;
+  int countDown = 10;
+  int allTime = 10;
   int? defaultPay;
   Timer? _timer;
 
@@ -130,12 +132,25 @@ class _PageState extends State<ConfirmOrder> {
     getPaymentMethodData();
     getData();
 
+    // 从状态管理读取总时间
+    final controller = Get.isRegistered<SeatSelectionController>()
+        ? Get.find<SeatSelectionController>()
+        : Get.put(SeatSelectionController(), permanent: true);
+    final base = controller.totalSeconds.value;
+    countDown = base > 0 ? base : countDown;
+    allTime = countDown;
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (!mounted) {
+        _timer?.cancel();
+        return;
+      }
+      
       if (countDown <= 0) {
         _timer?.cancel();  // 取消计时器
         
-        // 倒计时结束，自动取消订单并返回到选座页面
-        await _cancelOrderAndReturn();
+        // 倒计时结束，处理订单超时
+        await _handleOrderTimeout();
         return;
       }
       
@@ -148,51 +163,58 @@ class _PageState extends State<ConfirmOrder> {
   @override
   void dispose() {
     _timer?.cancel();
+    _timer = null;
     _refreshController.dispose();
     super.dispose();
   }
 
-  // 取消订单并返回到选座页面
-  Future<void> _cancelOrderAndReturn() async {
+  @override
+  void deactivate() {
+    // 页面被新的路由覆盖时，立即停止倒计时；切到后台不会触发此方法
+    _timer?.cancel();
+    _timer = null;
+    super.deactivate();
+  }
+
+  // 订单超时处理
+  Future<void> _handleOrderTimeout() async {
+    if (!mounted) return;
+    
     try {
-      // 调用取消订单接口
-      await ApiRequest().request(
-        path: '/movieOrder/cancel',
-        method: 'POST',
-        data: {
-          'orderId': int.parse(widget.id!),
-        },
-        fromJsonT: (json) => json,
-      );
-      
-      // 获取座位选择信息用于跳转
-      final seatData = SeatCancelManager.getCurrentSeatSelection();
-      
-      // 清除座位选择信息
-      SeatCancelManager.clearSeatSelection();
-      
+      final controller = Get.isRegistered<SeatSelectionController>()
+          ? Get.find<SeatSelectionController>()
+          : Get.put(SeatSelectionController(), permanent: true);
+      await controller.timeoutOrder(context, orderId: int.parse(widget.id!));
+
       if (!mounted) return;
-      
-      // 显示提示
-      ToastService.showWarning(S.of(context).confirmOrder_orderCanceled);
-      
-      // 跳转回座位选择页面
-      if (seatData != null && 
-          seatData['movieShowTimeId'] != null && 
-          seatData['theaterHallId'] != null) {
-        context.pushReplacementNamed(
-          'selectSeat',
-          queryParameters: {
-            'id': seatData['movieShowTimeId'].toString(),
-            'theaterHallId': seatData['theaterHallId'].toString(),
-          }
-        );
-      } else {
-        Navigator.of(context).pop();
-      }
+      // 回退到 selectSeat
+      Navigator.of(context).popUntil(
+        (route) => route.settings.name == 'selectSeat',
+      );
     } catch (e) {
       if (!mounted) return;
-      ToastService.showError(S.of(context).confirmOrder_cancelOrderFailed);
+      context.goNamed('home');
+    }
+  }
+
+  // 取消订单并返回到选座页面
+  Future<void> _cancelOrderAndReturn() async {
+    if (!mounted) return;
+    
+    try {
+      final controller = Get.isRegistered<SeatSelectionController>()
+          ? Get.find<SeatSelectionController>()
+          : Get.put(SeatSelectionController(), permanent: true);
+      await controller.cancelOrder(context, orderId: int.parse(widget.id!));
+
+      if (!mounted) return;
+      // 回退到 selectSeat
+      Navigator.of(context).popUntil(
+        (route) => route.settings.name == 'selectSeat',
+      );
+    } catch (e) {
+      if (!mounted) return;
+      context.pushReplacementNamed('home');
     }
   }
 
@@ -477,44 +499,8 @@ class _PageState extends State<ConfirmOrder> {
           final shouldCancel = await SeatCancelManager.showCancelOrderDialog(context);
 
           if (shouldCancel == true) {
-            // 用户确认取消，调用取消订单接口
-            try {
-              await ApiRequest().request(
-                path: '/movieOrder/cancel',
-                method: 'POST',
-                data: {
-                  'orderId': int.parse(widget.id!),
-                },
-                fromJsonT: (json) => json,
-              );
-              
-              // 获取座位选择信息用于跳转
-              final seatData = SeatCancelManager.getCurrentSeatSelection();
-              
-              // 清除座位选择信息
-              SeatCancelManager.clearSeatSelection();
-              
-              ToastService.showSuccess(S.of(context).confirmOrder_orderCanceled);
-              
-              if (mounted) {
-                // 跳转回座位选择页面
-                if (seatData != null && 
-                    seatData['movieShowTimeId'] != null && 
-                    seatData['theaterHallId'] != null) {
-                  context.pushReplacementNamed(
-                    'selectSeat',
-                    queryParameters: {
-                      'id': seatData['movieShowTimeId'].toString(),
-                      'theaterHallId': seatData['theaterHallId'].toString(),
-                    }
-                  );
-                } else {
-                  Navigator.of(context).pop();
-                }
-              }
-            } catch (e) {
-              ToastService.showError(S.of(context).confirmOrder_cancelOrderFailed);
-            }
+            // 用户确认取消，调用取消订单方法
+            await _cancelOrderAndReturn();
           }
         },
       ),
@@ -838,9 +824,9 @@ class _PageState extends State<ConfirmOrder> {
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF323233),
                                       ),
-                                    ),
-                                    SizedBox(height: 4.h),
-                                    Text(
+                                ),
+                                 SizedBox(height: 4.h),
+                                Text(
                                       S.of(context).confirmOrder_seatCount(data.seat?.length ?? 0),
                                       style: TextStyle(
                                         fontSize: 20.sp,
@@ -864,10 +850,10 @@ class _PageState extends State<ConfirmOrder> {
                           SizedBox(height: 20.h),
                           
                           // 座位列表
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: data.seat == null ? [] : data.seat!.map((item) {
+                                    children: data.seat == null ? [] : data.seat!.map((item) {
                                 return Container(
                                   margin: EdgeInsets.only(right: 12.w),
                                   padding: EdgeInsets.all(16.w),
@@ -912,15 +898,15 @@ class _PageState extends State<ConfirmOrder> {
                                               fontSize: 18.sp,
                                               color: Color(0xFF667EEA),
                                               fontWeight: FontWeight.w500,
-                                            ),
+                                            ), 
                                           ),
                                         ),
                                       ],
                                     ],
                                   ),
-                                );
-                              }).toList(),
-                            ),
+                                      );
+                                    }).toList(),
+                                  ),
                           ),
                         ],
                       ),
@@ -1172,7 +1158,6 @@ class _PageState extends State<ConfirmOrder> {
                         orElse: () => PaymentMethodResponse(),
                       );
                       
-                      // 如果是信用卡支付，跳转到选择信用卡页面
                       if (selectedPayment.name == 'クレジットカード') {
                         // 跳转到选择信用卡页面
                         await context.pushNamed(
@@ -1185,11 +1170,16 @@ class _PageState extends State<ConfirmOrder> {
                       }
                       
                       // 其他支付方式，直接调用支付接口
+                      // 已取消倒计时，防止过程中触发超时
                       setState(() {
                         payLoading = true;
                       });
 
                       try {
+                        final ctrl = Get.isRegistered<SeatSelectionController>()
+                            ? Get.find<SeatSelectionController>()
+                            : Get.put(SeatSelectionController(), permanent: true);
+                        ctrl.suppressOps.value = true;
                         await ApiRequest().request<dynamic>(
                         path: '/movieOrder/pay',
                         method: 'POST', 
@@ -1214,8 +1204,13 @@ class _PageState extends State<ConfirmOrder> {
                           setState(() {
                             payLoading = false;
                           });
-                          ToastService.showError('支付失败，请重试');
+                          ToastService.showError(S.of(context).confirmOrder_payFailed);
                         }
+                      } finally {
+                        final ctrl = Get.isRegistered<SeatSelectionController>()
+                            ? Get.find<SeatSelectionController>()
+                            : Get.put(SeatSelectionController(), permanent: true);
+                        ctrl.suppressOps.value = false;
                       }
                     },
                         child: Center(
