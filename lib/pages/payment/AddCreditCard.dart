@@ -7,6 +7,7 @@ import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/utils/credit_card_validator.dart';
+import 'package:otaku_movie/response/payment/credit_card_response.dart';
 
 class AddCreditCard extends StatefulWidget {
   final String? orderId;
@@ -100,22 +101,23 @@ class _AddCreditCardState extends State<AddCreditCard> {
 
     try {
       // 准备信用卡数据
-      final cardData = {
-        'cardNumber': _cardNumberController.text.replaceAll(' ', ''),
-        'cardHolderName': _cardHolderController.text,
-        'expiryDate': _expiryDateController.text,
-        'cvv': _cvvController.text,
-        'cardType': _cardType,
-        'saveCard': _saveCard, // 是否保存到数据库
-      };
+      final cardRequest = CreditCardSaveRequest(
+        cardNumber: _cardNumberController.text.replaceAll(' ', ''),
+        cardHolderName: _cardHolderController.text,
+        expiryDate: _expiryDateController.text,
+        cvv: _cvvController.text,
+        cardType: _cardType,
+        isDefault: false, // 可以根据需要设置
+        saveCard: _saveCard,
+      );
 
       if (_saveCard) {
         // 保存到数据库
-        await ApiRequest().request<dynamic>(
-          path: '/api/creditCard/save',
+        await ApiRequest().request<Map<String, dynamic>>(
+          path: '/creditCard/save',
           method: 'POST',
-          data: cardData,
-          fromJsonT: (json) => json,
+          data: cardRequest.toJson(),
+          fromJsonT: (json) => json as Map<String, dynamic>,
         );
         
         if (!mounted) return;
@@ -128,8 +130,15 @@ class _AddCreditCardState extends State<AddCreditCard> {
         if (!mounted) return;
         ToastService.showSuccess(S.of(context).payment_addCreditCard_cardConfirmed);
         
-        // 返回信用卡数据，用于临时支付
-        Navigator.of(context).pop(cardData);
+        // 返回临时卡片对象，用于临时支付
+        final tempCard = TempCard(
+          cardNumber: _cardNumberController.text.replaceAll(' ', ''),
+          cardHolderName: _cardHolderController.text,
+          expiryDate: _expiryDateController.text,
+          cvv: _cvvController.text,
+          cardType: _cardType,
+        );
+        Navigator.of(context).pop(tempCard);
       }
     } catch (e) {
       if (!mounted) return;
