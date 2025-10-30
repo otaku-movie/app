@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:get/get.dart';
+import 'package:otaku_movie/controller/SeatSelectionController.dart';
 
 /// 座位取消管理工具类
 class SeatCancelManager {
@@ -206,6 +208,16 @@ class SeatCancelManager {
   /// 取消座位选择
   static Future<bool> cancelSeatSelection(BuildContext context) async {
     try {
+      // 支付等过程需要抑制座位取消
+      try {
+        final ctrl = Get.isRegistered<SeatSelectionController>()
+            ? Get.find<SeatSelectionController>()
+            : null;
+        if (ctrl != null && ctrl.suppressOps.value) {
+          return true;
+        }
+      } catch (_) {}
+
       final data = getCurrentSeatSelection();
       if (data == null) return true;
 

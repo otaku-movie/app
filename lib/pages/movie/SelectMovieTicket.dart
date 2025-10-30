@@ -1,13 +1,17 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/cinema/movie_ticket_type_response.dart';
 import 'package:otaku_movie/response/movie/user_select_seat_data_response.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/utils/seat_cancel_manager.dart';
+import 'package:get/get.dart';
+import 'package:otaku_movie/controller/SeatSelectionController.dart';
 
 import '../../api/index.dart';
 import '../../utils/index.dart';
@@ -30,57 +34,208 @@ class SelectMovieTicketType extends StatefulWidget {
 class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
   List<MovieTicketTypeResponse> movieTicketTypeData = [];
   UserSelectSeatDataResponse data = UserSelectSeatDataResponse();
+  bool loading = true;
+  bool error = false;
+  
+
+  Timer? _ticketTimer;
+  late final SeatSelectionController seatSelectionController =
+      Get.isRegistered<SeatSelectionController>()
+          ? Get.find<SeatSelectionController>()
+          : Get.put(SeatSelectionController(), permanent: true);
+          
+  int ticketCountDown = 0; // 秒
 
   Future<void> getMovieTicketType() async {
-    ApiRequest().request(
-      path: '/cinema/ticketType/list',
-      method: 'POST',
-      data: {"cinemaId": int.parse(widget.cinemaId!)},
-      fromJsonT: (json) {
-        if (json is List) {
-          return json.map((item) {
-            return MovieTicketTypeResponse.fromJson(item);
-          }).toList();
-        }
-      },
-    ).then((res) {
-      if (res.data != null) {
+    try {
+      final res = await ApiRequest().request(
+        path: '/cinema/ticketType/list',
+        method: 'POST',
+        data: {"cinemaId": int.parse(widget.cinemaId!)},
+        fromJsonT: (json) {
+          if (json is List) {
+            return json.map((item) {
+              return MovieTicketTypeResponse.fromJson(item);
+            }).toList();
+          }
+          return <MovieTicketTypeResponse>[];
+        },
+      );
+      
+      if (mounted) {
         setState(() {
-          movieTicketTypeData = res.data!;
+          movieTicketTypeData = res.data ?? [];
+          error = false;
         });
       }
-    });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          error = true;
+        });
+      }
+    }
   }
 
   Future<void> getData() async {
-    ApiRequest().request(
-      path: '/movie_show_time/user_select_seat',
-      method: 'GET', 
-      queryParameters: {"movieShowTimeId": int.parse(widget.movieShowTimeId!)},
-      fromJsonT: (json) {
-        return UserSelectSeatDataResponse.fromJson(json);
-      },
-    ).then((res) {
-      if (res.data != null) {
+    try {
+      final res = await ApiRequest().request(
+        path: '/movie_show_time/user_select_seat',
+        method: 'GET', 
+        queryParameters: {"movieShowTimeId": int.parse(widget.movieShowTimeId!)},
+        fromJsonT: (json) {
+          return UserSelectSeatDataResponse.fromJson(json);
+        },
+      );
+      
+      if (mounted) {
         setState(() {
-          data = res.data!;
+          data = res.data ?? UserSelectSeatDataResponse();
+          error = false;
+        });
+        // 配置场次信息（总时间由状态管理统一设置）
+        seatSelectionController.configure(
+          movieShowTimeId: data.movieShowTimeId,
+          theaterHallId: data.theaterHallId,
+        );
+        // _restartTicketTimer();
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          error = true;
         });
       }
-    });
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    // 确保不在抑制期，并用状态管理的总时长初始化本页倒计时显示
+    seatSelectionController.suppressOps.value = false;
+
+    setState(() {
+      ticketCountDown = seatSelectionController.totalSeconds.value;
+      final base = seatSelectionController.totalSeconds.value;
+    ticketCountDown = base > 0 ? base : ticketCountDown;
+    });
+    
     if (widget.cinemaId != null) {
       _loadInitialData();
     }
   }
 
+  @override
+  void dispose() {
+    _ticketTimer?.cancel();
+    _ticketTimer = null;
+    super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    // 页面离开（被覆盖/跳转）时，立即停止倒计时
+    _ticketTimer?.cancel();
+    _ticketTimer = null;
+    super.deactivate();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   // 当页面重新显示时，刷新座位数据以确保显示最新状态
+  //   if (widget.movieShowTimeId != null) {
+  //     getData();
+  //   }
+  // }
+
   // 加载初始数据
   Future<void> _loadInitialData() async {
-    await getData();
-    await getMovieTicketType();
+    setState(() {
+      loading = true;
+      error = false;
+    });
+    
+    await Future.wait([
+      getData(),
+      getMovieTicketType(),
+    ]);
+    
+    if (mounted) {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
+  // 刷新数据
+  Future<void> _refreshData() async {
+    setState(() {
+      error = false;
+    });
+    
+    await Future.wait([
+      getData(),
+      getMovieTicketType(),
+    ]);
+  }
+
+  void _restartTicketTimer() {
+    _ticketTimer?.cancel();
+    // 仅当当前路由在最前且不处于抑制期，且座位信息存在时启动倒计时
+    final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
+    if (!mounted || !isCurrent) return;
+    if (seatSelectionController.suppressOps.value) return;
+    if (data.seat != null && data.seat!.isNotEmpty) {
+      // 使用状态管理中的总时长作为初始值
+      final base = seatSelectionController.totalSeconds.value;
+      setState(() {
+        ticketCountDown = (base > 0 ? base : 600);
+      });
+      // 下一帧启动，确保路由状态稳定
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _ticketTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (!mounted) return;
+        // 若页面不再最前或进入抑制期，立即停止计时
+        final stillCurrent = ModalRoute.of(context)?.isCurrent ?? false;
+        if (!stillCurrent || seatSelectionController.suppressOps.value) {
+          timer.cancel();
+          _ticketTimer = null;
+          return;
+        }
+        if (ticketCountDown <= 0) {
+          timer.cancel();
+          await _handleTicketTimeout();
+          return;
+        }
+        setState(() {
+          ticketCountDown--;
+        });
+        });
+      });
+    }
+  }
+
+  Future<void> _handleTicketTimeout() async {
+    if (!mounted) return;
+    try {
+      // 统一交由状态管理清理（仅座位，不涉及订单）
+      await seatSelectionController.cancelSeatAndClear(context);
+      // 返回到选座页（替换）
+      if (data.movieShowTimeId != null && data.theaterHallId != null) {
+         // 回退到 selectSeat
+      Navigator.of(context).popUntil(
+        (route) => route.settings.name == 'selectSeat',
+      );
+      } else {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      // 失败也尝试返回
+      if (!mounted) return;
+      Navigator.of(context).pop();
+    }
   }
 
   @override
@@ -96,18 +251,15 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
            if (!mounted) return;
            
            if (shouldCancel == true) {
-             // 调用取消选座API
-             final success = await SeatCancelManager.cancelSeatSelection(context);
-             if (success && mounted) {
+             // 交由状态管理取消并清空
+             await seatSelectionController.cancelSeatAndClear(context);
+             if (mounted) {
                // 返回到座位选择页面
                if (data.movieShowTimeId != null && data.theaterHallId != null) {
-                 context.pushReplacementNamed(
-                   'selectSeat',
-                   queryParameters: {
-                     'id': data.movieShowTimeId.toString(),
-                     'theaterHallId': data.theaterHallId.toString(),
-                   }
-                 );
+                  // 回退到 selectSeat
+                  Navigator.of(context).popUntil(
+                    (route) => route.settings.name == 'selectSeat',
+                  );
                } else {
                  Navigator.of(context).pop();
                }
@@ -115,26 +267,33 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
            }
          },
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Colors.grey.shade50,
-              Colors.grey.shade100,
-            ],
-          ),
-        ),
-        child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(20.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+      body: AppErrorWidget(
+        loading: loading,
+        error: error,
+        onRetry: _refreshData,
+        child: RefreshIndicator(
+          onRefresh: _refreshData,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.grey.shade50,
+                  Colors.grey.shade100,
+                ],
+              ),
+            ),
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Container(
+                      padding: EdgeInsets.all(20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                     // 电影信息卡片 - 重新设计
                     Container(
                       padding: EdgeInsets.all(24.w),
@@ -188,17 +347,57 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // 电影标题
-                                    Text(
-                                      data.movieName ?? '',
-                                      style: TextStyle(
-                                    fontSize: 32.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                    height: 1.2,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                // 电影标题 + 倒计时（与 ConfirmOrder 风格保持一致）
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        data.movieName ?? '',
+                                        style: TextStyle(
+                                          fontSize: 32.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black87,
+                                          height: 1.2,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    // SizedBox(width: 12.w),
+                                    // SizedBox(
+                                    //   width: 125.w, // 固定宽度
+                                    //   child: Container(
+                                    //     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                                    //     decoration: BoxDecoration(
+                                    //       color: Colors.red.shade50,
+                                    //       borderRadius: BorderRadius.circular(20.r),
+                                    //       border: Border.all(color: Colors.red.shade200, width: 1),
+                                    //     ),
+                                    //     child: Row(
+                                    //       mainAxisSize: MainAxisSize.min,
+                                    //       mainAxisAlignment: MainAxisAlignment.center,
+                                    //       children: [
+                                    //         Icon(Icons.access_time, size: 18.sp, color: Colors.red.shade600),
+                                    //         SizedBox(width: 6.w),
+                                    //         Flexible(
+                                    //           child: Text(
+                                    //           _formatCountDown(ticketCountDown),
+                                    //           style: TextStyle(
+                                    //               fontSize: 18.sp,
+                                    //               color: Colors.red.shade600,
+                                    //               fontWeight: FontWeight.bold,
+                                    //             ),
+                                    //             textAlign: TextAlign.center,
+                                    //             overflow: TextOverflow.ellipsis,
+                                    //           ),
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    //     ),
+                                    
+                                  ],
                                 ),
                                 
                                 SizedBox(height: 16.h),
@@ -700,8 +899,11 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
             ),
           ),
         ],
+            ),
+          ),
+        ),
       ),
-    ));
+    );
   }
 
   int getTotalPrice () {
@@ -823,6 +1025,14 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
       );
     }
   }
+
+  String _formatCountDown(int seconds) {
+    if (seconds < 0) seconds = 0;
+    final m = (seconds ~/ 60).toString().padLeft(2, '0');
+    final s = (seconds % 60).toString().padLeft(2, '0');
+    return '$m:$s';
+  }
+
   void _showActionSheet(BuildContext context, Seat seat) {
     showModalBottomSheet(
       backgroundColor: Colors.transparent,

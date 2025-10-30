@@ -295,15 +295,25 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmOrder_continuePay":
             MessageLookupByLibrary.simpleMessage("支払いを続ける"),
         "confirmOrder_countdown": MessageLookupByLibrary.simpleMessage("残り時間"),
+        "confirmOrder_noSpec": MessageLookupByLibrary.simpleMessage("仕様情報なし"),
         "confirmOrder_orderCanceled":
             MessageLookupByLibrary.simpleMessage("注文がキャンセルされました"),
+        "confirmOrder_orderTimeout":
+            MessageLookupByLibrary.simpleMessage("注文タイムアウト処理中..."),
+        "confirmOrder_orderTimeoutMessage":
+            MessageLookupByLibrary.simpleMessage(
+                "注文がタイムアウトしました。自動的にキャンセルされました"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支払いへ"),
+        "confirmOrder_payFailed":
+            MessageLookupByLibrary.simpleMessage("支払いに失敗しました。もう一度お試しください"),
         "confirmOrder_seatCount": m7,
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage("支払い方法を選択してください"),
         "confirmOrder_selectedSeats":
             MessageLookupByLibrary.simpleMessage("選択済み座席"),
         "confirmOrder_timeInfo": MessageLookupByLibrary.simpleMessage("時間情報"),
+        "confirmOrder_timeoutFailed":
+            MessageLookupByLibrary.simpleMessage("注文タイムアウト処理に失敗しました。再試行してください"),
         "confirmOrder_title": MessageLookupByLibrary.simpleMessage("注文確認"),
         "confirmOrder_total": MessageLookupByLibrary.simpleMessage("合計"),
         "enum_seatType_coupleSeat":

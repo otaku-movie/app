@@ -285,15 +285,24 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmOrder_continuePay":
             MessageLookupByLibrary.simpleMessage("继续支付"),
         "confirmOrder_countdown": MessageLookupByLibrary.simpleMessage("剩余时间"),
+        "confirmOrder_noSpec": MessageLookupByLibrary.simpleMessage("无规格信息"),
         "confirmOrder_orderCanceled":
             MessageLookupByLibrary.simpleMessage("订单已取消"),
+        "confirmOrder_orderTimeout":
+            MessageLookupByLibrary.simpleMessage("订单超时处理中..."),
+        "confirmOrder_orderTimeoutMessage":
+            MessageLookupByLibrary.simpleMessage("订单已超时，已自动取消"),
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("支付"),
+        "confirmOrder_payFailed":
+            MessageLookupByLibrary.simpleMessage("支付失败，请重试"),
         "confirmOrder_seatCount": m7,
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage("选择支付方式"),
         "confirmOrder_selectedSeats":
             MessageLookupByLibrary.simpleMessage("已选座位"),
         "confirmOrder_timeInfo": MessageLookupByLibrary.simpleMessage("时间信息"),
+        "confirmOrder_timeoutFailed":
+            MessageLookupByLibrary.simpleMessage("订单超时处理失败，请重试"),
         "confirmOrder_title": MessageLookupByLibrary.simpleMessage("确认订单"),
         "confirmOrder_total": MessageLookupByLibrary.simpleMessage("合计"),
         "enum_seatType_coupleSeat": MessageLookupByLibrary.simpleMessage("情侣座"),
@@ -618,7 +627,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("取消座位选择"),
         "seatSelection_confirm": MessageLookupByLibrary.simpleMessage("确定"),
         "seatSelection_seatCanceled":
-            MessageLookupByLibrary.simpleMessage("座位选择已取消"),
+            MessageLookupByLibrary.simpleMessage("选择的座位已取消"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("确认选座"),
         "selectSeat_maxSelectSeatWarn": m17,
