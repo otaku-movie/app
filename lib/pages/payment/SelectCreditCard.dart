@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/response/payment/credit_card_response.dart';
 
 class SelectCreditCard extends StatefulWidget {
   final String? orderId;
@@ -17,11 +19,11 @@ class SelectCreditCard extends StatefulWidget {
 }
 
 class _SelectCreditCardState extends State<SelectCreditCard> {
-  List<CreditCardModel> _creditCards = [];
+  List<CreditCardResponse> _creditCards = [];
   int? _selectedCardId;
   bool _isLoading = false;
   bool _isPaying = false;
-  Map<String, dynamic>? _tempCardData; // 临时信用卡数据（仅本次使用）
+  TempCard? _tempCard; // 临时信用卡数据（仅本次使用）
 
   @override
   void initState() {
@@ -38,31 +40,26 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
     });
 
     try {
-      // TODO: 调用获取信用卡列表的接口
-      await Future.delayed(const Duration(seconds: 1)); // 模拟API调用
+      final response = await ApiRequest().request<List<dynamic>>(
+        path: '/creditCard/list',
+        method: 'GET',
+        fromJsonT: (json) => json as List<dynamic>,
+      );
       
       if (!mounted) return;
       
-      // 模拟数据
       setState(() {
-        _creditCards = [
-          CreditCardModel(
-            id: 1,
-            cardType: 'Visa',
-            lastFourDigits: '4242',
-            cardHolderName: 'TARO YAMADA',
-            expiryDate: '12/25',
-          ),
-          CreditCardModel(
-            id: 2,
-            cardType: 'MasterCard',
-            lastFourDigits: '5555',
-            cardHolderName: 'TARO YAMADA',
-            expiryDate: '10/26',
-          ),
-        ];
+        _creditCards = (response.data ?? [])
+            .map((item) => CreditCardResponse.fromJson(item))
+            .toList();
+        
+        // 选择默认信用卡或第一张卡
         if (_creditCards.isNotEmpty) {
-          _selectedCardId = _creditCards[0].id;
+          final defaultCard = _creditCards.firstWhere(
+            (card) => card.isDefault == true,
+            orElse: () => _creditCards.first,
+          );
+          _selectedCardId = defaultCard.id;
         }
       });
     } catch (e) {
@@ -79,7 +76,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
 
   // 支付
   Future<void> _pay() async {
-    if (_selectedCardId == null && _tempCardData == null) {
+    if (_selectedCardId == null && _tempCard == null) {
       ToastService.showWarning(S.of(context).payment_selectCreditCard_pleaseSelectCard);
       return;
     }
@@ -92,31 +89,25 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
 
     try {
       // 准备支付数据
-      Map<String, dynamic> paymentData = {
-        'orderId': int.parse(widget.orderId!),
-      };
-
-      if (_tempCardData != null) {
-        // 使用临时信用卡（仅本次使用）
-        paymentData['tempCard'] = _tempCardData;
-      } else {
-        // 使用已保存的信用卡
-        paymentData['creditCardId'] = _selectedCardId;
-      }
+      final paymentRequest = PaymentRequest(
+        orderId: int.parse(widget.orderId!),
+        creditCardId: _tempCard == null ? _selectedCardId : null,
+        tempCard: _tempCard,
+      );
 
       // 调用支付接口
       await ApiRequest().request<dynamic>(
         path: '/movieOrder/pay',
         method: 'POST',
-        data: paymentData,
+        data: paymentRequest.toJson(),
         fromJsonT: (json) => json,
       );
 
       if (!mounted) return;
 
       // 支付成功后清除临时卡片（如果使用的是临时卡片）
-      if (_tempCardData != null) {
-        _tempCardData = null;
+      if (_tempCard != null) {
+        _tempCard = null;
       }
 
       ToastService.showSuccess(S.of(context).payment_selectCreditCard_paymentSuccess);
@@ -152,10 +143,10 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
       // 卡片已保存到数据库，重新加载信用卡列表
       // 不清除临时卡片，让用户可以在保存的卡和临时卡之间选择
       _loadCreditCards();
-    } else if (result is Map<String, dynamic>) {
+    } else if (result is TempCard) {
       // 仅本次使用的临时卡片
       setState(() {
-        _tempCardData = result;
+        _tempCard = result;
         _selectedCardId = null; // 取消选中已保存的卡片
       });
       ToastService.showInfo(S.of(context).payment_selectCreditCard_tempCardSelected);
@@ -180,18 +171,18 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
 
   // 构建临时卡片项
   Widget _buildTempCardItem() {
-    final isSelected = _tempCardData != null && _selectedCardId == null;
-    final cardNumber = _tempCardData!['cardNumber'] as String;
+    final isSelected = _tempCard != null && _selectedCardId == null;
+    final cardNumber = _tempCard!.cardNumber;
     final lastFour = cardNumber.substring(cardNumber.length - 4);
-    final cardType = _tempCardData!['cardType'] as String;
-    final cardHolderName = _tempCardData!['cardHolderName'] as String;
-    final expiryDate = _tempCardData!['expiryDate'] as String;
+    final cardType = _tempCard!.cardType;
+    final cardHolderName = _tempCard!.cardHolderName;
+    final expiryDate = _tempCard!.expiryDate;
 
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedCardId = null; // 取消已保存卡片的选择
-          // _tempCardData 保持不变，表示选中临时卡片
+          // _tempCard 保持不变，表示选中临时卡片
         });
       },
       child: Container(
@@ -262,7 +253,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                   onPressed: () {
                     if (mounted) {
                       setState(() {
-                        _tempCardData = null;
+                        _tempCard = null;
                         // 如果临时卡片被选中，清除选择
                         if (_selectedCardId == null && _creditCards.isNotEmpty) {
                           _selectedCardId = _creditCards[0].id;
@@ -368,13 +359,15 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
       appBar: CustomAppBar(
         title: Text(S.of(context).payment_selectCreditCard_title, style: const TextStyle(color: Colors.white)),
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
+      body: AppErrorWidget(
+        loading: _isLoading,
+        // error: error,
+        // empty: !_isLoading && !error && _creditCards.isEmpty && _tempCard == null,
+        child:  Column(
               children: [
                 // 信用卡列表
                 Expanded(
-                  child: _creditCards.isEmpty && _tempCardData == null
+                  child: _creditCards.isEmpty && _tempCard == null
                       ? Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -405,15 +398,15 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                         )
                       : ListView.builder(
                           padding: EdgeInsets.all(32.w),
-                          itemCount: (_tempCardData != null ? 1 : 0) + _creditCards.length,
+                          itemCount: (_tempCard != null ? 1 : 0) + _creditCards.length,
                           itemBuilder: (context, index) {
                             // 如果有临时卡片，第一个显示临时卡片
-                            if (_tempCardData != null && index == 0) {
+                            if (_tempCard != null && index == 0) {
                               return _buildTempCardItem();
                             }
                             
                             // 显示已保存的卡片
-                            final cardIndex = _tempCardData != null ? index - 1 : index;
+                            final cardIndex = _tempCard != null ? index - 1 : index;
                             final card = _creditCards[cardIndex];
                             final isSelected = card.id == _selectedCardId;
 
@@ -467,7 +460,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                                         borderRadius: BorderRadius.circular(12.r),
                                       ),
                                       child: SvgPicture.asset(
-                                        _getCardIcon(card.cardType),
+                                        _getCardIcon(card.cardType ?? ''),
                                         fit: BoxFit.contain,
                                       ),
                                     ),
@@ -479,7 +472,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '${card.cardType} •••• ${card.lastFourDigits}',
+                                            '${card.cardType ?? ''} •••• ${card.lastFourDigits ?? ''}',
                                             style: TextStyle(
                                               fontSize: 32.sp,
                                               fontWeight: FontWeight.bold,
@@ -490,7 +483,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                                           ),
                                           SizedBox(height: 8.h),
                                           Text(
-                                            card.cardHolderName,
+                                            card.cardHolderName ?? '',
                                             style: TextStyle(
                                               fontSize: 24.sp,
                                               color: isSelected
@@ -500,7 +493,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                                           ),
                                           SizedBox(height: 4.h),
                                           Text(
-                                            '有效期: ${card.expiryDate}',
+                                            '有效期: ${card.expiryDate ?? ''}',
                                             style: TextStyle(
                                               fontSize: 22.sp,
                                               color: isSelected
@@ -578,7 +571,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                         width: double.infinity,
                         height: 96.h,
                         child: ElevatedButton(
-                          onPressed: _isPaying || (_creditCards.isEmpty && _tempCardData == null) ? null : _pay,
+                          onPressed: _isPaying || (_creditCards.isEmpty && _tempCard == null) ? null : _pay,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF3B82F6),
                             disabledBackgroundColor: Colors.grey.shade300,
@@ -622,24 +615,9 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                 ),
               ],
             ),
+      )
     );
   }
 }
 
-// 信用卡数据模型
-class CreditCardModel {
-  final int id;
-  final String cardType;
-  final String lastFourDigits;
-  final String cardHolderName;
-  final String expiryDate;
-
-  CreditCardModel({
-    required this.id,
-    required this.cardType,
-    required this.lastFourDigits,
-    required this.cardHolderName,
-    required this.expiryDate,
-  });
-}
 
