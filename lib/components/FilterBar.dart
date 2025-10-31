@@ -6,8 +6,9 @@ class FilterValue {
   final String id;
   final String name;
   final List<FilterValue>? children;
+  final int? count; // 数量
 
-  FilterValue({required this.id, required this.name, this.children});
+  FilterValue({required this.id, required this.name, this.children, this.count});
 }
 
 class FilterOption {
@@ -26,16 +27,78 @@ class FilterOption {
   });
 }
 
+class FilterBarStyle {
+  final double? height;
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
+  final Color? selectedBackgroundColor;
+  final Color? unselectedBackgroundColor;
+  final Color? selectedBorderColor;
+  final Color? unselectedBorderColor;
+  final double? borderRadius;
+  final double? borderWidth;
+  final double? iconSize;
+  final Color? selectedIconColor;
+  final Color? unselectedIconColor;
+  final double? textSize;
+  final FontWeight? selectedTextWeight;
+  final FontWeight? unselectedTextWeight;
+  final Color? selectedTextColor;
+  final Color? unselectedTextColor;
+  final Color? selectedArrowColor;
+  final Color? unselectedArrowColor;
+  final double? arrowSize;
+  final Color? badgeBackgroundColor;
+  final Color? selectedBadgeBackgroundColor;
+  final Color? badgeTextColor;
+  final Color? selectedBadgeTextColor;
+  final double? badgeTextSize;
+  final double? badgeBorderRadius;
+  final double? dropdownGap;
+
+  const FilterBarStyle({
+    this.height,
+    this.padding,
+    this.margin,
+    this.selectedBackgroundColor,
+    this.unselectedBackgroundColor,
+    this.selectedBorderColor,
+    this.unselectedBorderColor,
+    this.borderRadius,
+    this.borderWidth,
+    this.iconSize,
+    this.selectedIconColor,
+    this.unselectedIconColor,
+    this.textSize,
+    this.selectedTextWeight,
+    this.unselectedTextWeight,
+    this.selectedTextColor,
+    this.unselectedTextColor,
+    this.selectedArrowColor,
+    this.unselectedArrowColor,
+    this.arrowSize,
+    this.badgeBackgroundColor,
+    this.selectedBadgeBackgroundColor,
+    this.badgeTextColor,
+    this.selectedBadgeTextColor,
+    this.badgeTextSize,
+    this.badgeBorderRadius,
+    this.dropdownGap,
+  });
+}
+
 class FilterBar extends StatefulWidget {
   final List<FilterOption> filters;
   final Map<String, dynamic> initialSelected;
   final void Function(Map<String, dynamic> selected) onConfirm;
+  final FilterBarStyle? style;
 
   const FilterBar({
     super.key,
     required this.filters,
     this.initialSelected = const {},
     required this.onConfirm,
+    this.style,
   });
 
   @override
@@ -120,68 +183,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                 _showDropdown(filter, index);
               }
             },
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150), // 减少动画时间
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-              // margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
-              decoration: BoxDecoration(
-                color: (isActive || hasSelection) ? Color(0xFFFF6B6B) : Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: (isActive || hasSelection)
-                      ? const Color(0xFFFF6B6B).withOpacity(0.3) 
-                      : Colors.black.withOpacity(0.05),
-                    blurRadius: (isActive || hasSelection) ? 8 : 4,
-                    offset: Offset(0, (isActive || hasSelection) ? 3 : 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Text(
-                      filter.title,
-                      style: TextStyle(
-                        fontWeight: (isActive || hasSelection) ? FontWeight.w700 : FontWeight.w600,
-                        color: (isActive || hasSelection) ? Colors.white : const Color(0xFF323233),
-                        fontSize: 26.sp,
-                        letterSpacing: 0.5,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  if (display.isNotEmpty) ...[
-                    SizedBox(width: 8.w),
-                    Flexible(
-                      child: Text(
-                        display,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: (isActive || hasSelection) ? Colors.white : const Color(0xFFFF6B6B),
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                  SizedBox(width: 4.w),
-                  AnimatedBuilder(
-                    animation: _arrowControllers[index],
-                    builder: (context, child) {
-                      return Transform.rotate(
-                        angle: _arrowControllers[index].value * 3.14159 * 2,
-                        child: Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          size: 28.sp,
-                          color: (isActive || hasSelection) ? Colors.white : Colors.grey.shade600,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+            child: _buildFilterButton(filter, index, isActive, hasSelection, display),
           ),
         );
       }),
@@ -267,12 +269,17 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
     
     if (filter.nested) {
       // 嵌套筛选确认逻辑
-      List<String> selectedIds = [];
-      if (selected1 != null) selectedIds.add(selected1!);
-      if (selected2 != null) selectedIds.add(selected2!);
-      if (selected3 != null) selectedIds.add(selected3!);
-      
-      selected[filter.key] = selectedIds;
+      // 如果第一级选择了"全部"（id为空），清空该筛选
+      if (selected1 != null && selected1 == '') {
+        selected[filter.key] = [];
+      } else {
+        List<String> selectedIds = [];
+        if (selected1 != null) selectedIds.add(selected1!);
+        if (selected2 != null) selectedIds.add(selected2!);
+        if (selected3 != null) selectedIds.add(selected3!);
+        
+        selected[filter.key] = selectedIds;
+      }
     } else {
       // 普通筛选确认逻辑
       if (filter.multi) {
@@ -294,7 +301,11 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
 
   bool _canConfirm(FilterOption filter) {
     if (filter.nested) {
-      // 嵌套筛选至少需要选择到第二级
+      // 嵌套筛选：如果第一级选择了"全部"（id为空），可以直接确认
+      if (selected1 != null && selected1 == '') {
+        return true;
+      }
+      // 否则至少需要选择到第二级
       return selected2 != null;
     } else {
       // 普通筛选至少需要选择一个选项
@@ -350,6 +361,8 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
 
   OverlayEntry _createOverlayEntry(FilterOption filter, Offset offset, Size size, int index) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final style = widget.style ?? const FilterBarStyle();
+    final gap = style.dropdownGap ?? 8.h; // 弹出层与筛选按钮之间的间距，可从外部控制
 
     return OverlayEntry(
       builder: (context) {
@@ -358,7 +371,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
             // 遮罩只覆盖筛选框下方的区域，不遮挡header和筛选框
             Positioned(
               left: 0,
-              top: offset.dy + size.height,
+              top: offset.dy + size.height + gap,
               right: 0,
               bottom: 0,
               child: GestureDetector(
@@ -371,7 +384,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
             // 弹窗内容
             Positioned(
               left: 0,
-              top: offset.dy + size.height,
+              top: offset.dy + size.height + gap,
               width: screenWidth,
               child: Material(
                 color: Colors.transparent,
@@ -405,10 +418,34 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                               children: activeFilter.values.map((value) {
                                 final isSelected = _tempSelected.contains(value.id);
                                 return ListTile(
-                                  title: Text(value.name,
-                                      style: TextStyle(
-                                          fontSize: 28.sp,
-                                          color: isSelected ? Colors.red : Colors.black87)),
+                                  title: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(value.name,
+                                            style: TextStyle(
+                                                fontSize: 28.sp,
+                                                color: isSelected ? Colors.red : Colors.black87)),
+                                      ),
+                                      if (value.count != null) ...[
+                                        SizedBox(width: 8.w),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            borderRadius: BorderRadius.circular(12.r),
+                                          ),
+                                          child: Text(
+                                            '${value.count}',
+                                            style: TextStyle(
+                                              fontSize: 20.sp,
+                                              color: Colors.grey.shade700,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ],
+                                  ),
                                   trailing: isSelected ? const Icon(Icons.check, color: Colors.red) : null,
                                   onTap: () {
                                     _overlayRebuild?.call(() {
@@ -526,12 +563,41 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                 children: level1List.map<Widget>((item) {
                   final isSelected = selected1 == item.id;
                   return ListTile(
-                    title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                    title: Row(
+                      children: [
+                        Expanded(
+                          child: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                        ),
+                        if (item.count != null) ...[
+                          SizedBox(width: 8.w),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Text(
+                              '${item.count}',
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                color: Colors.grey.shade700,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                     onTap: () {
                       _overlayRebuild?.call(() {
                         selected1 = item.id;
                         selected2 = null;
                         selected3 = null;
+                        // 如果选择的是"全部"（id为空），直接确认
+                        if (item.id == '') {
+                          _confirmSelection(filter);
+                          return;
+                        }
                         _nestedTabController?.animateTo( hasLevel2 ? 1 : 0 );
                       });
                     },
@@ -543,7 +609,31 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                       children: level2List.map<Widget>((item) {
                         final isSelected = selected2 == item.id;
                         return ListTile(
-                          title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                              ),
+                              if (item.count != null) ...[
+                                SizedBox(width: 8.w),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Text(
+                                    '${item.count}',
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      color: Colors.grey.shade700,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                           onTap: () {
                             _overlayRebuild?.call(() {
                               selected2 = item.id;
@@ -560,7 +650,31 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                       children: level3List.map<Widget>((item) {
                         final isSelected = selected3 == item.id;
                         return ListTile(
-                          title: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                          title: Row(
+                            children: [
+                              Expanded(
+                                child: Text(item.name, style: TextStyle(color: isSelected ? Colors.red : Colors.black)),
+                              ),
+                              if (item.count != null) ...[
+                                SizedBox(width: 8.w),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: Text(
+                                    '${item.count}',
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      color: Colors.grey.shade700,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                           onTap: () {
                             _overlayRebuild?.call(() {
                               selected3 = item.id;
@@ -643,9 +757,13 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
   if (!filter.nested) {
     // 普通多选过滤，保留原逻辑
     final ids = selected[filter.key] ?? [];
+    // 如果选择的是空字符串（全部），不显示文本
+    if (ids.isEmpty || (ids.length == 1 && ids.first == '')) {
+      return '';
+    }
     final names = filter.values
         .expand((v) => _flatten(v))
-        .where((v) => ids.contains(v.id))
+        .where((v) => ids.contains(v.id) && v.id != '') // 排除"全部"选项
         .map((v) => v.name)
         .toList();
     return names.join(', ');
@@ -653,6 +771,10 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
 
   // 嵌套筛选，直接从 selected[filter.key] 取
   final ids = selected[filter.key] ?? [];
+  // 如果数组为空或第一个元素是空字符串（全部），不显示文本
+  if (ids.isEmpty || (ids.isNotEmpty && ids.first == '')) {
+    return '';
+  }
   if (ids.length >= 3) {
     return _getNameById(ids[2], filter.values) ?? '';
   }
@@ -667,6 +789,128 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
   List<FilterValue> _flatten(FilterValue value) {
     final children = value.children ?? [];
     return [value, ...children.expand(_flatten)];
+  }
+
+  IconData _getFilterIcon(String key) {
+    switch (key) {
+      case 'areaId':
+        return Icons.location_on_rounded;
+      case 'brandId':
+        return Icons.business_rounded;
+      case 'specId':
+        return Icons.movie_filter_rounded;
+      case 'subtitleId':
+        return Icons.subtitles_rounded;
+      default:
+        return Icons.tune_rounded;
+    }
+  }
+
+  Widget _buildFilterButton(FilterOption filter, int index, bool isActive, bool hasSelection, String display) {
+    final style = widget.style ?? const FilterBarStyle();
+    final isSelected = isActive || hasSelection;
+    
+    // 默认样式值
+    final height = style.height ?? 56.h;
+    final padding = style.padding ?? EdgeInsets.symmetric(horizontal: 20.w);
+    final margin = style.margin ?? EdgeInsets.symmetric(horizontal: 4.w);
+    final selectedBgColor = style.selectedBackgroundColor ?? const Color(0xFF1989FA);
+    final unselectedBgColor = style.unselectedBackgroundColor ?? Colors.grey.shade50;
+    final selectedBorderColor = style.selectedBorderColor ?? const Color(0xFF1989FA);
+    final unselectedBorderColor = style.unselectedBorderColor ?? Colors.grey.shade200;
+    final borderRadius = style.borderRadius ?? 12.r;
+    final borderWidth = style.borderWidth ?? 1.0;
+    final iconSize = style.iconSize ?? 22.sp;
+    final selectedIconColor = style.selectedIconColor ?? Colors.white;
+    final unselectedIconColor = style.unselectedIconColor ?? const Color(0xFF646566);
+    final textSize = style.textSize ?? 26.sp;
+    final selectedTextWeight = style.selectedTextWeight ?? FontWeight.w600;
+    final unselectedTextWeight = style.unselectedTextWeight ?? FontWeight.w500;
+    final selectedTextColor = style.selectedTextColor ?? Colors.white;
+    final unselectedTextColor = style.unselectedTextColor ?? const Color(0xFF323233);
+    final selectedArrowColor = style.selectedArrowColor ?? Colors.white;
+    final unselectedArrowColor = style.unselectedArrowColor ?? const Color(0xFF969799);
+    final arrowSize = style.arrowSize ?? 22.sp;
+    final badgeBgColor = style.badgeBackgroundColor ?? const Color(0xFF1989FA).withOpacity(0.1);
+    final selectedBadgeBgColor = style.selectedBadgeBackgroundColor ?? Colors.white.withOpacity(0.2);
+    final badgeTextColor = style.badgeTextColor ?? const Color(0xFF1989FA);
+    final selectedBadgeTextColor = style.selectedBadgeTextColor ?? Colors.white;
+    final badgeTextSize = style.badgeTextSize ?? 20.sp;
+    final badgeBorderRadius = style.badgeBorderRadius ?? 8.r;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      height: height,
+      padding: padding,
+      margin: margin,
+      decoration: BoxDecoration(
+        color: isSelected ? selectedBgColor : unselectedBgColor,
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: Border.all(
+          color: isSelected ? selectedBorderColor : unselectedBorderColor,
+          width: borderWidth,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _getFilterIcon(filter.key),
+            size: iconSize,
+            color: isSelected ? selectedIconColor : unselectedIconColor,
+          ),
+          SizedBox(width: 8.w),
+          Flexible(
+            child: Text(
+              filter.title,
+              style: TextStyle(
+                fontWeight: isSelected ? selectedTextWeight : unselectedTextWeight,
+                color: isSelected ? selectedTextColor : unselectedTextColor,
+                fontSize: textSize,
+                height: 1.2,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+          if (display.isNotEmpty) ...[
+            SizedBox(width: 6.w),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+              decoration: BoxDecoration(
+                color: isSelected ? selectedBadgeBgColor : badgeBgColor,
+                borderRadius: BorderRadius.circular(badgeBorderRadius),
+              ),
+              child: Text(
+                display,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  color: isSelected ? selectedBadgeTextColor : badgeTextColor,
+                  fontSize: badgeTextSize,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+          SizedBox(width: 4.w),
+          AnimatedBuilder(
+            animation: _arrowControllers[index],
+            builder: (context, child) {
+              return Transform.rotate(
+                angle: _arrowControllers[index].value * 3.14159,
+                child: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: arrowSize,
+                  color: isSelected ? selectedArrowColor : unselectedArrowColor,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 }
 

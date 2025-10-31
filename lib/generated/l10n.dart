@@ -780,6 +780,26 @@ class S {
     );
   }
 
+  /// `m`
+  String get common_unit_meter {
+    return Intl.message(
+      'm',
+      name: 'common_unit_meter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `km`
+  String get common_unit_kilometer {
+    return Intl.message(
+      'km',
+      name: 'common_unit_kilometer',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `pts`
   String get common_unit_point {
     return Intl.message(
@@ -3880,6 +3900,16 @@ class S {
     );
   }
 
+  /// `All Areas`
+  String get cinemaList_allArea {
+    return Intl.message(
+      'All Areas',
+      name: 'cinemaList_allArea',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Nearby Cinemas`
   String get cinemaList_title {
     return Intl.message(
@@ -3890,11 +3920,31 @@ class S {
     );
   }
 
+  /// `All Cinemas`
+  String get cinemaList_allCinemas {
+    return Intl.message(
+      'All Cinemas',
+      name: 'cinemaList_allCinemas',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Getting current location`
   String get cinemaList_address {
     return Intl.message(
       'Getting current location',
       name: 'cinemaList_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current location`
+  String get cinemaList_currentLocation {
+    return Intl.message(
+      'Current location',
+      name: 'cinemaList_currentLocation',
       desc: '',
       args: [],
     );
@@ -3945,6 +3995,16 @@ class S {
     return Intl.message(
       'Filter by Area',
       name: 'cinemaList_filter_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brand`
+  String get cinemaList_filter_brand {
+    return Intl.message(
+      'Brand',
+      name: 'cinemaList_filter_brand',
       desc: '',
       args: [],
     );

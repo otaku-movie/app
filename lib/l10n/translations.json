@@ -424,6 +424,16 @@
       "ja": "円",
       "en": "JPY"
     },
+    "unit_meter": {
+      "zh": "米",
+      "ja": "m",
+      "en": "m"
+    },
+    "unit_kilometer": {
+      "zh": "公里",
+      "ja": "km",
+      "en": "km"
+    },
     "unit_point": {
       "zh": "分",
       "ja": "点",
@@ -2289,15 +2299,30 @@
     }
   },
   "cinemaList": {
+    "allArea": {
+      "zh": "全部地区",
+      "ja": "全地域",
+      "en": "All Areas"
+    },
     "title": {
       "zh": "附近影院",
       "ja": "近くの映画館",
       "en": "Nearby Cinemas"
     },
+    "allCinemas": {
+      "zh": "全部影院",
+      "ja": "すべての映画館",
+      "en": "All Cinemas"
+    },
     "address": {
       "zh": "正在获取当前位置",
       "ja": "現在地を取得中",
       "en": "Getting current location"
+    },
+    "currentLocation": {
+      "zh": "当前所在地",
+      "ja": "現在地",
+      "en": "Current location"
     },
     "search": {
       "hint": {
@@ -2328,6 +2353,11 @@
         "zh": "按区域筛选",
         "ja": "地域でフィルター",
         "en": "Filter by Area"
+      },
+      "brand": {
+        "zh": "品牌",
+        "ja": "ブランド",
+        "en": "Brand"
       },
       "loading": {
         "zh": "正在加载区域数据...",

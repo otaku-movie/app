@@ -51,6 +51,9 @@ class CinemaListResponse {
     final String? brandName;
     
     final List<Spec>? spec;
+    final double? latitude;
+    final double? longitude;
+    final String? postalCode;
     
     final List<NowShowingMovie>? nowShowingMovies;
     
@@ -71,6 +74,9 @@ class CinemaListResponse {
         this.brandName,
         this.spec,
         this.nowShowingMovies,
+        this.latitude,
+        this.longitude,
+        this.postalCode,
     });
 
     factory CinemaListResponse.fromJson(Map<String, dynamic> json) => _$CinemaListResponseFromJson(json);
