@@ -128,6 +128,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Screen Spec"),
         "about_movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("Subtitle"),
+        "about_movieShowList_dropdown_tag":
+            MessageLookupByLibrary.simpleMessage("Tag"),
         "about_privacy_policy":
             MessageLookupByLibrary.simpleMessage("View Privacy Policy"),
         "about_register_haveAccount":
@@ -509,6 +511,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Screen Spec"),
         "movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("Subtitle"),
+        "movieShowList_dropdown_tag":
+            MessageLookupByLibrary.simpleMessage("Tag"),
         "movieTicketType_actualPrice":
             MessageLookupByLibrary.simpleMessage("Actual Payment"),
         "movieTicketType_cinema":

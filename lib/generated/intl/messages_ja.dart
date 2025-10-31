@@ -120,9 +120,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_movieShowList_dropdown_area":
             MessageLookupByLibrary.simpleMessage("地域"),
         "about_movieShowList_dropdown_screenSpec":
-            MessageLookupByLibrary.simpleMessage("上映仕様"),
+            MessageLookupByLibrary.simpleMessage("仕様"),
         "about_movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("字幕"),
+        "about_movieShowList_dropdown_tag":
+            MessageLookupByLibrary.simpleMessage("タグ"),
         "about_privacy_policy":
             MessageLookupByLibrary.simpleMessage("プライバシーポリシーを表示"),
         "about_register_haveAccount":
@@ -475,6 +477,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映仕様"),
         "movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("字幕"),
+        "movieShowList_dropdown_tag":
+            MessageLookupByLibrary.simpleMessage("タグ"),
         "movieTicketType_actualPrice":
             MessageLookupByLibrary.simpleMessage("実際の支払い"),
         "movieTicketType_cinema": MessageLookupByLibrary.simpleMessage("映画館"),

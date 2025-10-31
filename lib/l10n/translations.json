@@ -878,14 +878,19 @@
           "en": "Area"
         },
         "screenSpec": {
-          "zh": "放映规格",
-          "ja": "上映仕様",
+          "zh": "规格",
+          "ja": "仕様",
           "en": "Screen Spec"
         },
         "subtitle": {
           "zh": "字幕",
           "ja": "字幕",
           "en": "Subtitle"
+        },
+        "tag": {
+          "zh": "标签",
+          "ja": "タグ",
+          "en": "Tag"
         }
       }
     }
@@ -2099,7 +2104,12 @@
         "zh": "字幕",
         "ja": "字幕",
         "en": "Subtitle"
-      }
+      },
+      "tag": {
+          "zh": "标签",
+          "ja": "タグ",
+          "en": "Tag"
+        }
     }
   },
   "payment": {

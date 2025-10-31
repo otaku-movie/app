@@ -1590,6 +1590,16 @@ class S {
     );
   }
 
+  /// `Tag`
+  String get about_movieShowList_dropdown_tag {
+    return Intl.message(
+      'Tag',
+      name: 'about_movieShowList_dropdown_tag',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Couple Seat`
   String get enum_seatType_coupleSeat {
     return Intl.message(
@@ -3515,6 +3525,16 @@ class S {
     return Intl.message(
       'Subtitle',
       name: 'movieShowList_dropdown_subtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tag`
+  String get movieShowList_dropdown_tag {
+    return Intl.message(
+      'Tag',
+      name: 'movieShowList_dropdown_tag',
       desc: '',
       args: [],
     );

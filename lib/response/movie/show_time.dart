@@ -30,12 +30,23 @@ class Cinema {
     final String? cinemaAddress;
     
     final List<ShowTime>? showTimes;
+    
+    @JsonKey(name: "cinemaLatitude")
+    final double? cinemaLatitude;
+    
+    @JsonKey(name: "cinemaLongitude")
+    final double? cinemaLongitude;
+    
+    double? distance;
 
     Cinema({
         this.cinemaId,
         this.cinemaName,
         this.cinemaAddress,
         this.showTimes,
+        this.cinemaLatitude,
+        this.cinemaLongitude,
+        this.distance,
     });
 
     factory Cinema.fromJson(Map<String, dynamic> json) => _$CinemaFromJson(json);

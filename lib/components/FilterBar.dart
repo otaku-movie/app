@@ -17,6 +17,7 @@ class FilterOption {
   final List<FilterValue> values;
   final bool multi;
   final bool nested;
+  final IconData? icon;
 
   FilterOption({
     required this.key,
@@ -24,6 +25,7 @@ class FilterOption {
     required this.values,
     this.multi = true,
     this.nested = false,
+    this.icon,
   });
 }
 
@@ -135,7 +137,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
         vsync: this,
         duration: const Duration(milliseconds: 150), // 减少动画时间
         lowerBound: 0,
-        upperBound: 0.5,
+        upperBound: 1, // 旋转180度
       ),
     );
   }
@@ -775,13 +777,17 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
   if (ids.isEmpty || (ids.isNotEmpty && ids.first == '')) {
     return '';
   }
+  // 优先显示最后一级（最具体的级别）
   if (ids.length >= 3) {
     return _getNameById(ids[2], filter.values) ?? '';
   }
   if (ids.length == 2) {
     return _getNameById(ids[1], filter.values) ?? '';
   }
-  // 只选一级时不显示
+  // 只选一级时，显示一级名称
+  if (ids.length == 1) {
+    return _getNameById(ids[0], filter.values) ?? '';
+  }
   return '';
 }
 
@@ -830,7 +836,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
     final unselectedTextColor = style.unselectedTextColor ?? const Color(0xFF323233);
     final selectedArrowColor = style.selectedArrowColor ?? Colors.white;
     final unselectedArrowColor = style.unselectedArrowColor ?? const Color(0xFF969799);
-    final arrowSize = style.arrowSize ?? 22.sp;
+    final arrowSize = style.arrowSize ?? 26.sp;
     final badgeBgColor = style.badgeBackgroundColor ?? const Color(0xFF1989FA).withOpacity(0.1);
     final selectedBadgeBgColor = style.selectedBadgeBackgroundColor ?? Colors.white.withOpacity(0.2);
     final badgeTextColor = style.badgeTextColor ?? const Color(0xFF1989FA);
@@ -855,15 +861,17 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            _getFilterIcon(filter.key),
-            size: iconSize,
-            color: isSelected ? selectedIconColor : unselectedIconColor,
-          ),
-          SizedBox(width: 8.w),
+          if (iconSize > 0) ...[
+            Icon(
+              filter.icon ?? _getFilterIcon(filter.key),
+              size: iconSize,
+              color: isSelected ? selectedIconColor : unselectedIconColor,
+            ),
+            SizedBox(width: 8.w),
+          ],
           Flexible(
             child: Text(
-              filter.title,
+              display.isNotEmpty ? display : filter.title,
               style: TextStyle(
                 fontWeight: isSelected ? selectedTextWeight : unselectedTextWeight,
                 color: isSelected ? selectedTextColor : unselectedTextColor,
@@ -874,26 +882,6 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
               maxLines: 1,
             ),
           ),
-          if (display.isNotEmpty) ...[
-            SizedBox(width: 6.w),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
-              decoration: BoxDecoration(
-                color: isSelected ? selectedBadgeBgColor : badgeBgColor,
-                borderRadius: BorderRadius.circular(badgeBorderRadius),
-              ),
-              child: Text(
-                display,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: isSelected ? selectedBadgeTextColor : badgeTextColor,
-                  fontSize: badgeTextSize,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
           SizedBox(width: 4.w),
           AnimatedBuilder(
             animation: _arrowControllers[index],
