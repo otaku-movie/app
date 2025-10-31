@@ -116,9 +116,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_movieShowList_dropdown_area":
             MessageLookupByLibrary.simpleMessage("地区"),
         "about_movieShowList_dropdown_screenSpec":
-            MessageLookupByLibrary.simpleMessage("放映规格"),
+            MessageLookupByLibrary.simpleMessage("规格"),
         "about_movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("字幕"),
+        "about_movieShowList_dropdown_tag":
+            MessageLookupByLibrary.simpleMessage("标签"),
         "about_privacy_policy": MessageLookupByLibrary.simpleMessage("查看隐私协议"),
         "about_register_haveAccount":
             MessageLookupByLibrary.simpleMessage("已有账号？"),
@@ -452,6 +454,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("放映规格"),
         "movieShowList_dropdown_subtitle":
             MessageLookupByLibrary.simpleMessage("字幕"),
+        "movieShowList_dropdown_tag":
+            MessageLookupByLibrary.simpleMessage("标签"),
         "movieTicketType_actualPrice":
             MessageLookupByLibrary.simpleMessage("实付"),
         "movieTicketType_cinema": MessageLookupByLibrary.simpleMessage("影院"),

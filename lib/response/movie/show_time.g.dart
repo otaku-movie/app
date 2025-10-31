@@ -27,6 +27,9 @@ Cinema _$CinemaFromJson(Map<String, dynamic> json) => Cinema(
       showTimes: (json['showTimes'] as List<dynamic>?)
           ?.map((e) => ShowTime.fromJson(e as Map<String, dynamic>))
           .toList(),
+      cinemaLatitude: (json['cinemaLatitude'] as num?)?.toDouble(),
+      cinemaLongitude: (json['cinemaLongitude'] as num?)?.toDouble(),
+      distance: (json['distance'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$CinemaToJson(Cinema instance) => <String, dynamic>{
@@ -34,6 +37,9 @@ Map<String, dynamic> _$CinemaToJson(Cinema instance) => <String, dynamic>{
       'cinemaName': instance.cinemaName,
       'cinemaAddress': instance.cinemaAddress,
       'showTimes': instance.showTimes?.map((e) => e.toJson()).toList(),
+      'cinemaLatitude': instance.cinemaLatitude,
+      'cinemaLongitude': instance.cinemaLongitude,
+      'distance': instance.distance,
     };
 
 ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(

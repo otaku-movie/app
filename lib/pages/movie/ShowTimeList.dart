@@ -8,11 +8,16 @@ import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/FilterBar.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/area_response.dart';
 import 'package:otaku_movie/response/cinema/cinema_spec_response.dart';
 import 'package:otaku_movie/response/movie/show_time.dart';
 import 'package:otaku_movie/response/language/language_response.dart';
+import 'package:otaku_movie/response/cinema/cinema_movie_show_time_detail_response.dart';
+import 'package:otaku_movie/utils/location_util.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 
 class ShowTimeList extends StatefulWidget {
@@ -31,9 +36,19 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   List<CinemaSpecResponse> cinemaSpec = [];
   List<AreaResponse> areaTreeList = [];
   List<LanguageResponse> languageList = []; // 添加字幕列表
+  List<ShowTimeTag> showTimeTagList = []; // 添加上映标签列表
   int tabLength = 0;
   bool loading = false;
+  bool error = false;
   Map<String, dynamic> filterParams = {};
+  Placemark? location;
+  Position? position;
+  String? currentAddressFull;
+  bool locationLoading = false;
+  EasyRefreshController easyRefreshController = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
 
   @override
   void initState() {
@@ -41,12 +56,33 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     _loadInitialData();
   }
 
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    _tabController = null;
+    easyRefreshController.dispose();
+    super.dispose();
+  }
+
   // 加载初始数据
   Future<void> _loadInitialData() async {
-    await getData();
+    // 开始时设置 loading 状态
+    setState(() {
+      loading = true;
+      error = false;
+    });
+    
+    // 先加载筛选数据
     await getCinemaSpec();
     await getAreaTree();
     await getLanguageList();
+    await getShowTimeTagList();
+    
+    // 先加载数据（显示loading），然后再获取位置
+    await getData();
+    
+    // 后台获取位置信息，获取到位置后重新加载数据计算距离
+    getLocation();
   }
 
   Future<void> getAreaTree() async {
@@ -125,12 +161,78 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     });
   }
 
+  Future<void> getShowTimeTagList() async {
+    ApiRequest().request(
+      path: '/showTimeTag/list',
+      method: 'POST',
+      data: {
+        'page': 1,
+        'pageSize': 30,
+      },
+      fromJsonT: (json) {
+        return ApiPaginationResponse<ShowTimeTag>.fromJson(
+          json,
+          (data) => ShowTimeTag.fromJson(data as Map<String, dynamic>),
+        );
+      },
+    ).then((res) {
+      if (res.data?.list != null) {
+        List<ShowTimeTag> list = res.data!.list!;
+        
+        setState(() {
+          showTimeTagList = list;
+        });
+        print('上映标签列表: $showTimeTagList');
+      }
+    }).catchError((error) {
+      print('获取上映标签列表失败: $error');
+    }).whenComplete(() {
+    });
+  }
+
+  Future<void> getLocation() async {
+    try {
+      if (mounted) {
+        setState(() {
+          locationLoading = true;
+        });
+      }
+      final current = await LocationUtil.getCurrentPosition(accuracy: LocationAccuracy.high);
+      if (current == null) {
+        // 获取不到位置，不设置 loading = false，让后续逻辑处理
+        return;
+      }
+      final place = await LocationUtil.reverseGeocode(current);
+      final full = await LocationUtil.reverseGeocodeTextLocalized(context, current);
+      if (!mounted) return;
+      setState(() {
+        location = place;
+        position = current;
+        currentAddressFull = full;
+      });
+      // 获取到位置信息后，重新获取数据，以便计算距离
+      getData(refresh: true);
+    } catch (e) {
+      print('Error getting location: $e');
+      // 获取位置失败，不阻止数据加载
+    } finally {
+      if (mounted) {
+        setState(() {
+          locationLoading = false;
+        });
+      }
+    }
+  }
 
 
-  Future<void> getData() async {
+
+  Future<void> getData({bool refresh = false}) async {
+    if (!refresh) {
     setState(() {
       loading = true;
+        error = false;
     });
+    }
 
     final areaIdList = filterParams['areaId'] ?? [];
     final params = {
@@ -157,6 +259,18 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     if (specId != null && specId.isNotEmpty) {
       requestData["specId"] = specId;
     }
+    
+    // 只有当上映标签ID不为空时才添加
+    final showTimeTagId = (filterParams['showTimeTagId'] ?? []).length > 0 ? filterParams['showTimeTagId'][0] : '';
+    if (showTimeTagId.isNotEmpty) {
+      requestData["showTimeTagId"] = int.tryParse(showTimeTagId);
+    }
+    
+    // 添加经纬度参数，用于后端查询附近影院
+    if (position != null) {
+      requestData['latitude'] = position!.latitude;
+      requestData['longitude'] = position!.longitude;
+    }
 
     ApiRequest().request(
       path: '/app/movie/showTime',
@@ -169,184 +283,112 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
       },
     ).then((res) {
       if (res.data != null && res.data!.isNotEmpty) {
+        List<ShowTimeResponse> list = res.data!;
+        
+        // 计算距离并排序
+        if (position != null) {
+          _computeDistancesForList(list);
+          print('✅ 距离计算完成, position: ${position!.latitude}, ${position!.longitude}');
+        } else {
+          print('⚠️ position 为 null，无法计算距离');
+        }
+        
+        if (!mounted) return;
+        
         setState(() {
-          data = res.data!;
+          data = list;
           _tabController?.dispose();
+          _tabController = null;
           tabLength = data.length;
+          loading = false;
+          error = false;
         });
 
-        // 在数据加载后初始化 TabController
-        _tabController = TabController(length: tabLength, vsync: this);
+        // 在数据加载后初始化 TabController（确保页面还在 mounted）
+        if (mounted && tabLength > 0) {
+          _tabController = TabController(length: tabLength, vsync: this);
+        }
+        
+        // 通知 EasyRefresh 刷新完成
+        if (refresh) {
+          easyRefreshController.finishRefresh(IndicatorResult.success, true);
+        }
       } else {
-        // 添加假数据用于测试
-        _addFakeData();
+        // 数据为空，清空列表
+        if (!mounted) return;
+        
+        setState(() {
+          data = [];
+          _tabController?.dispose();
+          _tabController = null;
+          tabLength = 0;
+          loading = false;
+          error = false;
+        });
+        
+        // 通知 EasyRefresh 刷新完成
+        if (refresh) {
+          easyRefreshController.finishRefresh(IndicatorResult.success, true);
+        }
       }
-    }).catchError((error) {
-      print('获取数据失败: $error');
-      // API失败时也添加假数据
-      _addFakeData();
-    }).whenComplete(() {
+    }).catchError((err) {
+      print('获取数据失败: $err');
+      // API失败时设置错误状态
+      if (!mounted) return;
+      
       setState(() {
+        data = [];
+        _tabController?.dispose();
+        _tabController = null;
+        tabLength = 0;
         loading = false;
+        error = true;
       });
+      
+      // 通知 EasyRefresh 刷新失败
+      if (refresh) {
+        easyRefreshController.finishRefresh(IndicatorResult.fail, true);
+      }
     });
   }
 
-  // 添加假数据用于测试
-  void _addFakeData() {
-    final now = DateTime.now();
+  // 计算距离并排序
+  void _computeDistancesForList(List<ShowTimeResponse> responses) {
+    if (position == null) {
+      print('⚠️ _computeDistancesForList: position 为 null');
+      return;
+    }
     
-    // 创建多个场次，包含不同的座位状态
-    List<ShowTime> showTimes1 = [
-      // 售罄状态
-      ShowTime(
-        id: 1,
-        theaterHallId: 1,
-        theaterHallName: "1号厅",
-        startTime: DateTime(now.year, now.month, now.day, 10, 30),
-        endTime: DateTime(now.year, now.month, now.day, 12, 30),
-        specName: "IMAX 3D",
-        totalSeats: 200,
-        selectedSeats: 200,
-        availableSeats: 0, // 售罄
-      ),
-      // 紧张状态
-      ShowTime(
-        id: 2,
-        theaterHallId: 1,
-        theaterHallName: "1号厅",
-        startTime: DateTime(now.year, now.month, now.day, 14, 30),
-        endTime: DateTime(now.year, now.month, now.day, 16, 30),
-        specName: "2D",
-        totalSeats: 150,
-        selectedSeats: 130,
-        availableSeats: 20, // 紧张 (20/150 = 13.3% < 20%)
-      ),
-      // 充足状态
-      ShowTime(
-        id: 3,
-        theaterHallId: 2,
-        theaterHallName: "2号厅",
-        startTime: DateTime(now.year, now.month, now.day, 16, 45),
-        endTime: DateTime(now.year, now.month, now.day, 18, 45),
-        specName: "3D",
-        totalSeats: 180,
-        selectedSeats: 50,
-        availableSeats: 130, // 充足 (130/180 = 72.2% > 20%)
-      ),
-      // 更多场次用于测试超过6个的情况
-      ShowTime(
-        id: 4,
-        theaterHallId: 2,
-        theaterHallName: "2号厅",
-        startTime: DateTime(now.year, now.month, now.day, 19, 0),
-        endTime: DateTime(now.year, now.month, now.day, 21, 0),
-        specName: "IMAX",
-        totalSeats: 200,
-        selectedSeats: 80,
-        availableSeats: 120,
-      ),
-      ShowTime(
-        id: 5,
-        theaterHallId: 3,
-        theaterHallName: "3号厅",
-        startTime: DateTime(now.year, now.month, now.day, 21, 15),
-        endTime: DateTime(now.year, now.month, now.day, 23, 15),
-        specName: "2D",
-        totalSeats: 120,
-        selectedSeats: 15,
-        availableSeats: 105,
-      ),
-      ShowTime(
-        id: 6,
-        theaterHallId: 3,
-        theaterHallName: "3号厅",
-        startTime: DateTime(now.year, now.month, now.day, 23, 30),
-        endTime: DateTime(now.year, now.month, now.day + 1, 1, 30),
-        specName: "3D",
-        totalSeats: 120,
-        selectedSeats: 110,
-        availableSeats: 10, // 紧张
-      ),
-      ShowTime(
-        id: 7,
-        theaterHallId: 4,
-        theaterHallName: "VIP厅",
-        startTime: DateTime(now.year, now.month, now.day + 1, 10, 0),
-        endTime: DateTime(now.year, now.month, now.day + 1, 12, 0),
-        specName: "IMAX 3D",
-        totalSeats: 50,
-        selectedSeats: 50,
-        availableSeats: 0, // 售罄
-      ),
-      ShowTime(
-        id: 8,
-        theaterHallId: 4,
-        theaterHallName: "VIP厅",
-        startTime: DateTime(now.year, now.month, now.day + 1, 14, 0),
-        endTime: DateTime(now.year, now.month, now.day + 1, 16, 0),
-        specName: "4DX",
-        totalSeats: 50,
-        selectedSeats: 5,
-        availableSeats: 45, // 充足
-      ),
-    ];
-
-    List<ShowTime> showTimes2 = [
-      // 第二个影院的场次
-      ShowTime(
-        id: 9,
-        theaterHallId: 5,
-        theaterHallName: "巨幕厅",
-        startTime: DateTime(now.year, now.month, now.day, 11, 0),
-        endTime: DateTime(now.year, now.month, now.day, 13, 0),
-        specName: "IMAX",
-        totalSeats: 300,
-        selectedSeats: 250,
-        availableSeats: 50,
-      ),
-      ShowTime(
-        id: 10,
-        theaterHallId: 5,
-        theaterHallName: "巨幕厅",
-        startTime: DateTime(now.year, now.month, now.day, 15, 0),
-        endTime: DateTime(now.year, now.month, now.day, 17, 0),
-        specName: "3D",
-        totalSeats: 300,
-        selectedSeats: 300,
-        availableSeats: 0, // 售罄
-      ),
-    ];
-
-    // 创建假数据
-    List<ShowTimeResponse> fakeData = [
-      ShowTimeResponse(
-        date: "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
-        data: [
-          Cinema(
-            cinemaId: 1,
-            cinemaName: "万达影城（朝阳店）",
-            cinemaAddress: "北京市朝阳区建国路93号万达广场",
-            showTimes: showTimes1,
-          ),
-          Cinema(
-            cinemaId: 2,
-            cinemaName: "CGV影城（三里屯店）",
-            cinemaAddress: "北京市朝阳区三里屯太古里南区",
-            showTimes: showTimes2,
-          ),
-        ],
-      ),
-    ];
-
-    setState(() {
-      data = fakeData;
-      _tabController?.dispose();
-      tabLength = data.length;
-    });
-
-    // 在数据加载后初始化 TabController
-    _tabController = TabController(length: tabLength, vsync: this);
+    for (var response in responses) {
+      if (response.data == null) continue;
+      int computedCount = 0;
+      for (var cinema in response.data!) {
+        if (cinema.cinemaLatitude != null && cinema.cinemaLongitude != null) {
+          final distance = LocationUtil.distanceBetweenMeters(
+            position!,
+            cinema.cinemaLatitude,
+            cinema.cinemaLongitude,
+          );
+          if (distance != null) {
+            cinema.distance = distance;
+            computedCount++;
+            print('📍 影院 ${cinema.cinemaName}: 距离 ${distance.toStringAsFixed(0)}m (${cinema.cinemaLatitude}, ${cinema.cinemaLongitude})');
+          } else {
+            print('⚠️ 无法计算 ${cinema.cinemaName} 的距离');
+          }
+        } else {
+          print('⚠️ ${cinema.cinemaName} 缺少经纬度: lat=${cinema.cinemaLatitude}, lng=${cinema.cinemaLongitude}');
+        }
+      }
+      print('✅ 已计算 ${computedCount}/${response.data!.length} 个影院的距离');
+      
+      // 按距离排序
+      response.data!.sort((a, b) {
+        final distA = a.distance ?? double.infinity;
+        final distB = b.distance ?? double.infinity;
+        return distA.compareTo(distB);
+      });
+    }
   }
 
   List<Widget> generateTab() {
@@ -405,20 +447,17 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     if (loading) {
       return Scaffold(
         appBar: CustomAppBar(title: widget.movieName),
-        body: const Center(child: CircularProgressIndicator()),
+        body: AppErrorWidget(loading: loading, child: Container()),
       );
     }
 
-    return DefaultTabController(
-      initialIndex: 0,
-      length: tabLength > 0 ? tabLength : 1, // 至少为1，防止TabController报错
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: const Color(0xFFF7F8FA),
         appBar: CustomAppBar(
           title: widget.movieName,
-          bottom: (data.isNotEmpty && _tabController != null)
+          bottom: (data.isNotEmpty && _tabController != null && mounted)
               ? TabBar(
-                  controller: _tabController,
+                  controller: _tabController!,
                   tabs: generateTab(),
                   isScrollable: true,
                   labelPadding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 0.h),
@@ -452,27 +491,44 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   title: S.of(context).about_movieShowList_dropdown_area,
                   multi: false,
                   nested: true,
-                  values: areaTreeList
-                      .where((item) => item.name != null && item.name!.isNotEmpty)
-                      .map((item) => convertToFilterValue(item))
-                      .toList(),
+                  icon: Icons.location_on_rounded,
+                  values: [
+                    FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
+                    ...areaTreeList
+                        .where((item) => item.name != null && item.name!.isNotEmpty)
+                        .map((item) => convertToFilterValue(item))
+                        .toList(),
+                  ],
                 ),
                 FilterOption(
                   key: 'specId',
                   title: S.of(context).about_movieShowList_dropdown_screenSpec,
+                  icon: Icons.movie_filter_rounded,
                   values: [
                     FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
                     ...cinemaSpec.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
                       return FilterValue(id: item.id.toString(), name: item.name!);
-                    }).toList(),
+                  }).toList(),
                   ],
                 ),
                  FilterOption(
                   key: 'subtitleId',
                   title: S.of(context).about_movieShowList_dropdown_subtitle,
+                  icon: Icons.subtitles_rounded,
                   values: [
                     FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
                     ...languageList.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
+                      return FilterValue(id: item.id.toString(), name: item.name!);
+                    }).toList(),
+                  ],
+                ),
+                FilterOption(
+                  key: 'showTimeTagId',
+                  title:  S.of(context).about_movieShowList_dropdown_tag,
+                  icon: Icons.local_activity_rounded,
+                  values: [
+                    FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
+                    ...showTimeTagList.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
                       return FilterValue(id: item.id.toString(), name: item.name!);
                     }).toList(),
                   ],
@@ -490,18 +546,53 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
             ),
             SizedBox(height: 10.h),
             Expanded(
-              child: (data.isEmpty || _tabController == null)
-                  ? Center(
-                      child: Text(
-                        S.of(context).about_components_showTimeList_noData,
-                        style: TextStyle(fontSize: 32.sp, color: Colors.grey),
-                      ),
-                    )
-                  : EasyRefresh.builder(
+              child: AppErrorWidget(
+                loading: loading,
+                error: error,
+                onRetry: () => getData(refresh: true),
+                child: EasyRefresh.builder(
+                  controller: easyRefreshController,
                       header: customHeader(context),
                       footer: customFooter(context),
-                      onRefresh: _onRefresh,
+                  onRefresh: () async {
+                    await getData(refresh: true);
+                  },
                       childBuilder: (context, physics) {
+                    if (data.isEmpty || _tabController == null || !mounted) {
+                      // 没有数据时，使用 SingleChildScrollView 确保可以下拉刷新
+                      return SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height - 300.h,
+                          padding: EdgeInsets.symmetric(vertical: 100.h),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.movie_creation_outlined,
+                                  size: 64.sp,
+                                  color: Colors.grey.shade400,
+                                ),
+                                SizedBox(height: 16.h),
+                                Text(
+                                  S.of(context).about_components_showTimeList_noData,
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    
+                        if (!mounted || _tabController == null) {
+                          return const SizedBox.shrink();
+                        }
                         return TabBarView(
                           controller: _tabController,
                           physics: const BouncingScrollPhysics(),
@@ -555,32 +646,34 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                                               ),
                                             ),
                                             SizedBox(width: 12.w),
-                                            // Container(
-                                            //   padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                                            //   decoration: BoxDecoration(
-                                            //     color: const Color(0xFF1989FA).withOpacity(0.1),
-                                            //     borderRadius: BorderRadius.circular(20.r),
-                                            //   ),
-                                            //   child: Row(
-                                            //     mainAxisSize: MainAxisSize.min,
-                                            //     children: [
-                                            //       Icon(
-                                            //         Icons.location_on_outlined,
-                                            //         size: 16.sp,
-                                            //         color: const Color(0xFF1989FA),
-                                            //       ),
-                                            //       SizedBox(width: 4.w),
-                                            //       Text(
-                                            //         '3.7km',
-                                            //         style: TextStyle(
-                                            //           fontSize: 22.sp,
-                                            //           color: const Color(0xFF1989FA),
-                                            //           fontWeight: FontWeight.w500,
-                                            //         ),
-                                            //       ),
-                                            //     ],
-                                            //   ),
-                                            // ),
+                                            // 显示距离
+                                            if (children.distance != null)
+                                              Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xFF1989FA).withOpacity(0.1),
+                                                  borderRadius: BorderRadius.circular(20.r),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                    Icon(
+                                                      Icons.location_on_outlined,
+                                                      size: 16.sp,
+                                                      color: const Color(0xFF1989FA),
+                                                    ),
+                                                    SizedBox(width: 4.w),
+                                                    Text(
+                                                      LocationUtil.formatDistanceLocalized(context, children.distance!),
+                                                      style: TextStyle(
+                                                        fontSize: 22.sp,
+                                                        color: const Color(0xFF1989FA),
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             SizedBox(width: 8.w),
                                             Icon(
                                               Icons.arrow_forward_ios,
@@ -591,7 +684,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                                         ),
                                         SizedBox(height: 12.h),
                                         Row(
-                                          children: [
+                                              children: [
                                             Icon(
                                               Icons.place_outlined,
                                               size: 24.sp,
@@ -625,19 +718,21 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                         );
                       },
                     ),
-            ),
+                  ),
+                ),
           ],
         ),
-      )
-    );
+      );
   }
 
   FutureOr _onRefresh() async {
     // 重新获取数据
-    await getData();
+    await getData(refresh: true);
     await getCinemaSpec();
     await getAreaTree();
     await getLanguageList();
+    await getShowTimeTagList();
+    await getLocation();
   }
 
   FutureOr _onLoad() {
