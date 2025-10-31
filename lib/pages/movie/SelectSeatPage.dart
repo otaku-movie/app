@@ -15,6 +15,7 @@ import 'package:otaku_movie/response/movie/theater_seat.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/utils/seat_cancel_manager.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../api/index.dart';
 
@@ -45,6 +46,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
   List<Seat> seatData = [];
   Set<int> selectSeatSet = {};
   List<SeatItem> selectSeatList = [];
+  bool seatDataLoaded = false; // 座位数据是否已加载完成
 
   // int code = SelectSeatState.available.code;
 
@@ -68,6 +70,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
   }
 
   void getSeatData() {
+    setState(() {
+      seatDataLoaded = false; // 开始加载，设置为 false
+    });
+    
     ApiRequest().request(
       path: '/movie_show_time/select_seat/list',
       method: 'GET',
@@ -85,9 +91,14 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
           data = res.data!;
           rowCount = res.data!.seat?.length ?? 0;
           columnCount = res.data!.seat != null ? data.seat![0].children?.length ?? 0 : 0;
+          seatDataLoaded = true; // 座位数据加载完成
         });
         insertAisle();
       }
+    }).catchError((error) {
+      setState(() {
+        seatDataLoaded = false; // 加载失败，保持 false
+      });
     });
   }
 
@@ -685,7 +696,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
             onScaleUpdate: (details) {
               // Scale factor is handled by InteractiveViewer
             },
-            child: InteractiveViewer(
+            child: seatDataLoaded ? InteractiveViewer(
               constrained: false,
               boundaryMargin:  EdgeInsets.only(top: 200.h, left: 500, right: 500,bottom: 1000.h),
               minScale: 0.1,
@@ -697,6 +708,7 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                   direction: 'column',
                     // spacing: 0.0,
                     children: [
+                       // 屏幕
                        Center(
                          child: Container(
                            width: columnCount > 0 ? (seatSize + seatGap) * columnCount : 200.w, // 根据座位列数计算宽度
@@ -710,41 +722,42 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                          ),
                        ),
                       
-                      // 生成座位行号
-                      Space(
-                        children: [
-                           Wrap(
-                             direction: Axis.vertical,
-                             children: [
-                               Container(
-                                 width: seatSize,
-                                 height: seatSize,
-                                 alignment: Alignment.center,
-                               ),
-                              ...seatData.map((row)  {
-                                return Container(
-                                  width: seatSize,
-                                  height: seatSize,
-                                  alignment: Alignment.center,
-                                  margin: EdgeInsets.all(seatGap),
-                                  child: Text(
-                                    row.rowName ?? '',
-                                    style: const TextStyle(fontSize: 16, color: Colors.black),
-                                  )
-                                );
-                              })
-                             ]
-                           ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // 生成座位列号
-                          Wrap(
-                            direction: Axis.horizontal,
-                            children: buildSeatColumnName()
-                          ),
-                          // 生成座位
-                            ...seatData.map((row) {
+                      // 生成座位行号和座位（仅当座位数据加载完成后显示）
+                      if (seatDataLoaded) ...[
+                        Space(
+                          children: [
+                             Wrap(
+                               direction: Axis.vertical,
+                               children: [
+                                 Container(
+                                   width: seatSize,
+                                   height: seatSize,
+                                   alignment: Alignment.center,
+                                 ),
+                                ...seatData.map((row)  {
+                                  return Container(
+                                    width: seatSize,
+                                    height: seatSize,
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.all(seatGap),
+                                    child: Text(
+                                      row.rowName ?? '',
+                                      style: const TextStyle(fontSize: 16, color: Colors.black),
+                                    )
+                                  );
+                                })
+                               ]
+                             ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 生成座位列号
+                            Wrap(
+                              direction: Axis.horizontal,
+                              children: buildSeatColumnName()
+                            ),
+                            // 生成座位
+                              ...seatData.map((row) {
                               if (row.type == SeatType.aisle) {
                                 // 如果是过道，返回一个空白行
                                 return Container(
@@ -833,12 +846,34 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                                 );
                               }
                             })
-                        ],
+                          ],
+                        ),
+                      ],
                       )
-                        ],
-                      )
-                     
-              ])))
+                    ]
+                  ]
+                ),
+              ),
+            ) : Center(
+              // 座位数据加载中，显示 loading（样式参考 errorWidget）
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  LoadingAnimationWidget.staggeredDotsWave(
+                    color: Color(0xFF667EEA),
+                    size: 60.w,
+                  ),
+                  SizedBox(height: 20.h),
+                  Text(
+                    S.of(context).common_loading,
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           ),
         
