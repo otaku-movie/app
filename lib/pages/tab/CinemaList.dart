@@ -7,10 +7,16 @@ import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/cinema/cinemaList.dart';
+import 'package:otaku_movie/response/cinema/cinema_spec_response.dart';
+import 'package:otaku_movie/response/cinema/brand_response.dart';
 import 'package:otaku_movie/response/area_response.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:otaku_movie/utils/location_util.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+import 'package:otaku_movie/components/CustomEasyRefresh.dart';
+import 'package:otaku_movie/components/error.dart';
 
 class CinemaList extends StatefulWidget {
   const CinemaList({Key? key}) : super(key: key);
@@ -21,8 +27,9 @@ class CinemaList extends StatefulWidget {
 
 class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMixin {
   List<CinemaListResponse> data = [];
-  List<CinemaListResponse> filteredData = [];
   List<AreaResponse> areaTreeList = [];
+  List<CinemaSpecResponse> cinemaSpecList = [];
+  List<BrandResponse> brandList = [];
   bool loading = true;
   bool error = false;
   bool isSearching = false;
@@ -31,8 +38,18 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   Map<String, dynamic> filterParams = {};
   TextEditingController searchController = TextEditingController();
   Placemark? location;
+  Position? position;
+  String? currentAddressFull;
+  bool locationLoading = false;
   ScrollController scrollController = ScrollController();
   bool showAppBarShadow = false;
+  EasyRefreshController easyRefreshController = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
+  int currentPage = 1;
+  bool loadFinished = false;
+  int totalCount = 0; // 影院总数
 
   @override
   bool get wantKeepAlive => true;
@@ -42,10 +59,69 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
     super.initState();
     getData();
     getAreaTree();
+    getCinemaSpec();
+    getBrandList();
     getLocation();
     
     // 添加滚动监听
     scrollController.addListener(_onScroll);
+  }
+
+  String _currentLocalityText(BuildContext context) {
+    if (location == null) return S.of(context).cinemaList_address;
+    if (location!.subLocality != null && location!.subLocality!.isNotEmpty) {
+      return location!.subLocality!;
+    }
+    if (location!.locality != null && location!.locality!.isNotEmpty) {
+      return location!.locality!;
+    }
+    if (location!.administrativeArea != null && location!.administrativeArea!.isNotEmpty) {
+      return location!.administrativeArea!;
+    }
+    return S.of(context).cinemaList_address;
+  }
+
+  String _currentFullAddressText(BuildContext context) {
+    if (location == null) return S.of(context).cinemaList_address;
+    final parts = <String>[];
+    void add(String? v) { if (v != null && v.trim().isNotEmpty) parts.add(v.trim()); }
+    final lang = Localizations.localeOf(context).languageCode;
+    if (lang == 'zh') {
+      // 中文：省/州 -> 市 -> 区/町 -> 街道 -> 国家 -> 邮编
+      add(location!.administrativeArea);
+      add(location!.locality);
+      add(location!.subLocality);
+      add(location!.street);
+      add(location!.postalCode);
+    } else if (lang == 'ja') {
+      // 日文（日本地址习惯）：邮编 -> 都/道/府/県 -> 市区町村 -> 丁目番地 -> 国
+      add(location!.postalCode);
+      add(location!.administrativeArea);
+      add(location!.locality);
+      add(location!.subLocality);
+      add(location!.street);
+    } else {
+      // 英文等：街道 -> 区/镇 -> 市 -> 省/州 -> 邮编 -> 国家
+      add(location!.street);
+      add(location!.subLocality);
+      add(location!.locality);
+      add(location!.administrativeArea);
+      add(location!.postalCode);
+    }
+    if (currentAddressFull != null && currentAddressFull!.isNotEmpty) {
+      // 去掉末尾国家名（如果有）
+      String text = currentAddressFull!;
+      final country = location?.country;
+      if (country != null && country.trim().isNotEmpty) {
+        final trimmed = country.trim();
+        // 移除诸如 ", Japan" / ", 中国" / " Japan" 的结尾国家
+        text = text.replaceAll(RegExp(r"\s*,\s*" + RegExp.escape(trimmed) + r"\s*$"), '');
+        text = text.replaceAll(RegExp(r"\s+" + RegExp.escape(trimmed) + r"\s*$"), '');
+      }
+      return text;
+    }
+    if (parts.isEmpty) return _currentLocalityText(context);
+    return parts.join(' ');
   }
 
   void _onScroll() {
@@ -67,47 +143,158 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
     scrollController.removeListener(_onScroll);
     searchController.dispose();
     scrollController.dispose();
+    easyRefreshController.dispose();
     super.dispose();
   }
 
   Future<void> getLocation() async {
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
-      
-      if (mounted && placemarks.isNotEmpty) {
+      if (mounted) {
         setState(() {
-          location = placemarks.first;
+          locationLoading = true;
         });
       }
+      final current = await LocationUtil.getCurrentPosition(accuracy: LocationAccuracy.high);
+      if (current == null) return;
+      final place = await LocationUtil.reverseGeocode(current);
+      final full = await LocationUtil.reverseGeocodeTextLocalized(context, current);
+      if (!mounted) return;
+      setState(() {
+        location = place;
+        position = current;
+        currentAddressFull = full;
+      });
+      // 获取到位置信息后，重新获取影院数据，以便后端根据经纬度查询附近影院
+      getData();
     } catch (e) {
       print('Error getting location: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          locationLoading = false;
+        });
+      }
     }
   }
 
-  Future<void> getData() async {
+  Future<void> getData({int page = 1, bool refresh = false}) async {
     if (!mounted) return;
     
-    setState(() {
-      loading = true;
-      error = false;
-    });
+    // 如果是刷新，重置页面和数据
+    if (refresh) {
+      currentPage = 1;
+      loadFinished = false;
+    }
+    
+    // 如果是加载更多，不显示 loading，只显示加载底部指示器
+    if (page == 1) {
+      setState(() {
+        loading = true;
+        error = false;
+      });
+    }
 
     try {
-      print('🔍 开始获取影院数据...');
-      print('📋 请求参数: $filterParams');
+      // 处理筛选参数：将筛选参数映射为 API 需要的格式
+      Map<String, dynamic> requestParams = {
+        'page': page,
+        'pageSize': 10,
+      };
+      
+      // 处理 name 搜索字段
+      if (filterParams.containsKey('name') && filterParams['name'] != null && filterParams['name'].toString().isNotEmpty) {
+        requestParams['name'] = filterParams['name'];
+      }
+      
+      // 处理嵌套地区筛选：将 areaId 数组映射到 regionId, prefectureId, cityId
+      if (filterParams.containsKey('areaId') && filterParams['areaId'] != null) {
+        final areaIds = filterParams['areaId'] as List?;
+        if (areaIds != null && areaIds.isNotEmpty && areaIds.first != '') {
+          // 嵌套筛选：第一级是 regionId，第二级是 prefectureId，第三级是 cityId
+          if (areaIds.length >= 1) {
+            final regionId = int.tryParse(areaIds[0].toString());
+            if (regionId != null) {
+              requestParams['regionId'] = regionId;
+            }
+          }
+          if (areaIds.length >= 2) {
+            final prefectureId = int.tryParse(areaIds[1].toString());
+            if (prefectureId != null) {
+              requestParams['prefectureId'] = prefectureId;
+            }
+          }
+          if (areaIds.length >= 3) {
+            final cityId = int.tryParse(areaIds[2].toString());
+            if (cityId != null) {
+              requestParams['cityId'] = cityId;
+            }
+          }
+        }
+      }
+      
+      // 处理 brandId
+      if (filterParams.containsKey('brandId')) {
+        final brandId = filterParams['brandId'];
+        if (brandId != null) {
+          if (brandId is List) {
+            if (brandId.isNotEmpty) {
+              final first = brandId.first;
+              if (first != null && first != '' && first.toString() != '') {
+                final parsed = int.tryParse(first.toString());
+                if (parsed != null) {
+                  requestParams['brandId'] = parsed;
+                }
+              }
+            }
+          } else {
+            final str = brandId.toString();
+            if (str.isNotEmpty && str != '') {
+              final parsed = int.tryParse(str);
+              if (parsed != null) {
+                requestParams['brandId'] = parsed;
+              }
+            }
+          }
+        }
+      }
+      
+      // 处理 specId
+      if (filterParams.containsKey('specId')) {
+        final specId = filterParams['specId'];
+        if (specId != null) {
+          if (specId is List) {
+            if (specId.isNotEmpty) {
+              final first = specId.first;
+              if (first != null && first != '' && first.toString() != '') {
+                final parsed = int.tryParse(first.toString());
+                if (parsed != null) {
+                  requestParams['specId'] = parsed;
+                }
+              }
+            }
+          } else {
+            final str = specId.toString();
+            if (str.isNotEmpty && str != '') {
+              final parsed = int.tryParse(str);
+              if (parsed != null) {
+                requestParams['specId'] = parsed;
+              }
+            }
+          }
+        }
+      }
+      
+      // 添加经纬度参数，用于后端查询附近影院
+      if (position != null) {
+        requestParams['latitude'] = position!.latitude;
+        requestParams['longitude'] = position!.longitude;
+      }
       
       final apiRequest = ApiRequest();
       final response = await apiRequest.request<ApiPaginationResponse<CinemaListResponse>>(
       path: '/cinema/list',
       method: 'POST',
-        data: filterParams,
+        data: requestParams,
       fromJsonT: (json) {
         return ApiPaginationResponse<CinemaListResponse>.fromJson(
           json,
@@ -116,38 +303,108 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
       },
       );
       
-      print('📡 API响应: ${response.data}');
-      print('📊 响应状态: ${response.code}');
-      print('💬 响应消息: ${response.message}');
-      
       if (mounted) {
+        final list = response.data?.list ?? [];
+        final total = response.data?.total ?? 0;
+        final pageSize = response.data?.pageSize ?? 10;
+        
+        // 计算距离并排序
+        if (position != null && list.isNotEmpty) {
+          _computeDistancesForList(list);
+        }
+        
         setState(() {
-          data = response.data?.list ?? [];
-          filteredData = List.from(data);
+          if (page == 1) {
+            // 刷新：替换数据
+            data = list;
+            totalCount = total; // 保存总数
+          } else {
+            // 加载更多：追加数据
+            data.addAll(list);
+          }
+          
           loading = false;
+          currentPage = page;
+          
+          // 判断是否加载完成
+          final totalPages = (total / pageSize).ceil();
+          loadFinished = page >= totalPages || list.isEmpty;
         });
         
-        print('🎬 解析后的影院数据: ${data.length} 个影院');
-        if (data.isNotEmpty) {
-          print('🏢 第一个影院: ${data.first.name}');
+        // 刷新时重新计算距离（如果有定位信息）
+        if (refresh && position != null && data.isNotEmpty) {
+          _computeDistancesForList(data);
+          if (mounted) {
+            setState(() {
+              // 触发UI更新
+            });
+          }
+        }
+        
+        // 通知 EasyRefresh 刷新/加载完成
+        if (refresh) {
+          easyRefreshController.finishRefresh(IndicatorResult.success, true);
+        } else if (page > 1) {
+          if (loadFinished) {
+            easyRefreshController.finishLoad(IndicatorResult.noMore, true);
+          } else {
+            easyRefreshController.finishLoad(IndicatorResult.success, true);
+          }
         }
       }
     } catch (e) {
       print('❌ 获取影院数据失败: $e');
       if (mounted) {
-      setState(() {
-        error = true;
-        loading = false;
-      });
+        setState(() {
+          error = true;
+          loading = false;
+        });
+        
+        // 通知 EasyRefresh 失败
+        if (refresh) {
+          easyRefreshController.finishRefresh(IndicatorResult.fail, true);
+        } else if (page > 1) {
+          easyRefreshController.finishLoad(IndicatorResult.fail, true);
+        }
       }
     }
   }
+
+  void _computeDistances() {
+    if (position == null || data.isEmpty) return;
+    _computeDistancesForList(data);
+    if (mounted) {
+      setState(() {
+        // 触发UI更新，显示排序后的数据
+      });
+    }
+  }
+
+  void _computeDistancesForList(List<CinemaListResponse> list) {
+    if (position == null || list.isEmpty) return;
+    for (final c in list) {
+      final lat = c.latitude;
+      final lng = c.longitude;
+      if (lat != null && lng != null) {
+        c.distance = LocationUtil.distanceBetweenMeters(position!, lat, lng);
+      }
+    }
+    list.sort((a, b) {
+      final da = a.distance;
+      final db = b.distance;
+      if (da == null && db == null) return 0;
+      if (da == null) return 1;
+      if (db == null) return -1;
+      return da.compareTo(db);
+    });
+  }
+
+  String _formatDistance(BuildContext context, double meters) => LocationUtil.formatDistanceLocalized(context, meters);
 
   Future<void> getAreaTree() async {
     if (!mounted) return;
     
     try {
-      print('🌳 开始获取区域树数据...');
       
       final apiRequest = ApiRequest();
       final response = await apiRequest.request<List<dynamic>>(
@@ -156,10 +413,6 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
         fromJsonT: (json) => json as List<dynamic>,
       );
       
-      print('📡 区域树API响应: ${response.data}');
-      print('📊 响应状态: ${response.code}');
-      print('💬 响应消息: ${response.message}');
-      
       if (mounted) {
         setState(() {
           areaTreeList = (response.data ?? [])
@@ -167,46 +420,93 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
               .toList();
         });
         
-        print('🌳 解析后的区域数据: ${areaTreeList.length} 个区域');
-        if (areaTreeList.isNotEmpty) {
-          print('🏘️ 第一个区域: ${areaTreeList.first.name}');
-        }
       }
     } catch (e) {
-      print('❌ 获取区域树数据失败: $e');
-      if (mounted) {
-        setState(() {
-          areaTreeList = _getFallbackAreaData();
-        });
-      }
     }
   }
 
-  List<AreaResponse> _getFallbackAreaData() {
-    return [
-      AreaResponse(id: 1, name: '全部', children: []),
-      AreaResponse(id: 2, name: '北京市', children: []),
-      AreaResponse(id: 3, name: '上海市', children: []),
-      AreaResponse(id: 4, name: '广州市', children: []),
-      AreaResponse(id: 5, name: '深圳市', children: []),
-    ];
+  Future<void> getCinemaSpec() async {
+    if (!mounted) return;
+    
+    try {
+      final apiRequest = ApiRequest();
+      final response = await apiRequest.request<ApiPaginationResponse<CinemaSpecResponse>>(
+        path: '/cinema/spec/list',
+        method: 'POST',
+        data: {
+          'page': 1,
+          'pageSize': 100,
+        },
+        fromJsonT: (json) {
+          return ApiPaginationResponse<CinemaSpecResponse>.fromJson(
+            json,
+            (data) => CinemaSpecResponse.fromJson(data as Map<String, dynamic>),
+          );
+        },
+      );
+      
+      if (mounted) {
+        setState(() {
+          cinemaSpecList = response.data?.list ?? [];
+        });
+      }
+    } catch (e) {
+      print('获取规格列表失败: $e');
+    }
   }
+
+  Future<void> getBrandList() async {
+    if (!mounted) return;
+    
+    try {
+      final apiRequest = ApiRequest();
+      final response = await apiRequest.request<ApiPaginationResponse<BrandResponse>>(
+        path: '/brand/list',
+        method: 'POST',
+        data: {
+          'page': 1,
+          'pageSize': 100,
+        },
+        fromJsonT: (json) {
+          return ApiPaginationResponse<BrandResponse>.fromJson(
+            json,
+            (data) => BrandResponse.fromJson(data as Map<String, dynamic>),
+          );
+        },
+      );
+      
+      if (mounted) {
+        setState(() {
+          brandList = response.data?.list ?? [];
+        });
+      }
+    } catch (e) {
+      print('获取品牌列表失败: $e');
+    }
+  }
+
 
   void _performSearch(String query) {
     if (!mounted) return;
     
-          setState(() {
+    setState(() {
       isSearching = query.isNotEmpty;
-      if (isSearching) {
-        filteredData = data.where((cinema) {
-          final name = cinema.name?.toLowerCase() ?? '';
-          final address = cinema.fullAddress?.toLowerCase() ?? '';
-          return name.contains(query.toLowerCase()) || address.contains(query.toLowerCase());
-        }).toList();
+      // 更新筛选参数，添加 name 字段
+      if (query.isNotEmpty) {
+        filterParams['name'] = query;
       } else {
-        filteredData = List.from(data);
+        filterParams.remove('name');
       }
     });
+    
+    // 执行 API 搜索
+    if (query.isNotEmpty || filterParams.isNotEmpty) {
+      getData(refresh: true);
+    } else {
+      // 如果搜索为空且没有其他筛选，重新获取数据
+      filterParams.remove('name');
+      getData(refresh: true);
+    }
   }
 
   void _clearSearch() {
@@ -215,18 +515,36 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
     setState(() {
       searchController.clear();
       isSearching = false;
-      filteredData = List.from(data);
+      filterParams.remove('name');
     });
+    // 重新获取数据
+    getData(refresh: true);
   }
 
   void _handleFilterChange(Map<String, dynamic> selected) {
     if (!mounted) return;
     
     setState(() {
+      // 保留 name 搜索字段（如果存在）
+      if (filterParams.containsKey('name')) {
+        selected['name'] = filterParams['name'];
+      }
+      
       filterParams = selected;
-      selectedArea = selected['areaId']?.toString();
+      
+      // 更新 selectedArea 用于显示
+      if (selected.containsKey('areaId') && selected['areaId'] != null) {
+        final areaIds = selected['areaId'] as List?;
+        if (areaIds != null && areaIds.isNotEmpty) {
+          selectedArea = areaIds.last.toString();
+        } else {
+          selectedArea = null;
+        }
+      } else {
+        selectedArea = null;
+      }
     });
-    getData();
+    getData(refresh: true);
   }
 
   FilterValue convertToFilterValue(AreaResponse item) {
@@ -237,51 +555,152 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
     );
   }
 
-  Widget _buildCinemaList() {
-    final displayData = isSearching ? filteredData : data;
+  // 检查是否有活跃的筛选条件
+  bool _hasActiveFilters() {
+    // 检查是否有地区筛选
+    if (filterParams.containsKey('areaId') && 
+        filterParams['areaId'] != null &&
+        filterParams['areaId'] is List &&
+        (filterParams['areaId'] as List).isNotEmpty &&
+        (filterParams['areaId'] as List).first != '') {
+      return true;
+    }
+    // 检查是否有品牌筛选
+    if (filterParams.containsKey('brandId') && 
+        filterParams['brandId'] != null) {
+      final brandId = filterParams['brandId'];
+      if (brandId is List && brandId.isNotEmpty && brandId.first != '' && brandId.first.toString() != '') {
+        return true;
+      } else if (brandId != null && brandId.toString() != '') {
+        return true;
+      }
+    }
+    // 检查是否有规格筛选
+    if (filterParams.containsKey('specId') && 
+        filterParams['specId'] != null) {
+      final specId = filterParams['specId'];
+      if (specId is List && specId.isNotEmpty && specId.first != '' && specId.first.toString() != '') {
+        return true;
+      } else if (specId != null && specId.toString() != '') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  Widget _buildCinemaList(ScrollPhysics? physics) {
+    final displayData = data;
     
+    // 检查是否有地区筛选
+    final hasAreaFilter = filterParams.containsKey('areaId') && 
+                          filterParams['areaId'] != null &&
+                          filterParams['areaId'] is List &&
+                          (filterParams['areaId'] as List).isNotEmpty &&
+                          (filterParams['areaId'] as List).first != '';
+    
+    // 如果没有地区筛选，显示标题（有定位显示"附近影院"，无定位显示"全部影院"）
+    final showTitle = !hasAreaFilter;
+    
+    // 如果数据为空，显示空状态（支持下拉刷新）
     if (displayData.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              isSearching ? Icons.search_off_rounded : Icons.location_off_rounded,
-              size: 64.sp,
-              color: Colors.grey.shade400,
+      return SingleChildScrollView(
+        physics: physics ?? const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          height: MediaQuery.of(context).size.height - 300.h, // 确保有足够高度支持下拉刷新
+          padding: EdgeInsets.symmetric(vertical: 100.h),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isSearching ? Icons.search_off_rounded : Icons.location_off_rounded,
+                  size: 64.sp,
+                  color: Colors.grey.shade400,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  isSearching 
+                    ? S.of(context).cinemaList_empty_noSearchResults
+                    : S.of(context).cinemaList_empty_noData,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  isSearching 
+                    ? S.of(context).cinemaList_empty_noSearchResultsTip
+                    : S.of(context).cinemaList_empty_noDataTip,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 16.h),
-            Text(
-              isSearching 
-                ? S.of(context).cinemaList_empty_noSearchResults
-                : S.of(context).cinemaList_empty_noData,
-              style: TextStyle(
-                fontSize: 18.sp,
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              isSearching 
-                ? S.of(context).cinemaList_empty_noSearchResultsTip
-                : S.of(context).cinemaList_empty_noDataTip,
-              style: TextStyle(
-                fontSize: 14.sp,
-                color: Colors.grey.shade500,
-              ),
-            ),
-          ],
+          ),
         ),
       );
     }
     
+    // 计算 itemCount
+    final itemCount = displayData.length + (showTitle ? 1 : 0);
+    
     return ListView.builder(
       controller: scrollController,
+      physics: physics ?? const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      itemCount: displayData.length,
+      itemCount: itemCount,
       itemBuilder: (context, index) {
-        final cinema = displayData[index];
+        // 如果没有地区筛选，第一项显示标题
+        if (showTitle && index == 0) {
+          final hasLocation = position != null;
+          return Container(
+            margin: EdgeInsets.only(bottom: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 12.h),
+            child: Row(
+              children: [
+                Icon(
+                  hasLocation ? Icons.location_on_rounded : Icons.movie_rounded,
+                  size: 24.sp,
+                  color: const Color(0xFF1989FA),
+                ),
+                SizedBox(width: 8.w),
+                Text(
+                  hasLocation 
+                    ? S.of(context).cinemaList_title 
+                    : S.of(context).cinemaList_allCinemas,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1989FA).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Text(
+                    '$totalCount',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF1989FA),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        
+        final cinemaIndex = showTitle ? index - 1 : index;
+        final cinema = displayData[cinemaIndex];
         return _buildCinemaCard(cinema);
       },
     );
@@ -390,6 +809,38 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                           ),
                         ),
                       ),
+                      if (cinema.distance != null)
+                        Container(
+                          margin: EdgeInsets.only(left: 8.w),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                          decoration: BoxDecoration(
+                            color: Colors.blue.shade50,
+                            borderRadius: BorderRadius.circular(20.r),
+                            border: Border.all(
+                              color: Colors.blue.shade200,
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.location_on_rounded,
+                                size: 16.sp,
+                                color: Colors.blue.shade600,
+                              ),
+                              SizedBox(width: 4.w),
+                              Text(
+                                _formatDistance(context, cinema.distance!),
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  color: Colors.blue.shade700,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                   
@@ -448,52 +899,51 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                           color: const Color(0xFF323233),
                         ),
                       ),
-                      Spacer(),
-                      // "更多"按钮
-                      GestureDetector(
-                        onTap: () {
-                          // 跳转到电影详情页面或显示更多电影
-                          print('查看更多电影');
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                          // decoration: BoxDecoration(
-                          //   color: Colors.blue.shade50,
-                          //   borderRadius: BorderRadius.circular(16.r),
-                          //   border: Border.all(
-                          //     color: Colors.blue.shade200,
-                          //     width: 1,
-                          //   ),
-                          // ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                      // Spacer(),
+                      // // "更多"按钮
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     // 跳转到电影详情页面或显示更多电影
+                      //   },
+                      //   child: Container(
+                      //     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                      //     // decoration: BoxDecoration(
+                      //     //   color: Colors.blue.shade50,
+                      //     //   borderRadius: BorderRadius.circular(16.r),
+                      //     //   border: Border.all(
+                      //     //     color: Colors.blue.shade200,
+                      //     //     width: 1,
+                      //     //   ),
+                      //     // ),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.min,
                             
-                            children: [
-                              Text(
-                                '更多',
-                                style: TextStyle(
-                                  fontSize: 20.sp,
-                                  color: Colors.grey.shade500,
-                                  // fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(width: 4.w),
-                              Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                size: 20.sp,
-                                color: Colors.grey.shade500,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      //       children: [
+                      //         Text(
+                      //           '更多',
+                      //           style: TextStyle(
+                      //             fontSize: 20.sp,
+                      //             color: Colors.grey.shade500,
+                      //             // fontWeight: FontWeight.w600,
+                      //           ),
+                      //         ),
+                      //         SizedBox(width: 4.w),
+                      //         Icon(
+                      //           Icons.arrow_forward_ios_rounded,
+                      //           size: 20.sp,
+                      //           color: Colors.grey.shade500,
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(height: 16.h),
                   
                   // 电影海报列表 - 占满整行
                   SizedBox(
-                    height: 280.h, // 保持高度限制以避免布局错误
+                    height: 240.h, // 保持高度限制以避免布局错误
                     child: cinema.nowShowingMovies == null || cinema.nowShowingMovies!.isEmpty
                         ? Center(
                             child: Container(
@@ -527,17 +977,18 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                               final movie = cinema.nowShowingMovies![index];
                               return GestureDetector(
                                 onTap: () {
-                                  context.pushNamed('showTimeDetail', pathParameters: {
-                                    'id': '${movie.id}',
+                                  context.pushNamed('showTimeDetail',
+                                    pathParameters: {
+                                      'id': '${movie.id}'
+                                    },
+                                   queryParameters: {
+                                    'movieId': '${movie.id}',
                                     'cinemaId': '${cinema.id}'
-                                  }, queryParameters: {
-                                    'movieName': movie.name ?? '',
-                                    'cinemaName': cinema.name ?? '',
                                   });
                                 },
                                 child: Container(
                                   width: 160.w, // 固定宽度，适合显示更多电影
-                                  height: 280.h, // 添加高度限制，确保卡片有固定高度
+                                  height: double.infinity, // 添加高度限制，确保卡片有固定高度
                                   margin: EdgeInsets.only(right: 12.w),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -595,45 +1046,45 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                                       ),
                                       SizedBox(height: 6.h),
                                       // 评分
-                                      if (movie.rate != null && movie.rate! > 0)
-                                        Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
-                                          decoration: BoxDecoration(
-                                            color: Colors.orange.shade50,
-                                            borderRadius: BorderRadius.circular(24.r),
-                                            border: Border.all(
-                                              color: Colors.orange.shade200,
-                                              width: 2,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.orange.withOpacity(0.2),
-                                                blurRadius: 12,
-                                                offset: const Offset(0, 3),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Icon(
-                                                Icons.star_rounded,
-                                                size: 28.sp,
-                                                color: Colors.orange.shade600,
-                                              ),
-                                              SizedBox(width: 6.w),
-                                              Text(
-                                                movie.rate!.toStringAsFixed(1),
-                                                style: TextStyle(
-                                                  fontSize: 18.sp,
-                                                  color: Colors.orange.shade700,
-                                                  fontWeight: FontWeight.bold,
-                                                  letterSpacing: 0.5,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                      // if (movie.rate != null && movie.rate! > 0)
+                                      //   Container(
+                                      //     padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 4.h),
+                                      //     decoration: BoxDecoration(
+                                      //       color: Colors.orange.shade50,
+                                      //       borderRadius: BorderRadius.circular(24.r),
+                                      //       border: Border.all(
+                                      //         color: Colors.orange.shade200,
+                                      //         width: 2,
+                                      //       ),
+                                      //       boxShadow: [
+                                      //         BoxShadow(
+                                      //           color: Colors.orange.withOpacity(0.2),
+                                      //           blurRadius: 12,
+                                      //           offset: const Offset(0, 3),
+                                      //         ),
+                                      //       ],
+                                      //     ),
+                                      //     child: Row(
+                                      //       mainAxisSize: MainAxisSize.min,
+                                      //       children: [
+                                      //         Icon(
+                                      //           Icons.star_rounded,
+                                      //           size: 28.sp,
+                                      //           color: Colors.orange.shade600,
+                                      //         ),
+                                      //         SizedBox(width: 6.w),
+                                      //         Text(
+                                      //           movie.rate!.toStringAsFixed(1),
+                                      //           style: TextStyle(
+                                      //             fontSize: 18.sp,
+                                      //             color: Colors.orange.shade700,
+                                      //             fontWeight: FontWeight.bold,
+                                      //             letterSpacing: 0.5,
+                                      //           ),
+                                      //         ),
+                                      //       ],
+                                      //     ),
+                                      //   ),
                                     ],
                                   ),
                                 ),
@@ -803,7 +1254,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.white,
-                  Colors.grey.shade50,
+                  Colors.white,
                 ],
               ),
               boxShadow: showAppBarShadow
@@ -819,49 +1270,6 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
             ),
             child: Column(
               children: [
-                // 位置信息
-                if (location?.subLocality != null && location!.subLocality!.isNotEmpty)
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-                    margin: EdgeInsets.only(bottom: 16.h),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1989FA).withOpacity(0.08),
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: const Color(0xFF1989FA).withOpacity(0.15),
-                        width: 1,
-                      ),
-                    ),
-                    child: Row(
-          children: [
-                        Container(
-                          padding: EdgeInsets.all(8.w),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1989FA),
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Icon(
-                            Icons.location_on_rounded,
-                            color: Colors.white,
-                            size: 24.sp,
-                          ),
-                        ),
-                        SizedBox(width: 12.w),
-                        Expanded(
-              child: Text(
-                            location!.subLocality!,
-                            style: TextStyle(
-                              fontSize: 26.sp,
-                              color: const Color(0xFF323233),
-                              fontWeight: FontWeight.w600,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-      ),
                 
                 // 搜索和筛选区域
                 Row(
@@ -899,7 +1307,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                             ),
                             SizedBox(width: 8.w),
                             Text(
-                              location?.subLocality ?? '全部地区',
+                              location?.subLocality ?? S.of(context).cinemaList_allArea,
                               style: TextStyle(
                                 color: showFilterBar ? Colors.white : const Color(0xFF323233),
                                 fontSize: 26.sp,
@@ -985,7 +1393,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                 
                 // 筛选栏 - 只在showFilterBar为true时显示
                 if (showFilterBar) ...[
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 12.h),
                   areaTreeList.isEmpty 
                     ? Container(
                         height: 52.h,
@@ -1020,75 +1428,70 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                           ),
                         ),
                       )
-                    : Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade50,
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: Colors.grey.shade200, width: 1),
-                        ),
-                        child: FilterBar(
+                    : FilterBar(
                           filters: [
                             FilterOption(
                               key: 'areaId',
                               title: S.of(context).cinemaList_filter_title,
                               multi: false,
                               nested: true,
-                              values: areaTreeList.map((item) => convertToFilterValue(item)).toList(),
+                              values: [
+                                FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
+                                ...areaTreeList.map((item) => convertToFilterValue(item)).toList(),
+                              ],
+                            ),
+                            FilterOption(
+                              key: 'brandId',
+                              title: S.of(context).cinemaList_filter_brand,
+                              multi: false,
+                              nested: false,
+                              values: [
+                                FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
+                                ...brandList.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
+                                  return FilterValue(
+                                    id: item.id.toString(),
+                                    name: item.name!
+                                  );
+                                }).toList(),
+                              ],
+                            ),
+                            FilterOption(
+                              key: 'specId',
+                              title: S.of(context).about_movieShowList_dropdown_screenSpec,
+                              multi: false,
+                              nested: false,
+                              values: [
+                                FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
+                                ...cinemaSpecList.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
+                                  return FilterValue(
+                                    id: item.id.toString(),
+                                    name: item.name!,
+                                  );
+                                }).toList(),
+                              ],
                             ),
                           ],
                           initialSelected: filterParams,
                           onConfirm: _handleFilterChange,
                         ),
-                      ),
                 ],
               ],
             ),
           ),
           
-          // 搜索结果统计
+          // 搜索时的清除按钮 - 仅在搜索时显示
           if (isSearching)
             Container(
               margin: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 0),
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-              decoration: BoxDecoration(
-                color: filteredData.isEmpty 
-                  ? const Color(0xFFFF976A).withOpacity(0.1)
-                  : const Color(0xFF1989FA).withOpacity(0.08),
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(
-                  color: filteredData.isEmpty 
-                    ? const Color(0xFFFF976A).withOpacity(0.3)
-                    : const Color(0xFF1989FA).withOpacity(0.2), 
-                  width: 1
-                ),
-              ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Icon(
-                    filteredData.isEmpty ? Icons.search_off_rounded : Icons.search_rounded,
-                    color: filteredData.isEmpty ? const Color(0xFFFF976A) : const Color(0xFF1989FA),
-                    size: 22.sp,
-                  ),
-                  SizedBox(width: 10.w),
-                  Expanded(
-                    child: Text(
-                      filteredData.isEmpty 
-                        ? S.of(context).cinemaList_search_results_notFound
-                        : S.of(context).cinemaList_search_results_found(filteredData.length),
-                      style: TextStyle(
-                        fontSize: 24.sp,
-                        color: const Color(0xFF323233),
-                        fontWeight: FontWeight.w500,
-                              ), 
-                            ),
-                          ),
-                  SizedBox(width: 10.w),
                   GestureDetector(
                     onTap: _clearSearch,
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                       decoration: BoxDecoration(
-                        color: filteredData.isEmpty ? const Color(0xFFFF976A) : const Color(0xFF1989FA),
+                        color: const Color(0xFF1989FA),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Text(
@@ -1098,46 +1501,96 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
                         ),
-                                    ),
-                                  ),
-                                ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
           
           // 影院列表
           Expanded(
-            child: loading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : error
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline, size: 48.sp, color: Colors.grey),
-                        SizedBox(height: 16.h),
-                        Text(
-                          S.of(context).cinemaList_empty_noData,
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Text(
-                          S.of(context).cinemaList_empty_noDataTip,
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.grey.shade500,
-                          ),
-                        ),
-                  ],
-                ),
-              )
-                : _buildCinemaList(),
+            child: AppErrorWidget(
+              loading: loading,
+              error: error,
+              onRetry: () => getData(refresh: true),
+              child: EasyRefresh.builder(
+                controller: easyRefreshController,
+                header: customHeader(context),
+                footer: customFooter(context),
+                onRefresh: () async {
+                  await getData(refresh: true);
+                },
+                onLoad: () async {
+                  if (!loadFinished) {
+                    await getData(page: currentPage + 1);
+                  } else {
+                    easyRefreshController.finishLoad(IndicatorResult.noMore, true);
+                  }
+                },
+                childBuilder: (context, physics) {
+                  return _buildCinemaList(physics);
+                },
+              ),
+            ),
           ),
+          // Container(
+          //     width: double.infinity,
+          //     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          //     decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Colors.black.withOpacity(0.06),
+          //           blurRadius: 10,
+          //           offset: const Offset(0, -2),
+          //         ),
+          //       ],
+          //     ),
+              // child: SafeArea(
+              //   top: false,
+              //   child: Row(
+              //     children: [
+              //       Container(
+              //         padding: EdgeInsets.all(6.w),
+              //         decoration: BoxDecoration(
+              //           color: const Color(0xFF1989FA).withOpacity(0.12),
+              //           borderRadius: BorderRadius.circular(8.r),
+              //         ),
+              //         child: Icon(
+              //           Icons.my_location_rounded,
+              //           size: 18.sp,
+              //           color: const Color(0xFF1989FA),
+              //         ),
+              //       ),
+              //       SizedBox(width: 10.w),
+              //       Text(
+              //         '${S.of(context).cinemaList_currentLocation}: ',
+              //         style: TextStyle(
+              //           fontSize: 22.sp,
+              //           color: const Color(0xFF646566),
+              //           fontWeight: FontWeight.w500,
+              //         ),
+              //       ),
+              //       Expanded(
+              //         child: Text(
+              //           locationLoading
+              //             ? S.of(context).cinemaList_address
+              //             : _currentFullAddressText(context),
+              //           style: TextStyle(
+              //             fontSize: 24.sp,
+              //             color: const Color(0xFF323233),
+              //             fontWeight: FontWeight.w600,
+              //           ),
+              //           maxLines: 2,
+              //           softWrap: true,
+              //           overflow: TextOverflow.ellipsis,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+    //         ),
         ],
       ),
     );

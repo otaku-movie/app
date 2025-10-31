@@ -439,7 +439,13 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
           mainAxisSize: MainAxisSize.min,
           children: [
             // 筛选栏始终保留
-            FilterBar(
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(top: 12.h, left: 16.w, right: 16.w, bottom: 12.h),
+              child: FilterBar(
+                style: FilterBarStyle(
+                  dropdownGap: 10.h,
+                ),
               filters: [
                  FilterOption(
                   key: 'areaId',
@@ -480,6 +486,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                 });
                 getData();
               },
+              ),
             ),
             SizedBox(height: 10.h),
             Expanded(

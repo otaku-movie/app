@@ -48,6 +48,9 @@ CinemaListResponse _$CinemaListResponseFromJson(Map<String, dynamic> json) =>
       nowShowingMovies: (json['nowShowingMovies'] as List<dynamic>?)
           ?.map((e) => NowShowingMovie.fromJson(e as Map<String, dynamic>))
           .toList(),
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
+      postalCode: json['postalCode'] as String?,
     );
 
 Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
@@ -64,6 +67,9 @@ Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
       'brandId': instance.brandId,
       'brandName': instance.brandName,
       'spec': instance.spec?.map((e) => e.toJson()).toList(),
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'postalCode': instance.postalCode,
       'nowShowingMovies':
           instance.nowShowingMovies?.map((e) => e.toJson()).toList(),
       'distance': instance.distance,

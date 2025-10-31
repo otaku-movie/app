@@ -158,6 +158,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("基本料金"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage("現在地を取得中"),
+        "cinemaList_allArea": MessageLookupByLibrary.simpleMessage("全地域"),
+        "cinemaList_allCinemas":
+            MessageLookupByLibrary.simpleMessage("すべての映画館"),
+        "cinemaList_currentLocation":
+            MessageLookupByLibrary.simpleMessage("現在地"),
         "cinemaList_empty_noData":
             MessageLookupByLibrary.simpleMessage("映画館データがありません"),
         "cinemaList_empty_noDataTip":
@@ -166,6 +171,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("関連する映画館が見つかりません"),
         "cinemaList_empty_noSearchResultsTip":
             MessageLookupByLibrary.simpleMessage("他のキーワードをお試しください"),
+        "cinemaList_filter_brand": MessageLookupByLibrary.simpleMessage("ブランド"),
         "cinemaList_filter_loading":
             MessageLookupByLibrary.simpleMessage("地域データを読み込み中..."),
         "cinemaList_filter_title":
@@ -274,6 +280,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_loading": MessageLookupByLibrary.simpleMessage("読み込み中..."),
         "common_retry": MessageLookupByLibrary.simpleMessage("再読み込み"),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("円"),
+        "common_unit_kilometer": MessageLookupByLibrary.simpleMessage("km"),
+        "common_unit_meter": MessageLookupByLibrary.simpleMessage("m"),
         "common_unit_point": MessageLookupByLibrary.simpleMessage("点"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("金曜日"),
         "common_week_monday": MessageLookupByLibrary.simpleMessage("月曜日"),

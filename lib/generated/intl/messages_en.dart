@@ -166,6 +166,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Standard Ticket Price"),
         "cinemaList_address":
             MessageLookupByLibrary.simpleMessage("Getting current location"),
+        "cinemaList_allArea": MessageLookupByLibrary.simpleMessage("All Areas"),
+        "cinemaList_allCinemas":
+            MessageLookupByLibrary.simpleMessage("All Cinemas"),
+        "cinemaList_currentLocation":
+            MessageLookupByLibrary.simpleMessage("Current location"),
         "cinemaList_empty_noData":
             MessageLookupByLibrary.simpleMessage("No cinema data"),
         "cinemaList_empty_noDataTip":
@@ -174,6 +179,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No related cinemas found"),
         "cinemaList_empty_noSearchResultsTip":
             MessageLookupByLibrary.simpleMessage("Please try other keywords"),
+        "cinemaList_filter_brand":
+            MessageLookupByLibrary.simpleMessage("Brand"),
         "cinemaList_filter_loading":
             MessageLookupByLibrary.simpleMessage("Loading area data..."),
         "cinemaList_filter_title":
@@ -286,6 +293,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_loading": MessageLookupByLibrary.simpleMessage("Loading..."),
         "common_retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("JPY"),
+        "common_unit_kilometer": MessageLookupByLibrary.simpleMessage("km"),
+        "common_unit_meter": MessageLookupByLibrary.simpleMessage("m"),
         "common_unit_point": MessageLookupByLibrary.simpleMessage("pts"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("Friday"),
         "common_week_monday": MessageLookupByLibrary.simpleMessage("Monday"),

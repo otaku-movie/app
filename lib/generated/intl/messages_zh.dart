@@ -153,6 +153,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "cinemaDetail_ticketTypePrice":
             MessageLookupByLibrary.simpleMessage("普通影票价格"),
         "cinemaList_address": MessageLookupByLibrary.simpleMessage("正在获取当前位置"),
+        "cinemaList_allArea": MessageLookupByLibrary.simpleMessage("全部地区"),
+        "cinemaList_allCinemas": MessageLookupByLibrary.simpleMessage("全部影院"),
+        "cinemaList_currentLocation":
+            MessageLookupByLibrary.simpleMessage("当前所在地"),
         "cinemaList_empty_noData":
             MessageLookupByLibrary.simpleMessage("暂无影院数据"),
         "cinemaList_empty_noDataTip":
@@ -161,6 +165,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("没有找到相关影院"),
         "cinemaList_empty_noSearchResultsTip":
             MessageLookupByLibrary.simpleMessage("请尝试其他关键词"),
+        "cinemaList_filter_brand": MessageLookupByLibrary.simpleMessage("品牌"),
         "cinemaList_filter_loading":
             MessageLookupByLibrary.simpleMessage("正在加载区域数据..."),
         "cinemaList_filter_title":
@@ -265,6 +270,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_loading": MessageLookupByLibrary.simpleMessage("加载中..."),
         "common_retry": MessageLookupByLibrary.simpleMessage("重新加载"),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("日元"),
+        "common_unit_kilometer": MessageLookupByLibrary.simpleMessage("公里"),
+        "common_unit_meter": MessageLookupByLibrary.simpleMessage("米"),
         "common_unit_point": MessageLookupByLibrary.simpleMessage("分"),
         "common_week_friday": MessageLookupByLibrary.simpleMessage("周五"),
         "common_week_monday": MessageLookupByLibrary.simpleMessage("周一"),
