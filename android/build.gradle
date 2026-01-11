@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.9.0'
+    ext.kotlin_version = '2.1.0'
     // repositories {
     //     google()
     //     mavenCentral()
@@ -17,12 +17,40 @@ allprojects {
     }
 }
 
+// 全局 Java 和 Kotlin 版本配置
+subprojects {
+    afterEvaluate { project ->
+        if (project.hasProperty('android')) {
+            project.android {
+                if (project.android.hasProperty('compileOptions')) {
+                    compileOptions {
+                        sourceCompatibility = JavaVersion.VERSION_17
+                        targetCompatibility = JavaVersion.VERSION_17
+                    }
+                }
+            }
+        }
+        // 配置所有 Kotlin 编译任务使用 JVM 17
+        project.tasks.matching { 
+            it.name.contains('Kotlin') && 
+            (it.name.contains('Compile') || it.name.contains('compile'))
+        }.configureEach { task ->
+            try {
+                if (task.hasProperty('kotlinOptions')) {
+                    task.kotlinOptions {
+                        jvmTarget = '17'
+                    }
+                }
+            } catch (Exception e) {
+                // 忽略配置错误
+            }
+        }
+    }
+}
+
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {

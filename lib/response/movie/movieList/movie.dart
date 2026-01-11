@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:otaku_movie/response/hello_movie.dart';
 

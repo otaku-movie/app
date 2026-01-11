@@ -9,6 +9,7 @@ class MovieNowShowingResponse extends MovieResponse {
   
   final List<Cast>? cast;
   
+  @override
   final List<HelloMovieResponse>? helloMovie;
 
   MovieNowShowingResponse({
@@ -24,6 +25,7 @@ class MovieNowShowingResponse extends MovieResponse {
   factory MovieNowShowingResponse.fromJson(Map<String, dynamic> json) =>
       _$MovieNowShowingResponseFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$MovieNowShowingResponseToJson(this);
 }
 

@@ -419,6 +419,53 @@
       "ja": "再読み込み",
       "en": "Retry"
     },
+    "network_error": {
+      "connectionRefused": {
+        "zh": "服务器拒绝连接，请稍后重试",
+        "ja": "サーバー接続が拒否されました。後でもう一度お試しください",
+        "en": "Server connection refused, please try again later"
+      },
+      "noRouteToHost": {
+        "zh": "无法连接到服务器，请检查网络连接",
+        "ja": "サーバーに接続できません。ネットワーク接続を確認してください",
+        "en": "Cannot connect to server, please check network connection"
+      },
+      "connectionTimeout": {
+        "zh": "连接超时，请检查网络或稍后重试",
+        "ja": "接続がタイムアウトしました。ネットワークを確認するか、後でもう一度お試しください",
+        "en": "Connection timeout, please check network or try again later"
+      },
+      "networkUnreachable": {
+        "zh": "网络不可达，请检查网络设置",
+        "ja": "ネットワークに到達できません。ネットワーク設定を確認してください",
+        "en": "Network unreachable, please check network settings"
+      },
+      "hostLookupFailed": {
+        "zh": "无法解析服务器地址，请检查网络设置",
+        "ja": "サーバーアドレスを解決できません。ネットワーク設定を確認してください",
+        "en": "Cannot resolve server address, please check network settings"
+      },
+      "sendTimeout": {
+        "zh": "发送请求超时，请稍后重试",
+        "ja": "リクエストがタイムアウトしました。後でもう一度お試しください",
+        "en": "Request timeout, please try again later"
+      },
+      "receiveTimeout": {
+        "zh": "接收响应超时，请稍后重试",
+        "ja": "レスポンスがタイムアウトしました。後でもう一度お試しください",
+        "en": "Response timeout, please try again later"
+      },
+      "connectionError": {
+        "zh": "网络连接错误，请检查网络设置",
+        "ja": "ネットワーク接続エラーです。ネットワーク設定を確認してください",
+        "en": "Network connection error, please check network settings"
+      },
+      "default": {
+        "zh": "网络请求失败，请稍后重试",
+        "ja": "ネットワークリクエストが失敗しました。後でもう一度お試しください",
+        "en": "Network request failed, please try again later"
+      }
+    },
     "unit_jpy": {
       "zh": "日元",
       "ja": "円",

@@ -24,6 +24,9 @@ void main() async {
 
   print("---------------env: $env");
 
+  // 初始化配置（自动获取本机 IP 地址，仅 dev 环境）
+  await Config.initialize();
+
   // 设置Jiffy为中文语言环境
   await Jiffy.setLocale('zh_cn');
 
