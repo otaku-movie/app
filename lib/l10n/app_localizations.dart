@@ -760,6 +760,18 @@ abstract class AppLocalizations {
   /// **'Confirm'**
   String get common_components_filterBar_confirm;
 
+  /// No description provided for @common_components_filterBar_allDay.
+  ///
+  /// In en, this message translates to:
+  /// **'All Day'**
+  String get common_components_filterBar_allDay;
+
+  /// No description provided for @common_components_filterBar_noData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data yet'**
+  String get common_components_filterBar_noData;
+
   /// No description provided for @common_week_monday.
   ///
   /// In en, this message translates to:
@@ -909,6 +921,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'There are {count} more showtimes...'**
   String about_components_showTimeList_moreShowTimes(Object count);
+
+  /// No description provided for @about_components_showTimeList_timeRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Time'**
+  String get about_components_showTimeList_timeRange;
+
+  /// No description provided for @about_components_showTimeList_dubbingVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Dubbed Version'**
+  String get about_components_showTimeList_dubbingVersion;
 
   /// No description provided for @about_components_showTimeList_seatStatus_soldOut.
   ///
@@ -1083,6 +1107,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tag'**
   String get about_movieShowList_dropdown_tag;
+
+  /// No description provided for @about_movieShowList_dropdown_version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get about_movieShowList_dropdown_version;
 
   /// No description provided for @enum_seatType_coupleSeat.
   ///
@@ -2247,6 +2277,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tag'**
   String get movieShowList_dropdown_tag;
+
+  /// No description provided for @movieShowList_dropdown_version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get movieShowList_dropdown_version;
 
   /// No description provided for @payment_addCreditCard_title.
   ///

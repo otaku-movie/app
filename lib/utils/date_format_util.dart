@@ -415,5 +415,74 @@ class DateFormatUtil {
     // 中日英都是从左到右
     return false;
   }
+
+  /// 格式化完整的日期时间范围给后端（格式：yyyy-MM-dd HH:mm:ss-yyyy-MM-dd HH:mm:ss）
+  /// 30小时制：24-29对应下一天的00:00-05:59
+  /// 
+  /// [startHour] 开始小时（滑块值，30小时制是6-29，24小时制是0-24）
+  /// [endHour] 结束小时（滑块值，30小时制是6-29，24小时制是0-24）
+  /// [baseDate] 基准日期，用于计算完整的日期时间
+  /// [use30HourFormat] 是否使用30小时制
+  static String formatFullDateTimeRangeForBackend(
+    double startHour, 
+    double endHour, 
+    DateTime baseDate,
+    bool use30HourFormat,
+  ) {
+    final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+    
+    DateTime startDateTime;
+    DateTime endDateTime;
+    
+    if (use30HourFormat) {
+      // 30小时制处理
+      if (startHour >= 24) {
+        // 24-29对应下一天的00:00-05:59
+        final hour = (startHour - 24).toInt();
+        final minute = ((startHour - startHour.toInt()) * 60).toInt();
+        startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day + 1, hour, minute);
+      } else {
+        // 6-23对应当天的06:00-23:59
+        final hour = startHour.toInt();
+        final minute = ((startHour - startHour.toInt()) * 60).toInt();
+        startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, hour, minute);
+      }
+      
+      if (endHour >= 24) {
+        // 24-29对应下一天的00:00-05:59
+        if (endHour == 29) {
+          // 29表示全天，显示为下一天的05:59:59
+          endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day + 1, 5, 59, 59);
+        } else {
+          final hour = (endHour - 24).toInt();
+          final minute = ((endHour - endHour.toInt()) * 60).toInt();
+          endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day + 1, hour, minute);
+        }
+      } else {
+        // 6-23对应当天的06:00-23:59
+        final hour = endHour.toInt();
+        final minute = ((endHour - endHour.toInt()) * 60).toInt();
+        endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, hour, minute);
+      }
+    } else {
+      // 24小时制处理
+      if (endHour == 24) {
+        // 24表示全天，显示为当天的23:59:59
+        final hour = startHour.toInt();
+        final minute = ((startHour - startHour.toInt()) * 60).toInt();
+        startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, hour, minute);
+        endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 23, 59, 59);
+      } else {
+        final startHourInt = startHour.toInt();
+        final startMinute = ((startHour - startHour.toInt()) * 60).toInt();
+        final endHourInt = endHour.toInt();
+        final endMinute = ((endHour - endHour.toInt()) * 60).toInt();
+        startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, startHourInt, startMinute);
+        endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, endHourInt, endMinute);
+      }
+    }
+    
+    return '${dateFormat.format(startDateTime)}-${dateFormat.format(endDateTime)}';
+  }
 }
 

@@ -621,9 +621,19 @@
           "en": "Reset"
         },
         "confirm": {
-          "zh": "确认",
-          "ja": "確認",
+          "zh": "确定",
+          "ja": "確定",
           "en": "Confirm"
+        },
+        "allDay": {
+          "zh": "全天",
+          "ja": "終日",
+          "en": "All Day"
+        },
+        "noData": {
+          "zh": "暂无数据",
+          "ja": "まだデータがありません",
+          "en": "No data yet"
         }
       }
     },
@@ -765,6 +775,16 @@
           "zh": "还有 {count} 个场次...",
           "ja": "あと {count} 回の上映があります...",
           "en": "There are {count} more showtimes..."
+        },
+        "timeRange": {
+          "zh": "开场时间",
+          "ja": "上映開始時間",
+          "en": "Show Time"
+        },
+        "dubbingVersion": {
+          "zh": "吹き替え版",
+          "ja": "吹き替え版",
+          "en": "Dubbed Version"
         },
         "seatStatus": {
           "soldOut": {
@@ -938,6 +958,11 @@
           "zh": "标签",
           "ja": "タグ",
           "en": "Tag"
+        },
+        "version": {
+          "zh": "版本",
+          "ja": "バージョン",
+          "en": "Version"
         }
       }
     }
@@ -2156,6 +2181,11 @@
           "zh": "标签",
           "ja": "タグ",
           "en": "Tag"
+        },
+        "version": {
+          "zh": "版本",
+          "ja": "バージョン",
+          "en": "Version"
         }
     }
   },

@@ -79,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "about_components_showTimeList_all": MessageLookupByLibrary.simpleMessage(
       "すべて",
     ),
+    "about_components_showTimeList_dubbingVersion":
+        MessageLookupByLibrary.simpleMessage("吹き替え版"),
     "about_components_showTimeList_moreShowTimes": m0,
     "about_components_showTimeList_noData":
         MessageLookupByLibrary.simpleMessage("まだデータがありません"),
@@ -90,6 +92,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("残りわずか"),
     "about_components_showTimeList_seatStatus_soldOut":
         MessageLookupByLibrary.simpleMessage("完売"),
+    "about_components_showTimeList_timeRange":
+        MessageLookupByLibrary.simpleMessage("上映開始時間"),
     "about_components_showTimeList_unnamed":
         MessageLookupByLibrary.simpleMessage("名前なし"),
     "about_copyright": MessageLookupByLibrary.simpleMessage(
@@ -137,6 +141,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "about_movieShowList_dropdown_tag": MessageLookupByLibrary.simpleMessage(
       "タグ",
     ),
+    "about_movieShowList_dropdown_version":
+        MessageLookupByLibrary.simpleMessage("バージョン"),
     "about_privacy_policy": MessageLookupByLibrary.simpleMessage(
       "プライバシーポリシーを表示",
     ),
@@ -286,8 +292,14 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("更新しています..."),
     "common_components_easyRefresh_refresh_readyText":
         MessageLookupByLibrary.simpleMessage("更新中..."),
+    "common_components_filterBar_allDay": MessageLookupByLibrary.simpleMessage(
+      "終日",
+    ),
     "common_components_filterBar_confirm": MessageLookupByLibrary.simpleMessage(
-      "確認",
+      "確定",
+    ),
+    "common_components_filterBar_noData": MessageLookupByLibrary.simpleMessage(
+      "まだデータがありません",
     ),
     "common_components_filterBar_pleaseSelect":
         MessageLookupByLibrary.simpleMessage("選択してください"),
@@ -570,6 +582,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "字幕",
     ),
     "movieShowList_dropdown_tag": MessageLookupByLibrary.simpleMessage("タグ"),
+    "movieShowList_dropdown_version": MessageLookupByLibrary.simpleMessage(
+      "バージョン",
+    ),
     "movieTicketType_actualPrice": MessageLookupByLibrary.simpleMessage(
       "実際の支払い",
     ),

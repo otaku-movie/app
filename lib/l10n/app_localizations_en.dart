@@ -375,6 +375,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get common_components_filterBar_confirm => 'Confirm';
 
   @override
+  String get common_components_filterBar_allDay => 'All Day';
+
+  @override
+  String get common_components_filterBar_noData => 'No data yet';
+
+  @override
   String get common_week_monday => 'Monday';
 
   @override
@@ -453,6 +459,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String about_components_showTimeList_moreShowTimes(Object count) {
     return 'There are $count more showtimes...';
   }
+
+  @override
+  String get about_components_showTimeList_timeRange => 'Show Time';
+
+  @override
+  String get about_components_showTimeList_dubbingVersion => 'Dubbed Version';
 
   @override
   String get about_components_showTimeList_seatStatus_soldOut => 'Sold Out';
@@ -545,6 +557,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_movieShowList_dropdown_tag => 'Tag';
+
+  @override
+  String get about_movieShowList_dropdown_version => 'Version';
 
   @override
   String get enum_seatType_coupleSeat => 'Couple Seat';
@@ -1173,6 +1188,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get movieShowList_dropdown_tag => 'Tag';
+
+  @override
+  String get movieShowList_dropdown_version => 'Version';
 
   @override
   String get payment_addCreditCard_title => 'Add Credit Card';

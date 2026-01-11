@@ -83,6 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "about_components_showTimeList_all": MessageLookupByLibrary.simpleMessage(
       "All",
     ),
+    "about_components_showTimeList_dubbingVersion":
+        MessageLookupByLibrary.simpleMessage("Dubbed Version"),
     "about_components_showTimeList_moreShowTimes": m0,
     "about_components_showTimeList_noData":
         MessageLookupByLibrary.simpleMessage("No data yet"),
@@ -94,6 +96,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("Limited"),
     "about_components_showTimeList_seatStatus_soldOut":
         MessageLookupByLibrary.simpleMessage("Sold Out"),
+    "about_components_showTimeList_timeRange":
+        MessageLookupByLibrary.simpleMessage("Show Time"),
     "about_components_showTimeList_unnamed":
         MessageLookupByLibrary.simpleMessage("Unnamed"),
     "about_copyright": MessageLookupByLibrary.simpleMessage(
@@ -145,6 +149,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "about_movieShowList_dropdown_tag": MessageLookupByLibrary.simpleMessage(
       "Tag",
     ),
+    "about_movieShowList_dropdown_version":
+        MessageLookupByLibrary.simpleMessage("Version"),
     "about_privacy_policy": MessageLookupByLibrary.simpleMessage(
       "View Privacy Policy",
     ),
@@ -316,8 +322,14 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("Refreshing..."),
     "common_components_easyRefresh_refresh_readyText":
         MessageLookupByLibrary.simpleMessage("Refreshing..."),
+    "common_components_filterBar_allDay": MessageLookupByLibrary.simpleMessage(
+      "All Day",
+    ),
     "common_components_filterBar_confirm": MessageLookupByLibrary.simpleMessage(
       "Confirm",
+    ),
+    "common_components_filterBar_noData": MessageLookupByLibrary.simpleMessage(
+      "No data yet",
     ),
     "common_components_filterBar_pleaseSelect":
         MessageLookupByLibrary.simpleMessage("Please select"),
@@ -650,6 +662,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Subtitle",
     ),
     "movieShowList_dropdown_tag": MessageLookupByLibrary.simpleMessage("Tag"),
+    "movieShowList_dropdown_version": MessageLookupByLibrary.simpleMessage(
+      "Version",
+    ),
     "movieTicketType_actualPrice": MessageLookupByLibrary.simpleMessage(
       "Actual Payment",
     ),

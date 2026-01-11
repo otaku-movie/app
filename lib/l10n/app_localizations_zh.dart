@@ -348,7 +348,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get common_components_filterBar_reset => '重置';
 
   @override
-  String get common_components_filterBar_confirm => '确认';
+  String get common_components_filterBar_confirm => '确定';
+
+  @override
+  String get common_components_filterBar_allDay => '全天';
+
+  @override
+  String get common_components_filterBar_noData => '暂无数据';
 
   @override
   String get common_week_monday => '周一';
@@ -426,6 +432,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String about_components_showTimeList_moreShowTimes(Object count) {
     return '还有 $count 个场次...';
   }
+
+  @override
+  String get about_components_showTimeList_timeRange => '开场时间';
+
+  @override
+  String get about_components_showTimeList_dubbingVersion => '吹き替え版';
 
   @override
   String get about_components_showTimeList_seatStatus_soldOut => '售罄';
@@ -513,6 +525,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get about_movieShowList_dropdown_tag => '标签';
+
+  @override
+  String get about_movieShowList_dropdown_version => '版本';
 
   @override
   String get enum_seatType_coupleSeat => '情侣座';
@@ -1118,6 +1133,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get movieShowList_dropdown_tag => '标签';
+
+  @override
+  String get movieShowList_dropdown_version => '版本';
 
   @override
   String get payment_addCreditCard_title => '添加信用卡';

@@ -67,7 +67,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             supportedLocales: S.delegate.supportedLocales,
             // onGenerateRoute: Application.router.generator,
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.red, // AppBar 蓝色
+                brightness: Brightness.light,
+              ),
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               useMaterial3: true,

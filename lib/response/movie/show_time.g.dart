@@ -60,6 +60,8 @@ ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
       showTimeTagId: json['showTimeTagId'],
       subtitle: json['subtitle'],
       showTimeTags: json['showTimeTags'],
+      movieVersionId: (json['movieVersionId'] as num?)?.toInt(),
+      versionCode: (json['versionCode'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
@@ -76,4 +78,6 @@ Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
       'showTimeTagId': instance.showTimeTagId,
       'subtitle': instance.subtitle,
       'showTimeTags': instance.showTimeTags,
+      'movieVersionId': instance.movieVersionId,
+      'versionCode': instance.versionCode,
     };

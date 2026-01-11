@@ -1433,7 +1433,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                             FilterOption(
                               key: 'areaId',
                               title: S.of(context).cinemaList_filter_title,
-                              multi: false,
+                              type: FilterType.single, // 单选模式
                               nested: true,
                               values: [
                                 FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
@@ -1443,7 +1443,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                             FilterOption(
                               key: 'brandId',
                               title: S.of(context).cinemaList_filter_brand,
-                              multi: false,
+                              type: FilterType.single, // 单选模式
                               nested: false,
                               values: [
                                 FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
@@ -1458,7 +1458,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                             FilterOption(
                               key: 'specId',
                               title: S.of(context).about_movieShowList_dropdown_screenSpec,
-                              multi: false,
+                              type: FilterType.single, // 单选模式
                               nested: false,
                               values: [
                                 FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),

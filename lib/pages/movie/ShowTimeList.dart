@@ -19,6 +19,9 @@ import 'package:otaku_movie/utils/location_util.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:get/get.dart';
+import 'package:otaku_movie/controller/DictController.dart';
+import 'package:otaku_movie/response/dict_response.dart';
 
 class ShowTimeList extends StatefulWidget {
   final String? id;
@@ -37,6 +40,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   List<AreaResponse> areaTreeList = [];
   List<LanguageResponse> languageList = []; // 添加字幕列表
   List<ShowTimeTag> showTimeTagList = []; // 添加上映标签列表
+  List<DictItemResponse> versionList = []; // 添加版本列表
+  late DictController dictController; // 字典控制器
   int tabLength = 0;
   bool loading = false;
   bool error = false;
@@ -53,6 +58,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   @override
   void initState() {
     super.initState();
+    dictController = Get.find<DictController>();
     _loadInitialData();
   }
 
@@ -77,6 +83,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     await getAreaTree();
     await getLanguageList();
     await getShowTimeTagList();
+    await getVersionList();
     
     // 先加载数据（显示loading），然后再获取位置
     await getData();
@@ -190,6 +197,16 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     });
   }
 
+  Future<void> getVersionList() async {
+    // 从字典控制器获取版本数据
+    if (dictController.dict.value['dubbingVersion'] != null) {
+      setState(() {
+        versionList = dictController.dict.value['dubbingVersion']!;
+      });
+      print('版本列表: $versionList');
+    }
+  }
+
   Future<void> getLocation() async {
     try {
       if (mounted) {
@@ -264,6 +281,12 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     final showTimeTagId = (filterParams['showTimeTagId'] ?? []).length > 0 ? filterParams['showTimeTagId'][0] : '';
     if (showTimeTagId.isNotEmpty) {
       requestData["showTimeTagId"] = int.tryParse(showTimeTagId);
+    }
+    
+    // 只有当版本代码不为空时才添加
+    final versionCode = (filterParams['versionCode'] ?? []).length > 0 ? filterParams['versionCode'][0] : '';
+    if (versionCode.isNotEmpty) {
+      requestData["versionCode"] = int.tryParse(versionCode);
     }
     
     // 添加经纬度参数，用于后端查询附近影院
@@ -429,6 +452,93 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
 
 
+  /// 获取当前 tab 对应的日期
+  DateTime _getCurrentTabDate() {
+    if (_tabController != null && 
+        _tabController!.index >= 0 && 
+        _tabController!.index < data.length &&
+        data[_tabController!.index].date != null) {
+      try {
+        return DateTime.parse(data[_tabController!.index].date!);
+      } catch (e) {
+        // 解析失败，返回当前日期
+        return DateTime.now();
+      }
+    }
+    // 如果没有 tab 或数据为空，返回当前日期
+    return DateTime.now();
+  }
+
+  /// 创建 Drawer 筛选项配置
+  List<FilterOption> _buildDrawerFilters(BuildContext context) {
+    return [
+      // 时间范围筛选（30小时制）
+      FilterOption(
+        key: 'timeRange',
+        title: S.of(context).about_components_showTimeList_timeRange,
+        type: FilterType.timeRange,
+        use30HourFormat: true, // 使用30小时制
+        values: [], // 时间范围不需要 values
+      ),
+      // 时间范围筛选（30小时制示例，可根据需要启用）
+      // FilterOption(
+      //   key: 'timeRange30h',
+      //   title: '开场时间',
+      //   type: 'timeRange',
+      //   use30HourFormat: true, // 使用30小时制（0-5点显示为24-29点）
+      //   values: [],
+      // ),
+      // Switch 开关示例（吹き替え版）
+      FilterOption(
+        key: 'dubbingVersion',
+        title: S.of(context).about_components_showTimeList_dubbingVersion,
+        type: FilterType.switch_,
+        values: [], // Switch 类型不需要 values，只有选中和未选中两种状态
+        drawerDisplayConfig: DrawerFilterDisplayConfig(
+          icon: Icons.record_voice_over_rounded,
+          iconSize: 24.sp,
+        ),
+      ),
+      FilterOption(
+                  key: 'subtitleId',
+                  title: S.of(context).about_movieShowList_dropdown_subtitle,
+                  icon: Icons.subtitles_rounded,
+                  values: [
+                    // FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
+                    ...languageList.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
+                      return FilterValue(id: item.id.toString(), name: item.name!);
+                    }).toList(),
+                  ],
+                ),
+      // 上映标签
+      FilterOption(
+        key: 'showTimeTagId',
+        title: S.of(context).about_movieShowList_dropdown_tag,
+        icon: Icons.local_activity_rounded,
+        values: [
+          FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
+          ...showTimeTagList
+              .where((item) => item.name != null && item.name!.isNotEmpty)
+              .map((item) => FilterValue(id: item.id.toString(), name: item.name!)),
+        ],
+        
+      ),
+      FilterOption(
+        key: 'versionCode',
+        title: S.of(context).about_movieShowList_dropdown_version,
+        icon: Icons.movie_filter_rounded,
+        type: FilterType.single, // 单选模式
+        values: [
+          FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
+          ...versionList
+              .where((item) => item.name != null && item.name!.isNotEmpty)
+              .map((item) => FilterValue(id: item.code.toString(), name: item.name!)),
+        ],
+        
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     FilterValue convertToFilterValue(dynamic item) {
@@ -484,12 +594,16 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
               child: FilterBar(
                 style: FilterBarStyle(
                   dropdownGap: 10.h,
+                  drawerWidth: 600.w, // 设置 drawer 宽度为 600.w（使用 screenutil 适配）
+                  iconSize: 24.sp,
                 ),
+                drawerFilters: _buildDrawerFilters(context),
+                baseDate: _getCurrentTabDate(),
               filters: [
                  FilterOption(
                   key: 'areaId',
                   title: S.of(context).about_movieShowList_dropdown_area,
-                  multi: false,
+                  type: FilterType.single, // 单选模式
                   nested: true,
                   icon: Icons.location_on_rounded,
                   values: [
@@ -511,28 +625,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   }).toList(),
                   ],
                 ),
-                 FilterOption(
-                  key: 'subtitleId',
-                  title: S.of(context).about_movieShowList_dropdown_subtitle,
-                  icon: Icons.subtitles_rounded,
-                  values: [
-                    FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
-                    ...languageList.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
-                      return FilterValue(id: item.id.toString(), name: item.name!);
-                    }).toList(),
-                  ],
-                ),
-                FilterOption(
-                  key: 'showTimeTagId',
-                  title:  S.of(context).about_movieShowList_dropdown_tag,
-                  icon: Icons.local_activity_rounded,
-                  values: [
-                    FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
-                    ...showTimeTagList.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
-                      return FilterValue(id: item.id.toString(), name: item.name!);
-                    }).toList(),
-                  ],
-                ),
+                 
+                
                
               ],
               initialSelected: filterParams, // 只初始化时传递
@@ -540,6 +634,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                 setState(() {
                   filterParams = selected;
                 });
+                print(selected);
+                print('--------------------------------');
                 getData();
               },
               ),
@@ -732,10 +828,24 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     await getAreaTree();
     await getLanguageList();
     await getShowTimeTagList();
+    await getVersionList();
     await getLocation();
   }
 
   FutureOr _onLoad() {
+  }
+
+  // 获取版本名称
+  String _getVersionName(int versionCode) {
+    try {
+      final version = versionList.firstWhere(
+        (item) => item.code == versionCode,
+        orElse: () => DictItemResponse(name: '--'),
+      );
+      return version.name ?? '--';
+    } catch (e) {
+      return '--';
+    }
   }
 
   // 构建场次信息
@@ -868,23 +978,50 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
             ),
           ),
           SizedBox(height: 10.h),
-          // 规格信息
-          if (showTime.specName != null && showTime.specName!.isNotEmpty)
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1989FA).withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Text(
-                showTime.specName!,
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  color: const Color(0xFF1989FA),
-                  fontWeight: FontWeight.w500,
+          // 规格和版本信息
+          Wrap(
+            spacing: 8.w,
+            runSpacing: 8.h,
+            children: [
+              if (showTime.specName != null && showTime.specName!.isNotEmpty)
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1989FA).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Text(
+                    showTime.specName!,
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      color: const Color(0xFF1989FA),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              if (showTime.versionCode != null)
+                Builder(
+                  builder: (context) {
+                    final versionName = _getVersionName(showTime.versionCode!);
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                      child: Text(
+                        versionName,
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          color: Colors.orange,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ),
           SizedBox(height: 10.h),
           // 选座状态
           Row(

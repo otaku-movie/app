@@ -79,6 +79,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "about_components_showTimeList_all": MessageLookupByLibrary.simpleMessage(
       "全部",
     ),
+    "about_components_showTimeList_dubbingVersion":
+        MessageLookupByLibrary.simpleMessage("吹き替え版"),
     "about_components_showTimeList_moreShowTimes": m0,
     "about_components_showTimeList_noData":
         MessageLookupByLibrary.simpleMessage("暂无数据"),
@@ -90,6 +92,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("紧张"),
     "about_components_showTimeList_seatStatus_soldOut":
         MessageLookupByLibrary.simpleMessage("售罄"),
+    "about_components_showTimeList_timeRange":
+        MessageLookupByLibrary.simpleMessage("开场时间"),
     "about_components_showTimeList_unnamed":
         MessageLookupByLibrary.simpleMessage("未命名"),
     "about_copyright": MessageLookupByLibrary.simpleMessage(
@@ -129,6 +133,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "about_movieShowList_dropdown_tag": MessageLookupByLibrary.simpleMessage(
       "标签",
     ),
+    "about_movieShowList_dropdown_version":
+        MessageLookupByLibrary.simpleMessage("版本"),
     "about_privacy_policy": MessageLookupByLibrary.simpleMessage("查看隐私协议"),
     "about_register_haveAccount": MessageLookupByLibrary.simpleMessage("已有账号？"),
     "about_register_loginHere": MessageLookupByLibrary.simpleMessage("立即登录"),
@@ -258,8 +264,14 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("刷新中..."),
     "common_components_easyRefresh_refresh_readyText":
         MessageLookupByLibrary.simpleMessage("正在刷新..."),
+    "common_components_filterBar_allDay": MessageLookupByLibrary.simpleMessage(
+      "全天",
+    ),
     "common_components_filterBar_confirm": MessageLookupByLibrary.simpleMessage(
-      "确认",
+      "确定",
+    ),
+    "common_components_filterBar_noData": MessageLookupByLibrary.simpleMessage(
+      "暂无数据",
     ),
     "common_components_filterBar_pleaseSelect":
         MessageLookupByLibrary.simpleMessage("请选择"),
@@ -492,6 +504,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "字幕",
     ),
     "movieShowList_dropdown_tag": MessageLookupByLibrary.simpleMessage("标签"),
+    "movieShowList_dropdown_version": MessageLookupByLibrary.simpleMessage(
+      "版本",
+    ),
     "movieTicketType_actualPrice": MessageLookupByLibrary.simpleMessage("实付"),
     "movieTicketType_cinema": MessageLookupByLibrary.simpleMessage("影院"),
     "movieTicketType_confirmOrder": MessageLookupByLibrary.simpleMessage(

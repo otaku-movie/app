@@ -1094,6 +1094,26 @@ class S {
     );
   }
 
+  /// `All Day`
+  String get common_components_filterBar_allDay {
+    return Intl.message(
+      'All Day',
+      name: 'common_components_filterBar_allDay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data yet`
+  String get common_components_filterBar_noData {
+    return Intl.message(
+      'No data yet',
+      name: 'common_components_filterBar_noData',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Monday`
   String get common_week_monday {
     return Intl.message(
@@ -1331,6 +1351,26 @@ class S {
       name: 'about_components_showTimeList_moreShowTimes',
       desc: '',
       args: [count],
+    );
+  }
+
+  /// `Show Time`
+  String get about_components_showTimeList_timeRange {
+    return Intl.message(
+      'Show Time',
+      name: 'about_components_showTimeList_timeRange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dubbed Version`
+  String get about_components_showTimeList_dubbingVersion {
+    return Intl.message(
+      'Dubbed Version',
+      name: 'about_components_showTimeList_dubbingVersion',
+      desc: '',
+      args: [],
     );
   }
 
@@ -1614,6 +1654,16 @@ class S {
     return Intl.message(
       'Tag',
       name: 'about_movieShowList_dropdown_tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get about_movieShowList_dropdown_version {
+    return Intl.message(
+      'Version',
+      name: 'about_movieShowList_dropdown_version',
       desc: '',
       args: [],
     );
@@ -3464,6 +3514,16 @@ class S {
     return Intl.message(
       'Tag',
       name: 'movieShowList_dropdown_tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version`
+  String get movieShowList_dropdown_version {
+    return Intl.message(
+      'Version',
+      name: 'movieShowList_dropdown_version',
       desc: '',
       args: [],
     );

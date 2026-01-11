@@ -361,7 +361,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get common_components_filterBar_reset => 'リセット';
 
   @override
-  String get common_components_filterBar_confirm => '確認';
+  String get common_components_filterBar_confirm => '確定';
+
+  @override
+  String get common_components_filterBar_allDay => '終日';
+
+  @override
+  String get common_components_filterBar_noData => 'まだデータがありません';
 
   @override
   String get common_week_monday => '月曜日';
@@ -439,6 +445,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String about_components_showTimeList_moreShowTimes(Object count) {
     return 'あと $count 回の上映があります...';
   }
+
+  @override
+  String get about_components_showTimeList_timeRange => '上映開始時間';
+
+  @override
+  String get about_components_showTimeList_dubbingVersion => '吹き替え版';
 
   @override
   String get about_components_showTimeList_seatStatus_soldOut => '完売';
@@ -526,6 +538,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get about_movieShowList_dropdown_tag => 'タグ';
+
+  @override
+  String get about_movieShowList_dropdown_version => 'バージョン';
 
   @override
   String get enum_seatType_coupleSeat => 'カップルシート';
@@ -1133,6 +1148,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get movieShowList_dropdown_tag => 'タグ';
+
+  @override
+  String get movieShowList_dropdown_version => 'バージョン';
 
   @override
   String get payment_addCreditCard_title => 'クレジットカードを追加';

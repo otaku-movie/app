@@ -82,6 +82,10 @@ class ShowTime {
     dynamic subtitle;
     @JsonKey(name: "showTimeTags")
     dynamic showTimeTags;
+    @JsonKey(name: "movieVersionId")
+    int? movieVersionId;
+    @JsonKey(name: "versionCode")
+    int? versionCode;
 
     ShowTime({
         this.id,
@@ -97,6 +101,8 @@ class ShowTime {
         this.showTimeTagId,
         this.subtitle,
         this.showTimeTags,
+        this.movieVersionId,
+        this.versionCode,
     });
 
     factory ShowTime.fromJson(Map<String, dynamic> json) => _$ShowTimeFromJson(json);
