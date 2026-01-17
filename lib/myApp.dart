@@ -44,6 +44,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final languageController = Get.find<LanguageController>();
 
     return ScreenUtilInit(
       designSize: const Size(750, 1334),
@@ -51,9 +52,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       splitScreenMode: true,
       builder: (context, child) {
         return Obx(() {
-          final locale = Get.find<LanguageController>().locale.value;
+          final locale = languageController.locale.value;
 
           return MaterialApp.router(
+            key: const ValueKey('material_app'), // 使用固定的 key 保持路由状态稳定
             routerConfig: routerConfig,
             locale: locale,
             

@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:otaku_movie/config/config.dart';
+import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/l10n/app_localizations.dart';
 import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/response.dart';
@@ -39,8 +41,13 @@ class ApiRequest {
           // 从本地存储获取 token
           String? token = _prefs?.getString('token');
           
-          // 获取当前系统语言环境
-          final locale = PlatformDispatcher.instance.locale;
+          // 获取用户选择的语言环境（优先使用 LanguageController 中的语言，否则使用系统语言）
+          Locale locale;
+          if (Get.isRegistered<LanguageController>()) {
+            locale = Get.find<LanguageController>().locale.value;
+          } else {
+            locale = PlatformDispatcher.instance.locale;
+          }
           final languageCode = locale.languageCode;
           final countryCode = locale.countryCode ?? '';
           final acceptLanguage = '$languageCode-$countryCode';
