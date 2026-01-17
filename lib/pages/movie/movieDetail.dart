@@ -12,7 +12,6 @@ import 'package:otaku_movie/components/HelloMovie.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
-import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/hello_movie.dart';
@@ -20,6 +19,7 @@ import 'package:otaku_movie/response/movie/movieList/character.dart';
 import 'package:otaku_movie/response/movie/movieList/comment/comment_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
 import 'package:otaku_movie/response/movie/movie_staff.dart';
+import 'package:otaku_movie/response/movie/movie_version.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,9 +41,20 @@ class _PageState extends State<MovieDetail> {
   List<CharacterResponse> characterData = [];
   List<MovieStaffResponse> staffListData = [];
   List<CommentResponse> commentListData = [];
+  List<MovieVersionResponse> versionList = [];
+  bool loading = false;
+  bool error = false;
 
 
   getData () {
+    // 开始加载时设置loading状态
+    if (mounted) {
+      setState(() {
+        loading = true;
+        error = false;
+      });
+    }
+    
     ApiRequest().request(
       path: '/movie/detail',
       method: 'GET',
@@ -54,21 +65,55 @@ class _PageState extends State<MovieDetail> {
         return MovieResponse.fromJson(json);
       },
     ).then((res) {
-      setState(() {
-        data = res.data!;
-      });
+      if (mounted) {
+        setState(() {
+          data = res.data!;
+          loading = false;
+          error = false;
+        });
+      }
     }).catchError((err) {
-      // setState(() {
-      //   error = true;
-      // });
-    }).whenComplete(() {
-      // setState(() {
-      //   loading = false;
-      // });
+      if (mounted) {
+        setState(() {
+          loading = false;
+          error = true;
+        });
+      }
     });
   }
 
+  // 获取版本列表
+  getVersionList() {
+    ApiRequest().request(
+      path: '/movie/version/list',
+      method: 'GET',
+      queryParameters: {
+        "movieId": int.parse(widget.id!)
+      },
+      fromJsonT: (json) {
+        if (json is List<dynamic>) {
+          return json.map((item) {
+            return MovieVersionResponse.fromJson(item);
+          }).toList();
+        }
+      },
+    ).then((res) {
+      if (res.data != null && mounted) {
+        setState(() {
+          versionList = res.data!;
+        });
+      }
+    });
+  }
+
+  // 保留原方法作为兼容（如果版本列表为空时使用）
   getCharacterData () {
+    // 如果有版本列表，不使用原接口
+    if (versionList.isNotEmpty) {
+      return;
+    }
+    
+    // 否则使用原接口
     ApiRequest().request(
       path: '/movie/character',
       method: 'GET',
@@ -83,13 +128,14 @@ class _PageState extends State<MovieDetail> {
         }
       },
     ).then((res) {
-      if (res.data != null) {
+      if (res.data != null && mounted) {
         setState(() {
           characterData = res.data!;
         });
       }
     });
   }
+
 
   getStaffData () {
     ApiRequest().request(
@@ -147,7 +193,7 @@ class _PageState extends State<MovieDetail> {
   void initState() {
     super.initState();
     getData();
-    getCharacterData();
+    getVersionList(); // 先获取版本列表
     getStaffData();
     getCommentData();
 
@@ -327,10 +373,10 @@ List<Widget> generateComment() {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                         decoration: BoxDecoration(
-                          color: comment.like! ? const Color(0xFFFF6B35).withOpacity(0.1) : Colors.grey.shade50,
+                          color: comment.like! ? const Color(0xFFFF6B35).withValues(alpha: 0.1) : Colors.grey.shade50,
                           borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(
-                            color: comment.like! ? const Color(0xFFFF6B35).withOpacity(0.3) : Colors.grey.shade200,
+                            color: comment.like! ? const Color(0xFFFF6B35).withValues(alpha: 0.3) : Colors.grey.shade200,
                             width: 1,
                           ),
                         ),
@@ -553,7 +599,7 @@ List<Widget> generateComment() {
               margin: EdgeInsets.only(right: 12.w),
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Row(
@@ -582,7 +628,7 @@ List<Widget> generateComment() {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Row(
@@ -623,7 +669,7 @@ List<Widget> generateComment() {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 20,
               offset: const Offset(0, -5),
             ),
@@ -653,7 +699,7 @@ List<Widget> generateComment() {
                 borderRadius: BorderRadius.circular(25.r),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1989FA).withOpacity(0.3),
+                    color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -702,6 +748,11 @@ List<Widget> generateComment() {
         ),
       ),
       body: AppErrorWidget(
+        loading: loading,
+        error: error,
+        onRetry: () {
+          getData();
+        },
         child: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -774,13 +825,13 @@ List<Widget> generateComment() {
                             // boxShadow: [
                             //   // 第一层浅阴影
                             //   BoxShadow(
-                            //     color: Colors.white.withOpacity(0.2),
+                            //     color: Colors.white.withValues(alpha: 0.2),
                             //     blurRadius: 15,
                             //     offset: const Offset(5, 5),
                             //   ),
                             //   // 第二层更深的阴影
                             //   BoxShadow(
-                            //     color: Colors.black.withOpacity(0.3),
+                            //     color: Colors.black.withValues(alpha: 0.3),
                             //     blurRadius: 30,
                             //     offset: const Offset(10, 10),
                             //   ),
@@ -823,7 +874,7 @@ List<Widget> generateComment() {
                                       height: 1.3,
                                       shadows: [
                                         Shadow(
-                                          color: Colors.black.withOpacity(0.3),
+                                          color: Colors.black.withValues(alpha: 0.3),
                                           offset: const Offset(0, 2),
                                           blurRadius: 4,
                                         ),
@@ -843,7 +894,7 @@ List<Widget> generateComment() {
                                           margin: EdgeInsets.only(right: 8.w),
                                           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                                           decoration: BoxDecoration(
-                                            color: Colors.black.withOpacity(0.3),
+                                            color: Colors.black.withValues(alpha: 0.3),
                                             borderRadius: BorderRadius.circular(16.r),
                                           ),
                                           child: Row(
@@ -871,7 +922,7 @@ List<Widget> generateComment() {
                                       Container(
                                         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                                         decoration: BoxDecoration(
-                                          color: Colors.black.withOpacity(0.3),
+                                          color: Colors.black.withValues(alpha: 0.3),
                                           borderRadius: BorderRadius.circular(16.r),
                                         ),
                                         child: Row(
@@ -1019,7 +1070,7 @@ List<Widget> generateComment() {
                           // color: const Color(0xFFF7F8FA),
                           borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
-                            color: const Color(0xFF1989FA).withOpacity(0.6),
+                            color: const Color(0xFF1989FA).withValues(alpha: 0.6),
                             width: 1,
                           ),
                         ),
@@ -1028,7 +1079,7 @@ List<Widget> generateComment() {
                             Container(
                               padding: EdgeInsets.all(8.w),
                               decoration: BoxDecoration(
-                                color: const Color(0xFF1989FA).withOpacity(0.1),
+                                color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(8.r),
                               ),
                               child: Icon(
@@ -1138,7 +1189,7 @@ List<Widget> generateComment() {
                                               color: const Color(0xFFF7F8FA),
                                               borderRadius: BorderRadius.circular(20.r),
                                               border: Border.all(
-                                                color: const Color(0xFF1989FA).withOpacity(0.3),
+                                                color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                                                 width: 1,
                                               ),
                                             ),
@@ -1240,103 +1291,261 @@ List<Widget> generateComment() {
                         ),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child:  Wrap(
-                            spacing: 20.w,
+                          padding: EdgeInsets.symmetric(vertical: 8.h),
+                          child: Row(
                             children: staffListData.map((item) {
-                              return SizedBox(
-                                width: 163.w, // 设置容器宽度
+                              return Container(
+                                width: 180.w,
+                                margin: EdgeInsets.only(right: 20.w),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    // 工作人员头像卡片
                                     Container(
-                                      width: 163.w,
-                                      height: 200.h,
+                                      width: 180.w,
+                                      height: 240.h,
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade300,
-                                        borderRadius: BorderRadius.circular(8)
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(12.r),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(alpha: 0.08),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
                                       ),
                                       clipBehavior: Clip.antiAlias,
                                       child: CustomExtendedImage(
                                         item.avatar ?? '',
-                                        fit: BoxFit.cover, // 确保图片填满容器
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                    SizedBox(height: 10.w), // 为文本和图片之间添加间距
+                                    SizedBox(height: 12.h),
+                                    // 工作人员名称
                                     Text(
                                       item.name ?? '',
-                                      style: TextStyle(fontSize: 30.sp),
-                                      maxLines: 1, // 限制为一行
-                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                      style: TextStyle(
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: const Color(0xFF323233),
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Text(
-                                      item.position!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
-                                      style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
-                                      maxLines: 1, // 限制为一行
-                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                    )
+                                    // 职位信息
+                                    if (item.position != null && item.position!.isNotEmpty) ...[
+                                      SizedBox(height: 6.h),
+                                      Text(
+                                        item.position!.map((children) => children.name ?? '').join('、'),
+                                        style: TextStyle(
+                                          fontSize: 24.sp,
+                                          color: Colors.grey.shade600,
+                                          height: 1.3,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ],
                                 ),
                               );
-                            }).toList()
+                            }).toList(),
                           ),
                         ),
                       ],
                       
-                      ...characterData.isEmpty ? [] : [
+                      // 版本列表和角色列表（分别显示每个版本）
+                      if (versionList.isNotEmpty) ...[
+                        // 遍历所有版本，每个版本显示其角色列表
+                        ...versionList.map((version) {
+                          final versionCharacters = version.characters ?? [];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // 版本标题
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          '${S.of(context).movieDetail_detail_character} - ',
+                                          style: TextStyle(
+                                            fontSize: 36.sp,
+                                            fontWeight: FontWeight.bold
+                                          )
+                                        ),
+                                        Dict(
+                                          code: version.versionCode,
+                                          name: 'dubbingVersion',
+                                        ),
+                                        Text(
+                                          '（${versionCharacters.length}）',
+                                          style: TextStyle(
+                                            fontSize: 36.sp,
+                                            fontWeight: FontWeight.bold
+                                          )
+                                        ),
+                                      ],
+                                    ),
+                                    Icon(Icons.arrow_forward_ios, size: 36.sp)
+                                  ],
+                                ),
+                              ),
+                              // 该版本的角色列表
+                              if (versionCharacters.isNotEmpty) ...[
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                                  child: Row(
+                                    children: versionCharacters.map((item) {
+                                      return Container(
+                                        width: 180.w,
+                                        margin: EdgeInsets.only(right: 20.w),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            // 角色头像卡片
+                                            Container(
+                                              width: 180.w,
+                                              height: 240.h,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade200,
+                                                borderRadius: BorderRadius.circular(12.r),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black.withValues(alpha: 0.08),
+                                                    blurRadius: 8,
+                                                    offset: const Offset(0, 2),
+                                                  ),
+                                                ],
+                                              ),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: CustomExtendedImage(
+                                                item.cover ?? '',
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            SizedBox(height: 12.h),
+                                            // 角色名称
+                                            Text(
+                                              item.name ?? '',
+                                              style: TextStyle(
+                                                fontSize: 28.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: const Color(0xFF323233),
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            // 配音演员
+                                            if (item.staff != null && item.staff!.isNotEmpty) ...[
+                                              SizedBox(height: 6.h),
+                                              Text(
+                                                item.staff!.map((children) => children.name ?? '').join('、'),
+                                                style: TextStyle(
+                                                  fontSize: 24.sp,
+                                                  color: Colors.grey.shade600,
+                                                  height: 1.3,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            ],
+                          );
+                        }).toList(),
+                      ] else if (characterData.isNotEmpty) ...[
+                        // 如果没有版本列表，使用原有的显示方式
                         Padding(
                           padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
-                          child:  Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('${S.of(context).movieDetail_detail_character}（${characterData.length}）', style: TextStyle(
-                              // color: Colors.grey.shade700,
-                              fontSize: 36.sp,
-                              fontWeight: FontWeight.bold
-                            )),
-                            Icon(Icons.arrow_forward_ios, size: 36.sp)
-                          ],
-                        )
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${S.of(context).movieDetail_detail_character}（${characterData.length}）',
+                                style: TextStyle(
+                                  fontSize: 36.sp,
+                                  fontWeight: FontWeight.bold
+                                )
+                              ),
+                              Icon(Icons.arrow_forward_ios, size: 36.sp)
+                            ],
+                          ),
                         ),
+                        // 角色列表
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child:  Wrap(
-                            spacing: 20.w,
+                          padding: EdgeInsets.symmetric(vertical: 8.h),
+                          child: Row(
                             children: characterData.map((item) {
-                              return SizedBox(
-                                width: 163.w, // 设置容器宽度
+                              return Container(
+                                width: 180.w,
+                                margin: EdgeInsets.only(right: 20.w),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    // 角色头像卡片
                                     Container(
-                                      width: 163.w,
-                                      height: 200.h,
+                                      width: 180.w,
+                                      height: 240.h,
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade300,
-                                        borderRadius: BorderRadius.circular(8)
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(12.r),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(alpha: 0.08),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
                                       ),
                                       clipBehavior: Clip.antiAlias,
                                       child: CustomExtendedImage(
                                         item.cover ?? '',
-                                        fit: BoxFit.cover, // 确保图片填满容器
+                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                    SizedBox(height: 10.w), // 为文本和图片之间添加间距
+                                    SizedBox(height: 12.h),
+                                    // 角色名称
                                     Text(
                                       item.name ?? '',
-                                      style: TextStyle(fontSize: 30.sp),
-                                      maxLines: 1, // 限制为一行
-                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
+                                      style: TextStyle(
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: const Color(0xFF323233),
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Text(
-                                      item.staff!.map((children) => children.name ?? '').join('、'), // 拼接名字，若为空则用空字符串替代
-                                      style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade500),
-                                      maxLines: 1, // 限制为一行
-                                      overflow: TextOverflow.ellipsis, // 超出部分显示省略号
-                                    )
+                                    // 配音演员
+                                    if (item.staff != null && item.staff!.isNotEmpty) ...[
+                                      SizedBox(height: 6.h),
+                                      Text(
+                                        item.staff!.map((children) => children.name ?? '').join('、'),
+                                        style: TextStyle(
+                                          fontSize: 24.sp,
+                                          color: Colors.grey.shade600,
+                                          height: 1.3,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
                                   ],
                                 ),
                               );
-                            }).toList()
+                            }).toList(),
                           ),
                         ),
                       ],
@@ -1356,7 +1565,7 @@ List<Widget> generateComment() {
                                   Container(
                                     padding: EdgeInsets.all(8.w),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF1989FA).withOpacity(0.1),
+                                      color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(8.r),
                                     ),
                                     child: Icon(
@@ -1387,10 +1596,10 @@ List<Widget> generateComment() {
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFFFF6B35).withOpacity(0.1),
+                                    color: const Color(0xFFFF6B35).withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(20.r),
                                     border: Border.all(
-                                      color: const Color(0xFFFF6B35).withOpacity(0.3),
+                                      color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
                                       width: 1,
                                     ),
                                   ),

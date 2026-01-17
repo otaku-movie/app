@@ -46,6 +46,16 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   }
 
   void getData({int page = 1}) {
+    // 开始加载时设置loading状态
+    if (page == 1) {
+      if (mounted) {
+        setState(() {
+          loading = true;
+          error = false;
+        });
+      }
+    }
+    
     ApiRequest().request(
       path: '/app/movie/nowShowing',
       method: 'GET',
@@ -65,15 +75,16 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         
         if (mounted) {
           setState(() {
-            if (list.isNotEmpty && !loadFinished) {
-              data.addAll(list); // 追加数据
+            if (list.isNotEmpty && !loadFinished && page > 1) {
+              data.addAll(list); // 追加数据（非第一页）
             }
             if (page == 1) {
-              data = list;
+              data = list; // 第一页直接替换
             }
             currentPage = page;
             loadFinished = list.isEmpty; // 更新加载完成标志
-            
+            loading = false;
+            error = false;
           });
         }
 
@@ -81,20 +92,26 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           list.isEmpty ? IndicatorResult.noMore : IndicatorResult.success,
           true
         );
+      } else {
+        // 数据为空
+        if (mounted) {
+          setState(() {
+            if (page == 1) {
+              data = [];
+            }
+            loading = false;
+            error = false;
+          });
+        }
       }
     }).catchError((err) {
       if (mounted) {
         setState(() {
+          loading = false;
           error = true;
         });
       }
-    })
-    .whenComplete(() {
-      if (mounted) {
-        setState(() {
-          loading = false;
-        });
-      }
+      easyRefreshController.finishLoad(IndicatorResult.fail, true);
     });
   }
 
@@ -121,16 +138,12 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         child: AppErrorWidget(
           loading: loading,
           error: error,
-          child: Column(
-            children: [
-              // 内容区域
-              Expanded(
-                child: data.isEmpty 
-                  ? _buildEmptyState() 
-                  : _buildListView(),
-              ),
-            ],
-          ),
+          empty: !loading && !error && data.isEmpty,
+          emptyWidget: _buildEmptyState(),
+          onRetry: () {
+            getData();
+          },
+          child: _buildListView(),
         ),
     );
   }
