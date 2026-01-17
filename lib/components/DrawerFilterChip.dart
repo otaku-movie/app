@@ -37,8 +37,15 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
     super.initState();
     // 判断是否使用30小时制
     _use30HourFormat = widget.filter.use30HourFormat ?? false;
-    _maxHour = _use30HourFormat ? 29 : 24; // 30小时制是6-29，24小时制是0-24
+    _maxHour = _use30HourFormat ? 30 : 24; // 30小时制是6-30，24小时制是0-24
     
+    // 初始化时间范围值
+    _initializeTimeRangeValues();
+  }
+
+  /// 初始化时间范围值（从 selectedIds 解析或使用默认值）
+  /// [useSetState] 是否使用 setState 更新状态（在 initState 中为 false，在 didUpdateWidget 中为 false，因为外层已调用 setState）
+  void _initializeTimeRangeValues({bool useSetState = false}) {
     // 初始化时间范围：从 selectedIds 中解析，如果没有则使用默认值
     // 存储格式：数组包含两个元素，分别是开始时间和结束时间（yyyy-MM-dd HH:mm:ss）
     if (widget.filter.type == FilterType.timeRange && widget.selectedIds.isNotEmpty) {
@@ -103,17 +110,17 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
                 (endDateTime.year == today.year && endDateTime.month == today.month && endDateTime.day > today.day);
             
             if (endIsNextDay) {
-              // 下一天的00:00-05:59，转换为24-29
+              // 下一天的00:00-05:59，转换为24-30
               final hour = endDateTime.hour;
               final minute = endDateTime.minute;
               final second = endDateTime.second;
-              // 如果是 05:59:59，表示全天（29）
+              // 如果是 05:59:59，表示全天（30）
               if (hour == 5 && minute == 59 && second == 59) {
-                endHour = 29.0;
+                endHour = 30.0;
               } else {
                 endHour = 24 + hour + (minute / 60) + (second / 3600);
               }
-              if (endHour > 29) endHour = 29; // 确保不大于29
+              if (endHour > 30) endHour = 30; // 确保不大于30
             } else {
               // 当天的06:00-23:59，转换为6-23
               final hour = endDateTime.hour;
@@ -136,13 +143,13 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
             }
             // 确保值在有效范围内
             if (startHour < 6) startHour = 6;
-            if (startHour > 29) startHour = 29;
+            if (startHour > 30) startHour = 30;
             if (endHour < 6) endHour = 6;
-            if (endHour > 29) endHour = 29;
+            if (endHour > 30) endHour = 30;
             if (startHour > endHour) {
               // 如果仍然不满足，使用默认值
               startHour = 6.0;
-              endHour = 29.0;
+              endHour = 30.0;
             }
           } else {
             // 24小时制处理
@@ -180,15 +187,27 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
           _timeRangeValues = RangeValues(startHour, endHour);
         } else {
           // 不是完整日期时间格式或解析失败，使用默认值
-          // 默认选中全天：30小时制是6-29（06:00-下一天05:59），24小时制是0-24（00:00-24:00）
+          // 默认选中全天：30小时制是6-30（06:00-下一天05:59），24小时制是0-24（00:00-24:00）
           _timeRangeValues = RangeValues(_use30HourFormat ? 6.0 : 0.0, _maxHour);
         }
       } catch (e) {
         _timeRangeValues = RangeValues(_use30HourFormat ? 6.0 : 0.0, _maxHour);
       }
     } else {
-      // 默认选中全天：30小时制是6-29（06:00-下一天05:59），24小时制是0-24（00:00-24:00）
+      // 默认选中全天：30小时制是6-30（06:00-下一天05:59），24小时制是0-24（00:00-24:00）
       _timeRangeValues = RangeValues(_use30HourFormat ? 6.0 : 0.0, _maxHour);
+    }
+  }
+
+  @override
+  void didUpdateWidget(DrawerFilterChip oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 当 selectedIds 发生变化时，重新初始化时间范围值（用于重置功能）
+    if (widget.filter.type == FilterType.timeRange && 
+        widget.selectedIds != oldWidget.selectedIds) {
+      setState(() {
+        _initializeTimeRangeValues(useSetState: false);
+      });
     }
   }
 
@@ -216,9 +235,9 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
   /// 构建时间范围筛选
   Widget _buildTimeRangeFilter(Color selectedColor) {
     // 格式化显示时间（考虑30小时制）
-    final displayStart = _formatTimeForDisplay(_timeRangeValues.start);
-    final displayEnd = _formatTimeForDisplay(_timeRangeValues.end);
-    final isAllDay = ((_use30HourFormat && _timeRangeValues.start == 6 && _timeRangeValues.end == 29) || 
+    final displayStart = _formatTimeForDisplay(_timeRangeValues.start, isEndTime: false);
+    final displayEnd = _formatTimeForDisplay(_timeRangeValues.end, isEndTime: true);
+    final isAllDay = ((_use30HourFormat && _timeRangeValues.start == 6 && _timeRangeValues.end == 30) ||
                       (!_use30HourFormat && _timeRangeValues.start == 0 && _timeRangeValues.end == 24));
     
     final timeText = isAllDay
@@ -323,7 +342,7 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
                     }
                     
                     if (end >= 24) {
-                      if (end == 29) {
+                      if (end == 30) {
                         endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day + 1, 5, 59, 59);
                       } else {
                         final hour = (end - 24).toInt();
@@ -439,13 +458,17 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
   }
 
   /// 格式化时间（小时转时间字符串，用于显示）
-  /// 30小时制：滑块值6-23正常显示，24-29显示为24:00-29:59
-  String _formatTimeForDisplay(double hour) {
+  /// 30小时制：滑块值6-23正常显示，24-29显示为24:00-29:00，最大值30显示为29:59
+  String _formatTimeForDisplay(double hour, {bool isEndTime = false}) {
     int displayHour = hour.toInt();
     
-    // 30小时制：滑块值6-23正常显示，24-29显示为24-29
-    // 不需要转换，因为滑块值已经是正确的显示值
+    // 30小时制：当结束时间为最大值（30.0）时，应该显示为 29:59
+    // 最大值30对应下一天的 05:59:59，所以显示为 29:59
+    if (_use30HourFormat && isEndTime && hour == 30.0 && hour == _maxHour) {
+      return '29:59';
+    }
     
+    // 其他情况正常格式化：28:00, 29:00 等
     final m = ((hour - hour.toInt()) * 60).toInt();
     return '${displayHour.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}';
   }

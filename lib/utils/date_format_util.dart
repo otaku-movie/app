@@ -484,5 +484,42 @@ class DateFormatUtil {
     
     return '${dateFormat.format(startDateTime)}-${dateFormat.format(endDateTime)}';
   }
+
+  /// 格式化时间为30小时制或24小时制显示
+  /// 
+  /// [dateTime] 要格式化的时间，如果为 null 则返回 '--:--'
+  /// [use30HourFormat] 是否使用30小时制
+  /// [baseDate] 基准日期，用于判断时间是否属于下一天（30小时制时，下一天的0-5点显示为24-29点）
+  /// 
+  /// 返回格式化的时间字符串，格式为 'HH:mm'
+  /// 
+  /// 30小时制规则：
+  /// - 当天的6-23点显示为6-23点
+  /// - 下一天的0-5点显示为24-29点（表示前一天的24-29点）
+  static String formatShowTime({
+    DateTime? dateTime,
+    required bool use30HourFormat,
+    DateTime? baseDate,
+  }) {
+    if (dateTime == null) return '--:--';
+    
+    int hour = dateTime.hour;
+    int minute = dateTime.minute;
+    
+    // 如果是30小时制，需要判断是否应该显示为24-29点
+    if (use30HourFormat && baseDate != null) {
+      // 获取基准日期和时间的日期部分（不包含时间）
+      final baseDateOnly = DateTime(baseDate.year, baseDate.month, baseDate.day);
+      final dateTimeOnly = DateTime(dateTime.year, dateTime.month, dateTime.day);
+      
+      // 如果时间日期是基准日期的下一天，且小时是0-5点，说明是前一天的24-29点
+      if (dateTimeOnly.difference(baseDateOnly).inDays == 1 && hour >= 0 && hour <= 5) {
+        hour += 24;
+      }
+      // 注意：当天的0-5点不转换为24-29点，因为30小时制是从6点开始的
+    }
+    
+    return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
+  }
 }
 

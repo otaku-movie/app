@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:go_router/go_router.dart';
@@ -20,8 +21,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:get/get.dart';
+import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/controller/DictController.dart';
 import 'package:otaku_movie/response/dict_response.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 
 class ShowTimeList extends StatefulWidget {
   final String? id;
@@ -45,11 +48,14 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   int tabLength = 0;
   bool loading = false;
   bool error = false;
-  Map<String, dynamic> filterParams = {};
+  Map<String, dynamic> filterParams = {
+    'use30HourFormat': true,
+  };
   Placemark? location;
   Position? position;
   String? currentAddressFull;
   bool locationLoading = false;
+  TextEditingController searchController = TextEditingController(); // 搜索关键词控制器
   EasyRefreshController easyRefreshController = EasyRefreshController(
     controlFinishRefresh: true,
     controlFinishLoad: true,
@@ -64,9 +70,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
   @override
   void dispose() {
+    _tabController?.removeListener(_onTabChanged);
     _tabController?.dispose();
     _tabController = null;
     easyRefreshController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
@@ -102,6 +110,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         }
       },
     ).then((res) {
+      if (!mounted) return;
       if (res.data != null) {
         List<AreaResponse> list = res.data!;
         
@@ -129,6 +138,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         );
       },
     ).then((res) {
+      if (!mounted) return;
       if (res.data?.list != null) {
         List<CinemaSpecResponse> list = res.data!.list!;
         
@@ -156,6 +166,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         );
       },
     ).then((res) {
+      if (!mounted) return;
       if (res.data?.list != null) {
         List<LanguageResponse> list = res.data!.list!;
         
@@ -183,6 +194,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         );
       },
     ).then((res) {
+      if (!mounted) return;
       if (res.data?.list != null) {
         List<ShowTimeTag> list = res.data!.list!;
         
@@ -198,6 +210,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   }
 
   Future<void> getVersionList() async {
+    if (!mounted) return;
     // 从字典控制器获取版本数据
     if (dictController.dict.value['dubbingVersion'] != null) {
       setState(() {
@@ -243,57 +256,125 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
 
 
-  Future<void> getData({bool refresh = false}) async {
-    if (!refresh) {
-    setState(() {
-      loading = true;
-        error = false;
-    });
+  /// 从 filterParams 中获取第一个值并转换为整数
+  int? _getIntFromFilter(String key) {
+    final value = filterParams[key];
+    if (value is List && value.isNotEmpty) {
+      final str = value[0]?.toString() ?? '';
+      if (str.isNotEmpty && str != '') {
+        return int.tryParse(str);
+      }
     }
+    return null;
+  }
 
-    final areaIdList = filterParams['areaId'] ?? [];
-    final params = {
-      "regionId": int.tryParse(areaIdList.length > 0 ? areaIdList[0] : ''),
-      "prefectureId": int.tryParse(areaIdList.length > 1 ? areaIdList[1] : ''),
-      "cityId": int.tryParse(areaIdList.length > 2 ? areaIdList[2] : ''),
-    };
+  /// 从 filterParams 中获取列表值
+  List<int>? _getIntListFromFilter(String key) {
+    final value = filterParams[key];
+    if (value is List && value.isNotEmpty) {
+      final list = value
+          .where((item) => item != null && item.toString().isNotEmpty && item.toString() != '')
+          .map((item) => int.tryParse(item.toString()))
+          .whereType<int>()
+          .toList();
+      return list.isNotEmpty ? list : null;
+    }
+    return null;
+  }
 
-    // 构建请求参数，只添加非空的筛选条件
-    Map<String, dynamic> requestData = {
+  /// 构建请求参数
+  Map<String, dynamic> _buildRequestData() {
+    final requestData = <String, dynamic>{
       "movieId": int.parse(widget.id!),
       "page": 1,
-      ...params,
     };
-    
-    // 只有当字幕ID不为空时才添加
-    final subtitleId = (filterParams['subtitleId'] ?? []).length > 0 ? filterParams['subtitleId'][0] : '';
-    if (subtitleId.isNotEmpty) {
-      requestData["subtitleId"] = int.tryParse(subtitleId);
+
+    // 地区筛选
+    final areaIdList = filterParams['areaId'] ?? [];
+    if (areaIdList.isNotEmpty) {
+      final regionId = int.tryParse(areaIdList[0]?.toString() ?? '');
+      if (regionId != null) requestData["regionId"] = regionId;
+      
+      if (areaIdList.length > 1) {
+        final prefectureId = int.tryParse(areaIdList[1]?.toString() ?? '');
+        if (prefectureId != null) requestData["prefectureId"] = prefectureId;
+      }
+      
+      if (areaIdList.length > 2) {
+        final cityId = int.tryParse(areaIdList[2]?.toString() ?? '');
+        if (cityId != null) requestData["cityId"] = cityId;
+      }
     }
-    
-    // 只有当规格ID不为空时才添加
-    final specId = filterParams['specId'];
-    if (specId != null && specId.isNotEmpty) {
-      requestData["specId"] = specId;
+
+    // 筛选条件
+    final subtitleId = _getIntFromFilter('subtitleId');
+    if (subtitleId != null) requestData["subtitleId"] = subtitleId;
+
+    final specId = _getIntListFromFilter('specId');
+    if (specId != null) requestData["specId"] = specId;
+
+    final showTimeTagId = _getIntFromFilter('showTimeTagId');
+    if (showTimeTagId != null) requestData["showTimeTagId"] = showTimeTagId;
+
+    final versionCode = _getIntFromFilter('versionCode');
+    if (versionCode != null) requestData["versionCode"] = versionCode;
+
+    // 搜索关键词
+    final keyword = searchController.text.trim();
+    if (keyword.isNotEmpty) {
+      requestData["keyword"] = keyword;
     }
-    
-    // 只有当上映标签ID不为空时才添加
-    final showTimeTagId = (filterParams['showTimeTagId'] ?? []).length > 0 ? filterParams['showTimeTagId'][0] : '';
-    if (showTimeTagId.isNotEmpty) {
-      requestData["showTimeTagId"] = int.tryParse(showTimeTagId);
+
+    // 开场时间范围筛选
+    final timeRange = filterParams['timeRange'];
+    if (timeRange is List && timeRange.length == 2) {
+      final startTime = timeRange[0]?.toString();
+      final endTime = timeRange[1]?.toString();
+      
+      if (startTime != null && startTime.isNotEmpty) {
+        requestData["startTimeFrom"] = startTime;
+      }
+      if (endTime != null && endTime.isNotEmpty) {
+        requestData["startTimeTo"] = endTime;
+      }
     }
-    
-    // 只有当版本代码不为空时才添加
-    final versionCode = (filterParams['versionCode'] ?? []).length > 0 ? filterParams['versionCode'][0] : '';
-    if (versionCode.isNotEmpty) {
-      requestData["versionCode"] = int.tryParse(versionCode);
+
+    // 30小时制开关
+    final use30HourFormat = filterParams['use30HourFormat'];
+    if (use30HourFormat is bool && use30HourFormat) {
+      requestData["use30HourFormat"] = true;
+    } else if (use30HourFormat == 'true') {
+      requestData["use30HourFormat"] = true;
     }
-    
-    // 添加经纬度参数，用于后端查询附近影院
+
+    // 经纬度参数（用于附近影院查询）
     if (position != null) {
       requestData['latitude'] = position!.latitude;
       requestData['longitude'] = position!.longitude;
     }
+
+    return requestData;
+  }
+
+  Future<void> getData({bool refresh = false}) async {
+    // 记录调用接口前的tab日期（如果有的话），用于接口返回后恢复tab
+    String? previousTabDate;
+    if (_tabController != null && 
+        _tabController!.index >= 0 && 
+        _tabController!.index < data.length &&
+        data[_tabController!.index].date != null) {
+      previousTabDate = data[_tabController!.index].date;
+    }
+    
+    if (!refresh) {
+      if (!mounted) return;
+      setState(() {
+        loading = true;
+        error = false;
+      });
+    }
+
+    final requestData = _buildRequestData();
 
     ApiRequest().request(
       path: '/app/movie/showTime',
@@ -318,6 +399,19 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         
         if (!mounted) return;
         
+        // 查找新数据中对应日期的index
+        int? targetIndex;
+        if (previousTabDate != null) {
+          targetIndex = list.indexWhere((item) => item.date == previousTabDate);
+          // 如果找不到相同的日期，使用第一个tab（index 0）
+          if (targetIndex < 0 || targetIndex >= list.length) {
+            targetIndex = 0;
+          }
+        } else {
+          // 如果没有之前的tab日期，使用第一个tab（index 0）
+          targetIndex = 0;
+        }
+        
         setState(() {
           data = list;
           _tabController?.dispose();
@@ -329,7 +423,14 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
         // 在数据加载后初始化 TabController（确保页面还在 mounted）
         if (mounted && tabLength > 0) {
-          _tabController = TabController(length: tabLength, vsync: this);
+          _tabController?.dispose();
+          _tabController = TabController(
+            length: tabLength, 
+            vsync: this,
+            initialIndex: targetIndex ?? 0,
+          );
+          // 添加tab切换监听，更新时间范围筛选器的日期
+          _tabController!.addListener(_onTabChanged);
         }
         
         // 通知 EasyRefresh 刷新完成
@@ -452,6 +553,103 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
 
 
+  /// Tab切换监听：更新时间范围筛选器的日期部分，保持时间不变，并重新加载数据
+  void _onTabChanged() {
+    if (_tabController == null) {
+      return;
+    }
+    
+    // 只在tab切换完成时执行（不是切换过程中）
+    if (_tabController!.indexIsChanging) {
+      return;
+    }
+    
+    // 检查是否有时间范围筛选
+    final timeRange = filterParams['timeRange'];
+    if (timeRange is List && timeRange.length >= 2) {
+      try {
+        final startTimeStr = timeRange[0]?.toString();
+        final endTimeStr = timeRange[1]?.toString();
+        
+        if (startTimeStr != null && startTimeStr.isNotEmpty &&
+            endTimeStr != null && endTimeStr.isNotEmpty) {
+          // 解析当前时间范围
+          final startDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').parse(startTimeStr);
+          final endDateTime = DateFormat('yyyy-MM-dd HH:mm:ss').parse(endTimeStr);
+          
+          // 获取新的基准日期
+          final newBaseDate = _getCurrentTabDate();
+          
+          // 提取时间部分（小时、分钟、秒）
+          final startTimeOnly = TimeOfDay(hour: startDateTime.hour, minute: startDateTime.minute);
+          final endTimeOnly = TimeOfDay(hour: endDateTime.hour, minute: endDateTime.minute);
+          final endSecond = endDateTime.second;
+          
+          // 构建新的日期时间（使用新日期 + 原时间）
+          DateTime newStartDateTime;
+          DateTime newEndDateTime;
+          
+          // 检查结束时间是否是下一天（30小时制）
+          final use30HourFormat = filterParams['use30HourFormat'];
+          final isUse30HourFormat = (use30HourFormat is bool && use30HourFormat) || 
+                                    (use30HourFormat == 'true' || use30HourFormat == true);
+          
+          if (isUse30HourFormat && endDateTime.day > startDateTime.day) {
+            // 结束时间是下一天，保持这个逻辑
+            newStartDateTime = DateTime(
+              newBaseDate.year,
+              newBaseDate.month,
+              newBaseDate.day,
+              startTimeOnly.hour,
+              startTimeOnly.minute,
+            );
+            newEndDateTime = DateTime(
+              newBaseDate.year,
+              newBaseDate.month,
+              newBaseDate.day + 1,
+              endTimeOnly.hour,
+              endTimeOnly.minute,
+              endSecond,
+            );
+          } else {
+            // 同一天的情况
+            newStartDateTime = DateTime(
+              newBaseDate.year,
+              newBaseDate.month,
+              newBaseDate.day,
+              startTimeOnly.hour,
+              startTimeOnly.minute,
+            );
+            newEndDateTime = DateTime(
+              newBaseDate.year,
+              newBaseDate.month,
+              newBaseDate.day,
+              endTimeOnly.hour,
+              endTimeOnly.minute,
+              endSecond,
+            );
+          }
+          
+          // 更新时间范围
+          final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+          setState(() {
+            filterParams['timeRange'] = [
+              dateFormat.format(newStartDateTime),
+              dateFormat.format(newEndDateTime),
+            ];
+          });
+        }
+      } catch (e) {
+        // 解析失败，忽略时间范围更新，但依然要重新加载数据
+        print('更新时间范围失败: $e');
+      }
+      // 无论是否有时间范围筛选，tab切换时都重新加载数据
+    getData();
+    }
+    
+    
+  }
+
   /// 获取当前 tab 对应的日期
   DateTime _getCurrentTabDate() {
     if (_tabController != null && 
@@ -471,13 +669,18 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
   /// 创建 Drawer 筛选项配置
   List<FilterOption> _buildDrawerFilters(BuildContext context) {
+    // 从 filterParams 中获取 use30HourFormat 的值，默认为 false（24小时制）
+    final use30HourFormat = filterParams['use30HourFormat'];
+    final isUse30HourFormat = (use30HourFormat is bool && use30HourFormat) || 
+                              (use30HourFormat == 'true' || use30HourFormat == true);
+    
     return [
-      // 时间范围筛选（30小时制）
+      // 时间范围筛选（动态30小时制，根据 use30HourFormat 开关决定）
       FilterOption(
         key: 'timeRange',
         title: S.of(context).about_components_showTimeList_timeRange,
         type: FilterType.timeRange,
-        use30HourFormat: true, // 使用30小时制
+        use30HourFormat: isUse30HourFormat, // 根据开关动态使用30小时制或24小时制
         values: [], // 时间范围不需要 values
       ),
       // 时间范围筛选（30小时制示例，可根据需要启用）
@@ -488,17 +691,24 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
       //   use30HourFormat: true, // 使用30小时制（0-5点显示为24-29点）
       //   values: [],
       // ),
+      // FilterOption(
+      //   key: 'use30HourFormat',
+      //   title: '30小时制', // TODO: 添加国际化
+      //   type: FilterType.switch_,
+      //   icon: Icons.schedule_rounded,
+      //   values: [], // Switch 类型不需要 values，只有选中和未选中两种状态
+      // ),
       // Switch 开关示例（吹き替え版）
-      FilterOption(
-        key: 'dubbingVersion',
-        title: S.of(context).about_components_showTimeList_dubbingVersion,
-        type: FilterType.switch_,
-        values: [], // Switch 类型不需要 values，只有选中和未选中两种状态
-        drawerDisplayConfig: DrawerFilterDisplayConfig(
-          icon: Icons.record_voice_over_rounded,
-          iconSize: 24.sp,
-        ),
-      ),
+      // FilterOption(
+      //   key: 'dubbingVersion',
+      //   title: S.of(context).about_components_showTimeList_dubbingVersion,
+      //   type: FilterType.switch_,
+      //   values: [], // Switch 类型不需要 values，只有选中和未选中两种状态
+      //   drawerDisplayConfig: DrawerFilterDisplayConfig(
+      //     icon: Icons.record_voice_over_rounded,
+      //     iconSize: 24.sp,
+      //   ),
+      // ),
       FilterOption(
                   key: 'subtitleId',
                   title: S.of(context).about_movieShowList_dropdown_subtitle,
@@ -565,6 +775,17 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         backgroundColor: const Color(0xFFF7F8FA),
         appBar: CustomAppBar(
           title: widget.movieName,
+          actions: [
+            // 搜索图标按钮
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.white, size: 42.sp),
+              onPressed: () {
+                GoRouter.of(context).pushNamed("home", queryParameters: {
+                  'tab': '2'
+                });
+              },
+            ),
+          ],
           bottom: (data.isNotEmpty && _tabController != null && mounted)
               ? TabBar(
                   controller: _tabController!,
@@ -572,7 +793,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   isScrollable: true,
                   labelPadding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 0.h),
                   labelColor: Colors.white,
-                  unselectedLabelColor: Colors.white.withOpacity(0.6),
+                  unselectedLabelColor: Colors.white.withValues(alpha: 0.6),
                   labelStyle: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600),
                   unselectedLabelStyle: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.normal),
                   indicator: UnderlineTabIndicator(
@@ -718,7 +939,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                                       borderRadius: BorderRadius.circular(12.r),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.05),
+                                          color: Colors.black.withValues(alpha: 0.05),
                                           blurRadius: 8,
                                           offset: const Offset(0, 2),
                                         ),
@@ -747,7 +968,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                                               Container(
                                                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                                                 decoration: BoxDecoration(
-                                                  color: const Color(0xFF1989FA).withOpacity(0.1),
+                                                  color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                                   borderRadius: BorderRadius.circular(20.r),
                                                 ),
                                                 child: Row(
@@ -836,23 +1057,12 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   }
 
   // 获取版本名称
-  String _getVersionName(int versionCode) {
-    try {
-      final version = versionList.firstWhere(
-        (item) => item.code == versionCode,
-        orElse: () => DictItemResponse(name: '--'),
-      );
-      return version.name ?? '--';
-    } catch (e) {
-      return '--';
-    }
-  }
-
   // 构建场次信息
   Widget _buildShowTimeInfo(Cinema children) {
     if (children.showTimes == null || children.showTimes!.isEmpty) {
       return Container(
         padding: EdgeInsets.all(12.w),
+        
         decoration: BoxDecoration(
           color: Colors.grey.shade100,
           borderRadius: BorderRadius.circular(8.r),
@@ -888,7 +1098,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         // ),
         // 横向滚动的场次卡片
         SizedBox(
-          height: 200.h, // 设置固定高度
+          // height: 200.h, // 简洁设计后的高度
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -904,6 +1114,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
       ],
     );
   }
+
 
   // 构建场次卡片
   Widget _buildShowTimeCard(ShowTime showTime) {
@@ -929,122 +1140,246 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
       seatStatusIcon = Icons.event_seat;
     }
 
-    return Container(
-      width: 152.w,
-      padding: EdgeInsets.all(16.w),
+    // 计算时长
+    String? durationText;
+    if (showTime.startTime != null && showTime.endTime != null) {
+      final duration = showTime.endTime!.difference(showTime.startTime!);
+      final hours = duration.inHours;
+      final minutes = duration.inMinutes % 60;
+      if (hours > 0) {
+        durationText = S.of(context).movieDetail_detail_duration_hoursMinutes(hours, minutes);
+      } else {
+        durationText = '${minutes}${S.of(context).movieDetail_detail_duration_minutes}';
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        // 直接跳转到选座页面
+        if (showTime.id != null && showTime.theaterHallId != null) {
+          context.pushNamed(
+            'selectSeat',
+            queryParameters: {
+              "id": '${showTime.id}',
+              "theaterHallId": '${showTime.theaterHallId}'
+            }
+          );
+        }
+      },
+      child: Container(
+      width: 240.w,
+      constraints: BoxConstraints(
+        minHeight: 200.h, // 设置最小高度，确保卡片高度统一
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: Colors.grey.shade200,
-          width: 1,
-        ),
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 10.r,
+            offset: Offset(0, 4.r),
+          ),
+        ],
       ),
+      margin: EdgeInsets.only(bottom: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // 时间信息
-          Row(
-            children: [
-              Icon(
-                Icons.access_time,
-                size: 24.sp,
-                color: const Color(0xFF1989FA),
+          // 顶部时间区域（带渐变背景）
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 14.h),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  const Color(0xFF1989FA).withValues(alpha: 0.1),
+                  const Color(0xFF1989FA).withValues(alpha: 0.05),
+                ],
               ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Text(
-                  showTime.startTime != null 
-                      ? '${showTime.startTime!.hour.toString().padLeft(2, '0')}:${showTime.startTime!.minute.toString().padLeft(2, '0')}'
-                      : '--:--',
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF323233),
-                  ),
-                ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r),
               ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          // 结束时间
-          Text(
-            showTime.endTime != null 
-                ? '${showTime.endTime!.hour.toString().padLeft(2, '0')}:${showTime.endTime!.minute.toString().padLeft(2, '0')}'
-                : '--:--',
-            style: TextStyle(
-              fontSize: 24.sp,
-              color: Colors.grey.shade600,
             ),
-          ),
-          SizedBox(height: 10.h),
-          // 规格和版本信息
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: [
-              if (showTime.specName != null && showTime.specName!.isNotEmpty)
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1989FA).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Text(
-                    showTime.specName!,
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: const Color(0xFF1989FA),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              if (showTime.versionCode != null)
-                Builder(
-                  builder: (context) {
-                    final versionName = _getVersionName(showTime.versionCode!);
-                    return Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8.r),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 开始时间和座位状态（同一行，右对齐）
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // 开始时间（大字体突出显示）
+                    Text(
+                      DateFormatUtil.formatShowTime(
+                        dateTime: showTime.startTime,
+                        use30HourFormat: (filterParams['use30HourFormat'] is bool && filterParams['use30HourFormat']) || 
+                                        (filterParams['use30HourFormat'] == 'true' || filterParams['use30HourFormat'] == true),
+                        baseDate: _getCurrentTabDate(),
                       ),
-                      child: Text(
-                        versionName,
+                      style: TextStyle(
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                        height: 1.2,
+                      ),
+                    ),
+                    // 右侧座位状态（图标形式）
+                    Tooltip(
+                      message: seatStatusText,
+                      child: Container(
+                        margin: EdgeInsets.only(left: 12.w),
+                        padding: EdgeInsets.all(8.w),
+                        decoration: BoxDecoration(
+                          color: seatStatusColor.withValues(alpha: 0.12),
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(
+                            color: seatStatusColor.withValues(alpha: 0.3),
+                            width: 1,
+                          ),
+                        ),
+                        child: Icon(
+                          seatStatusIcon,
+                          size: 24.sp,
+                          color: seatStatusColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                // 结束时间和时长
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // 结束时间（左对齐）
+                    Text(
+                      DateFormatUtil.formatShowTime(
+                        dateTime: showTime.endTime,
+                        use30HourFormat: (filterParams['use30HourFormat'] is bool && filterParams['use30HourFormat']) || 
+                                        (filterParams['use30HourFormat'] == 'true' || filterParams['use30HourFormat'] == true),
+                        baseDate: _getCurrentTabDate(),
+                      ),
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        color: Colors.grey.shade600,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    // 时长（右对齐）
+                    if (durationText != null)
+                      Text(
+                        durationText,
                         style: TextStyle(
-                          fontSize: 20.sp,
-                          color: Colors.orange,
+                          fontSize: 22.sp,
+                          color: Colors.grey.shade600,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                    );
-                  },
+                  ],
                 ),
-            ],
+              ],
+            ),
           ),
-          SizedBox(height: 10.h),
-          // 选座状态
-          Row(
-            children: [
-              Icon(
-                seatStatusIcon,
-                size: 22.sp,
-                color: seatStatusColor,
-              ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Text(
-                  seatStatusText,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    color: seatStatusColor,
-                    fontWeight: FontWeight.w600,
+          // 中间内容区域
+          Padding(
+            padding: EdgeInsets.all(14.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // 规格和版本信息（同一行，使用 Wrap 处理长文本）
+                if ((showTime.specName != null && showTime.specName!.isNotEmpty) || showTime.versionCode != null)
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 8.h,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      // 规格信息
+                      if (showTime.specName != null && showTime.specName!.isNotEmpty)
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1989FA).withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(8.r),
+                            border: Border.all(
+                              color: const Color(0xFF1989FA).withValues(alpha: 0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.movie_filter_rounded,
+                                size: 20.sp,
+                                color: const Color(0xFF1989FA),
+                              ),
+                              SizedBox(width: 4.w),
+                              Flexible(
+                                child: Text(
+                                  showTime.specName!,
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    color: const Color(0xFF1989FA),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      // 版本信息（如果顶部没有显示，则在这里显示）
+                      if (showTime.versionCode != null)
+                        Container(
+                          constraints: const BoxConstraints(
+                            maxWidth: double.infinity, // 限制最大宽度，避免过长
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(8.r),
+                            border: Border.all(
+                              color: Colors.orange.withValues(alpha: 0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.language_rounded,
+                                size: 20.sp,
+                                color: Colors.orange,
+                              ),
+                              SizedBox(width: 4.w),
+                              Flexible(
+                                child: Dict(
+                                  code: showTime.versionCode,
+                                  name: 'dubbingVersion',
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    color: Colors.orange,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
+      ),
       ),
     );
   }

@@ -21,7 +21,7 @@ enum FilterType {
   single,
   /// 时间范围筛选（使用滑块选择时间范围）
   timeRange,
-  /// 开关类型（Switch，只有选中和未选中两种状态）
+  /// 开关类型（Switch）
   switch_,
 }
 
@@ -996,28 +996,34 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
             _drawerSelected[filter.key] = [currentValue.toString()];
           }
         } else if (filter.type == FilterType.timeRange) {
-          // 时间范围筛选：如果没有值，根据默认值计算并保存初始值
-          // 默认选中全天：30小时制是6-29（06:00-下一天05:59），24小时制是0-24（00:00-24:00）
+          // 时间范围筛选：如果有已选择的值，使用已选择的值；否则根据默认值计算并保存初始值
+          // 默认选中全天：30小时制是6-30（06:00-下一天05:59），24小时制是0-24（00:00-24:00）
           // 存储格式：数组包含两个元素，分别是开始时间和结束时间
-          final use30HourFormat = filter.use30HourFormat ?? false;
-          final baseDate = widget.baseDate ?? DateTime.now();
-          final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
-          
-          DateTime startDateTime;
-          DateTime endDateTime;
-          
-          if (use30HourFormat) {
-            startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 6, 0);
-            endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day + 1, 5, 59, 59);
+          if (currentValue is List && currentValue.length >= 2) {
+            // 使用已选择的时间范围值
+            _drawerSelected[filter.key] = List.from(currentValue);
           } else {
-            startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 0, 0);
-            endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 23, 59, 59);
+            // 没有值，根据默认值计算并保存初始值
+            final use30HourFormat = filter.use30HourFormat ?? false;
+            final baseDate = widget.baseDate ?? DateTime.now();
+            final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+            
+            DateTime startDateTime;
+            DateTime endDateTime;
+            
+            if (use30HourFormat) {
+              startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 6, 0);
+              endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day + 1, 5, 59, 59);
+            } else {
+              startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 0, 0);
+              endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 23, 59, 59);
+            }
+            
+            _drawerSelected[filter.key] = [
+              dateFormat.format(startDateTime),
+              dateFormat.format(endDateTime),
+            ];
           }
-          
-          _drawerSelected[filter.key] = [
-            dateFormat.format(startDateTime),
-            dateFormat.format(endDateTime),
-          ];
         } else {
           // 其他类型：根据是否多选处理
           if (filter.isMultiSelect) {
@@ -1173,7 +1179,31 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                                         overlaySetState(() {
                                           if (widget.drawerFilters != null) {
                                             for (var filter in widget.drawerFilters!) {
-                                              _drawerSelected[filter.key] = [];
+                                              if (filter.type == FilterType.timeRange) {
+                                                // 时间范围类型：重置为默认值（全天）
+                                                final use30HourFormat = filter.use30HourFormat ?? false;
+                                                final baseDate = widget.baseDate ?? DateTime.now();
+                                                final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+                                                
+                                                DateTime startDateTime;
+                                                DateTime endDateTime;
+                                                
+                                                if (use30HourFormat) {
+                                                  startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 6, 0);
+                                                  endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day + 1, 5, 59, 59);
+                                                } else {
+                                                  startDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 0, 0);
+                                                  endDateTime = DateTime(baseDate.year, baseDate.month, baseDate.day, 23, 59, 59);
+                                                }
+                                                
+                                                _drawerSelected[filter.key] = [
+                                                  dateFormat.format(startDateTime),
+                                                  dateFormat.format(endDateTime),
+                                                ];
+                                              } else {
+                                                // 其他类型：重置为空数组
+                                                _drawerSelected[filter.key] = [];
+                                              }
                                             }
                                           }
                                         });
