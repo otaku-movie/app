@@ -55,6 +55,7 @@ TheaterHallShowTime _$TheaterHallShowTimeFromJson(Map<String, dynamic> json) =>
       startTime: json['startTime'] as String?,
       endTime: json['endTime'] as String?,
       specName: json['specName'] as String?,
+      versionCode: (json['versionCode'] as num?)?.toInt(),
       movieShowTimeTags: (json['movieShowTimeTags'] as List<dynamic>?)
           ?.map((e) => ShowTimeTag.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -78,6 +79,7 @@ Map<String, dynamic> _$TheaterHallShowTimeToJson(
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'specName': instance.specName,
+      'versionCode': instance.versionCode,
       'movieShowTimeTags':
           instance.movieShowTimeTags?.map((e) => e.toJson()).toList(),
       'showTimeTags': instance.showTimeTags?.map((e) => e.toJson()).toList(),

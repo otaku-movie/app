@@ -60,6 +60,8 @@ class TheaterHallShowTime {
 
     final String? specName;
 
+    final int? versionCode;
+
     final List<ShowTimeTag>? movieShowTimeTags;
     
     final List<ShowTimeTag>? showTimeTags;
@@ -78,6 +80,7 @@ class TheaterHallShowTime {
         this.startTime,
         this.endTime,
         this.specName,
+        this.versionCode,
         this.movieShowTimeTags,
         this.showTimeTags,
         this.subtitle,

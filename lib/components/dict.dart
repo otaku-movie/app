@@ -6,11 +6,19 @@ import 'package:otaku_movie/response/dict_response.dart';
 class Dict extends StatefulWidget {
   final int? code;
   final String? name;
+  final TextStyle? style;
+  final int? maxLines;
+  final TextOverflow? overflow;
+  final TextAlign? textAlign;
 
   const Dict({
     super.key,
     this.code,
     this.name,
+    this.style,
+    this.maxLines,
+    this.overflow,
+    this.textAlign,
   });
 
   @override
@@ -38,12 +46,30 @@ class _DictState extends State<Dict> {
             (item) => item.code == widget.code,
             orElse: () => DictItemResponse(name: 'Not Found'), // 提供默认值
           );
-          return Text(firstWhere.name ?? '');
+          return Text(
+            firstWhere.name ?? '',
+            style: widget.style,
+            maxLines: widget.maxLines,
+            overflow: widget.overflow,
+            textAlign: widget.textAlign,
+          );
         } catch (e) {
-          return Text('Error: ${e.toString()}');
+          return Text(
+            'Error: ${e.toString()}',
+            style: widget.style,
+            maxLines: widget.maxLines,
+            overflow: widget.overflow,
+            textAlign: widget.textAlign,
+          );
         }
       } else {
-        return const Text('');
+        return Text(
+          '',
+          style: widget.style,
+          maxLines: widget.maxLines,
+          overflow: widget.overflow,
+          textAlign: widget.textAlign,
+        );
       }
     });
   }

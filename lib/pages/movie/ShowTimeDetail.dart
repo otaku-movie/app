@@ -9,6 +9,7 @@ import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_show_time_detail_response.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_showing_response.dart';
+import 'package:otaku_movie/components/dict.dart';
 import '../../generated/l10n.dart';
 
 class ShowTimeDetail extends StatefulWidget {
@@ -189,6 +190,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     getCinemaMovieShowingData();
     // _tabController = TabController(length: 0, vsync: this);
   }
+
 
   @override
   void dispose() {
@@ -446,13 +448,13 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                       Container(
                                         padding: EdgeInsets.all(8.w),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.15),
+                                          color: Colors.white.withValues(alpha: 0.15),
                                           borderRadius: BorderRadius.circular(8.r),
                                         ),
                                         child: Icon(
                                           Icons.location_on_outlined,
                                           color: Colors.white,
-                                          size: 20.sp,
+                                          size: 22.sp,
                                         ),
                                       ),
                                       SizedBox(width: 12.w),
@@ -479,13 +481,13 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                       Container(
                                         padding: EdgeInsets.all(8.w),
                                         decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.15),
+                                          color: Colors.white.withValues(alpha: 0.15),
                                           borderRadius: BorderRadius.circular(8.r),
                                         ),
                                         child: Icon(
                                           Icons.phone_outlined,
                                           color: Colors.white,
-                                          size: 20.sp,
+                                          size: 22.sp,
                                         ),
                                       ),
                                       SizedBox(width: 12.w),
@@ -567,7 +569,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                       borderRadius: BorderRadius.circular(16.r),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withOpacity(0.05),
+                                          color: Colors.black.withValues(alpha: 0.05),
                                           blurRadius: 8,
                                           offset: const Offset(0, 2),
                                         ),
@@ -627,10 +629,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                       Container(
                                                         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                                                         decoration: BoxDecoration(
-                                                          color: const Color(0xFF1989FA).withOpacity(0.1),
-                                                          borderRadius: BorderRadius.circular(8.r),
-                                                          border: Border.all(
-                                                            color: const Color(0xFF1989FA).withOpacity(0.3),
+                                                            color: const Color(0xFF1989FA).withValues(alpha: 0.1),
+                                                            borderRadius: BorderRadius.circular(8.r),
+                                                            border: Border.all(
+                                                              color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                                                             width: 1,
                                                           ),
                                                         ),
@@ -639,7 +641,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                           children: [
                                                             Icon(
                                                               Icons.meeting_room_rounded,
-                                                              size: 18.sp,
+                                                              size: 22.sp,
                                                               color: const Color(0xFF1989FA),
                                                             ),
                                                             SizedBox(width: 6.w),
@@ -655,41 +657,81 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                         ),
                                                       ),
                                                       // 规格
-                                                      Container(
-                                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                                        decoration: BoxDecoration(
-                                                          gradient: LinearGradient(
-                                                            colors: [
-                                                              const Color(0xFFFFD700).withOpacity(0.2),
-                                                              const Color(0xFFFFA500).withOpacity(0.2),
+                                                      if (children.specName != null && children.specName!.isNotEmpty)
+                                                        Container(
+                                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                                          decoration: BoxDecoration(
+                                                            gradient: LinearGradient(
+                                                              colors: [
+                                                                const Color(0xFFFFD700).withValues(alpha: 0.2),
+                                                                const Color(0xFFFFA500).withValues(alpha: 0.2),
+                                                              ],
+                                                            ),
+                                                            borderRadius: BorderRadius.circular(8.r),
+                                                            border: Border.all(
+                                                              color: const Color(0xFFFFA500).withValues(alpha: 0.5),
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Icon(
+                                                                Icons.high_quality_rounded,
+                                                                size: 22.sp,
+                                                                color: const Color(0xFFFFA500),
+                                                              ),
+                                                              SizedBox(width: 6.w),
+                                                              Flexible(
+                                                                child: Text(
+                                                                  children.specName!,
+                                                                  style: TextStyle(
+                                                                    fontSize: 22.sp,
+                                                                    color: const Color(0xFFFFA500),
+                                                                    fontWeight: FontWeight.w600,
+                                                                  ),
+                                                                  maxLines: 1,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                ),
+                                                              ),
                                                             ],
                                                           ),
-                                                          borderRadius: BorderRadius.circular(8.r),
-                                                          border: Border.all(
-                                                            color: const Color(0xFFFFA500).withOpacity(0.5),
-                                                            width: 1,
+                                                        ),
+                                                      // 版本信息
+                                                      if (children.versionCode != null)
+                                                        Container(
+                                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.orange.withValues(alpha: 0.12),
+                                                            borderRadius: BorderRadius.circular(8.r),
+                                                            border: Border.all(
+                                                              color: Colors.orange.withValues(alpha: 0.3),
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Icon(
+                                                                Icons.language_rounded,
+                                                                size: 22.sp,
+                                                                color: Colors.orange,
+                                                              ),
+                                                              SizedBox(width: 6.w),
+                                                              Flexible(
+                                                                child: Dict(
+                                                                  code: children.versionCode,
+                                                                  name: 'dubbingVersion',
+                                                                  style: TextStyle(
+                                                                    fontSize: 22.sp,
+                                                                    color: Colors.orange,
+                                                                    fontWeight: FontWeight.w600,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                        child: Row(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Icon(
-                                                              Icons.high_quality_rounded,
-                                                              size: 18.sp,
-                                                              color: const Color(0xFFFFA500),
-                                                            ),
-                                                            SizedBox(width: 6.w),
-                                                            Text(
-                                                              children.specName ?? '',
-                                                              style: TextStyle(
-                                                                fontSize: 22.sp,
-                                                                color: const Color(0xFFFFA500),
-                                                                fontWeight: FontWeight.w600,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
                                                       // 座位状态
                                                       Builder(
                                                         builder: (context) {
@@ -697,10 +739,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                           return Container(
                                                             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                                                             decoration: BoxDecoration(
-                                                              color: seatInfo['color'].withOpacity(0.1),
+                                                              color: (seatInfo['color'] as Color).withValues(alpha: 0.1),
                                                               borderRadius: BorderRadius.circular(8.r),
                                                               border: Border.all(
-                                                                color: seatInfo['color'].withOpacity(0.3),
+                                                                color: (seatInfo['color'] as Color).withValues(alpha: 0.3),
                                                                 width: 1,
                                                               ),
                                                             ),
@@ -709,7 +751,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                               children: [
                                                                 Icon(
                                                                   seatInfo['icon'],
-                                                                  size: 18.sp,
+                                                                  size: 22.sp,
                                                                   color: seatInfo['color'],
                                                                 ),
                                                                 SizedBox(width: 6.w),
@@ -727,7 +769,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                                     '(${seatInfo['availableSeats']}/${seatInfo['totalSeats']})',
                                                                     style: TextStyle(
                                                                       fontSize: 20.sp,
-                                                                      color: seatInfo['color'].withOpacity(0.7),
+                                                                      color: (seatInfo['color'] as Color).withValues(alpha: 0.7),
                                                                       fontWeight: FontWeight.w500,
                                                                     ),
                                                                   ),
@@ -762,7 +804,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                   borderRadius: BorderRadius.circular(25.r),
                                                   boxShadow: [
                                                     BoxShadow(
-                                                      color: const Color(0xFF1989FA).withOpacity(0.3),
+                                                      color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                                                       blurRadius: 8,
                                                       offset: const Offset(0, 4),
                                                     ),
@@ -813,7 +855,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                         borderRadius: BorderRadius.circular(6.r),
                                                         boxShadow: [
                                                           BoxShadow(
-                                                            color: const Color(0xFFFF6B6B).withOpacity(0.2),
+                                                            color: const Color(0xFFFF6B6B).withValues(alpha: 0.2),
                                                             blurRadius: 4,
                                                             offset: const Offset(0, 2),
                                                           ),
@@ -825,7 +867,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                           Icon(
                                                             Icons.local_activity,
                                                             color: Colors.white,
-                                                            size: 16.sp,
+                                                            size: 22.sp,
                                                           ),
                                                           SizedBox(width: 4.w),
                                                           Text(
@@ -848,7 +890,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                       height: 32.h,
                                                       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                                                       decoration: BoxDecoration(
-                                                        color: const Color(0xFFFFA500).withOpacity(0.1),
+                                                        color: const Color(0xFFFFA500).withValues(alpha: 0.1),
                                                         borderRadius: BorderRadius.circular(6.r),
                                                         border: Border.all(
                                                           color: const Color(0xFFFFA500),
@@ -861,7 +903,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                           Icon(
                                                             Icons.subtitles_outlined,
                                                             color: const Color(0xFFFFA500),
-                                                            size: 16.sp,
+                                                            size: 22.sp,
                                                           ),
                                                           SizedBox(width: 4.w),
                                                           Text(
