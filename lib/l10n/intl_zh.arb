@@ -152,7 +152,7 @@
   "about_components_showTimeList_noShowTimeInfo": "暂无场次信息",
   "about_components_showTimeList_moreShowTimes": "还有 {count} 个场次...",
   "about_components_showTimeList_timeRange": "开场时间",
-  "about_components_showTimeList_dubbingVersion": "吹き替え版",
+  "about_components_showTimeList_dubbingVersion": "配音版",
   "about_components_showTimeList_seatStatus_soldOut": "售罄",
   "about_components_showTimeList_seatStatus_limited": "紧张",
   "about_components_showTimeList_seatStatus_available": "充足",

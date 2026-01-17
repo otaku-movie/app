@@ -437,7 +437,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get about_components_showTimeList_timeRange => '开场时间';
 
   @override
-  String get about_components_showTimeList_dubbingVersion => '吹き替え版';
+  String get about_components_showTimeList_dubbingVersion => '配音版';
 
   @override
   String get about_components_showTimeList_seatStatus_soldOut => '售罄';
