@@ -80,7 +80,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "全部",
     ),
     "about_components_showTimeList_dubbingVersion":
-        MessageLookupByLibrary.simpleMessage("吹き替え版"),
+        MessageLookupByLibrary.simpleMessage("配音版"),
     "about_components_showTimeList_moreShowTimes": m0,
     "about_components_showTimeList_noData":
         MessageLookupByLibrary.simpleMessage("暂无数据"),
