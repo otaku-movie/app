@@ -151,6 +151,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "about_movieShowList_dropdown_version":
         MessageLookupByLibrary.simpleMessage("Version"),
+    "about_movieShowList_dropdown_dimensionType":
+        MessageLookupByLibrary.simpleMessage("2D/3D"),
     "about_privacy_policy": MessageLookupByLibrary.simpleMessage(
       "View Privacy Policy",
     ),
@@ -706,6 +708,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "movieTicketType_totalPrice": MessageLookupByLibrary.simpleMessage(
       "Total Price",
     ),
+    "movieTicketType_singleSeatPrice": MessageLookupByLibrary.simpleMessage(
+      "Price per seat",
+    ),
+    "movieTicketType_seatCountLabel": MessageLookupByLibrary.simpleMessage(
+      " seats",
+    ),
+    "movieTicketType_priceRuleTitle": MessageLookupByLibrary.simpleMessage(
+      "Price Calculation",
+    ),
+    "movieTicketType_priceRuleFormula": MessageLookupByLibrary.simpleMessage(
+      "Price per seat = Area price + Ticket type price + Spec surcharge (e.g. 3D, IMAX; 2D has none)",
+    ),
     "orderDetail_countdown_hoursMinutes": m12,
     "orderDetail_countdown_minutesSeconds": m13,
     "orderDetail_countdown_seconds": m14,
@@ -720,6 +734,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "orderDetail_orderMessage": MessageLookupByLibrary.simpleMessage(
       "Order Information",
+    ),
+    "orderDetail_failureReason": MessageLookupByLibrary.simpleMessage(
+      "Failure Reason",
     ),
     "orderDetail_orderNumber": MessageLookupByLibrary.simpleMessage(
       "Order Number",
@@ -852,6 +869,11 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("Temporary card removed"),
     "payment_selectCreditCard_tempCardSelected":
         MessageLookupByLibrary.simpleMessage("Temporary credit card selected"),
+    "payError_back": MessageLookupByLibrary.simpleMessage("Back"),
+    "payError_message": MessageLookupByLibrary.simpleMessage(
+      "Something went wrong with your order. Please try again later.",
+    ),
+    "payError_title": MessageLookupByLibrary.simpleMessage("Payment Failed"),
     "payment_selectCreditCard_title": MessageLookupByLibrary.simpleMessage(
       "Select Credit Card",
     ),
@@ -922,6 +944,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "seatSelection_cancelSeatFailed": MessageLookupByLibrary.simpleMessage(
       "Failed to cancel seat selection, please try again",
     ),
+    "seatSelection_goToPay": MessageLookupByLibrary.simpleMessage("Go to Pay"),
+    "seatSelection_hasLockedOrderMessage": MessageLookupByLibrary.simpleMessage(
+      "You have an unpaid order. Please complete payment first.",
+    ),
+    "seatSelection_hasLockedOrderTitle": MessageLookupByLibrary.simpleMessage(
+      "Unpaid Order",
+    ),
+    "seatSelection_later": MessageLookupByLibrary.simpleMessage("Later"),
     "seatSelection_cancelSeatTitle": MessageLookupByLibrary.simpleMessage(
       "Cancel Seat Selection",
     ),

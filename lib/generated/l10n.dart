@@ -1669,6 +1669,16 @@ class S {
     );
   }
 
+  /// `2D/3D`
+  String get about_movieShowList_dropdown_dimensionType {
+    return Intl.message(
+      '2D/3D',
+      name: 'about_movieShowList_dropdown_dimensionType',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Couple Seat`
   String get enum_seatType_coupleSeat {
     return Intl.message(
@@ -2634,6 +2644,46 @@ class S {
     );
   }
 
+  /// `Price per seat`
+  String get movieTicketType_singleSeatPrice {
+    return Intl.message(
+      'Price per seat',
+      name: 'movieTicketType_singleSeatPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` seats` (seat count unit, e.g. "3 seats")
+  String get movieTicketType_seatCountLabel {
+    return Intl.message(
+      ' seats',
+      name: 'movieTicketType_seatCountLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price Calculation`
+  String get movieTicketType_priceRuleTitle {
+    return Intl.message(
+      'Price Calculation',
+      name: 'movieTicketType_priceRuleTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price per seat = Area price + Ticket type price + Spec surcharge (e.g. 3D, IMAX; 2D has none)`
+  String get movieTicketType_priceRuleFormula {
+    return Intl.message(
+      'Price per seat = Area price + Ticket type price + Spec surcharge (e.g. 3D, IMAX; 2D has none)',
+      name: 'movieTicketType_priceRuleFormula',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Actual Payment`
   String get movieTicketType_actualPrice {
     return Intl.message(
@@ -2957,6 +3007,27 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  String get seatSelection_hasLockedOrderTitle {
+    return Intl.message('Unpaid Order', name: 'seatSelection_hasLockedOrderTitle', desc: '', args: []);
+  }
+
+  String get seatSelection_hasLockedOrderMessage {
+    return Intl.message(
+      'You have an unpaid order. Please complete payment first.',
+      name: 'seatSelection_hasLockedOrderMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get seatSelection_goToPay {
+    return Intl.message('Go to Pay', name: 'seatSelection_goToPay', desc: '', args: []);
+  }
+
+  String get seatSelection_later {
+    return Intl.message('Later', name: 'seatSelection_later', desc: '', args: []);
   }
 
   /// `My Profile`
@@ -3344,6 +3415,16 @@ class S {
     return Intl.message(
       'Order Information',
       name: 'orderDetail_orderMessage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failure Reason`
+  String get orderDetail_failureReason {
+    return Intl.message(
+      'Failure Reason',
+      name: 'orderDetail_failureReason',
       desc: '',
       args: [],
     );
@@ -3904,6 +3985,36 @@ class S {
     return Intl.message(
       'Temporary credit card selected',
       name: 'payment_selectCreditCard_tempCardSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment Failed`
+  String get payError_title {
+    return Intl.message(
+      'Payment Failed',
+      name: 'payError_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong with your order. Please try again later.`
+  String get payError_message {
+    return Intl.message(
+      'Something went wrong with your order. Please try again later.',
+      name: 'payError_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back`
+  String get payError_back {
+    return Intl.message(
+      'Back',
+      name: 'payError_back',
       desc: '',
       args: [],
     );

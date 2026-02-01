@@ -43,7 +43,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   List<AreaResponse> areaTreeList = [];
   List<LanguageResponse> languageList = []; // 添加字幕列表
   List<ShowTimeTag> showTimeTagList = []; // 添加上映标签列表
-  List<DictItemResponse> versionList = []; // 添加版本列表
+  List<DictItemResponse> versionList = []; // 版本列表（字典 dubbingVersion）
+  List<DictItemResponse> dimensionList = []; // 2D/3D 列表（字典 dimensionType）
   late DictController dictController; // 字典控制器
   int tabLength = 0;
   bool loading = false;
@@ -211,13 +212,14 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
   Future<void> getVersionList() async {
     if (!mounted) return;
-    // 从字典控制器获取版本数据
-    if (dictController.dict.value['dubbingVersion'] != null) {
-      setState(() {
+    setState(() {
+      if (dictController.dict.value['dubbingVersion'] != null) {
         versionList = dictController.dict.value['dubbingVersion']!;
-      });
-      print('版本列表: $versionList');
-    }
+      }
+      if (dictController.dict.value['dimensionType'] != null) {
+        dimensionList = dictController.dict.value['dimensionType']!;
+      }
+    });
   }
 
   Future<void> getLocation() async {
@@ -315,6 +317,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
     final showTimeTagId = _getIntFromFilter('showTimeTagId');
     if (showTimeTagId != null) requestData["showTimeTagId"] = showTimeTagId;
+
+    final dimensionType = _getIntFromFilter('dimensionType');
+    if (dimensionType != null) requestData["dimensionType"] = dimensionType;
 
     final versionCode = _getIntFromFilter('versionCode');
     if (versionCode != null) requestData["versionCode"] = versionCode;
@@ -733,6 +738,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         ],
         
       ),
+     
       FilterOption(
         key: 'versionCode',
         title: S.of(context).about_movieShowList_dropdown_version,
@@ -836,6 +842,18 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   ],
                 ),
                 FilterOption(
+                  key: 'dimensionType',
+                  title: S.of(context).about_movieShowList_dropdown_dimensionType,
+                  icon: Icons.visibility_rounded,
+                  type: FilterType.single,
+                  values: [
+                    FilterValue(id: '', name: S.of(context).about_components_showTimeList_all),
+                    ...dimensionList
+                        .where((item) => item.name != null && item.name!.isNotEmpty)
+                        .map((item) => FilterValue(id: item.code.toString(), name: item.name!)),
+                  ],
+                ),
+                FilterOption(
                   key: 'specId',
                   title: S.of(context).about_movieShowList_dropdown_screenSpec,
                   icon: Icons.movie_filter_rounded,
@@ -843,12 +861,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                     FilterValue(id: '', name: S.of(context).about_components_showTimeList_all), // 添加"全部"选项
                     ...cinemaSpec.where((item) => item.name != null && item.name!.isNotEmpty).map((item) {
                       return FilterValue(id: item.id.toString(), name: item.name!);
-                  }).toList(),
+                    }).toList(),
                   ],
                 ),
-                 
-                
-               
               ],
               initialSelected: filterParams, // 只初始化时传递
               onConfirm: (selected) {
@@ -1292,16 +1307,18 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // 规格和版本信息（同一行，使用 Wrap 处理长文本）
-                if ((showTime.specName != null && showTime.specName!.isNotEmpty) || showTime.versionCode != null)
+                // 规格+2D/3D、版本信息（规格在前、2D/3D 在后合并为一块，同一行 Wrap）
+                if ((showTime.specNames != null && showTime.specNames!.isNotEmpty) ||
+                    showTime.dimensionType != null ||
+                    showTime.versionCode != null)
                   Wrap(
                     spacing: 8.w,
                     runSpacing: 8.h,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      // 规格信息
-                      if (showTime.specName != null && showTime.specName!.isNotEmpty)
-                        Container(
+                      // 规格信息：规格名在前、2D/3D 在后，合并为一块如 "IMAX 3D"
+                      if (showTime.specNames != null && showTime.specNames!.isNotEmpty)
+                        ...showTime.specNames!.map((name) => Container(
                           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
                           decoration: BoxDecoration(
                             color: const Color(0xFF1989FA).withValues(alpha: 0.12),
@@ -1322,7 +1339,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                               SizedBox(width: 4.w),
                               Flexible(
                                 child: Text(
-                                  showTime.specName!,
+                                  name,
                                   style: TextStyle(
                                     fontSize: 20.sp,
                                     color: const Color(0xFF1989FA),
@@ -1330,6 +1347,51 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (showTime.dimensionType != null) ...[
+                                SizedBox(width: 4.w),
+                                Dict(
+                                  code: showTime.dimensionType,
+                                  name: 'dimensionType',
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    color: const Color(0xFF1989FA),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ))
+                      else if (showTime.dimensionType != null)
+                        // 仅有 2D/3D 无规格时单独显示（字典 dimensionType）
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF7232DD).withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(8.r),
+                            border: Border.all(
+                              color: const Color(0xFF7232DD).withValues(alpha: 0.3),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.visibility_rounded,
+                                size: 20.sp,
+                                color: const Color(0xFF7232DD),
+                              ),
+                              SizedBox(width: 4.w),
+                              Dict(
+                                code: showTime.dimensionType,
+                                name: 'dimensionType',
+                                style: TextStyle(
+                                  fontSize: 20.sp,
+                                  color: const Color(0xFF7232DD),
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],

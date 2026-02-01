@@ -52,12 +52,12 @@ class CreditCardSaveRequest {
 
 @JsonSerializable(fieldRename: FieldRename.none)
 class PaymentRequest {
-  final int orderId;
+  final String orderNumber;
   final int? creditCardId;
   final TempCard? tempCard;
 
   PaymentRequest({
-    required this.orderId,
+    required this.orderNumber,
     this.creditCardId,
     this.tempCard,
   });

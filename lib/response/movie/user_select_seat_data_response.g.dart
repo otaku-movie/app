@@ -17,10 +17,16 @@ UserSelectSeatDataResponse _$UserSelectSeatDataResponseFromJson(
       startTime: json['startTime'] as String?,
       endTime: json['endTime'] as String?,
       specName: json['specName'] as String?,
+      dimensionType: (json['dimensionType'] as num?)?.toInt(),
       cinemaId: (json['cinemaId'] as num?)?.toInt(),
       cinemaName: json['cinemaName'] as String?,
       theaterHallId: (json['theaterHallId'] as num?)?.toInt(),
       theaterHallName: json['theaterHallName'] as String?,
+      specPriceList: (json['specPriceList'] as List<dynamic>?)
+          ?.map((e) => SpecPrice.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      displayTypeName: json['displayTypeName'] as String?,
+      displayTypeSurcharge: (json['displayTypeSurcharge'] as num?)?.toInt(),
       seat: (json['seat'] as List<dynamic>?)
           ?.map((e) => Seat.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -37,10 +43,14 @@ Map<String, dynamic> _$UserSelectSeatDataResponseToJson(
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'specName': instance.specName,
+      'dimensionType': instance.dimensionType,
       'cinemaId': instance.cinemaId,
       'cinemaName': instance.cinemaName,
       'theaterHallId': instance.theaterHallId,
       'theaterHallName': instance.theaterHallName,
+      'specPriceList': instance.specPriceList?.map((e) => e.toJson()).toList(),
+      'displayTypeName': instance.displayTypeName,
+      'displayTypeSurcharge': instance.displayTypeSurcharge,
       'seat': instance.seat?.map((e) => e.toJson()).toList(),
     };
 
@@ -52,7 +62,6 @@ Seat _$SeatFromJson(Map<String, dynamic> json) => Seat(
       areaPrice: (json['areaPrice'] as num?)?.toInt(),
       areaName: json['areaName'] as String?,
       movieTicketTypeId: (json['movieTicketTypeId'] as num?)?.toInt(),
-      plusPrice: (json['plusPrice'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$SeatToJson(Seat instance) => <String, dynamic>{
@@ -63,5 +72,15 @@ Map<String, dynamic> _$SeatToJson(Seat instance) => <String, dynamic>{
       'areaPrice': instance.areaPrice,
       'areaName': instance.areaName,
       'movieTicketTypeId': instance.movieTicketTypeId,
+    };
+
+SpecPrice _$SpecPriceFromJson(Map<String, dynamic> json) => SpecPrice(
+      name: json['name'] as String?,
+      plusPrice: (json['plusPrice'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$SpecPriceToJson(SpecPrice instance) =>
+    <String, dynamic>{
+      'name': instance.name,
       'plusPrice': instance.plusPrice,
     };

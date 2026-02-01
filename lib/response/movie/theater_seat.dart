@@ -15,11 +15,19 @@ class TheaterSeat {
     
     final List<AreaElement>? area;
 
+    /// 当前用户在本场次是否有未支付的锁定订单
+    final bool? hasLockedOrder;
+
+    /// 未支付订单号，用于跳转支付页
+    final String? orderNumber;
+
     TheaterSeat({
         this.maxSelectSeatCount,
         this.seat,
         this.aisle,
         this.area,
+        this.hasLockedOrder,
+        this.orderNumber,
     });
 
     factory TheaterSeat.fromJson(Map<String, dynamic> json) => _$TheaterSeatFromJson(json);

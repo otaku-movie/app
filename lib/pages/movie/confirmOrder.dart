@@ -8,6 +8,7 @@ import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
+import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/order/order_detail_response.dart';
@@ -19,11 +20,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/controller/SeatSelectionController.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 
 class ConfirmOrder extends StatefulWidget {
-  final String? id;
+  final String? orderNumber;
 
-  const ConfirmOrder({super.key, this.id});
+  const ConfirmOrder({super.key, this.orderNumber});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -34,6 +36,8 @@ class _PageState extends State<ConfirmOrder> {
   OrderDetailResponse data = OrderDetailResponse();
   List<PaymentMethodResponse> paymentMethodData = [];
   bool payLoading = false;
+  /// 同步防抖：防止 setState 未生效前重复点击
+  bool _paySubmitting = false;
   bool loading = false;
   final EasyRefreshController _refreshController = EasyRefreshController(
     controlFinishRefresh: true,
@@ -56,8 +60,20 @@ class _PageState extends State<ConfirmOrder> {
   int? defaultPay;
   Timer? _timer;
 
+  /// 订单号（字符串），无效时返回 null
+  String? get _orderNumber {
+    final raw = widget.orderNumber;
+    if (raw == null || raw.isEmpty || raw == 'null') return null;
+    return raw;
+  }
 
   getData({bool isRefresh = false}) {
+    final orderNumber = _orderNumber;
+    if (orderNumber == null) {
+      ToastService.showError('订单号无效');
+      if (mounted) context.pop();
+      return;
+    }
     if (!isRefresh) {
     setState(() {
       loading = true;
@@ -67,7 +83,7 @@ class _PageState extends State<ConfirmOrder> {
       path: '/movieOrder/detail',
       method: 'GET', 
       queryParameters: {
-        "id": int.parse(widget.id!)
+        "orderNumber": orderNumber
       },
       fromJsonT: (json) {
         return OrderDetailResponse.fromJson(json);
@@ -76,6 +92,7 @@ class _PageState extends State<ConfirmOrder> {
       if (res.data != null) {
         setState(() {
           data = res.data!;
+          _applyPayDeadlineToCountDown();
         });
       }
     }).whenComplete(() {
@@ -116,6 +133,19 @@ class _PageState extends State<ConfirmOrder> {
         _refreshController.finishRefresh(IndicatorResult.success);
       }
     });
+  }
+
+  /// 根据订单的支付截止时间（payDeadline）更新倒计时；若无则保持原有 countDown
+  void _applyPayDeadlineToCountDown() {
+    final deadlineStr = data.payDeadline;
+    if (deadlineStr == null || deadlineStr.isEmpty) return;
+    final deadline = DateFormatUtil.parseDate(deadlineStr, inputFormat: 'yyyy-MM-dd HH:mm:ss') ?? DateTime.tryParse(deadlineStr);
+    if (deadline == null) return;
+    final diff = deadline.difference(DateTime.now());
+    if (diff.inSeconds > 0) {
+      countDown = diff.inSeconds;
+      allTime = countDown;
+    }
   }
 
   // 刷新数据
@@ -179,12 +209,16 @@ class _PageState extends State<ConfirmOrder> {
   // 订单超时处理
   Future<void> _handleOrderTimeout() async {
     if (!mounted) return;
-    
+    final orderNumber = _orderNumber;
+    if (orderNumber == null) {
+      if (mounted) context.pop();
+      return;
+    }
     try {
       final controller = Get.isRegistered<SeatSelectionController>()
           ? Get.find<SeatSelectionController>()
           : Get.put(SeatSelectionController(), permanent: true);
-      await controller.timeoutOrder(context, orderId: int.parse(widget.id!));
+      await controller.timeoutOrder(context, orderNumber: orderNumber);
 
       if (!mounted) return;
       // 回退到 selectSeat
@@ -200,12 +234,16 @@ class _PageState extends State<ConfirmOrder> {
   // 取消订单并返回到选座页面
   Future<void> _cancelOrderAndReturn() async {
     if (!mounted) return;
-    
+    final orderNumber = _orderNumber;
+    if (orderNumber == null) {
+      if (mounted) context.pop();
+      return;
+    }
     try {
       final controller = Get.isRegistered<SeatSelectionController>()
           ? Get.find<SeatSelectionController>()
           : Get.put(SeatSelectionController(), permanent: true);
-      await controller.cancelOrder(context, orderId: int.parse(widget.id!));
+      await controller.cancelOrder(context, orderNumber: orderNumber);
 
       if (!mounted) return;
       // 回退到 selectSeat
@@ -488,21 +526,34 @@ class _PageState extends State<ConfirmOrder> {
     );
   }
 
+  /// 拦截返回/右滑：弹出取消订单确认，确认后调用取消订单接口再返回
+  Future<void> _handleBackOrCancelOrder() async {
+    final orderNumber = _orderNumber;
+    if (orderNumber == null || orderNumber.isEmpty) {
+      if (context.mounted) context.pop();
+      return;
+    }
+    final shouldCancel = await SeatCancelManager.showCancelOrderDialog(context);
+    if (!context.mounted) return;
+    if (shouldCancel == true) {
+      await _cancelOrderAndReturn();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final hasOrder = _orderNumber != null && _orderNumber!.isNotEmpty;
+    return PopScope(
+      canPop: !hasOrder,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await _handleBackOrCancelOrder();
+      },
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
         title: Text(S.of(context).confirmOrder_title, style: const TextStyle(color: Colors.white)),
-        onBackButtonPressed: () async {
-          // 显示确认对话框
-          final shouldCancel = await SeatCancelManager.showCancelOrderDialog(context);
-
-          if (shouldCancel == true) {
-            // 用户确认取消，调用取消订单方法
-            await _cancelOrderAndReturn();
-          }
-        },
+        onBackButtonPressed: _handleBackOrCancelOrder,
       ),
       body: AppErrorWidget(
         loading: loading,
@@ -533,7 +584,7 @@ class _PageState extends State<ConfirmOrder> {
                         borderRadius: BorderRadius.circular(24.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -547,7 +598,7 @@ class _PageState extends State<ConfirmOrder> {
                               borderRadius: BorderRadius.circular(20.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.15),
+                                  color: Colors.black.withValues(alpha: 0.15),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -711,13 +762,32 @@ class _PageState extends State<ConfirmOrder> {
                                           color: Colors.orange.shade100,
                                           borderRadius: BorderRadius.circular(4.r),
                                         ),
-                                        child: Text(
-                                          data.specName ?? '无规格信息',
-                                          style: TextStyle(
-                                            fontSize: 18.sp,
-                                            color: Colors.orange.shade800,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              (data.specNames != null && data.specNames!.isNotEmpty)
+                                                  ? data.specNames!.join('、')
+                                                  : (data.specName ?? '无规格信息'),
+                                              style: TextStyle(
+                                                fontSize: 18.sp,
+                                                color: Colors.orange.shade800,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            if (data.dimensionType != null) ...[
+                                              SizedBox(width: 6.w),
+                                              Dict(
+                                                code: data.dimensionType,
+                                                name: 'dimensionType',
+                                                style: TextStyle(
+                                                  fontSize: 18.sp,
+                                                  color: Colors.orange.shade800,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ],
                                         ),
                                       ),
                                     ],
@@ -803,7 +873,7 @@ class _PageState extends State<ConfirmOrder> {
                               Container(
                                 padding: EdgeInsets.all(10.w),
                                 decoration: BoxDecoration(
-                                  color: Color(0xFF667EEA).withOpacity(0.1),
+                                  color: Color(0xFF667EEA).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(10.r),
                                 ),
                                 child: Icon(
@@ -861,7 +931,7 @@ class _PageState extends State<ConfirmOrder> {
                                     color: Color(0xFFF8F9FA),
                                     borderRadius: BorderRadius.circular(12.r),
                                     border: Border.all(
-                                      color: Color(0xFF667EEA).withOpacity(0.1),
+                                      color: Color(0xFF667EEA).withValues(alpha: 0.1),
                                       width: 1,
                                     ),
                                   ),
@@ -889,7 +959,7 @@ class _PageState extends State<ConfirmOrder> {
                                         Container(
                                           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                                           decoration: BoxDecoration(
-                                            color: Color(0xFF667EEA).withOpacity(0.1),
+                                            color: Color(0xFF667EEA).withValues(alpha: 0.1),
                                             borderRadius: BorderRadius.circular(8.r),
                                           ),
                                           child: Text(
@@ -929,7 +999,7 @@ class _PageState extends State<ConfirmOrder> {
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.blue.withOpacity(0.1),
+                            color: Colors.blue.withValues(alpha: 0.1),
                             blurRadius: 8,
                             offset: Offset(0, 2),
                           ),
@@ -969,7 +1039,7 @@ class _PageState extends State<ConfirmOrder> {
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: Colors.grey.withValues(alpha: 0.1),
                             blurRadius: 10,
                             offset: Offset(0, 4),
                           ),
@@ -1085,7 +1155,7 @@ class _PageState extends State<ConfirmOrder> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -1152,60 +1222,83 @@ class _PageState extends State<ConfirmOrder> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(50.r),
                         onTap: payLoading ? null : () async {
+                      // 防抖：同步标志 + loading，防止重复点击
+                      if (_paySubmitting || payLoading) return;
+                      _paySubmitting = true;
+                      setState(() => payLoading = true);
+
                       // 检查选择的支付方式
                       final selectedPayment = paymentMethodData.firstWhere(
                         (payment) => payment.id == defaultPay,
                         orElse: () => PaymentMethodResponse(),
                       );
-                      
+
                       if (selectedPayment.name == 'クレジットカード') {
                         // 跳转到选择信用卡页面
+                        final orderNumber = _orderNumber;
+                        if (orderNumber == null) {
+                          _paySubmitting = false;
+                          if (mounted) setState(() => payLoading = false);
+                          return;
+                        }
                         await context.pushNamed(
                           'selectCreditCard',
                           queryParameters: {
-                            'orderId': '${data.id}',
+                            'orderNumber': orderNumber,
                           },
                         );
+                        _paySubmitting = false;
+                        if (mounted) setState(() => payLoading = false);
                         return;
                       }
-                      
+
                       // 其他支付方式，直接调用支付接口
                       // 已取消倒计时，防止过程中触发超时
-                      setState(() {
-                        payLoading = true;
-                      });
-
                       try {
                         final ctrl = Get.isRegistered<SeatSelectionController>()
                             ? Get.find<SeatSelectionController>()
                             : Get.put(SeatSelectionController(), permanent: true);
                         ctrl.suppressOps.value = true;
-                        await ApiRequest().request<dynamic>(
-                        path: '/movieOrder/pay',
-                        method: 'POST', 
-                        data: {
-                          'orderId': data.id,
-                          'payId': defaultPay
-                        },
+                        final orderNumber = _orderNumber;
+                        if (orderNumber == null) {
+                          _paySubmitting = false;
+                          if (mounted) setState(() => payLoading = false);
+                          return;
+                        }
+                        final res = await ApiRequest().request<dynamic>(
+                          path: '/movieOrder/pay',
+                          method: 'POST',
+                          data: {
+                            'orderNumber': orderNumber,
+                            'payId': defaultPay
+                          },
                           fromJsonT: (json) => json,
                         );
-                        
-                        if (mounted) {
-                          setState(() {
-                            payLoading = false;
+
+                        if (!mounted) return;
+                        _paySubmitting = false;
+                        setState(() => payLoading = false);
+
+                        // 仅当后端明确返回 code==200 时跳转成功页，否则一律跳失败页（含 code 为 null 或非 200）
+                        if (res.code == 200) {
+                          if (!mounted) return;
+                          context.pushNamed('paySuccess', queryParameters: {
+                            'orderNumber': orderNumber
                           });
-                          
-                        context.pushNamed('paySuccess', queryParameters: {
-                          'orderId': '${data.id}'
-                        });
+                        } else {
+                          if (!mounted) return;
+                          context.pushNamed('payError', queryParameters: {
+                            'reason': res.message ?? S.of(context).confirmOrder_payFailed
+                          });
                         }
                       } catch (e) {
-                        if (mounted) {
-                          setState(() {
-                            payLoading = false;
-                          });
-                          ToastService.showError(S.of(context).confirmOrder_payFailed);
-                        }
+                        _paySubmitting = false;
+                        if (!mounted) return;
+                        setState(() => payLoading = false);
+                        if (!mounted) return;
+                        context.pushNamed('payError', queryParameters: {
+                          'reason': S.of(context).confirmOrder_payFailed
+                        });
                       } finally {
                         final ctrl = Get.isRegistered<SeatSelectionController>()
                             ? Get.find<SeatSelectionController>()
@@ -1253,6 +1346,7 @@ class _PageState extends State<ConfirmOrder> {
           )],
         ),
       ),
+    ),
     );
   }
 }

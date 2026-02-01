@@ -32,14 +32,14 @@ class SeatSelectionController extends GetxController {
   }
 
   /// 统一调用：订单超时
-  Future<void> timeoutOrder(BuildContext context, {required int orderId}) async {
+  Future<void> timeoutOrder(BuildContext context, {required String orderNumber}) async {
     if (suppressOps.value) return; // 抑制时不做任何处理
     try {
       ToastService.showInfo(S.of(context).confirmOrder_orderTimeout);
       await ApiRequest().request(
         path: '/movieOrder/timeout',
         method: 'POST',
-        data: { 'orderId': orderId },
+        data: { 'orderNumber': orderNumber },
         fromJsonT: (json) => json,
       );
     } catch (_) {}
@@ -50,12 +50,12 @@ class SeatSelectionController extends GetxController {
   }
 
   /// 统一调用：用户取消订单
-  Future<void> cancelOrder(BuildContext context, {required int orderId}) async {
+  Future<void> cancelOrder(BuildContext context, {required String orderNumber}) async {
     try {
       await ApiRequest().request(
         path: '/movieOrder/cancel',
         method: 'POST',
-        data: { 'orderId': orderId },
+        data: { 'orderNumber': orderNumber },
         fromJsonT: (json) => json,
       );
       ToastService.showWarning(S.of(context).confirmOrder_orderCanceled);

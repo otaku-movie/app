@@ -22,6 +22,9 @@ class CustomExtendedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (src.isEmpty) {
+      return errorWidget ?? SizedBox(width: width, height: height, child: const Icon(Icons.image_not_supported, color: Colors.grey));
+    }
     // 如果src是完整url，直接使用，否则拼接base url
     final String imageUrl = src.startsWith('http') ? src : '${Config.imageBaseUrl}$src';
 

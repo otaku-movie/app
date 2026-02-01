@@ -66,8 +66,8 @@ class ShowTime {
     DateTime? startTime;
     @JsonKey(name: "endTime")
     DateTime? endTime;
-    @JsonKey(name: "specName")
-    String? specName;
+    @JsonKey(name: "specNames")
+    List<String>? specNames;
     @JsonKey(name: "totalSeats")
     int? totalSeats;
     @JsonKey(name: "selectedSeats")
@@ -86,6 +86,9 @@ class ShowTime {
     int? movieVersionId;
     @JsonKey(name: "versionCode")
     int? versionCode;
+    /// 放映类型：2D/3D，对应 dict_item.id
+    @JsonKey(name: "dimensionType")
+    int? dimensionType;
 
     ShowTime({
         this.id,
@@ -93,7 +96,7 @@ class ShowTime {
         this.theaterHallName,
         this.startTime,
         this.endTime,
-        this.specName,
+        this.specNames,
         this.totalSeats,
         this.selectedSeats,
         this.availableSeats,
@@ -103,6 +106,7 @@ class ShowTime {
         this.showTimeTags,
         this.movieVersionId,
         this.versionCode,
+        this.dimensionType,
     });
 
     factory ShowTime.fromJson(Map<String, dynamic> json) => _$ShowTimeFromJson(json);

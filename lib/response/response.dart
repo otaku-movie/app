@@ -14,16 +14,24 @@ class ApiResponse<T> {
     this.message,
   });
 
+  /// 安全解析 code：后端可能返回 int、num 或 String（如 "200"）
+  static int? _parseCode(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    if (value is String) return int.tryParse(value);
+    return null;
+  }
+
   // 从 JSON 映射转换为 ApiResponse 对象的工厂方法
   factory ApiResponse.fromJson(
     Map<String, dynamic> json,
     T Function(Object? json) fromJsonT,
   ) {
-
     return ApiResponse<T>(
-      code: json['code'] as int?, // 处理可能的 null 值
-      data: json['data'] != null ?  fromJsonT(json['data']) : null, // 处理 data 可能的 null 值
-      message: json['message'] as String?, // 处理可能的 null 值
+      code: _parseCode(json['code']),
+      data: json['data'] != null ? fromJsonT(json['data']) : null,
+      message: json['message'] as String?,
     );
   }
 

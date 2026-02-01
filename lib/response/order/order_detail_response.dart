@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'dart:convert';
 
 part 'order_detail_response.g.dart';
 
@@ -7,6 +6,9 @@ part 'order_detail_response.g.dart';
 class OrderDetailResponse {
     
     final int? id;
+    
+    /// 订单号（用于请求详情、取消等接口）
+    final String? orderNumber;
     
     final int? orderTotal;
     
@@ -45,12 +47,26 @@ class OrderDetailResponse {
     final String? cinemaFullAddress;
     final String? theaterHallName;
     
+    /// 规格名称（单个，兼容旧接口）
     final String? specName;
     
+    /// 规格名称列表（多个）
+    final List<String>? specNames;
+    
+    /// 放映类型：1=2D，2=3D
+    final int? dimensionType;
+    
+    /// 支付截止时间（订单创建时间 + 支付超时时间），用于前端倒计时显示。格式如 yyyy-MM-dd HH:mm:ss 或 ISO8601
+    final String? payDeadline;
+
+    /// 订单失败/取消/超时原因，仅失败/取消/超时时有值
+    final String? failureReason;
+
     final List<Seat>? seat;
 
     OrderDetailResponse({
         this.id,
+        this.orderNumber,
         this.orderTotal,
         this.orderState,
         this.payMethod,
@@ -71,6 +87,10 @@ class OrderDetailResponse {
         this.cinemaFullAddress,
         this.theaterHallName,
         this.specName,
+        this.specNames,
+        this.dimensionType,
+        this.payDeadline,
+        this.failureReason,
         this.seat,
     });
 

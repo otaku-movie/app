@@ -53,7 +53,7 @@ class _MovieListState extends State<MovieList> with TickerProviderStateMixin {
                 borderRadius: BorderRadius.circular(25.r),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha: 0.1),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -73,7 +73,7 @@ class _MovieListState extends State<MovieList> with TickerProviderStateMixin {
                   Container(
                     padding: EdgeInsets.all(6.w),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1989FA).withOpacity(0.1),
+                      color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8.r),
                     ),
                     child: Icon(
@@ -162,7 +162,7 @@ class _MovieListState extends State<MovieList> with TickerProviderStateMixin {
         duration: const Duration(milliseconds: 100),
         curve: Curves.easeOut,
         style: TextStyle(
-          color: isSelected ? Colors.white : Colors.white.withOpacity(0.7),
+          color: isSelected ? Colors.white : Colors.white.withValues(alpha: 0.7),
           fontSize: 32.sp,
           fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
           letterSpacing: 0.5,

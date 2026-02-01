@@ -63,7 +63,7 @@ class _AboutPageState extends State<AboutPage> {
                       height: 120.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                       ),
                     ),
                   ),
@@ -75,7 +75,7 @@ class _AboutPageState extends State<AboutPage> {
                       height: 80.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.05),
+                        color: Colors.white.withValues(alpha: 0.05),
                       ),
                     ),
                   ),
@@ -89,10 +89,10 @@ class _AboutPageState extends State<AboutPage> {
                           width: 100.w,
                           height: 100.w,
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(25.r),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withValues(alpha: 0.3),
                               width: 2,
                             ),
                           ),
@@ -118,7 +118,7 @@ class _AboutPageState extends State<AboutPage> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20.r),
                           ),
                           child: Text(
@@ -182,10 +182,10 @@ class _AboutPageState extends State<AboutPage> {
       height: 60.h,
       padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.05),
+        color: color.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -196,7 +196,7 @@ class _AboutPageState extends State<AboutPage> {
             width: 28.w,
             height: 28.w,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(14.r),
             ),
             child: Icon(

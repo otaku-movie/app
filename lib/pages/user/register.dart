@@ -159,7 +159,7 @@ class _RegisterState extends State<Register> {
             Container(
               padding: EdgeInsets.all(6.w),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Icon(
@@ -191,7 +191,7 @@ class _RegisterState extends State<Register> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  const Color(0xFF1989FA).withOpacity(0.05),
+                  const Color(0xFF1989FA).withValues(alpha: 0.05),
                   const Color(0xFFF7F8FA),
                 ],
               ),
@@ -212,7 +212,7 @@ class _RegisterState extends State<Register> {
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -250,7 +250,7 @@ class _RegisterState extends State<Register> {
                       borderRadius: BorderRadius.circular(24.r),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
+                          color: Colors.black.withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -322,7 +322,7 @@ class _RegisterState extends State<Register> {
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -341,8 +341,8 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                   color: emailError != null 
-                    ? Colors.red.withOpacity(0.1)
-                    : const Color(0xFF1989FA).withOpacity(0.1),
+                    ? Colors.red.withValues(alpha: 0.1)
+                    : const Color(0xFF1989FA).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(
@@ -353,7 +353,7 @@ class _RegisterState extends State<Register> {
               ),
               filled: true,
               fillColor: emailError != null 
-                ? Colors.red.withOpacity(0.05)
+                ? Colors.red.withValues(alpha: 0.05)
                 : const Color(0xFFF7F8FA),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.r),
@@ -427,7 +427,7 @@ class _RegisterState extends State<Register> {
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -446,8 +446,8 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                   color: usernameError != null 
-                    ? Colors.red.withOpacity(0.1)
-                    : const Color(0xFF1989FA).withOpacity(0.1),
+                    ? Colors.red.withValues(alpha: 0.1)
+                    : const Color(0xFF1989FA).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(
@@ -458,7 +458,7 @@ class _RegisterState extends State<Register> {
               ),
               filled: true,
               fillColor: usernameError != null 
-                ? Colors.red.withOpacity(0.05)
+                ? Colors.red.withValues(alpha: 0.05)
                 : const Color(0xFFF7F8FA),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.r),
@@ -522,7 +522,7 @@ class _RegisterState extends State<Register> {
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -542,8 +542,8 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                   color: passwordError != null 
-                    ? Colors.red.withOpacity(0.1)
-                    : const Color(0xFF1989FA).withOpacity(0.1),
+                    ? Colors.red.withValues(alpha: 0.1)
+                    : const Color(0xFF1989FA).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(
@@ -569,7 +569,7 @@ class _RegisterState extends State<Register> {
               ),
               filled: true,
               fillColor: passwordError != null 
-                ? Colors.red.withOpacity(0.05)
+                ? Colors.red.withValues(alpha: 0.05)
                 : const Color(0xFFF7F8FA),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.r),
@@ -634,7 +634,7 @@ class _RegisterState extends State<Register> {
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -654,8 +654,8 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
                   color: repeatPasswordError != null 
-                    ? Colors.red.withOpacity(0.1)
-                    : const Color(0xFF1989FA).withOpacity(0.1),
+                    ? Colors.red.withValues(alpha: 0.1)
+                    : const Color(0xFF1989FA).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(
@@ -681,7 +681,7 @@ class _RegisterState extends State<Register> {
               ),
               filled: true,
               fillColor: repeatPasswordError != null 
-                ? Colors.red.withOpacity(0.05)
+                ? Colors.red.withValues(alpha: 0.05)
                 : const Color(0xFFF7F8FA),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.r),
@@ -801,7 +801,7 @@ class _RegisterState extends State<Register> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1989FA).withOpacity(0.3),
+            color: const Color(0xFF1989FA).withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

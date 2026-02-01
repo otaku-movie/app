@@ -10,9 +10,9 @@ import 'package:otaku_movie/utils/credit_card_validator.dart';
 import 'package:otaku_movie/response/payment/credit_card_response.dart';
 
 class AddCreditCard extends StatefulWidget {
-  final String? orderId;
+  final String? orderNumber;
   
-  const AddCreditCard({super.key, this.orderId});
+  const AddCreditCard({super.key, this.orderNumber});
 
   @override
   State<AddCreditCard> createState() => _AddCreditCardState();

@@ -10,6 +10,7 @@ TicketDetailResponse _$TicketDetailResponseFromJson(
         Map<String, dynamic> json) =>
     TicketDetailResponse(
       id: (json['id'] as num?)?.toInt(),
+      orderNumber: json['orderNumber'] as String?,
       orderTotal: (json['orderTotal'] as num?)?.toDouble(),
       orderState: (json['orderState'] as num?)?.toInt(),
       payMethod: json['payMethod'] as String?,
@@ -32,6 +33,8 @@ TicketDetailResponse _$TicketDetailResponseFromJson(
       theaterHallId: (json['theaterHallId'] as num?)?.toInt(),
       theaterHallName: json['theaterHallName'] as String?,
       specName: json['specName'] as String?,
+      specNames: (json['specNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      dimensionType: (json['dimensionType'] as num?)?.toInt(),
       seat: (json['seat'] as List<dynamic>?)
           ?.map((e) => SeatInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -41,6 +44,7 @@ Map<String, dynamic> _$TicketDetailResponseToJson(
         TicketDetailResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'orderNumber': instance.orderNumber,
       'orderTotal': instance.orderTotal,
       'orderState': instance.orderState,
       'payMethod': instance.payMethod,
@@ -63,6 +67,8 @@ Map<String, dynamic> _$TicketDetailResponseToJson(
       'theaterHallId': instance.theaterHallId,
       'theaterHallName': instance.theaterHallName,
       'specName': instance.specName,
+      'specNames': instance.specNames,
+      'dimensionType': instance.dimensionType,
       'seat': instance.seat?.map((e) => e.toJson()).toList(),
     };
 

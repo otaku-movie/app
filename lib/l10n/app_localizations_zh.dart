@@ -530,6 +530,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get about_movieShowList_dropdown_version => '版本';
 
   @override
+  String get about_movieShowList_dropdown_dimensionType => '2D/3D';
+
+  @override
   String get enum_seatType_coupleSeat => '情侣座';
 
   @override
@@ -843,6 +846,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieTicketType_totalPrice => '总价';
 
   @override
+  String get movieTicketType_singleSeatPrice => '单人票价';
+
+  @override
+  String get movieTicketType_seatCountLabel => '座';
+
+  @override
+  String get movieTicketType_priceRuleTitle => '价格计算规则';
+
+  @override
+  String get movieTicketType_priceRuleFormula =>
+      '单人票价 = 区域价 + 票种价格 + 特效规格加价（3D/IMAX 等，普通 2D 无）';
+
+  @override
   String get movieTicketType_actualPrice => '实付';
 
   @override
@@ -942,6 +958,18 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get seatSelection_cancelSeatFailed => '取消座位选择失败，请重试';
+
+  @override
+  String get seatSelection_hasLockedOrderTitle => '未支付订单';
+
+  @override
+  String get seatSelection_hasLockedOrderMessage => '您有未支付的订单，请先完成支付';
+
+  @override
+  String get seatSelection_goToPay => '去支付';
+
+  @override
+  String get seatSelection_later => '稍后';
 
   @override
   String get user_title => '我的';
@@ -1079,6 +1107,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get orderDetail_orderMessage => '订单信息';
+
+  @override
+  String get orderDetail_failureReason => '失败原因';
 
   @override
   String get payResult_title => '支付完成';
@@ -1252,6 +1283,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get payment_selectCreditCard_tempCardSelected => '已选择临时信用卡';
+
+  @override
+  String get payError_title => '支付失败';
+
+  @override
+  String get payError_message => '您的订单似乎遇到了一些问题，请稍后重试。';
+
+  @override
+  String get payError_back => '返回';
 
   @override
   String get cinemaList_allArea => '全部地区';

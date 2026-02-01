@@ -1114,6 +1114,12 @@ abstract class AppLocalizations {
   /// **'Version'**
   String get about_movieShowList_dropdown_version;
 
+  /// No description provided for @about_movieShowList_dropdown_dimensionType.
+  ///
+  /// In en, this message translates to:
+  /// **'2D/3D'**
+  String get about_movieShowList_dropdown_dimensionType;
+
   /// No description provided for @enum_seatType_coupleSeat.
   ///
   /// In en, this message translates to:
@@ -1714,6 +1720,30 @@ abstract class AppLocalizations {
   /// **'Total Price'**
   String get movieTicketType_totalPrice;
 
+  /// No description provided for @movieTicketType_singleSeatPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price per seat'**
+  String get movieTicketType_singleSeatPrice;
+
+  /// No description provided for @movieTicketType_seatCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **' seats'**
+  String get movieTicketType_seatCountLabel;
+
+  /// No description provided for @movieTicketType_priceRuleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Price Calculation'**
+  String get movieTicketType_priceRuleTitle;
+
+  /// No description provided for @movieTicketType_priceRuleFormula.
+  ///
+  /// In en, this message translates to:
+  /// **'Price per seat = Area price + Ticket type price + Spec surcharge (e.g. 3D, IMAX; 2D has none)'**
+  String get movieTicketType_priceRuleFormula;
+
   /// No description provided for @movieTicketType_actualPrice.
   ///
   /// In en, this message translates to:
@@ -1911,6 +1941,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to cancel seat selection, please try again'**
   String get seatSelection_cancelSeatFailed;
+
+  /// No description provided for @seatSelection_hasLockedOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpaid Order'**
+  String get seatSelection_hasLockedOrderTitle;
+
+  /// No description provided for @seatSelection_hasLockedOrderMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an unpaid order. Please complete payment first.'**
+  String get seatSelection_hasLockedOrderMessage;
+
+  /// No description provided for @seatSelection_goToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Pay'**
+  String get seatSelection_goToPay;
+
+  /// No description provided for @seatSelection_later.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get seatSelection_later;
 
   /// No description provided for @user_title.
   ///
@@ -2169,6 +2223,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Order Information'**
   String get orderDetail_orderMessage;
+
+  /// No description provided for @orderDetail_failureReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Failure Reason'**
+  String get orderDetail_failureReason;
 
   /// No description provided for @payResult_title.
   ///
@@ -2511,6 +2571,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Temporary credit card selected'**
   String get payment_selectCreditCard_tempCardSelected;
+
+  /// No description provided for @payError_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Failed'**
+  String get payError_title;
+
+  /// No description provided for @payError_message.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong with your order. Please try again later.'**
+  String get payError_message;
+
+  /// No description provided for @payError_back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get payError_back;
 
   /// No description provided for @cinemaList_allArea.
   ///

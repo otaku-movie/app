@@ -208,7 +208,7 @@ class _LoginPageState extends State<Login> {
       height: 24.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4.r),
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
       ),
       child: Center(
         child: Text(
@@ -232,7 +232,7 @@ class _LoginPageState extends State<Login> {
             Container(
               padding: EdgeInsets.all(6.w),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Icon(
@@ -317,7 +317,7 @@ class _LoginPageState extends State<Login> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  const Color(0xFF1989FA).withOpacity(0.05),
+                  const Color(0xFF1989FA).withValues(alpha: 0.05),
                   const Color(0xFFF7F8FA),
                 ],
               ),
@@ -338,7 +338,7 @@ class _LoginPageState extends State<Login> {
                         borderRadius: BorderRadius.circular(16.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -376,7 +376,7 @@ class _LoginPageState extends State<Login> {
                       borderRadius: BorderRadius.circular(24.r),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
+                          color: Colors.black.withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -445,20 +445,20 @@ class _LoginPageState extends State<Login> {
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              const Color(0xFF1989FA).withOpacity(0.1),
-                              const Color(0xFF069EF0).withOpacity(0.1),
+                              const Color(0xFF1989FA).withValues(alpha: 0.1),
+                              const Color(0xFF069EF0).withValues(alpha: 0.1),
                             ],
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
                           ),
                           borderRadius: BorderRadius.circular(25.r),
                           border: Border.all(
-                            color: const Color(0xFF1989FA).withOpacity(0.3),
+                            color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                             width: 1,
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF1989FA).withOpacity(0.1),
+                              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -503,7 +503,7 @@ class _LoginPageState extends State<Login> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -521,7 +521,7 @@ class _LoginPageState extends State<Login> {
             margin: EdgeInsets.all(12.w),
             padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF1989FA).withOpacity(0.1),
+              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Icon(
@@ -560,7 +560,7 @@ class _LoginPageState extends State<Login> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -579,7 +579,7 @@ class _LoginPageState extends State<Login> {
             margin: EdgeInsets.all(12.w),
             padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF1989FA).withOpacity(0.1),
+              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8.r),
             ),
             child: Icon(
@@ -638,7 +638,7 @@ class _LoginPageState extends State<Login> {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF1989FA).withOpacity(0.3),
+            color: const Color(0xFF1989FA).withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -716,7 +716,7 @@ class _LoginPageState extends State<Login> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -739,7 +739,7 @@ class _LoginPageState extends State<Login> {
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 4,
                         offset: const Offset(0, 1),
                       ),

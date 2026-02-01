@@ -543,6 +543,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get about_movieShowList_dropdown_version => 'バージョン';
 
   @override
+  String get about_movieShowList_dropdown_dimensionType => '2D/3D';
+
+  @override
   String get enum_seatType_coupleSeat => 'カップルシート';
 
   @override
@@ -857,6 +860,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieTicketType_totalPrice => '合計金額';
 
   @override
+  String get movieTicketType_singleSeatPrice => '1座あたり料金';
+
+  @override
+  String get movieTicketType_seatCountLabel => '席';
+
+  @override
+  String get movieTicketType_priceRuleTitle => '料金計算ルール';
+
+  @override
+  String get movieTicketType_priceRuleFormula =>
+      '1座あたり料金 = エリア料金 + チケット種類料金 + 特効仕様加算（3D・IMAX等、通常2Dはなし）';
+
+  @override
   String get movieTicketType_actualPrice => '実際の支払い';
 
   @override
@@ -957,6 +973,19 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get seatSelection_cancelSeatFailed => '座席選択のキャンセルに失敗しました。再試行してください';
+
+  @override
+  String get seatSelection_hasLockedOrderTitle => '未払い注文';
+
+  @override
+  String get seatSelection_hasLockedOrderMessage =>
+      '未払いの注文があります。先に支払いを完了してください';
+
+  @override
+  String get seatSelection_goToPay => '支払いへ';
+
+  @override
+  String get seatSelection_later => '後で';
 
   @override
   String get user_title => 'マイページ';
@@ -1094,6 +1123,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get orderDetail_orderMessage => '注文情報';
+
+  @override
+  String get orderDetail_failureReason => '失敗理由';
 
   @override
   String get payResult_title => '支払い完了';
@@ -1267,6 +1299,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get payment_selectCreditCard_tempCardSelected => '一時クレジットカードが選択されました';
+
+  @override
+  String get payError_title => '支払い失敗';
+
+  @override
+  String get payError_message => '注文に問題が発生しました。しばらくしてから再度お試しください。';
+
+  @override
+  String get payError_back => '戻る';
 
   @override
   String get cinemaList_allArea => '全地域';

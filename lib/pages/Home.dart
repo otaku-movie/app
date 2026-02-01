@@ -60,7 +60,7 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
@@ -98,7 +98,7 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
             Container(
               padding: EdgeInsets.all(6.w),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF1989FA).withOpacity(0.1) : Colors.transparent,
+                color: isSelected ? const Color(0xFF1989FA).withValues(alpha: 0.1) : Colors.transparent,
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Icon(

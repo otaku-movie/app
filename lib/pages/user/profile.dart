@@ -134,7 +134,7 @@ class _UserProfilePageState extends State<UserProfile> {
                 icon: Container(
                   padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Icon(
@@ -180,7 +180,7 @@ class _UserProfilePageState extends State<UserProfile> {
                   borderRadius: BorderRadius.circular(20.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha: 0.08),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -300,7 +300,7 @@ class _UserProfilePageState extends State<UserProfile> {
                   borderRadius: BorderRadius.circular(20.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
+                      color: Colors.black.withValues(alpha: 0.08),
                       blurRadius: 20,
                       offset: const Offset(0, 4),
                     ),
@@ -322,10 +322,10 @@ class _UserProfilePageState extends State<UserProfile> {
                             Container(
                               height: 50.h,
                               decoration: BoxDecoration(
-                                color: const Color(0xFF1989FA).withOpacity(0.05),
+                                color: const Color(0xFF1989FA).withValues(alpha: 0.05),
                                 borderRadius: BorderRadius.circular(12.r),
                                 border: Border.all(
-                                  color: const Color(0xFF1989FA).withOpacity(0.3),
+                                  color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                                   width: 1,
                                 ),
                               ),
@@ -432,7 +432,7 @@ class _UserProfilePageState extends State<UserProfile> {
             width: 40.w,
             height: 40.w,
             decoration: BoxDecoration(
-              color: const Color(0xFF1989FA).withOpacity(0.1),
+              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: Icon(

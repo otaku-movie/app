@@ -182,7 +182,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                     borderRadius: BorderRadius.circular(12.r),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.04),
+                        color: Colors.black.withValues(alpha: 0.04),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -254,7 +254,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                               borderRadius: BorderRadius.circular(16.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.06),
+                                  color: Colors.black.withValues(alpha: 0.06),
                                   blurRadius: 16,
                                   offset: const Offset(0, 4),
                                   spreadRadius: 0,
@@ -300,7 +300,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                                 borderRadius: BorderRadius.circular(8.r),
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: const Color(0xFFFF6B35).withOpacity(0.3),
+                                                    color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
                                                     blurRadius: 4,
                                                     offset: const Offset(0, 2),
                                                   ),
@@ -329,7 +329,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                                 end: Alignment.bottomCenter,
                                                 colors: [
                                                   Colors.transparent,
-                                                  Colors.black.withOpacity(0.2),
+                                                  Colors.black.withValues(alpha: 0.2),
                                                 ],
                                               ),
                                             ),
@@ -397,7 +397,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                                   color: _getRatingColor(item?.levelName),
                                                   borderRadius: BorderRadius.circular(18.r),
                                                   border: Border.all(
-                                                    color: _getRatingColor(item?.levelName).withOpacity(0.3),
+                                                    color: _getRatingColor(item?.levelName).withValues(alpha: 0.3),
                                                     width: 1,
                                                   ),
                                                 ),
@@ -418,7 +418,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                       //   Container(
                                       //     padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                                       //     decoration: BoxDecoration(
-                                      //       color: const Color(0xFF1989FA).withOpacity(0.1),
+                                      //       color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                       //       borderRadius: BorderRadius.circular(8.r),
                                       //     ),
                                       //     child: Text(

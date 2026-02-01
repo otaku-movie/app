@@ -135,6 +135,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "about_movieShowList_dropdown_version":
         MessageLookupByLibrary.simpleMessage("版本"),
+    "about_movieShowList_dropdown_dimensionType":
+        MessageLookupByLibrary.simpleMessage("2D/3D"),
     "about_privacy_policy": MessageLookupByLibrary.simpleMessage("查看隐私协议"),
     "about_register_haveAccount": MessageLookupByLibrary.simpleMessage("已有账号？"),
     "about_register_loginHere": MessageLookupByLibrary.simpleMessage("立即登录"),
@@ -528,6 +530,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "movieTicketType_title": MessageLookupByLibrary.simpleMessage("选择电影票类型"),
     "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合计"),
     "movieTicketType_totalPrice": MessageLookupByLibrary.simpleMessage("总价"),
+    "movieTicketType_singleSeatPrice": MessageLookupByLibrary.simpleMessage("单人票价"),
+    "movieTicketType_seatCountLabel": MessageLookupByLibrary.simpleMessage("座"),
+    "movieTicketType_priceRuleTitle": MessageLookupByLibrary.simpleMessage("价格计算规则"),
+    "movieTicketType_priceRuleFormula": MessageLookupByLibrary.simpleMessage("单人票价 = 区域价 + 票种价格 + 特效规格加价（3D/IMAX 等，普通 2D 无）"),
     "orderDetail_countdown_hoursMinutes": m12,
     "orderDetail_countdown_minutesSeconds": m13,
     "orderDetail_countdown_seconds": m14,
@@ -541,6 +547,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "订单创建时间",
     ),
     "orderDetail_orderMessage": MessageLookupByLibrary.simpleMessage("订单信息"),
+    "orderDetail_failureReason": MessageLookupByLibrary.simpleMessage("失败原因"),
     "orderDetail_orderNumber": MessageLookupByLibrary.simpleMessage("订单号"),
     "orderDetail_orderState": MessageLookupByLibrary.simpleMessage("订单状态"),
     "orderDetail_payMethod": MessageLookupByLibrary.simpleMessage("支付方式"),
@@ -646,6 +653,11 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("已移除临时卡片"),
     "payment_selectCreditCard_tempCardSelected":
         MessageLookupByLibrary.simpleMessage("已选择临时信用卡"),
+    "payError_back": MessageLookupByLibrary.simpleMessage("返回"),
+    "payError_message": MessageLookupByLibrary.simpleMessage(
+      "您的订单似乎遇到了一些问题，请稍后重试。",
+    ),
+    "payError_title": MessageLookupByLibrary.simpleMessage("支付失败"),
     "payment_selectCreditCard_title": MessageLookupByLibrary.simpleMessage(
       "选择信用卡",
     ),
@@ -707,6 +719,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "seatSelection_cancelSeatFailed": MessageLookupByLibrary.simpleMessage(
       "取消座位选择失败，请重试",
     ),
+    "seatSelection_goToPay": MessageLookupByLibrary.simpleMessage("去支付"),
+    "seatSelection_hasLockedOrderMessage": MessageLookupByLibrary.simpleMessage(
+      "您有未支付的订单，请先完成支付",
+    ),
+    "seatSelection_hasLockedOrderTitle": MessageLookupByLibrary.simpleMessage(
+      "未支付订单",
+    ),
+    "seatSelection_later": MessageLookupByLibrary.simpleMessage("稍后"),
     "seatSelection_cancelSeatTitle": MessageLookupByLibrary.simpleMessage(
       "取消座位选择",
     ),

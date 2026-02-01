@@ -52,7 +52,7 @@ ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
       endTime: json['endTime'] == null
           ? null
           : DateTime.parse(json['endTime'] as String),
-      specName: json['specName'] as String?,
+      specNames: (json['specNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
       totalSeats: (json['totalSeats'] as num?)?.toInt(),
       selectedSeats: (json['selectedSeats'] as num?)?.toInt(),
       availableSeats: (json['availableSeats'] as num?)?.toInt(),
@@ -62,6 +62,7 @@ ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
       showTimeTags: json['showTimeTags'],
       movieVersionId: (json['movieVersionId'] as num?)?.toInt(),
       versionCode: (json['versionCode'] as num?)?.toInt(),
+      dimensionType: (json['dimensionType'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
@@ -70,7 +71,7 @@ Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
       'theaterHallName': instance.theaterHallName,
       'startTime': instance.startTime?.toIso8601String(),
       'endTime': instance.endTime?.toIso8601String(),
-      'specName': instance.specName,
+      'specNames': instance.specNames,
       'totalSeats': instance.totalSeats,
       'selectedSeats': instance.selectedSeats,
       'availableSeats': instance.availableSeats,
@@ -80,4 +81,5 @@ Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
       'showTimeTags': instance.showTimeTags,
       'movieVersionId': instance.movieVersionId,
       'versionCode': instance.versionCode,
+      'dimensionType': instance.dimensionType,
     };

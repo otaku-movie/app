@@ -169,7 +169,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -198,7 +198,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                       color: Colors.grey.shade200,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
+                          color: Colors.black.withValues(alpha: 0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -226,7 +226,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                           borderRadius: BorderRadius.circular(8.r),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFFF6B35).withOpacity(0.3),
+                              color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
                               blurRadius: 4,
                               offset: const Offset(0, 2),
                             ),
@@ -318,10 +318,10 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: const Color(0xFF1989FA).withOpacity(0.1),
+              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6.r),
               border: Border.all(
-                color: const Color(0xFF1989FA).withOpacity(0.3),
+                color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -341,10 +341,10 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: const Color(0xFFFF6B35).withOpacity(0.1),
+              color: const Color(0xFFFF6B35).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(6.r),
               border: Border.all(
-                color: const Color(0xFFFF6B35).withOpacity(0.3),
+                color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -422,7 +422,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: shadowColor.withOpacity(0.3),
+            color: shadowColor.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -479,7 +479,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           Container(
             padding: EdgeInsets.all(32.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF1989FA).withOpacity(0.1),
+              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(50.r),
             ),
             child: Icon(

@@ -39,7 +39,11 @@ class HelloMovie extends StatelessWidget {
     // ignore: unrelated_type_equality_checks
     if (helloMovieResponse.code == HelloMovieGuide.sub.code) {
       imagePath = 'assets/image/sub-guide.png'; // 音频引导的图片路径
-    } 
+    }
+
+    if (imagePath.isEmpty) {
+      return SizedBox(width: width, height: width);
+    }
 
     return ExtendedImage.asset(
       imagePath,

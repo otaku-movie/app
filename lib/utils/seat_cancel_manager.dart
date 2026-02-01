@@ -183,14 +183,14 @@ class SeatCancelManager {
     return result ?? false;
   }
 
-  /// 显示取消座位确认对话框
+  /// 显示取消座位确认对话框（返回时提示用户是否确认取消）
   static Future<bool> showCancelSeatDialog(BuildContext context) async {
     return await showCancelDialog(
       context,
-      title: S.of(context).seatSelection_cancelSeatTitle,
-      content: S.of(context).seatSelection_cancelSeatConfirm,
-      cancelText: S.of(context).confirmOrder_continuePay,
-      confirmText: S.of(context).confirmOrder_confirmCancel,
+      title: S.of(context).seatCancel_confirmTitle,
+      content: S.of(context).seatCancel_confirmMessage,
+      cancelText: S.of(context).seatCancel_cancel,
+      confirmText: S.of(context).seatCancel_confirm,
     );
   }
 
@@ -251,26 +251,26 @@ class SeatCancelManager {
   }
 
   /// 处理返回按钮点击
-  /// [orderId] 订单ID，如果为null则调用取消座位接口，否则调用取消订单接口
-  static Future<bool> handleBackButton(BuildContext context, {int? orderId}) async {
+  /// [orderNumber] 订单号，如果为 null 则调用取消座位接口，否则调用取消订单接口
+  static Future<bool> handleBackButton(BuildContext context, {String? orderNumber}) async {
     if (!hasSelectedSeats()) {
       return true; // 没有选择座位，直接返回
     }
 
     // 显示确认对话框
-    final shouldCancel = orderId != null 
+    final shouldCancel = orderNumber != null && orderNumber.isNotEmpty
         ? await showCancelOrderDialog(context)
         : await showCancelSeatDialog(context);
         
     if (shouldCancel == true) {
-      if (orderId != null) {
+      if (orderNumber != null && orderNumber.isNotEmpty) {
         // 用户确认取消，调用取消订单接口
         try {
           await ApiRequest().request(
-            path: '/api/movieOrder/cancel',
+            path: '/movieOrder/cancel',
             method: 'POST',
             data: {
-              'orderId': orderId,
+              'orderNumber': orderNumber,
             },
             fromJsonT: (json) => json,
           );
@@ -285,7 +285,7 @@ class SeatCancelManager {
           return false;
         }
       } else {
-        // 没有订单ID，调用取消座位选择接口
+        // 没有订单号，调用取消座位选择接口
         return await cancelSeatSelection(context);
       }
     }

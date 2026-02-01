@@ -231,10 +231,10 @@ class _CommentDetailPageState extends State<CommentDetail> {
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                           decoration: BoxDecoration(
-                            color: data.like! ? const Color(0xFFFF6B35).withOpacity(0.1) : Colors.grey.shade50,
+                            color: data.like! ? const Color(0xFFFF6B35).withValues(alpha: 0.1) : Colors.grey.shade50,
                             borderRadius: BorderRadius.circular(20.r),
                             border: Border.all(
-                              color: data.like! ? const Color(0xFFFF6B35).withOpacity(0.3) : Colors.grey.shade200,
+                              color: data.like! ? const Color(0xFFFF6B35).withValues(alpha: 0.3) : Colors.grey.shade200,
                               width: 1,
                             ),
                           ),
@@ -342,7 +342,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
                               Container(
                                 padding: EdgeInsets.all(2.w),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
+                                  color: Colors.white.withValues(alpha: 0.2),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
@@ -439,7 +439,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
+                    color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -479,7 +479,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
                             width: 30.w,
                             height: 30.w,
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.6),
+                              color: Colors.black.withValues(alpha: 0.6),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -576,7 +576,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
                         ? null
                         : [
                             BoxShadow(
-                              color: const Color(0xFF1989FA).withOpacity(0.3),
+                              color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 4),
                             ),
@@ -646,7 +646,7 @@ class _CommentDetailPageState extends State<CommentDetail> {
                           Container(
                             padding: EdgeInsets.all(6.w),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF1989FA).withOpacity(0.1),
+                              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Icon(

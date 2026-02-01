@@ -54,7 +54,7 @@ Map<String, dynamic> _$CreditCardSaveRequestToJson(
 
 PaymentRequest _$PaymentRequestFromJson(Map<String, dynamic> json) =>
     PaymentRequest(
-      orderId: (json['orderId'] as num).toInt(),
+      orderNumber: json['orderNumber'] as String,
       creditCardId: (json['creditCardId'] as num?)?.toInt(),
       tempCard: json['tempCard'] == null
           ? null
@@ -63,7 +63,7 @@ PaymentRequest _$PaymentRequestFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$PaymentRequestToJson(PaymentRequest instance) =>
     <String, dynamic>{
-      'orderId': instance.orderId,
+      'orderNumber': instance.orderNumber,
       'creditCardId': instance.creditCardId,
       'tempCard': instance.tempCard?.toJson(),
     };

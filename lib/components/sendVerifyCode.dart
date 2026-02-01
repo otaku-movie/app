@@ -117,7 +117,7 @@ class _PageState extends State<SendVerifyCode> {
               borderRadius: BorderRadius.circular(16.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withValues(alpha: 0.05),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -135,7 +135,7 @@ class _PageState extends State<SendVerifyCode> {
                   margin: EdgeInsets.all(12.w),
                   padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1989FA).withOpacity(0.1),
+                    color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Icon(
@@ -191,7 +191,7 @@ class _PageState extends State<SendVerifyCode> {
               ) : null,
               boxShadow: send ? null : [
                 BoxShadow(
-                  color: const Color(0xFF1989FA).withOpacity(0.3),
+                  color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 4),
                 ),

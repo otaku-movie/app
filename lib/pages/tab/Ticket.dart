@@ -228,10 +228,12 @@ class _PageState extends State<Ticket> {
   Widget _buildTicketCard(TicketDetailResponse ticket, int index) {
     return GestureDetector(
             onTap: () {
+        final orderNumber = ticket.orderNumber ?? ticket.id?.toString();
+        if (orderNumber == null || orderNumber.isEmpty) return;
         context.pushNamed(
           'orderDetail',
           queryParameters: {
-            "id": '${ticket.id}'
+            "orderNumber": orderNumber
           }
         );
       },
@@ -255,21 +257,21 @@ class _PageState extends State<Ticket> {
                   boxShadow: [
                     // 主阴影 - 更深更大
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.25),
+                      color: Colors.black.withValues(alpha: 0.25),
                       blurRadius: 40,
                       offset: const Offset(0, 15),
                       spreadRadius: 0,
                     ),
                     // 次级阴影 - 增加深度
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
+                      color: Colors.black.withValues(alpha: 0.15),
                       blurRadius: 20,
                       offset: const Offset(0, 8),
                       spreadRadius: -5,
                     ),
                     // 彩色阴影 - 增加质感
                     BoxShadow(
-                      color: Color(0xFF667EEA).withOpacity(0.15),
+                      color: Color(0xFF667EEA).withValues(alpha: 0.15),
                       blurRadius: 30,
                       offset: const Offset(0, 10),
                       spreadRadius: -5,
@@ -297,7 +299,7 @@ class _PageState extends State<Ticket> {
                                 BackdropFilter(
                                   filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
                                   child: Container(
-                                    color: Colors.black.withOpacity(0.5),
+                                    color: Colors.black.withValues(alpha: 0.5),
                                   ),
                                 ),
                               ],
@@ -321,7 +323,7 @@ class _PageState extends State<Ticket> {
                                     color: Colors.white,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
+                                        color: Colors.black.withValues(alpha: 0.3),
                                         blurRadius: 15,
                                         offset: const Offset(0, 5),
                                       ),
@@ -354,7 +356,7 @@ class _PageState extends State<Ticket> {
                                           height: 1.2,
                                           shadows: [
                                             Shadow(
-                                              color: Colors.black.withOpacity(0.3),
+                                              color: Colors.black.withValues(alpha: 0.3),
                                               offset: Offset(0, 2),
                                               blurRadius: 4,
                                             ),
@@ -394,7 +396,7 @@ class _PageState extends State<Ticket> {
                             Container(
                               padding: EdgeInsets.all(10.w),
                               decoration: BoxDecoration(
-                                color: Color(0xFF667EEA).withOpacity(0.1),
+                                color: Color(0xFF667EEA).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
                               child: Icon(
@@ -428,7 +430,9 @@ class _PageState extends State<Ticket> {
                                           color: Colors.grey.shade600,
                                         ),
                                       ),
-                                      if (ticket.specName != null && ticket.specName!.isNotEmpty) ...[
+                                      if ((ticket.specNames != null && ticket.specNames!.isNotEmpty) ||
+                                          (ticket.specName != null && ticket.specName!.isNotEmpty) ||
+                                          ticket.dimensionType != null) ...[
                                         SizedBox(width: 12.w),
                                         Container(
                                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -439,19 +443,51 @@ class _PageState extends State<Ticket> {
                                             borderRadius: BorderRadius.circular(12.r),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Color(0xFFFFD700).withOpacity(0.3),
+                                                color: Color(0xFFFFD700).withValues(alpha: 0.3),
                                                 blurRadius: 8,
                                                 offset: Offset(0, 2),
                                               ),
                                             ],
                                           ),
-                                          child: Text(
-                                            ticket.specName!,
-                                            style: TextStyle(
-                                              fontSize: 20.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              if (ticket.specNames != null && ticket.specNames!.isNotEmpty)
+                                                Text(
+                                                  ticket.specNames!.join('、'),
+                                                  style: TextStyle(
+                                                    fontSize: 20.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              else if (ticket.specName != null && ticket.specName!.isNotEmpty)
+                                                Text(
+                                                  ticket.specName!,
+                                                  style: TextStyle(
+                                                    fontSize: 20.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              if (ticket.dimensionType != null) ...[
+                                                if ((ticket.specNames != null && ticket.specNames!.isNotEmpty) ||
+                                                    (ticket.specName != null && ticket.specName!.isNotEmpty))
+                                                  SizedBox(width: 6.w),
+                                                Text(
+                                                  ticket.dimensionType == 1
+                                                      ? '2D'
+                                                      : ticket.dimensionType == 2
+                                                          ? '3D'
+                                                          : '${ticket.dimensionType}',
+                                                  style: TextStyle(
+                                                    fontSize: 20.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -511,7 +547,7 @@ class _PageState extends State<Ticket> {
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
               decoration: BoxDecoration(
-                                      color: Color(0xFF667EEA).withOpacity(0.1),
+                                      color: Color(0xFF667EEA).withValues(alpha: 0.1),
                                       borderRadius: BorderRadius.circular(6.r),
               ),
               child: Row(
@@ -563,7 +599,7 @@ class _PageState extends State<Ticket> {
                             Container(
                               padding: EdgeInsets.all(10.w),
                               decoration: BoxDecoration(
-                                color: Color(0xFFFF6B6B).withOpacity(0.1),
+                                color: Color(0xFFFF6B6B).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
                               child: Icon(
@@ -613,11 +649,11 @@ class _PageState extends State<Ticket> {
             //   child: Container(
             //     padding: EdgeInsets.all(8.w),
             //     decoration: BoxDecoration(
-            //       color: Colors.white.withOpacity(0.9),
+            //       color: Colors.white.withValues(alpha: 0.9),
             //       borderRadius: BorderRadius.circular(8.r),
             //       boxShadow: [
             //         BoxShadow(
-            //           color: Colors.black.withOpacity(0.1),
+            //           color: Colors.black.withValues(alpha: 0.1),
             //           blurRadius: 8,
             //           offset: Offset(0, 2),
             //         ),
@@ -672,7 +708,7 @@ class _PageState extends State<Ticket> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: Text(

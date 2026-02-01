@@ -1655,6 +1655,26 @@
       "ja": "合計金額",
       "en": "Total Price"
     },
+    "singleSeatPrice": {
+      "zh": "单人票价",
+      "ja": "1座あたり料金",
+      "en": "Price per seat"
+    },
+    "seatCountLabel": {
+      "zh": "座",
+      "ja": "席",
+      "en": " seats"
+    },
+    "priceRuleTitle": {
+      "zh": "价格计算规则",
+      "ja": "料金計算ルール",
+      "en": "Price Calculation"
+    },
+    "priceRuleFormula": {
+      "zh": "单人票价 = 区域价 + 票种价格 + 特效规格加价（3D/IMAX 等，普通 2D 无）",
+      "ja": "1座あたり料金 = エリア料金 + チケット種類料金 + 特効仕様加算（3D・IMAX等、通常2Dはなし）",
+      "en": "Price per seat = Area price + Ticket type price + Spec surcharge (e.g. 3D, IMAX; 2D has none)"
+    },
     "actualPrice": {
       "zh": "实付",
       "ja": "実際の支払い",
@@ -2078,6 +2098,11 @@
       "zh": "订单信息",
       "ja": "注文情報",
       "en": "Order Information"
+    },
+    "failureReason": {
+      "zh": "失败原因",
+      "ja": "失敗理由",
+      "en": "Failure Reason"
     }
   },
   "payResult": {
@@ -2383,6 +2408,23 @@
         "ja": "一時クレジットカードが選択されました",
         "en": "Temporary credit card selected"
       }
+    }
+  },
+  "payError": {
+    "title": {
+      "zh": "支付失败",
+      "ja": "支払い失敗",
+      "en": "Payment Failed"
+    },
+    "message": {
+      "zh": "您的订单似乎遇到了一些问题，请稍后重试。",
+      "ja": "注文に問題が発生しました。しばらくしてから再度お試しください。",
+      "en": "Something went wrong with your order. Please try again later."
+    },
+    "back": {
+      "zh": "返回",
+      "ja": "戻る",
+      "en": "Back"
     }
   },
   "cinemaList": {

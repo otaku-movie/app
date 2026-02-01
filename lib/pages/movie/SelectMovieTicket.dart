@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
+import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/cinema/movie_ticket_type_response.dart';
@@ -36,7 +37,8 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
   UserSelectSeatDataResponse data = UserSelectSeatDataResponse();
   bool loading = true;
   bool error = false;
-  
+  /// 创建订单请求进行中，防止重复点击产生多个订单
+  bool _creatingOrder = false;
 
   Timer? _ticketTimer;
   late final SeatSelectionController seatSelectionController =
@@ -46,7 +48,8 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
           
   int ticketCountDown = 0; // 秒
 
-  Future<void> getMovieTicketType() async {
+  /// 获取票价类型，成功返回 true，接口报错返回 false
+  Future<bool> getMovieTicketType() async {
     try {
       final res = await ApiRequest().request(
         path: '/cinema/ticketType/list',
@@ -65,19 +68,22 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
       if (mounted) {
         setState(() {
           movieTicketTypeData = res.data ?? [];
-          error = false;
         });
       }
+      return true;
     } catch (e) {
       if (mounted) {
         setState(() {
           error = true;
+          loading = false;
         });
       }
+      return false;
     }
   }
 
-  Future<void> getData() async {
+  /// 获取用户选座数据，成功返回 true，接口报错或无可选座位返回 false
+  Future<bool> getData() async {
     try {
       final res = await ApiRequest().request(
         path: '/movie_show_time/user_select_seat',
@@ -88,10 +94,21 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
         },
       );
       
+      // 如果接口没有返回用户已选择的座位信息，给出提示并显示异常界面
+      if (res.data == null || res.data?.seat == null || res.data!.seat!.isEmpty) {
+        if (mounted) {
+          ToastService.showInfo('未获取到当前选座信息，请重新选择座位');
+          setState(() {
+            error = true;
+            loading = false;
+          });
+        }
+        return false;
+      }
+
       if (mounted) {
         setState(() {
           data = res.data ?? UserSelectSeatDataResponse();
-          error = false;
         });
         // 配置场次信息（总时间由状态管理统一设置）
         seatSelectionController.configure(
@@ -100,12 +117,15 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
         );
         // _restartTicketTimer();
       }
+      return true;
     } catch (e) {
       if (mounted) {
         setState(() {
           error = true;
+          loading = false;
         });
       }
+      return false;
     }
   }
 
@@ -150,14 +170,14 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
   //   }
   // }
 
-  // 加载初始数据
+  // 加载初始数据：任一接口报错则显示异常界面
   Future<void> _loadInitialData() async {
     setState(() {
       loading = true;
       error = false;
     });
     
-    await Future.wait([
+    final results = await Future.wait([
       getData(),
       getMovieTicketType(),
     ]);
@@ -165,20 +185,28 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
     if (mounted) {
       setState(() {
         loading = false;
+        // 任一接口失败则显示异常界面
+        error = !(results[0] && results[1]);
       });
     }
   }
 
-  // 刷新数据
+  // 刷新数据：任一接口报错则显示异常界面
   Future<void> _refreshData() async {
     setState(() {
       error = false;
     });
     
-    await Future.wait([
+    final results = await Future.wait([
       getData(),
       getMovieTicketType(),
     ]);
+    
+    if (mounted) {
+      setState(() {
+        error = !(results[0] && results[1]);
+      });
+    }
   }
 
   void _restartTicketTimer() {
@@ -243,29 +271,13 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-         title: Text(S.of(context).movieTicketType_title, style: const TextStyle(color: Colors.white)),
-         onBackButtonPressed: () async {
-           // 显示确认对话框（Vant 风格）
-          final shouldCancel = await SeatCancelManager.showCancelSeatDialog(context);
-
-           if (!mounted) return;
-           
-           if (shouldCancel == true) {
-             // 交由状态管理取消并清空
-             await seatSelectionController.cancelSeatAndClear(context);
-             if (mounted) {
-               // 返回到座位选择页面
-               if (data.movieShowTimeId != null && data.theaterHallId != null) {
-                  // 回退到 selectSeat
-                  Navigator.of(context).popUntil(
-                    (route) => route.settings.name == 'selectSeat',
-                  );
-               } else {
-                 Navigator.of(context).pop();
-               }
-             }
-           }
-         },
+        title: Text(S.of(context).movieTicketType_title, style: const TextStyle(color: Colors.white)),
+        onBackButtonPressed: () async {
+          // 选票页返回：直接回到上一步（选座页），不取消座位
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        },
       ),
       body: AppErrorWidget(
         loading: loading,
@@ -309,7 +321,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                         borderRadius: BorderRadius.circular(24.r),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
+                            color: Colors.black.withValues(alpha: 0.08),
                             blurRadius: 20,
                             offset: const Offset(0, 4),
                           ),
@@ -323,7 +335,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                               borderRadius: BorderRadius.circular(20.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.15),
+                                  color: Colors.black.withValues(alpha: 0.15),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -487,13 +499,32 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                           color: Colors.orange.shade100,
                                           borderRadius: BorderRadius.circular(4.r),
                                         ),
-                                        child: Text(
-                                          data.specName ?? '',
-                                          style: TextStyle(
-                                            fontSize: 18.sp,
-                                            color: Colors.orange.shade800,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            if (data.specName != null && data.specName!.isNotEmpty)
+                                              Text(
+                                                data.specName!,
+                                                style: TextStyle(
+                                                  fontSize: 18.sp,
+                                                  color: Colors.orange.shade800,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            if (data.dimensionType != null) ...[
+                                              if (data.specName != null && data.specName!.isNotEmpty)
+                                                SizedBox(width: 6.w),
+                                              Dict(
+                                                code: data.dimensionType,
+                                                name: 'dimensionType',
+                                                style: TextStyle(
+                                                  fontSize: 18.sp,
+                                                  color: Colors.orange.shade800,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ],
                                         ),
                                       ),
                                     ],
@@ -574,7 +605,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.blue.withOpacity(0.05),
+                            color: Colors.blue.withValues(alpha: 0.05),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                                     ),
@@ -623,7 +654,112 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                         ),
                     ),
                     
-                    SizedBox(height: 30.h),
+                    SizedBox(height: 20.h),
+                    
+                    // 价格计算规则
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                      decoration: BoxDecoration(
+                        color: Colors.amber.shade50,
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(color: Colors.amber.shade200),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.info_outline, size: 22.sp, color: Colors.amber.shade800),
+                              SizedBox(width: 8.w),
+                              Text(
+                                S.of(context).movieTicketType_priceRuleTitle,
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.amber.shade900,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            S.of(context).movieTicketType_priceRuleFormula,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              color: Colors.amber.shade800,
+                              height: 1.4,
+                            ),
+                          ),
+                          // 显示当前场次的规格和放映类型加价信息
+                          if (data.specPriceList != null && data.specPriceList!.isNotEmpty || data.displayTypeSurcharge != null && data.displayTypeSurcharge! > 0) ...[
+                            SizedBox(height: 12.h),
+                            Container(
+                              padding: EdgeInsets.all(12.w),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.7),
+                                borderRadius: BorderRadius.circular(8.r),
+                                border: Border.all(color: Colors.amber.shade300),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '本场次加价：',
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.amber.shade900,
+                                    ),
+                                  ),
+                                  SizedBox(height: 6.h),
+                                  // 放映类型加价
+                                  if (data.displayTypeName != null && data.displayTypeSurcharge != null && data.displayTypeSurcharge! > 0)
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 4.h),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.visibility_rounded, size: 16.sp, color: Colors.purple.shade600),
+                                          SizedBox(width: 6.w),
+                                          Text(
+                                            '${data.displayTypeName}：+${data.displayTypeSurcharge}${S.of(context).common_unit_jpy}',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              color: Colors.amber.shade800,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  // 规格加价列表
+                                  if (data.specPriceList != null)
+                                    ...data.specPriceList!.map((spec) => Padding(
+                                      padding: EdgeInsets.only(bottom: 4.h),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.movie_filter_rounded, size: 16.sp, color: Colors.blue.shade600),
+                                          SizedBox(width: 6.w),
+                                          Text(
+                                            '${spec.name}：+${spec.plusPrice}${S.of(context).common_unit_jpy}',
+                                            style: TextStyle(
+                                              fontSize: 18.sp,
+                                              color: Colors.amber.shade800,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    
+                    SizedBox(height: 24.h),
                     
                     // 座位信息列表 - 优化设计
                     ...data.seat == null ? [] : data.seat!.map((item) {
@@ -635,7 +771,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                            borderRadius: BorderRadius.circular(20.r),
                            boxShadow: [
                              BoxShadow(
-                               color: Colors.black.withOpacity(0.05),
+                               color: Colors.black.withValues(alpha: 0.05),
                                blurRadius: 8,
                                offset: const Offset(0, 2),
                              ),
@@ -688,7 +824,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                          border: Border.all(color: Colors.orange.shade200),
                                        ),
                                        child: Text(
-                                         '${item.areaName}（+${item.plusPrice}${S.of(context).common_unit_jpy}）',
+                                         '${item.areaName}（+${item.areaPrice}${S.of(context).common_unit_jpy}）',
                                          style: TextStyle(
                                            fontSize: 18.sp,
                                            fontWeight: FontWeight.w600,
@@ -723,8 +859,8 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                      boxShadow: [
                                        BoxShadow(
                                          color: item.movieTicketTypeId == null 
-                                             ? Colors.grey.withOpacity(0.1)
-                                             : Colors.blue.withOpacity(0.2),
+                                             ? Colors.grey.withValues(alpha: 0.1)
+                                             : Colors.blue.withValues(alpha: 0.2),
                                          blurRadius: 8,
                                          offset: const Offset(0, 2),
                                        ),
@@ -753,6 +889,29 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                        : getTicketType(item),
                                  ),
                                ),
+                               // 单人票价（票种下方、靠右、红色加大）
+                               SizedBox(height: 10.h),
+                               Row(
+                                 mainAxisAlignment: MainAxisAlignment.end,
+                                 children: [
+                                   Text(
+                                     '${S.of(context).movieTicketType_singleSeatPrice}：',
+                                     style: TextStyle(
+                                       fontSize: 20.sp,
+                                       fontWeight: FontWeight.w500,
+                                       color: Colors.grey.shade600,
+                                     ),
+                                   ),
+                                   Text(
+                                     '${_seatPrice(item)}${S.of(context).common_unit_jpy}',
+                                     style: TextStyle(
+                                       fontSize: 30.sp,
+                                       fontWeight: FontWeight.bold,
+                                       color: Colors.red.shade600,
+                                     ),
+                                   ),
+                                 ],
+                               ),
                              ],
                         ),
                       ),
@@ -778,7 +937,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -790,7 +949,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                  // 价格信息
+                  // 价格信息（含座位数量）
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -805,8 +964,10 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                           ),
                         ),
                         SizedBox(height: 4.h),
-                Row(
-                  children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
                             Text(
                               '${getTotalPrice()}',
                               style: TextStyle(
@@ -825,6 +986,15 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              '（${data.seat?.length ?? 0}${S.of(context).movieTicketType_seatCountLabel}）',
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                color: Colors.grey.shade600,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -833,22 +1003,24 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                   
                   SizedBox(width: 20.w),
                   
-                  // 确认按钮
+                  // 确认按钮（创建订单中禁用，防止重复提交产生多个订单）
                   Container(
                     width: 200.w,
                     height: 60.h,
                     decoration: BoxDecoration(
-                      color: Colors.blue.shade500,
+                      color: _creatingOrder ? Colors.grey : Colors.blue.shade500,
                       borderRadius: BorderRadius.circular(50.r),
                     ),
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(50.r),
-                        onTap: () {
+                        onTap: _creatingOrder ? null : () {
+                          if (_creatingOrder) return;
                           bool every = data.seat!.every((item) => item.movieTicketTypeId != null);
 
                       if (every) {
+                         setState(() => _creatingOrder = true);
                          ApiRequest().request(
                           path: '/movieOrder/create',
                           method: 'POST', 
@@ -860,36 +1032,67 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                             return json;
                           },
                         ).then((res) {
+                          if (!mounted) return;
+                          setState(() => _creatingOrder = false);
+                          // RestBean：200=成功，其他为错误码（如 3203 部分座位不可用）
+                          if (res.code != 200) {
+                            // 创建订单失败：3203 时展示不可用座位名称（文档：unavailableSeatNames）
+                            if (res.code == 3203 && res.data != null && res.data is Map) {
+                              final errData = res.data as Map;
+                              final names = errData['unavailableSeatNames'];
+                              if (names is List && names.isNotEmpty) {
+                                ToastService.showError('部分座位不可用，请重新选择：${names.join('、')}');
+                              }
+                              // 通用错误文案由 ApiRequest 已 Toast
+                            }
+                            return;
+                          }
+                          final orderNumber = res.data?['orderNumber'];
+                          if (orderNumber == null) {
+                            ToastService.showError('创建订单失败，未返回订单号');
+                            return;
+                          }
                           // ignore: use_build_context_synchronously
                           context.pushNamed('confirmOrder', queryParameters: {
-                            'id': '${res.data?['id']}'
+                            'orderNumber': '$orderNumber'
                           });
+                        }).catchError((_) {
+                          if (mounted) setState(() => _creatingOrder = false);
                         });
                       } else {
                         ToastService.showWarning(S.of(context).movieTicketType_selectMovieTicketType);
                       }
                         },
                         child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                color: Colors.white,
-                                size: 24.sp,
-                              ),
-                              SizedBox(width: 10.w),
-                              Text(
-                      S.of(context).movieTicketType_confirmOrder,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 28.sp,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Poppins',
+                          child: _creatingOrder
+                              ? SizedBox(
+                                  width: 28.w,
+                                  height: 28.h,
+                                  child: const CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.white,
+                                      size: 24.sp,
+                                    ),
+                                    SizedBox(width: 10.w),
+                                    Text(
+                                      S.of(context).movieTicketType_confirmOrder,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         ),
                     ),
                   ),
@@ -906,19 +1109,52 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
     );
   }
 
-  int getTotalPrice () {
+  /// 单价 = areaPrice + 所选票种价格 + 规格加价之和 + 放映类型加价；总价 = 各座位单价之和
+  /// 
+  /// 计算总规格加价（所有规格的加价之和）
+  int get _totalSpecPlusPrice {
+    if (data.specPriceList == null || data.specPriceList!.isEmpty) {
+      return 0;
+    }
+    return data.specPriceList!.fold(0, (sum, spec) => sum + (spec.plusPrice ?? 0));
+  }
+  
+  /// 获取放映类型加价（2D/3D）
+  int get _displayTypeSurcharge => data.displayTypeSurcharge ?? 0;
+
+  /// 计算单个座位的票价（用于在座位上显示）
+  /// 单价 = 区域价 + 票种价格 + 规格加价之和 + 放映类型加价
+  int _seatPrice(Seat item) {
+    final area = item.areaPrice ?? 0;
+    final specPlus = _totalSpecPlusPrice;
+    final displayPlus = _displayTypeSurcharge;
+    
+    if (item.movieTicketTypeId != null) {
+      try {
+        final type = movieTicketTypeData.firstWhere((el) => el.id == item.movieTicketTypeId);
+        return area + (type.price ?? 0) + specPlus + displayPlus;
+      } catch (_) {
+        return area + specPlus + displayPlus;
+      }
+    }
+    return area + specPlus + displayPlus;
+  }
+
+  int getTotalPrice() {
     if (data.seat == null) return 0;
     return data.seat!.fold(0, (prev, current) {
+      final areaPrice = current.areaPrice ?? 0;
+      final specPlus = _totalSpecPlusPrice;
+      final displayPlus = _displayTypeSurcharge;
+      
       if (current.movieTicketTypeId != null) {
         try {
-        MovieTicketTypeResponse ticketType = movieTicketTypeData.firstWhere((el) => el.id == current.movieTicketTypeId);
-        return prev + (ticketType.price ?? 0) + (current.plusPrice ?? 0);
-        } catch (e) {
-          // 如果没有找到匹配的票种，返回原价格
-          return prev + (current.plusPrice ?? 0);
+          final ticketType = movieTicketTypeData.firstWhere((el) => el.id == current.movieTicketTypeId);
+          return prev + areaPrice + (ticketType.price ?? 0) + specPlus + displayPlus;
+        } catch (_) {
+          return prev + areaPrice + specPlus + displayPlus;
         }
       }
-
       return prev;
     });
   }
@@ -935,7 +1171,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
             Container(
               padding: EdgeInsets.all(8.w),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Icon(
@@ -958,15 +1194,15 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.25),
+            color: Colors.white.withValues(alpha: 0.25),
             borderRadius: BorderRadius.circular(20.r),
             border: Border.all(
-              color: Colors.white.withOpacity(0.3),
+              color: Colors.white.withValues(alpha: 0.3),
               width: 1,
             ),
           ),
           child: Text(
-            '${data.price}${S.of(context).common_unit_jpy}',
+            '${data.price ?? 0}${S.of(context).common_unit_jpy}',
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
@@ -986,7 +1222,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
               Container(
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(
@@ -1009,7 +1245,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.25),
+              color: Colors.grey.withValues(alpha: 0.25),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: Text(
@@ -1047,7 +1283,7 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
+                color: Colors.black.withValues(alpha: 0.1),
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),

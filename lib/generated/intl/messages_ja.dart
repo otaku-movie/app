@@ -143,6 +143,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "about_movieShowList_dropdown_version":
         MessageLookupByLibrary.simpleMessage("バージョン"),
+    "about_movieShowList_dropdown_dimensionType":
+        MessageLookupByLibrary.simpleMessage("2D/3D"),
     "about_privacy_policy": MessageLookupByLibrary.simpleMessage(
       "プライバシーポリシーを表示",
     ),
@@ -612,6 +614,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "movieTicketType_total": MessageLookupByLibrary.simpleMessage("合計"),
     "movieTicketType_totalPrice": MessageLookupByLibrary.simpleMessage("合計金額"),
+    "movieTicketType_singleSeatPrice": MessageLookupByLibrary.simpleMessage("1座あたり料金"),
+    "movieTicketType_seatCountLabel": MessageLookupByLibrary.simpleMessage("席"),
+    "movieTicketType_priceRuleTitle": MessageLookupByLibrary.simpleMessage("料金計算ルール"),
+    "movieTicketType_priceRuleFormula": MessageLookupByLibrary.simpleMessage("1座あたり料金 = エリア料金 + チケット種類料金 + 特効仕様加算（3D・IMAX等、通常2Dはなし）"),
     "orderDetail_countdown_hoursMinutes": m12,
     "orderDetail_countdown_minutesSeconds": m13,
     "orderDetail_countdown_seconds": m14,
@@ -625,6 +631,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "注文作成日時",
     ),
     "orderDetail_orderMessage": MessageLookupByLibrary.simpleMessage("注文情報"),
+    "orderDetail_failureReason": MessageLookupByLibrary.simpleMessage("失敗理由"),
     "orderDetail_orderNumber": MessageLookupByLibrary.simpleMessage("注文番号"),
     "orderDetail_orderState": MessageLookupByLibrary.simpleMessage("注文状態"),
     "orderDetail_payMethod": MessageLookupByLibrary.simpleMessage("支払い方法"),
@@ -734,6 +741,11 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("一時カードが削除されました"),
     "payment_selectCreditCard_tempCardSelected":
         MessageLookupByLibrary.simpleMessage("一時クレジットカードが選択されました"),
+    "payError_back": MessageLookupByLibrary.simpleMessage("戻る"),
+    "payError_message": MessageLookupByLibrary.simpleMessage(
+      "注文に問題が発生しました。しばらくしてから再度お試しください。",
+    ),
+    "payError_title": MessageLookupByLibrary.simpleMessage("支払い失敗"),
     "payment_selectCreditCard_title": MessageLookupByLibrary.simpleMessage(
       "クレジットカードを選択",
     ),
@@ -799,6 +811,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "seatSelection_cancelSeatFailed": MessageLookupByLibrary.simpleMessage(
       "座席選択のキャンセルに失敗しました。再試行してください",
     ),
+    "seatSelection_goToPay": MessageLookupByLibrary.simpleMessage("支払いへ"),
+    "seatSelection_hasLockedOrderMessage": MessageLookupByLibrary.simpleMessage(
+      "未払いの注文があります。先に支払いを完了してください",
+    ),
+    "seatSelection_hasLockedOrderTitle": MessageLookupByLibrary.simpleMessage(
+      "未払い注文",
+    ),
+    "seatSelection_later": MessageLookupByLibrary.simpleMessage("後で"),
     "seatSelection_cancelSeatTitle": MessageLookupByLibrary.simpleMessage(
       "座席選択をキャンセル",
     ),

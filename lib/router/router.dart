@@ -187,7 +187,7 @@ final GoRouter routerConfig = GoRouter(
           name: 'confirmOrder',
           builder: (BuildContext context, GoRouterState state) {
             return ConfirmOrder(
-              id: state.uri.queryParameters['id'],
+              orderNumber: state.uri.queryParameters['orderNumber'],
             );
           },
         ),
@@ -196,7 +196,7 @@ final GoRouter routerConfig = GoRouter(
           name: 'selectCreditCard',
           builder: (BuildContext context, GoRouterState state) {
             return SelectCreditCard(
-              orderId: state.uri.queryParameters['orderId'],
+              orderNumber: state.uri.queryParameters['orderNumber'],
             );
           },
         ),
@@ -205,7 +205,7 @@ final GoRouter routerConfig = GoRouter(
           name: 'addCreditCard',
           builder: (BuildContext context, GoRouterState state) {
             return AddCreditCard(
-              orderId: state.uri.queryParameters['orderId'],
+              orderNumber: state.uri.queryParameters['orderNumber'],
             );
           },
         ),
@@ -214,7 +214,7 @@ final GoRouter routerConfig = GoRouter(
           name: 'paySuccess',
           builder: (BuildContext context, GoRouterState state) {
             return PaySuccess(
-              orderId: state.uri.queryParameters['orderId'], 
+              orderNumber: state.uri.queryParameters['orderNumber'], 
             );
           },
         ),
@@ -222,7 +222,7 @@ final GoRouter routerConfig = GoRouter(
           path: '/movie/order/error',
           name: 'payError',
           builder: (BuildContext context, GoRouterState state) {
-            return const PayError();
+            return PayError(reason: state.uri.queryParameters['reason']);
           },
         ),
         GoRoute(
@@ -244,7 +244,7 @@ final GoRouter routerConfig = GoRouter(
           name: 'orderDetail',
           builder: (BuildContext context, GoRouterState state) {
             return OrderDetail(
-              id: state.uri.queryParameters['id'],
+              orderNumber: state.uri.queryParameters['orderNumber'],
             );
           },
         ),

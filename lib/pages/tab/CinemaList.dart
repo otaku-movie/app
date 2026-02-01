@@ -682,7 +682,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1989FA).withOpacity(0.1),
+                    color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Text(
@@ -719,7 +719,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
           borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 20,
               offset: const Offset(0, 4),
             ),
@@ -789,7 +789,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                       Container(
                         padding: EdgeInsets.all(6.w),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1989FA).withOpacity(0.1),
+                          color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: Icon(
@@ -881,7 +881,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                       Container(
                         padding: EdgeInsets.all(6.w),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFEE5A6F).withOpacity(0.1),
+                          color: const Color(0xFFEE5A6F).withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(6.r),
                         ),
                         child: Icon(
@@ -1002,7 +1002,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                                           color: Colors.grey.shade100, // 使用淡灰色背景
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.black.withOpacity(0.1),
+                                              color: Colors.black.withValues(alpha: 0.1),
                                               blurRadius: 8,
                                               offset: const Offset(0, 2),
                                             ),
@@ -1058,7 +1058,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                                       //       ),
                                       //       boxShadow: [
                                       //         BoxShadow(
-                                      //           color: Colors.orange.withOpacity(0.2),
+                                      //           color: Colors.orange.withValues(alpha: 0.2),
                                       //           blurRadius: 12,
                                       //           offset: const Offset(0, 3),
                                       //         ),
@@ -1151,7 +1151,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
             //             borderRadius: BorderRadius.circular(20.r),
             //             boxShadow: [
             //               BoxShadow(
-            //                 color: Colors.blue.withOpacity(0.3),
+            //                 color: Colors.blue.withValues(alpha: 0.3),
             //                 blurRadius: 8,
             //                 offset: const Offset(0, 2),
             //               ),
@@ -1192,10 +1192,10 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(
-          color: color.withOpacity(0.3),
+          color: color.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -1260,7 +1260,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
               boxShadow: showAppBarShadow
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
+                      color: Colors.black.withValues(alpha: 0.15),
                       blurRadius: 20,
                       offset: const Offset(0, 6),
                       spreadRadius: 0,
@@ -1541,7 +1541,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
           //       color: Colors.white,
           //       boxShadow: [
           //         BoxShadow(
-          //           color: Colors.black.withOpacity(0.06),
+          //           color: Colors.black.withValues(alpha: 0.06),
           //           blurRadius: 10,
           //           offset: const Offset(0, -2),
           //         ),
@@ -1554,7 +1554,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
               //       Container(
               //         padding: EdgeInsets.all(6.w),
               //         decoration: BoxDecoration(
-              //           color: const Color(0xFF1989FA).withOpacity(0.12),
+              //           color: const Color(0xFF1989FA).withValues(alpha: 0.12),
               //           borderRadius: BorderRadius.circular(8.r),
               //         ),
               //         child: Icon(

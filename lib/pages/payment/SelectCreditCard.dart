@@ -10,9 +10,9 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/payment/credit_card_response.dart';
 
 class SelectCreditCard extends StatefulWidget {
-  final String? orderId;
+  final String? orderNumber;
   
-  const SelectCreditCard({super.key, this.orderId});
+  const SelectCreditCard({super.key, this.orderNumber});
 
   @override
   State<SelectCreditCard> createState() => _SelectCreditCardState();
@@ -87,16 +87,22 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
       _isPaying = true;
     });
 
+    final orderNumber = widget.orderNumber;
+    if (orderNumber == null || orderNumber.isEmpty) {
+      ToastService.showError('订单号无效');
+      setState(() => _isPaying = false);
+      return;
+    }
     try {
       // 准备支付数据
       final paymentRequest = PaymentRequest(
-        orderId: int.parse(widget.orderId!),
+        orderNumber: orderNumber,
         creditCardId: _tempCard == null ? _selectedCardId : null,
         tempCard: _tempCard,
       );
 
       // 调用支付接口
-      await ApiRequest().request<dynamic>(
+      final res = await ApiRequest().request<dynamic>(
         path: '/movieOrder/pay',
         method: 'POST',
         data: paymentRequest.toJson(),
@@ -105,20 +111,26 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
 
       if (!mounted) return;
 
-      // 支付成功后清除临时卡片（如果使用的是临时卡片）
-      if (_tempCard != null) {
-        _tempCard = null;
+      // 仅当后端明确返回 code==200 时跳转成功页，否则一律跳失败页（含 code 为 null 或非 200）
+      if (res.code == 200) {
+        // 支付成功后清除临时卡片（如果使用的是临时卡片）
+        if (_tempCard != null) {
+          _tempCard = null;
+        }
+        ToastService.showSuccess(S.of(context).payment_selectCreditCard_paymentSuccess);
+        context.pushReplacementNamed('paySuccess', queryParameters: {
+          'orderNumber': orderNumber,
+        });
+      } else {
+        context.pushReplacementNamed('payError', queryParameters: {
+          'reason': res.message ?? S.of(context).payment_selectCreditCard_paymentFailed,
+        });
       }
-
-      ToastService.showSuccess(S.of(context).payment_selectCreditCard_paymentSuccess);
-      
-      // 跳转到支付成功页面
-      context.pushReplacementNamed('paySuccess', queryParameters: {
-        'orderId': widget.orderId!,
-      });
     } catch (e) {
       if (!mounted) return;
-      ToastService.showError(S.of(context).payment_selectCreditCard_paymentFailed);
+      context.pushReplacementNamed('payError', queryParameters: {
+        'reason': S.of(context).payment_selectCreditCard_paymentFailed,
+      });
     } finally {
       if (mounted) {
         setState(() {
@@ -133,7 +145,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
     final result = await context.pushNamed(
       'addCreditCard',
       queryParameters: {
-        'orderId': widget.orderId,
+        'orderNumber': widget.orderNumber,
       },
     );
 
@@ -225,7 +237,7 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                   decoration: BoxDecoration(
-                    color: isSelected ? Colors.white.withOpacity(0.2) : Colors.purple.shade100,
+                    color: isSelected ? Colors.white.withValues(alpha: 0.2) : Colors.purple.shade100,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(

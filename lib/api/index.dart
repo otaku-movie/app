@@ -159,14 +159,13 @@ class ApiRequest {
         (json) => fromJsonT(json),
       );
       
-      // 检查响应状态码
+      // 检查响应状态码（与 RestBean 约定一致：200=成功）
       if (response.statusCode == 200 && apiResponse.code == 200) {
         return apiResponse;
-      } else {
-        // 显示错误消息
-        ToastService.showInfo(apiResponse.message ?? '');
-        return apiResponse;
       }
+      // 非 200：显示错误消息后仍返回，由调用方根据 code 处理（如 3203 不可用座位）
+      ToastService.showInfo(apiResponse.message ?? '');
+      return apiResponse;
       
     } catch (e) {
       // 错误处理
@@ -183,7 +182,8 @@ class ApiRequest {
           // 处理服务器返回的错误响应（如 400, 500 等）
           if (e.response?.data != null && e.response!.data is Map) {
             final responseData = e.response!.data as Map;
-            if (responseData['code'] != 1 && responseData['message'] != null) {
+            // RestBean：200=成功，非 200 时展示 message
+            if (responseData['code'] != 200 && responseData['message'] != null) {
               ToastService.showInfo(responseData['message'] as String);
             }
           }

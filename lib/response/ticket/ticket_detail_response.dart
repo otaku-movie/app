@@ -5,6 +5,7 @@ part 'ticket_detail_response.g.dart';
 @JsonSerializable(fieldRename: FieldRename.none)
 class TicketDetailResponse {
   final int? id;
+  final String? orderNumber;
   final double? orderTotal;
   final int? orderState;
   final String? payMethod;
@@ -26,11 +27,17 @@ class TicketDetailResponse {
   final String? cinemaTel;
   final int? theaterHallId;
   final String? theaterHallName;
+  /// 规格名称（单个，兼容旧接口）
   final String? specName;
+  /// 规格名称列表（多个）
+  final List<String>? specNames;
+  /// 放映类型：1=2D，2=3D
+  final int? dimensionType;
   final List<SeatInfo>? seat;
 
   TicketDetailResponse({
     this.id,
+    this.orderNumber,
     this.orderTotal,
     this.orderState,
     this.payMethod,
@@ -53,6 +60,8 @@ class TicketDetailResponse {
     this.theaterHallId,
     this.theaterHallName,
     this.specName,
+    this.specNames,
+    this.dimensionType,
     this.seat,
   });
 

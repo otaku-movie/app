@@ -8,15 +8,16 @@ import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/dict.dart';
+import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/order/order_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
 
 class OrderDetail extends StatefulWidget {
-  final String? id;
+  final String? orderNumber;
 
-  const OrderDetail({super.key, this.id});
+  const OrderDetail({super.key, this.orderNumber});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -28,38 +29,47 @@ class _PageState extends State<OrderDetail> {
   // ignore: non_constant_identifier_names
   Uint8List? QRcodeBytes;
   bool loading = false;
+  bool error = false;
 
-  getData() {
+  Future<void> getData() async {
+    if (widget.orderNumber == null || widget.orderNumber!.isEmpty) return;
     setState(() {
       loading = true;
+      error = false;
     });
-    ApiRequest().request(
-      path: '/movieOrder/detail',
-      method: 'GET', 
-      queryParameters: {
-        "id": int.parse(widget.id!)
-      },
-      fromJsonT: (json) {
-        return OrderDetailResponse.fromJson(json);
-      },
-    ).then((res) {
-      if (res.data != null) {
+    try {
+      final res = await ApiRequest().request(
+        path: '/movieOrder/detail',
+        method: 'GET',
+        queryParameters: {
+          "orderNumber": widget.orderNumber!,
+        },
+        fromJsonT: (json) {
+          return OrderDetailResponse.fromJson(json);
+        },
+      );
+      if (res.data != null && mounted) {
         setState(() {
           data = res.data!;
+          error = false;
         });
+      } else if (mounted) {
+        setState(() => error = true);
       }
-    }).whenComplete(() {
-      setState(() {
-        loading = false;
-      });
-    });
+    } catch (_) {
+      if (mounted) setState(() => error = true);
+    } finally {
+      if (mounted) {
+        setState(() => loading = false);
+      }
+    }
   }
   generatorQRCode () {
     ApiRequest().request<dynamic>(
       path: '/movieOrder/generatorQRcode',
       method: 'GET', 
       queryParameters: {
-        "id": int.parse(widget.id!)
+        "orderNumber": widget.orderNumber!,
       },
       fromJsonT: (json) => json,
       responseType: ResponseType.bytes
@@ -96,27 +106,16 @@ class _PageState extends State<OrderDetail> {
       appBar: CustomAppBar(
          title: Text(S.of(context).orderDetail_title, style: const TextStyle(color: Colors.white)),
       ),
-      body: loading
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(
-                  color: const Color(0xFF1989FA),
-                ),
-                SizedBox(height: 20.h),
-                Text(
-                  S.of(context).common_loading,
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                    color: const Color(0xFF969799),
-                  ),
-                ),
-              ],
-            ),
-          )
-        : SingleChildScrollView(
-        child: Container(
+      body: AppErrorWidget(
+        loading: loading,
+        error: error,
+        onRetry: getData,
+        child: RefreshIndicator(
+          onRefresh: getData,
+          color: const Color(0xFF1989FA),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Container(
           padding: EdgeInsets.all(24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,13 +129,13 @@ class _PageState extends State<OrderDetail> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFFFF6B6B).withOpacity(0.1),
-                        const Color(0xFFFFE66D).withOpacity(0.1),
+                        const Color(0xFFFF6B6B).withValues(alpha: 0.1),
+                        const Color(0xFFFFE66D).withValues(alpha: 0.1),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16.r),
                     border: Border.all(
-                      color: const Color(0xFFFF6B6B).withOpacity(0.3),
+                      color: const Color(0xFFFF6B6B).withValues(alpha: 0.3),
                       width: 1.5,
                     ),
                   ),
@@ -146,7 +145,7 @@ class _PageState extends State<OrderDetail> {
                         width: 60.w,
                         height: 60.w,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFF6B6B).withOpacity(0.2),
+                          color: const Color(0xFFFF6B6B).withValues(alpha: 0.2),
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -191,7 +190,7 @@ class _PageState extends State<OrderDetail> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -249,7 +248,7 @@ class _PageState extends State<OrderDetail> {
                                 width: 60.w,
                                 height: 60.w,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF1989FA).withOpacity(0.1),
+                                  color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(30.r),
                                 ),
                                 child: Icon(
@@ -271,7 +270,7 @@ class _PageState extends State<OrderDetail> {
                                 width: 60.w,
                                 height: 60.w,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFEE0A24).withOpacity(0.1),
+                                  color: const Color(0xFFEE0A24).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(30.r),
                                 ),
                                 child: Icon(
@@ -310,7 +309,7 @@ class _PageState extends State<OrderDetail> {
                               borderRadius: BorderRadius.circular(12.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withValues(alpha: 0.1),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -388,12 +387,16 @@ class _PageState extends State<OrderDetail> {
                                       ),
                                     ),
                                     
-                                    // 版本信息和影厅
-                                    if ((data.specName != null && data.specName!.isNotEmpty) || 
+                                    // 版本信息、2D/3D、影厅
+                                    if ((data.specNames != null && data.specNames!.isNotEmpty) ||
+                                        (data.specName != null && data.specName!.isNotEmpty) ||
+                                        data.dimensionType != null ||
                                         (data.theaterHallName != null && data.theaterHallName!.isNotEmpty))
                                       Padding(
                                         padding: EdgeInsets.only(top: 8.h),
-                                        child: Row(
+                                        child: Wrap(
+                                          spacing: 8.w,
+                                          runSpacing: 6.h,
                                           children: [
                                             // 影厅名称
                                             if (data.theaterHallName != null && data.theaterHallName!.isNotEmpty)
@@ -415,14 +418,10 @@ class _PageState extends State<OrderDetail> {
                                                   ),
                                                 ),
                                               ),
-                                            
-                                            // 间距
-                                            if (data.theaterHallName != null && data.theaterHallName!.isNotEmpty &&
-                                                data.specName != null && data.specName!.isNotEmpty)
-                                              SizedBox(width: 8.w),
-                                            
-                                            // 版本信息
-                                            if (data.specName != null && data.specName!.isNotEmpty)
+                                            // 规格 + 2D/3D 合并一块
+                                            if ((data.specNames != null && data.specNames!.isNotEmpty) ||
+                                                (data.specName != null && data.specName!.isNotEmpty) ||
+                                                data.dimensionType != null)
                                               Container(
                                                 padding: EdgeInsets.symmetric(
                                                   horizontal: 12.w,
@@ -432,18 +431,50 @@ class _PageState extends State<OrderDetail> {
                                                   gradient: LinearGradient(
                                                     colors: [
                                                       const Color(0xFF1989FA),
-                                                      const Color(0xFF1989FA).withOpacity(0.8),
+                                                      const Color(0xFF1989FA).withValues(alpha: 0.8),
                                                     ],
                                                   ),
                                                   borderRadius: BorderRadius.circular(6.r),
                                                 ),
-                                                child: Text(
-                                                  data.specName!,
-                                                  style: TextStyle(
-                                                    fontSize: 22.sp,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    if (data.specNames != null && data.specNames!.isNotEmpty)
+                                                      Text(
+                                                        data.specNames!.join('、'),
+                                                        style: TextStyle(
+                                                          fontSize: 22.sp,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      )
+                                                    else if (data.specName != null && data.specName!.isNotEmpty)
+                                                      Text(
+                                                        data.specName!,
+                                                        style: TextStyle(
+                                                          fontSize: 22.sp,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    if (data.dimensionType != null) ...[
+                                                      if ((data.specNames != null && data.specNames!.isNotEmpty) ||
+                                                          (data.specName != null && data.specName!.isNotEmpty))
+                                                        SizedBox(width: 6.w),
+                                                      Text(
+                                                        data.dimensionType == 1
+                                                            ? '2D'
+                                                            : data.dimensionType == 2
+                                                                ? '3D'
+                                                                : '${data.dimensionType}',
+                                                        style: TextStyle(
+                                                          fontSize: 22.sp,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ],
                                                 ),
                                               ),
                                           ],
@@ -486,7 +517,7 @@ class _PageState extends State<OrderDetail> {
                                           gradient: LinearGradient(
                                             colors: [
                                               const Color(0xFF1989FA),
-                                              const Color(0xFF1989FA).withOpacity(0.9),
+                                              const Color(0xFF1989FA).withValues(alpha: 0.9),
                                             ],
                                           ),
                                           borderRadius: BorderRadius.circular(25.r),
@@ -526,7 +557,7 @@ class _PageState extends State<OrderDetail> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -576,7 +607,7 @@ class _PageState extends State<OrderDetail> {
                                   width: 40.w,
                                   height: 40.w,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF1989FA).withOpacity(0.1),
+                                    color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   child: Center(
@@ -625,7 +656,7 @@ class _PageState extends State<OrderDetail> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -745,7 +776,7 @@ class _PageState extends State<OrderDetail> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -778,7 +809,7 @@ class _PageState extends State<OrderDetail> {
                     // 订单详情项
                     _buildOrderInfoRow(
                       S.of(context).orderDetail_orderNumber,
-                      '${data.id}',
+                      data.orderNumber ?? '',
                     ),
                     SizedBox(height: 16.h),
                     Row(
@@ -794,6 +825,13 @@ class _PageState extends State<OrderDetail> {
                         _buildOrderStateTag(data.orderState),
                       ],
                     ),
+                    if (data.failureReason != null && data.failureReason!.isNotEmpty) ...[
+                      SizedBox(height: 16.h),
+                      _buildOrderInfoRow(
+                        S.of(context).orderDetail_failureReason,
+                        data.failureReason!,
+                      ),
+                    ],
                     SizedBox(height: 16.h),
                     _buildOrderInfoRow(
                       S.of(context).orderDetail_orderCreateTime,
@@ -818,6 +856,8 @@ class _PageState extends State<OrderDetail> {
           ),
         ),
       ),
+    ),
+    ),
     );
   }
 
@@ -869,7 +909,7 @@ class _PageState extends State<OrderDetail> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: _getOrderStateColor(code).withOpacity(0.1),
+        color: _getOrderStateColor(code).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: DefaultTextStyle(

@@ -184,7 +184,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                   borderRadius: BorderRadius.circular(20.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -303,7 +303,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                                         borderRadius: BorderRadius.circular(12.r),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black.withOpacity(0.08),
+                                            color: Colors.black.withValues(alpha: 0.08),
                                             blurRadius: 6,
                                             offset: const Offset(0, 2),
                                           ),
@@ -454,12 +454,12 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
       margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [specColor.withOpacity(0.1), Colors.white],
+          colors: [specColor.withValues(alpha: 0.1), Colors.white],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: specColor.withOpacity(0.3), width: 1.5),
+        border: Border.all(color: specColor.withValues(alpha: 0.3), width: 1.5),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(16.r),
@@ -472,7 +472,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
               child: Icon(
                 specIcon,
                 size: 100.sp,
-                color: specColor.withOpacity(0.05),
+                color: specColor.withValues(alpha: 0.05),
               ),
             ),
             // 内容
@@ -484,7 +484,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                   Container(
                     padding: EdgeInsets.all(12.w),
                     decoration: BoxDecoration(
-                      color: specColor.withOpacity(0.15),
+                      color: specColor.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Icon(
@@ -510,7 +510,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                           decoration: BoxDecoration(
-                            color: specColor.withOpacity(0.15),
+                            color: specColor.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(6.r),
                           ),
                           child: Text(
@@ -632,7 +632,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
           Container(
             padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
-              color: const Color(0xFF667EEA).withOpacity(0.1),
+              color: const Color(0xFF667EEA).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Icon(
@@ -739,7 +739,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
           Container(
             padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12.r),
             ),
             child: Icon(
@@ -830,10 +830,10 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                       decoration: BoxDecoration(
-                        color: iconColor.withOpacity(0.1),
+                        color: iconColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8.r),
                         border: Border.all(
-                          color: iconColor.withOpacity(0.3),
+                          color: iconColor.withValues(alpha: 0.3),
                           width: 1,
                         ),
                       ),
@@ -907,7 +907,7 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
               Container(
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  color: iconColor.withOpacity(0.1),
+                  color: iconColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Icon(

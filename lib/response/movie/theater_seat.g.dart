@@ -17,6 +17,8 @@ TheaterSeat _$TheaterSeatFromJson(Map<String, dynamic> json) => TheaterSeat(
       area: (json['area'] as List<dynamic>?)
           ?.map((e) => AreaElement.fromJson(e as Map<String, dynamic>))
           .toList(),
+      hasLockedOrder: json['hasLockedOrder'] as bool?,
+      orderNumber: json['orderNumber'] as String?,
     );
 
 Map<String, dynamic> _$TheaterSeatToJson(TheaterSeat instance) =>
@@ -25,6 +27,8 @@ Map<String, dynamic> _$TheaterSeatToJson(TheaterSeat instance) =>
       'seat': instance.seat?.map((e) => e.toJson()).toList(),
       'aisle': instance.aisle?.map((e) => e.toJson()).toList(),
       'area': instance.area?.map((e) => e.toJson()).toList(),
+      'hasLockedOrder': instance.hasLockedOrder,
+      'orderNumber': instance.orderNumber,
     };
 
 Aisle _$AisleFromJson(Map<String, dynamic> json) => Aisle(

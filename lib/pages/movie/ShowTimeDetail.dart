@@ -371,10 +371,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                       //     margin: EdgeInsets.only(right: 16.w),
                       //     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                       //     decoration: BoxDecoration(
-                      //       color: Colors.white.withOpacity(0.2),
+                      //       color: Colors.white.withValues(alpha: 0.2),
                       //       borderRadius: BorderRadius.circular(20.r),
                       //       border: Border.all(
-                      //         color: Colors.white.withOpacity(0.5),
+                      //         color: Colors.white.withValues(alpha: 0.5),
                       //         width: 1,
                       //       ),
                       //     ),

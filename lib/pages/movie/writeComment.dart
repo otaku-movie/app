@@ -156,7 +156,7 @@ class _WriteCommentPageState extends State<WriteComment> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -201,7 +201,7 @@ class _WriteCommentPageState extends State<WriteComment> {
                           height: 48.h, // 固定高度
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF6B35).withOpacity(0.1),
+                            color: const Color(0xFFFF6B35).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(24.r),
                           ),
                           child: Text(
@@ -227,7 +227,7 @@ class _WriteCommentPageState extends State<WriteComment> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),

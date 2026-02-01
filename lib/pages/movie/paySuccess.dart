@@ -12,9 +12,9 @@ import 'package:otaku_movie/api/index.dart';
 import 'package:dio/dio.dart';
 
 class PaySuccess extends StatefulWidget {
-  final String? orderId;
+  final String? orderNumber;
 
-  const PaySuccess({super.key, this.orderId});
+  const PaySuccess({super.key, this.orderNumber});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -30,12 +30,13 @@ class _PageState extends State<PaySuccess> {
     setState(() {
       loading = true;
     });
-    if (widget.orderId != null) {
+    final orderNumber = widget.orderNumber;
+    if (orderNumber != null && orderNumber.isNotEmpty && orderNumber != 'null') {
       ApiRequest().request(
         path: '/movieOrder/detail',
         method: 'GET', 
         queryParameters: {
-          "id": int.parse(widget.orderId!)
+          "orderNumber": orderNumber
         },
         fromJsonT: (json) {
           return OrderDetailResponse.fromJson(json);
@@ -51,15 +52,18 @@ class _PageState extends State<PaySuccess> {
           loading = false;
         });
       });
+    } else {
+      setState(() => loading = false);
     }
-   
   }
   generatorQRCode () {
+    final orderNumber = widget.orderNumber;
+    if (orderNumber == null || orderNumber.isEmpty || orderNumber == 'null') return;
     ApiRequest().request<dynamic>(
       path: '/movieOrder/generatorQRcode',
       method: 'GET', 
       queryParameters: {
-        "id": int.parse(widget.orderId!)
+        "orderNumber": orderNumber
       },
       fromJsonT: (json) => json,
       responseType: ResponseType.bytes
@@ -133,7 +137,7 @@ class _PageState extends State<PaySuccess> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -146,7 +150,7 @@ class _PageState extends State<PaySuccess> {
                       width: 140.w,
                       height: 140.w,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF07C160).withOpacity(0.1),
+                        color: const Color(0xFF07C160).withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -202,7 +206,7 @@ class _PageState extends State<PaySuccess> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -260,7 +264,7 @@ class _PageState extends State<PaySuccess> {
                                 width: 60.w,
                                 height: 60.w,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF1989FA).withOpacity(0.1),
+                                  color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(30.r),
                                 ),
                                 child: Icon(
@@ -282,7 +286,7 @@ class _PageState extends State<PaySuccess> {
                                 width: 60.w,
                                 height: 60.w,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFEE0A24).withOpacity(0.1),
+                                  color: const Color(0xFFEE0A24).withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(30.r),
                                 ),
                                 child: Icon(
@@ -324,7 +328,7 @@ class _PageState extends State<PaySuccess> {
                               borderRadius: BorderRadius.circular(12.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
+                                  color: Colors.black.withValues(alpha: 0.1),
                                   blurRadius: 8,
                                   offset: const Offset(0, 2),
                                 ),
@@ -402,13 +406,14 @@ class _PageState extends State<PaySuccess> {
                                       ),
                                     ),
                                     
-                                    // 版本信息和影厅
-                                    if ((data.specName != null && data.specName!.isNotEmpty) || 
+                                    // 规格+2D/3D 和影厅
+                                    if ((data.specName != null && data.specName!.isNotEmpty) ||
+                                        data.dimensionType != null ||
                                         (data.theaterHallName != null && data.theaterHallName!.isNotEmpty))
                                       Padding(
                                         padding: EdgeInsets.only(top: 8.h),
                                         child: Row(
-                                              children: [
+                                          children: [
                                             // 影厅名称
                                             if (data.theaterHallName != null && data.theaterHallName!.isNotEmpty)
                                               Container(
@@ -429,14 +434,11 @@ class _PageState extends State<PaySuccess> {
                                                   ),
                                                 ),
                                               ),
-                                            
-                                            // 间距
-                                            if (data.theaterHallName != null && data.theaterHallName!.isNotEmpty &&
-                                                data.specName != null && data.specName!.isNotEmpty)
-                                              SizedBox(width: 8.w),
-                                            
-                                            // 版本信息
-                                            if (data.specName != null && data.specName!.isNotEmpty)
+                                            if ((data.specName != null && data.specName!.isNotEmpty) ||
+                                                data.dimensionType != null) ...[
+                                              if (data.theaterHallName != null && data.theaterHallName!.isNotEmpty)
+                                                SizedBox(width: 8.w),
+                                              // 规格 + 2D/3D 合并一块
                                               Container(
                                                 padding: EdgeInsets.symmetric(
                                                   horizontal: 12.w,
@@ -446,20 +448,39 @@ class _PageState extends State<PaySuccess> {
                                                   gradient: LinearGradient(
                                                     colors: [
                                                       const Color(0xFF1989FA),
-                                                      const Color(0xFF1989FA).withOpacity(0.8),
+                                                      const Color(0xFF1989FA).withValues(alpha: 0.8),
                                                     ],
                                                   ),
                                                   borderRadius: BorderRadius.circular(6.r),
                                                 ),
-                                                child: Text(
-                                                  data.specName!,
-                                                  style: TextStyle(
-                                                    fontSize: 22.sp,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    if (data.specName != null && data.specName!.isNotEmpty)
+                                                      Text(
+                                                        data.specName!,
+                                                        style: TextStyle(
+                                                          fontSize: 22.sp,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    if (data.dimensionType != null) ...[
+                                                      if (data.specName != null && data.specName!.isNotEmpty)
+                                                        SizedBox(width: 6.w),
+                                                      Text(
+                                                        data.dimensionType == 1 ? '2D' : data.dimensionType == 2 ? '3D' : '${data.dimensionType}',
+                                                        style: TextStyle(
+                                                          fontSize: 22.sp,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ],
                                                 ),
                                               ),
+                                            ],
                                           ],
                                         ),
                                       ),
@@ -486,7 +507,7 @@ class _PageState extends State<PaySuccess> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -536,7 +557,7 @@ class _PageState extends State<PaySuccess> {
                                   width: 40.w,
                                   height: 40.w,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF1989FA).withOpacity(0.1),
+                                    color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   child: Center(
@@ -587,7 +608,7 @@ class _PageState extends State<PaySuccess> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -715,7 +736,7 @@ class _PageState extends State<PaySuccess> {
               GestureDetector(
                 onTap: () {
                   // 跳转到首页的票务 Tab（索引1）
-                  context.go('/home?tab=1');
+                  context.go('/home?tab=2');
                 },
                 child: Container(
                   width: double.infinity,
@@ -724,13 +745,13 @@ class _PageState extends State<PaySuccess> {
                     gradient: LinearGradient(
                       colors: [
                         const Color(0xFF1989FA),
-                        const Color(0xFF1989FA).withOpacity(0.9),
+                        const Color(0xFF1989FA).withValues(alpha: 0.9),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(16.r),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF1989FA).withOpacity(0.3),
+                        color: const Color(0xFF1989FA).withValues(alpha: 0.3),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),

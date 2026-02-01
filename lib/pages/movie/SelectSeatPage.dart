@@ -94,6 +94,23 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
           seatDataLoaded = true; // 座位数据加载完成
         });
         insertAisle();
+        // 当前用户在本场次有未支付的锁定订单时，提示去支付页（与取消座位弹窗同款 UI）
+        if (res.data!.hasLockedOrder == true && res.data!.orderNumber != null && res.data!.orderNumber!.isNotEmpty) {
+          final orderNumber = res.data!.orderNumber!;
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            if (!mounted) return;
+            final goToPay = await SeatCancelManager.showCancelDialog(
+              context,
+              title: S.of(context).seatSelection_hasLockedOrderTitle,
+              content: S.of(context).seatSelection_hasLockedOrderMessage,
+              cancelText: S.of(context).seatSelection_later,
+              confirmText: S.of(context).seatSelection_goToPay,
+            );
+            if (goToPay && mounted) {
+              context.pushNamed('confirmOrder', queryParameters: {'orderNumber': orderNumber});
+            }
+          });
+        }
       }
     }).catchError((error) {
       setState(() {
@@ -171,6 +188,58 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
     return transformationController.value.getMaxScaleOnAxis();
   }
 
+  /// 选座页返回/右滑：无选座直接返回，有选座时弹出是否确认取消
+  Future<void> _handleBackOrCancelSeat() async {
+    if (selectSeatList.isEmpty) {
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+      return;
+    }
+    final shouldCancel = await SeatCancelManager.showCancelSeatDialog(context);
+    if (!mounted) return;
+    if (shouldCancel != true) return;
+    
+    // 直接调用后端 API 取消座位（释放 Redis 锁）
+    try {
+      // 构建座位位置列表（与确认选座时的格式保持一致）
+      final seatPositions = selectSeatList.map((item) {
+        return {
+          "x": item.x,
+          "y": item.y,
+          "seatId": item.id,
+          "seatName": item.seatName
+        };
+      }).toList();
+      
+      // 调用取消座位接口
+      await ApiRequest().request(
+        path: '/movie_show_time/select_seat/cancel',
+        method: 'POST',
+        data: {
+          'movieShowTimeId': int.parse(widget.id!),
+          'theaterHallId': int.parse(widget.theaterHallId!),
+          'seatPosition': seatPositions,
+        },
+        fromJsonT: (json) => json,
+      );
+      
+      // 清空本地座位列表
+      setState(() {
+        selectSeatList.clear();
+        selectSeatSet.clear();
+      });
+      
+      ToastService.showSuccess(S.of(context).seatSelection_seatCanceled);
+      
+      if (!mounted) return;
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      ToastService.showError(S.of(context).seatSelection_cancelSeatFailed);
+    }
+  }
 
   void selectSeat (SeatItem item) {
     if (
@@ -521,173 +590,27 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
       });
     }
 
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: CustomAppBar(
-        title: Text(
-          _showTimeData.cinemaName ?? '', 
-          style: TextStyle(color: Colors.white, fontSize: 36.sp)
+    return PopScope(
+      canPop: selectSeatList.isEmpty,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        await _handleBackOrCancelSeat();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        appBar: CustomAppBar(
+          title: Text(
+            _showTimeData.cinemaName ?? '',
+            style: TextStyle(color: Colors.white, fontSize: 36.sp),
+          ),
+          onBackButtonPressed: () async {
+            // 选座页点返回键：直接回到上一步，不弹取消座位提示
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+          },
         ),
-        onBackButtonPressed: () async {
-          // 处理返回按钮点击
-          if (selectSeatList.isEmpty) {
-            // 没有选座，直接返回上一页
-            Navigator.of(context).pop();
-            return;
-          }
-          
-          // 有选座，显示确认对话框（Vant 风格）
-          if (!mounted) return;
-          final shouldCancel = await showDialog<bool>(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return Center(
-                child: Container(
-                  width: 640.w,
-                  margin: EdgeInsets.symmetric(horizontal: 32.w),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(32.r),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // 标题
-                      Padding(
-                        padding: EdgeInsets.only(top: 52.h, bottom: 16.h),
-                        child: Text(
-                          S.of(context).seatSelection_cancelSeatTitle,
-                          style: TextStyle(
-                            fontSize: 38.sp,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xFF323233),
-                            decoration: TextDecoration.none,
-                          ),
-                        ),
-                      ),
-                      
-                      // 内容
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 24.h),
-                        child: Text(
-                          S.of(context).seatSelection_cancelSeatConfirm,
-                          style: TextStyle(
-                            fontSize: 32.sp,
-                            color: Colors.black38,
-                            fontWeight: FontWeight.normal,
-                            // height: 1,
-                            decoration: TextDecoration.none,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      
-                      SizedBox(height: 24.h),
-                      
-                      // 按钮组 - Vant 风格的横向分割按钮
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              color: const Color(0xFFEBEDF0),
-                              width: 1,
-                            ),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            // 取消按钮
-                            Expanded(
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).pop(false);
-                                  },
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(32.r),
-                                  ),
-                                  child: Container(
-                                    height: 100.h,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      S.of(context).confirmOrder_continuePay,
-                                      style: TextStyle(
-                                        fontSize: 32.sp,
-                                        color: const Color(0xFF323233),
-                                        fontWeight: FontWeight.w500,
-                                        decoration: TextDecoration.none,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            
-                            // 分割线
-                            Container(
-                              width: 1,
-                              height: 100.h,
-                              color: const Color(0xFFEBEDF0),
-                            ),
-                            
-                            // 确认按钮
-                            Expanded(
-                              child: Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.of(context).pop(true);
-                                  },
-                                  borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(32.r),
-                                  ),
-                                  child: Container(
-                                    height: 100.h,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      S.of(context).confirmOrder_confirmCancel,
-                                      style: TextStyle(
-                                        fontSize: 32.sp,
-                                        color: const Color(0xFFEE0A24),
-                                        fontWeight: FontWeight.w600,
-                                        decoration: TextDecoration.none,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-
-          if (!mounted) return;
-          if (shouldCancel == true) {
-            // 用户确认取消，清除选座并返回
-            setState(() {
-              selectSeatList.clear();
-              selectSeatSet.clear();
-            });
-            
-            // 显示取消成功提示
-            ToastService.showSuccess(S.of(context).seatSelection_seatCanceled);
-            
-            if (!mounted) return;
-            
-            // 取消选座后，直接返回上一页
-            Navigator.of(context).pop();
-          }
-        },
-      ),
-      body: Stack(
+        body: Stack(
         children: [
           
           Positioned(
@@ -1300,9 +1223,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
           )
         ],
       ),
+    ),
     );
   }
-  
+
   List<Widget> buildSeatColumnName() {
     int index = 0;
 
@@ -1349,7 +1273,8 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                       return {
                         "x": item.x,
                         "y": item.y,
-                        "seatId": item.id
+                        "seatId": item.id,
+                        "seatName": item.seatName
                       };
                     }).toList();
 

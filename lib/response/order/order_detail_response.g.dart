@@ -9,6 +9,7 @@ part of 'order_detail_response.dart';
 OrderDetailResponse _$OrderDetailResponseFromJson(Map<String, dynamic> json) =>
     OrderDetailResponse(
       id: (json['id'] as num?)?.toInt(),
+      orderNumber: json['orderNumber'] as String?,
       orderTotal: (json['orderTotal'] as num?)?.toInt(),
       orderState: (json['orderState'] as num?)?.toInt(),
       payMethod: json['payMethod'] as String?,
@@ -29,6 +30,10 @@ OrderDetailResponse _$OrderDetailResponseFromJson(Map<String, dynamic> json) =>
       cinemaFullAddress: json['cinemaFullAddress'] as String?,
       theaterHallName: json['theaterHallName'] as String?,
       specName: json['specName'] as String?,
+      specNames: (json['specNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      dimensionType: (json['dimensionType'] as num?)?.toInt(),
+      payDeadline: json['payDeadline'] as String?,
+      failureReason: json['failureReason'] as String?,
       seat: (json['seat'] as List<dynamic>?)
           ?.map((e) => Seat.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -38,6 +43,7 @@ Map<String, dynamic> _$OrderDetailResponseToJson(
         OrderDetailResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'orderNumber': instance.orderNumber,
       'orderTotal': instance.orderTotal,
       'orderState': instance.orderState,
       'payMethod': instance.payMethod,
@@ -58,6 +64,10 @@ Map<String, dynamic> _$OrderDetailResponseToJson(
       'cinemaFullAddress': instance.cinemaFullAddress,
       'theaterHallName': instance.theaterHallName,
       'specName': instance.specName,
+      'specNames': instance.specNames,
+      'dimensionType': instance.dimensionType,
+      'payDeadline': instance.payDeadline,
+      'failureReason': instance.failureReason,
       'seat': instance.seat?.map((e) => e.toJson()).toList(),
     };
 

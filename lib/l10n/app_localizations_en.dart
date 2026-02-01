@@ -562,6 +562,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_movieShowList_dropdown_version => 'Version';
 
   @override
+  String get about_movieShowList_dropdown_dimensionType => '2D/3D';
+
+  @override
   String get enum_seatType_coupleSeat => 'Couple Seat';
 
   @override
@@ -885,6 +888,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieTicketType_totalPrice => 'Total Price';
 
   @override
+  String get movieTicketType_singleSeatPrice => 'Price per seat';
+
+  @override
+  String get movieTicketType_seatCountLabel => ' seats';
+
+  @override
+  String get movieTicketType_priceRuleTitle => 'Price Calculation';
+
+  @override
+  String get movieTicketType_priceRuleFormula =>
+      'Price per seat = Area price + Ticket type price + Spec surcharge (e.g. 3D, IMAX; 2D has none)';
+
+  @override
   String get movieTicketType_actualPrice => 'Actual Payment';
 
   @override
@@ -992,6 +1008,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get seatSelection_cancelSeatFailed =>
       'Failed to cancel seat selection, please try again';
+
+  @override
+  String get seatSelection_hasLockedOrderTitle => 'Unpaid Order';
+
+  @override
+  String get seatSelection_hasLockedOrderMessage =>
+      'You have an unpaid order. Please complete payment first.';
+
+  @override
+  String get seatSelection_goToPay => 'Go to Pay';
+
+  @override
+  String get seatSelection_later => 'Later';
 
   @override
   String get user_title => 'My Profile';
@@ -1131,6 +1160,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orderDetail_orderMessage => 'Order Information';
+
+  @override
+  String get orderDetail_failureReason => 'Failure Reason';
 
   @override
   String get payResult_title => 'Payment Successful';
@@ -1323,6 +1355,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get payment_selectCreditCard_tempCardSelected =>
       'Temporary credit card selected';
+
+  @override
+  String get payError_title => 'Payment Failed';
+
+  @override
+  String get payError_message =>
+      'Something went wrong with your order. Please try again later.';
+
+  @override
+  String get payError_back => 'Back';
 
   @override
   String get cinemaList_allArea => 'All Areas';

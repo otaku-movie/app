@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'dart:convert';
 
 part 'user_select_seat_data_response.g.dart';
 
@@ -22,6 +21,9 @@ class UserSelectSeatDataResponse {
   
   final String? specName;
   
+  /// 放映类型（2D/3D），用于 Dict 组件字典 dimensionType
+  final int? dimensionType;
+  
   final int? cinemaId;
   
   final String? cinemaName;
@@ -29,6 +31,15 @@ class UserSelectSeatDataResponse {
   final int? theaterHallId;
   
   final String? theaterHallName;
+  
+  /// 规格加价列表（如 IMAX、Dolby 等）
+  final List<SpecPrice>? specPriceList;
+  
+  /// 放映类型名称（2D/3D）
+  final String? displayTypeName;
+  
+  /// 放映类型加价（2D/3D 的加价，如 3D 加 300）
+  final int? displayTypeSurcharge;
   
   final List<Seat>? seat;
 
@@ -41,10 +52,14 @@ class UserSelectSeatDataResponse {
     this.startTime,
     this.endTime,
     this.specName,
+    this.dimensionType,
     this.cinemaId,
     this.cinemaName,
     this.theaterHallId,
     this.theaterHallName,
+    this.specPriceList,
+    this.displayTypeName,
+    this.displayTypeSurcharge,
     this.seat,
   });
 
@@ -69,8 +84,6 @@ class Seat {
   final String? areaName;
   
   int? movieTicketTypeId;
-  
-  final int? plusPrice;
 
   Seat({
     this.x,
@@ -80,10 +93,28 @@ class Seat {
     this.areaPrice,
     this.areaName,
     this.movieTicketTypeId,
-    this.plusPrice,
   });
 
   factory Seat.fromJson(Map<String, dynamic> json) => _$SeatFromJson(json);
 
   Map<String, dynamic> toJson() => _$SeatToJson(this);
+}
+
+/// 规格价格
+@JsonSerializable(fieldRename: FieldRename.none)
+class SpecPrice {
+  /// 规格名称（如 IMAX、Dolby）
+  final String? name;
+  
+  /// 加价（单位：日元）
+  final int? plusPrice;
+
+  SpecPrice({
+    this.name,
+    this.plusPrice,
+  });
+
+  factory SpecPrice.fromJson(Map<String, dynamic> json) => _$SpecPriceFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SpecPriceToJson(this);
 }

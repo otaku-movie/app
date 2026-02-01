@@ -114,7 +114,7 @@ class _PageState extends State<OrderList> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: _getOrderStateColor(code).withOpacity(0.1),
+        color: _getOrderStateColor(code).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(6.r),
       ),
       child: DefaultTextStyle(
@@ -160,8 +160,10 @@ class _PageState extends State<OrderList> {
 
             return GestureDetector(
               onTap: () {
+                final orderNumber = item.orderNumber ?? item.id?.toString();
+                if (orderNumber == null || orderNumber.isEmpty) return;
                 context.pushNamed('orderDetail', queryParameters: {
-                  'id': '${item.id}'
+                  'orderNumber': orderNumber,
                 });
               },
               child: Container(
@@ -172,7 +174,7 @@ class _PageState extends State<OrderList> {
                   borderRadius: BorderRadius.circular(16.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
+                      color: Colors.black.withValues(alpha: 0.03),
                       blurRadius: 10,
                       offset: const Offset(0, 2),
                     ),
@@ -194,7 +196,7 @@ class _PageState extends State<OrderList> {
                             ),
                             SizedBox(width: 6.w),
                             Text(
-                              '${S.of(context).orderList_orderNumber}：${item.id ?? ''}',
+                              '${S.of(context).orderList_orderNumber}：${item.orderNumber ?? ''}',
                               style: TextStyle(
                                 fontSize: 26.sp,
                                 color: const Color(0xFF969799),
@@ -208,8 +210,8 @@ class _PageState extends State<OrderList> {
                     
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 16.h),
-                      child: Divider(
-                        color: const Color(0xFFEBEDF0),
+                      child: const Divider(
+                        color: Color(0xFFEBEDF0),
                         height: 1,
                       ),
                     ),
@@ -224,7 +226,7 @@ class _PageState extends State<OrderList> {
                             borderRadius: BorderRadius.circular(12.r),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withValues(alpha: 0.1),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -340,7 +342,7 @@ class _PageState extends State<OrderList> {
                                                 vertical: 4.h,
                                               ),
                                               decoration: BoxDecoration(
-                                                color: const Color(0xFF1989FA).withOpacity(0.1),
+                                                color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                                                 borderRadius: BorderRadius.circular(6.r),
                                               ),
                                               child: Text(
@@ -400,7 +402,7 @@ class _PageState extends State<OrderList> {
                                           borderRadius: BorderRadius.circular(24.r),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: const Color(0xFFFF6B35).withOpacity(0.3),
+                                              color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
                                               blurRadius: 4,
                                               offset: const Offset(0, 4),
                                             ),
