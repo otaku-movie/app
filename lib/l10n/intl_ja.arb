@@ -532,5 +532,35 @@
   "comingSoon_releaseDate": "公開",
   "comingSoon_noMovies": "現在上映中の映画はありません",
   "comingSoon_tryLaterOrRefresh": "しばらくしてからもう一度お試しいただくか、下にスワイプして更新してください",
-  "comingSoon_pullToRefresh": "下にスワイプして更新"
+  "comingSoon_pullToRefresh": "下にスワイプして更新",
+  "comingSoon_presaleTicketBadge": "前売り券",
+  "movieDetail_viewPresaleTicket": "前売り券を見る",
+  "movieDetail_hasBonus": "特典付き",
+  "movieDetail_presaleHasBonus": "前売り券特典付き",
+  "presaleDetail_title": "前売り券詳細",
+  "presaleDetail_applyMovie": "対象映画",
+  "presaleDetail_salePeriod": "販売期間",
+  "presaleDetail_salePeriodNote": "本商品は前売り券です。販売期間は以下のとおりです。",
+  "presaleDetail_usagePeriod": "利用期間",
+  "presaleDetail_perUserLimit": "お一人様限り",
+  "presaleDetail_noLimit": "制限なし",
+  "presaleDetail_pickupNotes": "チケット受け取り",
+  "presaleDetail_description": "説明",
+  "presaleDetail_specs": "仕様・価格",
+  "presaleDetail_bonus": "特典",
+  "presaleDetail_price": "価格",
+  "presaleDetail_stock": "在庫",
+  "presaleDetail_delivery": "配送",
+  "presaleDetail_gallery": "ギャラリー",
+  "presaleDetail_buy": "購入",
+  "presaleDetail_addToCart": "カートに入れる",
+  "presaleDetail_buyNow": "今すぐ購入",
+  "presaleDetail_finalPrice": "お届け価格",
+  "presaleDetail_bonusDescription": "特典の説明",
+  "presaleDetail_bonusCount": "{count}枚",
+  "@presaleDetail_bonusCount": {
+    "placeholders": {
+      "count": {}
+    }
+  }
 }

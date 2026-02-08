@@ -532,5 +532,35 @@
   "comingSoon_releaseDate": "上映",
   "comingSoon_noMovies": "暂无正在上映的电影",
   "comingSoon_tryLaterOrRefresh": "请稍后再试或下拉刷新",
-  "comingSoon_pullToRefresh": "下拉刷新"
+  "comingSoon_pullToRefresh": "下拉刷新",
+  "comingSoon_presaleTicketBadge": "预售券",
+  "movieDetail_viewPresaleTicket": "查看预售券",
+  "movieDetail_hasBonus": "含特典",
+  "movieDetail_presaleHasBonus": "预售券含特典",
+  "presaleDetail_title": "预售券详情",
+  "presaleDetail_applyMovie": "适用影片",
+  "presaleDetail_salePeriod": "发售时间",
+  "presaleDetail_salePeriodNote": "本商品为预售券，销售期间如下：",
+  "presaleDetail_usagePeriod": "使用时间",
+  "presaleDetail_perUserLimit": "每人限购",
+  "presaleDetail_noLimit": "不限",
+  "presaleDetail_pickupNotes": "取票说明",
+  "presaleDetail_description": "详情说明",
+  "presaleDetail_specs": "规格与价格",
+  "presaleDetail_bonus": "特典",
+  "presaleDetail_price": "价格",
+  "presaleDetail_stock": "库存",
+  "presaleDetail_delivery": "配送方式",
+  "presaleDetail_gallery": "图集",
+  "presaleDetail_buy": "购买",
+  "presaleDetail_addToCart": "加入购物车",
+  "presaleDetail_buyNow": "立即购买",
+  "presaleDetail_finalPrice": "到手价",
+  "presaleDetail_bonusDescription": "特典说明",
+  "presaleDetail_bonusCount": "共{count}张",
+  "@presaleDetail_bonusCount": {
+    "placeholders": {
+      "count": {}
+    }
+  }
 }

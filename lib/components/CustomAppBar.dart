@@ -10,6 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;
   final TextStyle? titleTextStyle;
   final PreferredSizeWidget? bottom; // Make it nullable
+  final Color? iconColor;
 
   const CustomAppBar({
     super.key, 
@@ -19,13 +20,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackButtonPressed,
     this.titleTextStyle,
     this.backgroundColor = Colors.blue,
+    this.iconColor,
     this.bottom, // Initialize bottom here
   });
 
   @override
   Widget build(BuildContext context) {
     RouteMatchList  routeMatchList = GoRouter.of(context).routerDelegate.currentConfiguration;
-    List<RouteBase> routes = routeMatchList.routes;
 
     return AppBar(
       title: title is String 
@@ -33,7 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         : title,
       leading: showBackButton && routeMatchList.routes.length > 1
           ? IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              icon: Icon(Icons.arrow_back, color: iconColor ?? Colors.white),
               onPressed: () {
                 if (onBackButtonPressed != null) {
                   onBackButtonPressed!();

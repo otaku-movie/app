@@ -33,7 +33,9 @@ TicketDetailResponse _$TicketDetailResponseFromJson(
       theaterHallId: (json['theaterHallId'] as num?)?.toInt(),
       theaterHallName: json['theaterHallName'] as String?,
       specName: json['specName'] as String?,
-      specNames: (json['specNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      specNames: (json['specNames'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       dimensionType: (json['dimensionType'] as num?)?.toInt(),
       seat: (json['seat'] as List<dynamic>?)
           ?.map((e) => SeatInfo.fromJson(e as Map<String, dynamic>))

@@ -1514,4 +1514,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comingSoon_pullToRefresh => 'Pull to refresh';
+
+  @override
+  String get comingSoon_presaleTicketBadge => 'Presale Ticket';
+
+  @override
+  String get movieDetail_viewPresaleTicket => 'View Presale Ticket';
+
+  @override
+  String get movieDetail_hasBonus => 'With Bonus';
+
+  @override
+  String get movieDetail_presaleHasBonus => 'Presale with bonus';
+
+  @override
+  String get presaleDetail_title => 'Presale Ticket Detail';
+
+  @override
+  String get presaleDetail_applyMovie => 'Apply to Movie';
+
+  @override
+  String get presaleDetail_salePeriod => 'Sale Period';
+
+  @override
+  String get presaleDetail_salePeriodNote =>
+      'This product is a presale ticket. Sales period:';
+
+  @override
+  String get presaleDetail_usagePeriod => 'Usage Period';
+
+  @override
+  String get presaleDetail_perUserLimit => 'Per User Limit';
+
+  @override
+  String get presaleDetail_noLimit => 'No limit';
+
+  @override
+  String get presaleDetail_pickupNotes => 'Pickup Notes';
+
+  @override
+  String get presaleDetail_description => 'Description';
+
+  @override
+  String get presaleDetail_specs => 'Specs & Price';
+
+  @override
+  String get presaleDetail_bonus => 'Bonus';
+
+  @override
+  String get presaleDetail_price => 'Price';
+
+  @override
+  String get presaleDetail_stock => 'Stock';
+
+  @override
+  String get presaleDetail_delivery => 'Delivery';
+
+  @override
+  String get presaleDetail_gallery => 'Gallery';
+
+  @override
+  String get presaleDetail_buy => 'Buy';
+
+  @override
+  String get presaleDetail_addToCart => 'Add to Cart';
+
+  @override
+  String get presaleDetail_buyNow => 'Buy Now';
+
+  @override
+  String get presaleDetail_finalPrice => 'Price';
+
+  @override
+  String get presaleDetail_bonusDescription => 'Bonus details';
+
+  @override
+  String presaleDetail_bonusCount(Object count) {
+    return '$count images';
+  }
 }

@@ -52,7 +52,9 @@ ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
       endTime: json['endTime'] == null
           ? null
           : DateTime.parse(json['endTime'] as String),
-      specNames: (json['specNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      specNames: (json['specNames'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       totalSeats: (json['totalSeats'] as num?)?.toInt(),
       selectedSeats: (json['selectedSeats'] as num?)?.toInt(),
       availableSeats: (json['availableSeats'] as num?)?.toInt(),

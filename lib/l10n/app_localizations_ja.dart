@@ -1451,4 +1451,81 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get comingSoon_pullToRefresh => '下にスワイプして更新';
+
+  @override
+  String get comingSoon_presaleTicketBadge => '前売り券';
+
+  @override
+  String get movieDetail_viewPresaleTicket => '前売り券を見る';
+
+  @override
+  String get movieDetail_hasBonus => '特典付き';
+
+  @override
+  String get movieDetail_presaleHasBonus => '前売り券特典付き';
+
+  @override
+  String get presaleDetail_title => '前売り券詳細';
+
+  @override
+  String get presaleDetail_applyMovie => '対象映画';
+
+  @override
+  String get presaleDetail_salePeriod => '販売期間';
+
+  @override
+  String get presaleDetail_salePeriodNote => '本商品は前売り券です。販売期間は以下のとおりです。';
+
+  @override
+  String get presaleDetail_usagePeriod => '利用期間';
+
+  @override
+  String get presaleDetail_perUserLimit => 'お一人様限り';
+
+  @override
+  String get presaleDetail_noLimit => '制限なし';
+
+  @override
+  String get presaleDetail_pickupNotes => 'チケット受け取り';
+
+  @override
+  String get presaleDetail_description => '説明';
+
+  @override
+  String get presaleDetail_specs => '仕様・価格';
+
+  @override
+  String get presaleDetail_bonus => '特典';
+
+  @override
+  String get presaleDetail_price => '価格';
+
+  @override
+  String get presaleDetail_stock => '在庫';
+
+  @override
+  String get presaleDetail_delivery => '配送';
+
+  @override
+  String get presaleDetail_gallery => 'ギャラリー';
+
+  @override
+  String get presaleDetail_buy => '購入';
+
+  @override
+  String get presaleDetail_addToCart => 'カートに入れる';
+
+  @override
+  String get presaleDetail_buyNow => '今すぐ購入';
+
+  @override
+  String get presaleDetail_finalPrice => 'お届け価格';
+
+  @override
+  String get presaleDetail_bonusDescription => '特典の説明';
+
+  @override
+  String presaleDetail_bonusCount(Object count) {
+    return '$count枚';
+  }
 }

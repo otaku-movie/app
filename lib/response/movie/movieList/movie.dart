@@ -31,6 +31,12 @@ class MovieResponse {
   final String? levelDescription;
   final int? presaleShowTimeCount; // 预售场次数量
   final String? earliestShowTime; //最早场次时间
+  /// 关联的预售券 id，有则可在 C 端跳转预售券详情
+  final int? presaleId;
+  /// 是否有预售券
+  final bool? hasPresaleTicket;
+  /// 该预售券是否含特典
+  final bool? hasBonus;
 
   MovieResponse({
     this.id,
@@ -58,7 +64,10 @@ class MovieResponse {
     this.levelName,
     this.levelDescription,
     this.presaleShowTimeCount,
-    this.earliestShowTime
+    this.earliestShowTime,
+    this.presaleId,
+    this.hasPresaleTicket,
+    this.hasBonus
   });
 
   factory MovieResponse.fromJson(Map<String, dynamic> json) =>

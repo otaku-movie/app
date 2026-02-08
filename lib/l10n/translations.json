@@ -2643,6 +2643,39 @@
       "en": "Password reset successful"
     }
   },
+  "presaleDetail": {
+    "bonusDescription": {
+      "zh": "特典说明",
+      "ja": "特典の説明",
+      "en": "Bonus details"
+    },
+    "bonusCount": {
+      "zh": {
+        "text": "共{count}张",
+        "placeholders": {
+          "count": {
+            "type": "int"
+          }
+        }
+      },
+      "ja": {
+        "text": "{count}枚",
+        "placeholders": {
+          "count": {
+            "type": "int"
+          }
+        }
+      },
+      "en": {
+        "text": "{count} images",
+        "placeholders": {
+          "count": {
+            "type": "int"
+          }
+        }
+      }
+    }
+  },
   "comingSoon": {
     "presale": {
       "zh": "预售",

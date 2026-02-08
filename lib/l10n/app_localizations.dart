@@ -2859,6 +2859,156 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pull to refresh'**
   String get comingSoon_pullToRefresh;
+
+  /// No description provided for @comingSoon_presaleTicketBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Presale Ticket'**
+  String get comingSoon_presaleTicketBadge;
+
+  /// No description provided for @movieDetail_viewPresaleTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'View Presale Ticket'**
+  String get movieDetail_viewPresaleTicket;
+
+  /// No description provided for @movieDetail_hasBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'With Bonus'**
+  String get movieDetail_hasBonus;
+
+  /// No description provided for @movieDetail_presaleHasBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Presale with bonus'**
+  String get movieDetail_presaleHasBonus;
+
+  /// No description provided for @presaleDetail_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Presale Ticket Detail'**
+  String get presaleDetail_title;
+
+  /// No description provided for @presaleDetail_applyMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply to Movie'**
+  String get presaleDetail_applyMovie;
+
+  /// No description provided for @presaleDetail_salePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Period'**
+  String get presaleDetail_salePeriod;
+
+  /// No description provided for @presaleDetail_salePeriodNote.
+  ///
+  /// In en, this message translates to:
+  /// **'This product is a presale ticket. Sales period:'**
+  String get presaleDetail_salePeriodNote;
+
+  /// No description provided for @presaleDetail_usagePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Period'**
+  String get presaleDetail_usagePeriod;
+
+  /// No description provided for @presaleDetail_perUserLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Per User Limit'**
+  String get presaleDetail_perUserLimit;
+
+  /// No description provided for @presaleDetail_noLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'No limit'**
+  String get presaleDetail_noLimit;
+
+  /// No description provided for @presaleDetail_pickupNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup Notes'**
+  String get presaleDetail_pickupNotes;
+
+  /// No description provided for @presaleDetail_description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get presaleDetail_description;
+
+  /// No description provided for @presaleDetail_specs.
+  ///
+  /// In en, this message translates to:
+  /// **'Specs & Price'**
+  String get presaleDetail_specs;
+
+  /// No description provided for @presaleDetail_bonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus'**
+  String get presaleDetail_bonus;
+
+  /// No description provided for @presaleDetail_price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get presaleDetail_price;
+
+  /// No description provided for @presaleDetail_stock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock'**
+  String get presaleDetail_stock;
+
+  /// No description provided for @presaleDetail_delivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery'**
+  String get presaleDetail_delivery;
+
+  /// No description provided for @presaleDetail_gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get presaleDetail_gallery;
+
+  /// No description provided for @presaleDetail_buy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy'**
+  String get presaleDetail_buy;
+
+  /// No description provided for @presaleDetail_addToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Cart'**
+  String get presaleDetail_addToCart;
+
+  /// No description provided for @presaleDetail_buyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now'**
+  String get presaleDetail_buyNow;
+
+  /// No description provided for @presaleDetail_finalPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get presaleDetail_finalPrice;
+
+  /// No description provided for @presaleDetail_bonusDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus details'**
+  String get presaleDetail_bonusDescription;
+
+  /// No description provided for @presaleDetail_bonusCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} images'**
+  String presaleDetail_bonusCount(Object count);
 }
 
 class _AppLocalizationsDelegate

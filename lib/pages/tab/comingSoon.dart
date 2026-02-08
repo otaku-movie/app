@@ -101,10 +101,17 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
     return DateFormatUtil.extractWeekdayPart(section);
   }
 
-  /// 判断是否为预售（根据预售场次数量）
+  /// 判断是否为预售（预售场次或预售券）
   bool _isPresale(MovieResponse? item) {
     if (item == null) return false;
+    if (item.hasPresaleTicket == true || item.presaleId != null) return true;
     return (item.presaleShowTimeCount ?? 0) > 0;
+  }
+
+  /// 是否有预售券（可跳转预售券详情）
+  bool _hasPresaleTicket(MovieResponse? item) {
+    if (item == null) return false;
+    return item.presaleId != null;
   }
 
   bool _shouldShowRating(String? levelName) {
@@ -288,30 +295,43 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                             fit: BoxFit.cover,
                                           ),
                                         ),
-                                        // 预售角标（只在预售时显示）
+                                        // 预售券/预售角标（有预售或预售场次时显示，预售券可点击跳转）
                                         if (_isPresale(item))
                                           Positioned(
                                             top: 8.h,
                                             right: 8.w,
-                                            child: Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xFFFF6B35),
-                                                borderRadius: BorderRadius.circular(8.r),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
-                                                    blurRadius: 4,
-                                                    offset: const Offset(0, 2),
+                                            child: GestureDetector(
+                                              onTap: _hasPresaleTicket(item)
+                                                  ? () {
+                                                      context.pushNamed(
+                                                        'presaleDetail',
+                                                        pathParameters: {'id': '${item!.presaleId}'},
+                                                      );
+                                                    }
+                                                  : null,
+                                              behavior: HitTestBehavior.opaque,
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xFFFF6B35),
+                                                  borderRadius: BorderRadius.circular(8.r),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                                                      blurRadius: 4,
+                                                      offset: const Offset(0, 2),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: Text(
+                                                  _hasPresaleTicket(item)
+                                                      ? S.of(context).comingSoon_presaleTicketBadge
+                                                      : S.of(context).comingSoon_presale,
+                                                  style: TextStyle(
+                                                    fontSize: 16.sp,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w700,
                                                   ),
-                                                ],
-                                              ),
-                                              child: Text(
-                                                S.of(context).comingSoon_presale,
-                                                style: TextStyle(
-                                                  fontSize: 16.sp,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w700,
                                                 ),
                                               ),
                                             ),
@@ -359,32 +379,45 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                       SizedBox(height: 8.h),
                                       Row(
                                         children: [
-                                          // 预售标签（只在预售时显示）
+                                          // 预售券/预售标签（有则显示，预售券可点击跳转）
                                           if (_isPresale(item))
-                                            Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                                              decoration: BoxDecoration(
-                                                color: const Color(0xFFFF6B35),
-                                                borderRadius: BorderRadius.circular(18.r),
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Icon(
-                                                    Icons.local_fire_department,
-                                                    size: 20.sp,
-                                                    color: Colors.white,
-                                                  ),
-                                                  SizedBox(width: 4.w),
-                                                  Text(
-                                                    S.of(context).comingSoon_presale,
-                                                    style: TextStyle(
-                                                      fontSize: 18.sp,
+                                            GestureDetector(
+                                              onTap: _hasPresaleTicket(item)
+                                                  ? () {
+                                                      context.pushNamed(
+                                                        'presaleDetail',
+                                                        pathParameters: {'id': '${item!.presaleId}'},
+                                                      );
+                                                    }
+                                                  : null,
+                                              behavior: HitTestBehavior.opaque,
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xFFFF6B35),
+                                                  borderRadius: BorderRadius.circular(18.r),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Icon(
+                                                      Icons.local_fire_department,
+                                                      size: 20.sp,
                                                       color: Colors.white,
-                                                      fontWeight: FontWeight.w600,
                                                     ),
-                                                  ),
-                                                ],
+                                                    SizedBox(width: 4.w),
+                                                    Text(
+                                                      _hasPresaleTicket(item)
+                                                          ? S.of(context).comingSoon_presaleTicketBadge
+                                                          : S.of(context).comingSoon_presale,
+                                                      style: TextStyle(
+                                                        fontSize: 18.sp,
+                                                        color: Colors.white,
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           // 分级标签

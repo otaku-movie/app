@@ -532,5 +532,35 @@
   "comingSoon_releaseDate": "Release",
   "comingSoon_noMovies": "No movies currently showing",
   "comingSoon_tryLaterOrRefresh": "Please try again later or pull down to refresh",
-  "comingSoon_pullToRefresh": "Pull to refresh"
+  "comingSoon_pullToRefresh": "Pull to refresh",
+  "comingSoon_presaleTicketBadge": "Presale Ticket",
+  "movieDetail_viewPresaleTicket": "View Presale Ticket",
+  "movieDetail_hasBonus": "With Bonus",
+  "movieDetail_presaleHasBonus": "Presale with bonus",
+  "presaleDetail_title": "Presale Ticket Detail",
+  "presaleDetail_applyMovie": "Apply to Movie",
+  "presaleDetail_salePeriod": "Sale Period",
+  "presaleDetail_salePeriodNote": "This product is a presale ticket. Sales period:",
+  "presaleDetail_usagePeriod": "Usage Period",
+  "presaleDetail_perUserLimit": "Per User Limit",
+  "presaleDetail_noLimit": "No limit",
+  "presaleDetail_pickupNotes": "Pickup Notes",
+  "presaleDetail_description": "Description",
+  "presaleDetail_specs": "Specs & Price",
+  "presaleDetail_bonus": "Bonus",
+  "presaleDetail_price": "Price",
+  "presaleDetail_stock": "Stock",
+  "presaleDetail_delivery": "Delivery",
+  "presaleDetail_gallery": "Gallery",
+  "presaleDetail_buy": "Buy",
+  "presaleDetail_addToCart": "Add to Cart",
+  "presaleDetail_buyNow": "Buy Now",
+  "presaleDetail_finalPrice": "Price",
+  "presaleDetail_bonusDescription": "Bonus details",
+  "presaleDetail_bonusCount": "{count} images",
+  "@presaleDetail_bonusCount": {
+    "placeholders": {
+      "count": {}
+    }
+  }
 }

@@ -656,6 +656,16 @@ List<Widget> generateComment() {
     );
   }
 
+  /// 是否有场次（有影院/影厅排片才显示购票）
+  bool _hasShowTimes(MovieResponse data) {
+    return (data.cinemaCount ?? 0) > 0 || (data.theaterCount ?? 0) > 0;
+  }
+
+  /// 有场次或预售券任一则显示底部栏
+  bool _showBottomBar(MovieResponse data) {
+    return _hasShowTimes(data) || data.presaleId != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -663,90 +673,118 @@ List<Widget> generateComment() {
       // appBar: const CustomAppBar(
       //    title: Text('鬼灭之刃 无限城篇', style: TextStyle(color: Colors.white)),
       // ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 20,
-              offset: const Offset(0, -5),
-            ),
-          ],
-        ),
-        child: SafeArea(
-          child: GestureDetector(
-            onTap: () {
-              context.pushNamed(
-                'showTimeList', 
-                pathParameters: {
-                  "id": '${widget.id}'
-                }, 
-                queryParameters: {
-                  'movieName': data.name
-                });
-            },
-            child: Container(
-              width: double.infinity,
-              height: 80.h,
+      bottomNavigationBar: _showBottomBar(data)
+          ? Container(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                borderRadius: BorderRadius.circular(25.r),
+                color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1989FA).withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, -5),
                   ),
                 ],
               ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(25.r),
-                  onTap: () {
-                    context.pushNamed(
-                      'showTimeList', 
-                      pathParameters: {
-                        "id": '${widget.id}'
-                      },
-                      queryParameters: {
-                        'movieName': data.name
-                      }
-                    );
-                  },
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.movie_outlined,
-                          color: Colors.white,
-                          size: 28.sp,
-                        ),
-                        SizedBox(width: 12.w),
-                        Text(
-                          S.of(context).movieDetail_button_buy,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.w600,
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    if (data.presaleId != null) ...[
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            context.pushNamed(
+                              'presaleDetail',
+                              pathParameters: {'id': '${data.presaleId}'},
+                            );
+                          },
+                          child: Container(
+                            height: 80.h,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF6B35),
+                              borderRadius: BorderRadius.circular(25.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.confirmation_number_outlined, color: Colors.white, size: 28.sp),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    S.of(context).movieDetail_viewPresaleTicket,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 28.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                      if (_hasShowTimes(data)) SizedBox(width: 16.w),
+                    ],
+                    if (_hasShowTimes(data))
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            context.pushNamed(
+                              'showTimeList',
+                              pathParameters: {"id": '${widget.id}'},
+                              queryParameters: {'movieName': data.name},
+                            );
+                          },
+                          child: Container(
+                            height: 80.h,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(25.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF1989FA).withValues(alpha: 0.3),
+                                  blurRadius: 12,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.movie_outlined, color: Colors.white, size: 28.sp),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    S.of(context).movieDetail_button_buy,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 32.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-            ),
-          ),
-        ),
-      ),
+            )
+          : null,
       body: AppErrorWidget(
         loading: loading,
         error: error,
@@ -1108,6 +1146,25 @@ List<Widget> generateComment() {
                             S.of(context).movieDetail_detail_originalName,
                             data.originalName ?? '',
                           ),
+                          // 预售券含特典（仅当有预售券且该预售券含特典时显示）
+                          if (data.presaleId != null && data.hasBonus == true)
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.card_giftcard, size: 28.sp, color: Colors.orange),
+                                  SizedBox(width: 8.w),
+                                  Text(
+                                    S.of(context).movieDetail_presaleHasBonus,
+                                    style: TextStyle(
+                                      fontSize: 28.sp,
+                                      color: Colors.orange.shade800,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           // 时长
                           _buildInfoRow(
                             S.of(context).movieDetail_detail_time,
@@ -1368,7 +1425,7 @@ List<Widget> generateComment() {
                                 padding: EdgeInsets.only(bottom: 10.h, top: 20.h),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
+                                  children: versionCharacters.isEmpty ? [] : [
                                     Row(
                                       children: [
                                         Text(

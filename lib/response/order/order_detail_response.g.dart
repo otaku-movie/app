@@ -30,7 +30,9 @@ OrderDetailResponse _$OrderDetailResponseFromJson(Map<String, dynamic> json) =>
       cinemaFullAddress: json['cinemaFullAddress'] as String?,
       theaterHallName: json['theaterHallName'] as String?,
       specName: json['specName'] as String?,
-      specNames: (json['specNames'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      specNames: (json['specNames'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       dimensionType: (json['dimensionType'] as num?)?.toInt(),
       payDeadline: json['payDeadline'] as String?,
       failureReason: json['failureReason'] as String?,

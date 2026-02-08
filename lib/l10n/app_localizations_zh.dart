@@ -1433,4 +1433,81 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get comingSoon_pullToRefresh => '下拉刷新';
+
+  @override
+  String get comingSoon_presaleTicketBadge => '预售券';
+
+  @override
+  String get movieDetail_viewPresaleTicket => '查看预售券';
+
+  @override
+  String get movieDetail_hasBonus => '含特典';
+
+  @override
+  String get movieDetail_presaleHasBonus => '预售券含特典';
+
+  @override
+  String get presaleDetail_title => '预售券详情';
+
+  @override
+  String get presaleDetail_applyMovie => '适用影片';
+
+  @override
+  String get presaleDetail_salePeriod => '发售时间';
+
+  @override
+  String get presaleDetail_salePeriodNote => '本商品为预售券，销售期间如下：';
+
+  @override
+  String get presaleDetail_usagePeriod => '使用时间';
+
+  @override
+  String get presaleDetail_perUserLimit => '每人限购';
+
+  @override
+  String get presaleDetail_noLimit => '不限';
+
+  @override
+  String get presaleDetail_pickupNotes => '取票说明';
+
+  @override
+  String get presaleDetail_description => '详情说明';
+
+  @override
+  String get presaleDetail_specs => '规格与价格';
+
+  @override
+  String get presaleDetail_bonus => '特典';
+
+  @override
+  String get presaleDetail_price => '价格';
+
+  @override
+  String get presaleDetail_stock => '库存';
+
+  @override
+  String get presaleDetail_delivery => '配送方式';
+
+  @override
+  String get presaleDetail_gallery => '图集';
+
+  @override
+  String get presaleDetail_buy => '购买';
+
+  @override
+  String get presaleDetail_addToCart => '加入购物车';
+
+  @override
+  String get presaleDetail_buyNow => '立即购买';
+
+  @override
+  String get presaleDetail_finalPrice => '到手价';
+
+  @override
+  String get presaleDetail_bonusDescription => '特典说明';
+
+  @override
+  String presaleDetail_bonusCount(Object count) {
+    return '共$count张';
+  }
 }

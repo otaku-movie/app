@@ -79,8 +79,7 @@ SpecPrice _$SpecPriceFromJson(Map<String, dynamic> json) => SpecPrice(
       plusPrice: (json['plusPrice'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$SpecPriceToJson(SpecPrice instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$SpecPriceToJson(SpecPrice instance) => <String, dynamic>{
       'name': instance.name,
       'plusPrice': instance.plusPrice,
     };
