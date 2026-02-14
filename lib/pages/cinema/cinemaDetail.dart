@@ -103,7 +103,10 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
     ).then((res) {
       if (res.data != null) {
         setState(() {
-          movieTicketTypeList = res.data!;
+          // 过滤已删除/禁用的票种（deleted == 1 不显示）
+          movieTicketTypeList = res.data!
+              .where((item) => item.deleted != 1)
+              .toList();
         });
       }
     });
@@ -345,10 +348,10 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                   context,
                   title: S.of(context).cinemaDetail_ticketTypePrice,
                   children: movieTicketTypeList.map((item) {
-                    return _buildPriceItem(
+                    return _buildTicketTypeItem(
                       item.name ?? '',
                       '${item.price}${S.of(context).common_unit_jpy}',
-                      false,
+                      item.description,
                     );
                   }).toList(),
                 ),
@@ -611,6 +614,69 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  // 构建票种项（含描述）
+  Widget _buildTicketTypeItem(String name, String price, String? description) {
+    const priceColor = Color(0xFF1989FA);
+    
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: Colors.grey.shade100, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 26.sp,
+                  color: const Color(0xFF323233),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.currency_yen_rounded,
+                    color: priceColor,
+                    size: 22.sp,
+                  ),
+                  SizedBox(width: 2.w),
+                  Text(
+                    price.replaceAll('¥', '').replaceAll('円', ''),
+                    style: TextStyle(
+                      fontSize: 30.sp,
+                      color: priceColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          if (description != null && description.isNotEmpty) ...[
+            SizedBox(height: 8.h),
+            Text(
+              description,
+              style: TextStyle(
+                fontSize: 22.sp,
+                color: Colors.grey.shade600,
+                height: 1.4,
+              ),
+            ),
+          ],
         ],
       ),
     );

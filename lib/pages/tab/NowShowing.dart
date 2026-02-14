@@ -32,6 +32,51 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   bool loadFinished  = false;
  // 视图模式：false为列表，true为网格
 
+  /// 分级为 G 时不显示
+  bool _shouldShowRating(String? levelName) {
+    if (levelName == null || levelName.isEmpty) return false;
+    return levelName.toUpperCase() != 'G';
+  }
+
+  /// 获取分级对应的特殊颜色
+  Color _getRatingColor(String? levelName) {
+    if (levelName == null || levelName.isEmpty) return const Color(0xFF1989FA);
+    final level = levelName.toUpperCase().replaceAll('-', '').replaceAll('+', '');
+    switch (level) {
+      case 'PG12':
+        return const Color(0xFF4CAF50); // 绿色 - 12岁以下需家长陪同
+      case 'R15':
+        return const Color(0xFFFF9800); // 橙色 - 15岁以上
+      case 'R18':
+        return const Color(0xFFF44336); // 红色 - 18岁以上
+      default:
+        return const Color(0xFF1989FA); // 默认蓝色
+    }
+  }
+
+  Widget _buildLevelTag(String levelName) {
+    final color = _getRatingColor(levelName);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(6.r),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Text(
+        '${S.of(context).movieList_currentlyShowing_level}：$levelName',
+        style: TextStyle(
+          fontSize: 22.sp,
+          color: color,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
   /// 判断是否为预售（上映时间未到）
   bool _isPresale(String? startDate) {
     if (startDate == null || startDate.isEmpty) return false;
@@ -313,27 +358,9 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         ),
         SizedBox(height: 12.h),
         
-        // 等级信息
-        if (item.levelName != null && item.levelName!.isNotEmpty)
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1989FA).withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(6.r),
-              border: Border.all(
-                color: const Color(0xFF1989FA).withValues(alpha: 0.3),
-                width: 1,
-              ),
-            ),
-            child: Text(
-              '${S.of(context).movieList_currentlyShowing_level}：${item.levelName}',
-              style: TextStyle(
-                fontSize: 22.sp,
-                color: const Color(0xFF1989FA),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
+        // 等级信息（G 不显示，PG12/PG13/R15/R18 使用特殊颜色）
+        if (_shouldShowRating(item.levelName))
+          _buildLevelTag(item.levelName!),
         SizedBox(height: 16.h),
         
         // 上映日期（预售时显示）
@@ -412,7 +439,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
     
     return Container(
       width: double.infinity,
-      height: 80.h,
+      height: 68.h,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: buttonColors,

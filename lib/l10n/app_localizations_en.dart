@@ -550,6 +550,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_movieShowList_dropdown_area => 'Area';
 
   @override
+  String get about_movieShowList_dropdown_dimensionType => 'Dimension';
+
+  @override
   String get about_movieShowList_dropdown_screenSpec => 'Screen Spec';
 
   @override
@@ -560,9 +563,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_movieShowList_dropdown_version => 'Version';
-
-  @override
-  String get about_movieShowList_dropdown_dimensionType => '2D/3D';
 
   @override
   String get enum_seatType_coupleSeat => 'Couple Seat';
@@ -748,6 +748,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieDetail_button_buy => 'Buy Ticket';
 
   @override
+  String get movieDetail_viewPresaleTicket => 'Presale Ticket';
+
+  @override
+  String get movieDetail_presaleHasBonus => 'With Bonus';
+
+  @override
   String get movieDetail_comment_reply => 'Reply';
 
   @override
@@ -904,6 +910,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieTicketType_actualPrice => 'Actual Payment';
 
   @override
+  String get movieTicketType_mubitikeTitle => 'Movie Ticket Presale (Mubitike)';
+
+  @override
+  String get movieTicketType_mubitikeDescription =>
+      'Offsets the ticket price; 3D, IMAX and other surcharges still apply.';
+
+  @override
+  String get movieTicketType_mubitikeCode => 'Ticket code (10 digits)';
+
+  @override
+  String get movieTicketType_mubitikeCodeHint => 'Enter 10-digit code';
+
+  @override
+  String get movieTicketType_mubitikePassword => 'Password (4 digits)';
+
+  @override
+  String get movieTicketType_mubitikePasswordHint => 'Enter 4-digit password';
+
+  @override
+  String get movieTicketType_mubitikeUseCount => 'Number to use';
+
+  @override
+  String get movieTicketType_mubitikeTapToInput => 'Tap to input';
+
+  @override
+  String get movieTicketType_mubitikeUsageLimit =>
+      'Each presale ticket is limited to 1 person for 1 viewing only';
+
+  @override
+  String get movieTicketType_mubitikeDetailsTitle => 'Usage Details';
+
+  @override
+  String get movieTicketType_mubitikeDetails =>
+      '• Offsets ticket price\n• 3D, IMAX surcharges apply separately\n• 1 ticket per person per viewing';
+
+  @override
+  String get movieTicketType_fixedPrice => 'Fixed price';
+
+  @override
   String get seatCancel_confirmTitle => 'Cancel Seat Selection';
 
   @override
@@ -1010,17 +1055,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Failed to cancel seat selection, please try again';
 
   @override
-  String get seatSelection_hasLockedOrderTitle => 'Unpaid Order';
+  String get seatSelection_hasLockedOrderTitle => 'Unfinished Order';
 
   @override
   String get seatSelection_hasLockedOrderMessage =>
-      'You have an unpaid order. Please complete payment first.';
-
-  @override
-  String get seatSelection_goToPay => 'Go to Pay';
+      'You have an unfinished order and seats are locked. Please complete payment or cancel the order';
 
   @override
   String get seatSelection_later => 'Later';
+
+  @override
+  String get seatSelection_goToPay => 'Pay Now';
+
+  @override
+  String get seatSelection_screen => 'Screen';
 
   @override
   String get user_title => 'My Profile';
@@ -1211,6 +1259,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get movieShowList_dropdown_area => 'Area';
+
+  @override
+  String get movieShowList_dropdown_dimensionType => 'Dimension';
 
   @override
   String get movieShowList_dropdown_screenSpec => 'Screen Spec';
@@ -1500,7 +1551,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgotPassword_passwordResetSuccess => 'Password reset successful';
 
   @override
+  String get presaleDetail_title => 'Presale Ticket';
+
+  @override
+  String get presaleDetail_specs => 'Spec';
+
+  @override
+  String get presaleDetail_salePeriodNote =>
+      '※ Sale and usage periods may vary by theater. Please check each theater\'s notice';
+
+  @override
+  String get presaleDetail_applyMovie => 'Applicable Movie';
+
+  @override
+  String get presaleDetail_salePeriod => 'Sale Period';
+
+  @override
+  String get presaleDetail_usagePeriod => 'Usage Period';
+
+  @override
+  String get presaleDetail_perUserLimit => 'Per Person Limit';
+
+  @override
+  String get presaleDetail_noLimit => 'No limit';
+
+  @override
+  String get presaleDetail_pickupNotes => 'Pickup Notes';
+
+  @override
+  String get presaleDetail_gallery => 'Gallery';
+
+  @override
+  String get presaleDetail_price => 'Price';
+
+  @override
+  String get presaleDetail_bonus => 'Bonus';
+
+  @override
+  String get presaleDetail_bonusDescription => 'Bonus details';
+
+  @override
+  String presaleDetail_bonusCount(int count) {
+    return '$count images';
+  }
+
+  @override
   String get comingSoon_presale => 'Presale';
+
+  @override
+  String get comingSoon_presaleTicketBadge => 'Presale Ticket';
 
   @override
   String get comingSoon_releaseDate => 'Release';
@@ -1514,82 +1613,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comingSoon_pullToRefresh => 'Pull to refresh';
-
-  @override
-  String get comingSoon_presaleTicketBadge => 'Presale Ticket';
-
-  @override
-  String get movieDetail_viewPresaleTicket => 'View Presale Ticket';
-
-  @override
-  String get movieDetail_hasBonus => 'With Bonus';
-
-  @override
-  String get movieDetail_presaleHasBonus => 'Presale with bonus';
-
-  @override
-  String get presaleDetail_title => 'Presale Ticket Detail';
-
-  @override
-  String get presaleDetail_applyMovie => 'Apply to Movie';
-
-  @override
-  String get presaleDetail_salePeriod => 'Sale Period';
-
-  @override
-  String get presaleDetail_salePeriodNote =>
-      'This product is a presale ticket. Sales period:';
-
-  @override
-  String get presaleDetail_usagePeriod => 'Usage Period';
-
-  @override
-  String get presaleDetail_perUserLimit => 'Per User Limit';
-
-  @override
-  String get presaleDetail_noLimit => 'No limit';
-
-  @override
-  String get presaleDetail_pickupNotes => 'Pickup Notes';
-
-  @override
-  String get presaleDetail_description => 'Description';
-
-  @override
-  String get presaleDetail_specs => 'Specs & Price';
-
-  @override
-  String get presaleDetail_bonus => 'Bonus';
-
-  @override
-  String get presaleDetail_price => 'Price';
-
-  @override
-  String get presaleDetail_stock => 'Stock';
-
-  @override
-  String get presaleDetail_delivery => 'Delivery';
-
-  @override
-  String get presaleDetail_gallery => 'Gallery';
-
-  @override
-  String get presaleDetail_buy => 'Buy';
-
-  @override
-  String get presaleDetail_addToCart => 'Add to Cart';
-
-  @override
-  String get presaleDetail_buyNow => 'Buy Now';
-
-  @override
-  String get presaleDetail_finalPrice => 'Price';
-
-  @override
-  String get presaleDetail_bonusDescription => 'Bonus details';
-
-  @override
-  String presaleDetail_bonusCount(Object count) {
-    return '$count images';
-  }
 }

@@ -73,6 +73,9 @@ class TheaterHallShowTime {
     final int? availableSeats; // 可用座位数
     final int? totalSeats; // 总座位数
 
+    /// 是否开放售票：true-可售，false-已禁用
+    final bool? open;
+
     TheaterHallShowTime({
         this.id,
         this.theaterHallId,
@@ -87,6 +90,7 @@ class TheaterHallShowTime {
         this.seatStatus,
         this.availableSeats,
         this.totalSeats,
+        this.open,
     });
 
     factory TheaterHallShowTime.fromJson(Map<String, dynamic> json) => _$TheaterHallShowTimeFromJson(json);

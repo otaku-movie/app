@@ -1074,7 +1074,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   // 获取版本名称
   // 构建场次信息
   Widget _buildShowTimeInfo(Cinema children) {
-    if (children.showTimes == null || children.showTimes!.isEmpty) {
+    // 过滤已禁用的场次（open == false）
+    final availableShowTimes = (children.showTimes ?? [])
+        .where((s) => s.open != false)
+        .toList();
+    if (availableShowTimes.isEmpty) {
       return Container(
         padding: EdgeInsets.all(12.w),
         
@@ -1117,7 +1121,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: children.showTimes!.map((showTime) {
+              children: availableShowTimes.map((showTime) {
                 return Padding(
                   padding: EdgeInsets.only(right: 20.w),
                   child: _buildShowTimeCard(showTime),

@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/components/CinemaScreen.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/space.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -67,6 +68,40 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
         });
       }
     });
+  }
+
+  /// 规格/放映类型标签：无 specName 只显示 dimensionType（2D/3D），有 specName 则显示 dimensionType + specName
+  Widget _buildSpecDimensionLabel() {
+    final hasSpec = _showTimeData.specName != null && _showTimeData.specName!.isNotEmpty;
+    final hasDim = _showTimeData.dimensionType != null;
+    final textStyle = TextStyle(
+      fontSize: 18.sp,
+      fontWeight: FontWeight.w600,
+      color: Colors.blue.shade700,
+      fontFamily: 'Poppins',
+    );
+    if (!hasSpec && !hasDim) return const SizedBox.shrink();
+    if (!hasSpec) {
+      return Dict(
+        code: _showTimeData.dimensionType,
+        name: 'dimensionType',
+        style: textStyle,
+      );
+    }
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (hasDim) ...[
+          Dict(
+            code: _showTimeData.dimensionType,
+            name: 'dimensionType',
+            style: textStyle,
+          ),
+          SizedBox(width: 6.w),
+        ],
+        Text(_showTimeData.specName!, style: textStyle),
+      ],
+    );
   }
 
   void getSeatData() {
@@ -986,22 +1021,14 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
-                        children: [
+                              children: [
                                 Icon(
                                   Icons.movie,
                                   size: 22.sp,
                                   color: Colors.blue.shade600,
                                 ),
                                 SizedBox(width: 12.w),
-                                Text(
-                                  _showTimeData.specName ?? '',
-                                  style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.blue.shade700,
-                                    fontFamily: 'Poppins',
-                                  ),
-                                ),
+                                _buildSpecDimensionLabel(),
                               ],
                             ),
                           ),

@@ -1090,6 +1090,12 @@ abstract class AppLocalizations {
   /// **'Area'**
   String get about_movieShowList_dropdown_area;
 
+  /// No description provided for @about_movieShowList_dropdown_dimensionType.
+  ///
+  /// In en, this message translates to:
+  /// **'Dimension'**
+  String get about_movieShowList_dropdown_dimensionType;
+
   /// No description provided for @about_movieShowList_dropdown_screenSpec.
   ///
   /// In en, this message translates to:
@@ -1113,12 +1119,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version'**
   String get about_movieShowList_dropdown_version;
-
-  /// No description provided for @about_movieShowList_dropdown_dimensionType.
-  ///
-  /// In en, this message translates to:
-  /// **'2D/3D'**
-  String get about_movieShowList_dropdown_dimensionType;
 
   /// No description provided for @enum_seatType_coupleSeat.
   ///
@@ -1468,6 +1468,18 @@ abstract class AppLocalizations {
   /// **'Buy Ticket'**
   String get movieDetail_button_buy;
 
+  /// No description provided for @movieDetail_viewPresaleTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Presale Ticket'**
+  String get movieDetail_viewPresaleTicket;
+
+  /// No description provided for @movieDetail_presaleHasBonus.
+  ///
+  /// In en, this message translates to:
+  /// **'With Bonus'**
+  String get movieDetail_presaleHasBonus;
+
   /// No description provided for @movieDetail_comment_reply.
   ///
   /// In en, this message translates to:
@@ -1750,6 +1762,78 @@ abstract class AppLocalizations {
   /// **'Actual Payment'**
   String get movieTicketType_actualPrice;
 
+  /// No description provided for @movieTicketType_mubitikeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie Ticket Presale (Mubitike)'**
+  String get movieTicketType_mubitikeTitle;
+
+  /// No description provided for @movieTicketType_mubitikeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Offsets the ticket price; 3D, IMAX and other surcharges still apply.'**
+  String get movieTicketType_mubitikeDescription;
+
+  /// No description provided for @movieTicketType_mubitikeCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket code (10 digits)'**
+  String get movieTicketType_mubitikeCode;
+
+  /// No description provided for @movieTicketType_mubitikeCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 10-digit code'**
+  String get movieTicketType_mubitikeCodeHint;
+
+  /// No description provided for @movieTicketType_mubitikePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password (4 digits)'**
+  String get movieTicketType_mubitikePassword;
+
+  /// No description provided for @movieTicketType_mubitikePasswordHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 4-digit password'**
+  String get movieTicketType_mubitikePasswordHint;
+
+  /// No description provided for @movieTicketType_mubitikeUseCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Number to use'**
+  String get movieTicketType_mubitikeUseCount;
+
+  /// No description provided for @movieTicketType_mubitikeTapToInput.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to input'**
+  String get movieTicketType_mubitikeTapToInput;
+
+  /// No description provided for @movieTicketType_mubitikeUsageLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Each presale ticket is limited to 1 person for 1 viewing only'**
+  String get movieTicketType_mubitikeUsageLimit;
+
+  /// No description provided for @movieTicketType_mubitikeDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Details'**
+  String get movieTicketType_mubitikeDetailsTitle;
+
+  /// No description provided for @movieTicketType_mubitikeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'• Offsets ticket price\n• 3D, IMAX surcharges apply separately\n• 1 ticket per person per viewing'**
+  String get movieTicketType_mubitikeDetails;
+
+  /// No description provided for @movieTicketType_fixedPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed price'**
+  String get movieTicketType_fixedPrice;
+
   /// No description provided for @seatCancel_confirmTitle.
   ///
   /// In en, this message translates to:
@@ -1945,26 +2029,32 @@ abstract class AppLocalizations {
   /// No description provided for @seatSelection_hasLockedOrderTitle.
   ///
   /// In en, this message translates to:
-  /// **'Unpaid Order'**
+  /// **'Unfinished Order'**
   String get seatSelection_hasLockedOrderTitle;
 
   /// No description provided for @seatSelection_hasLockedOrderMessage.
   ///
   /// In en, this message translates to:
-  /// **'You have an unpaid order. Please complete payment first.'**
+  /// **'You have an unfinished order and seats are locked. Please complete payment or cancel the order'**
   String get seatSelection_hasLockedOrderMessage;
-
-  /// No description provided for @seatSelection_goToPay.
-  ///
-  /// In en, this message translates to:
-  /// **'Go to Pay'**
-  String get seatSelection_goToPay;
 
   /// No description provided for @seatSelection_later.
   ///
   /// In en, this message translates to:
   /// **'Later'**
   String get seatSelection_later;
+
+  /// No description provided for @seatSelection_goToPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Now'**
+  String get seatSelection_goToPay;
+
+  /// No description provided for @seatSelection_screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Screen'**
+  String get seatSelection_screen;
 
   /// No description provided for @user_title.
   ///
@@ -2319,6 +2409,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Area'**
   String get movieShowList_dropdown_area;
+
+  /// No description provided for @movieShowList_dropdown_dimensionType.
+  ///
+  /// In en, this message translates to:
+  /// **'Dimension'**
+  String get movieShowList_dropdown_dimensionType;
 
   /// No description provided for @movieShowList_dropdown_screenSpec.
   ///
@@ -2830,11 +2926,101 @@ abstract class AppLocalizations {
   /// **'Password reset successful'**
   String get forgotPassword_passwordResetSuccess;
 
+  /// No description provided for @presaleDetail_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Presale Ticket'**
+  String get presaleDetail_title;
+
+  /// No description provided for @presaleDetail_specs.
+  ///
+  /// In en, this message translates to:
+  /// **'Spec'**
+  String get presaleDetail_specs;
+
+  /// No description provided for @presaleDetail_salePeriodNote.
+  ///
+  /// In en, this message translates to:
+  /// **'※ Sale and usage periods may vary by theater. Please check each theater\'s notice'**
+  String get presaleDetail_salePeriodNote;
+
+  /// No description provided for @presaleDetail_applyMovie.
+  ///
+  /// In en, this message translates to:
+  /// **'Applicable Movie'**
+  String get presaleDetail_applyMovie;
+
+  /// No description provided for @presaleDetail_salePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Period'**
+  String get presaleDetail_salePeriod;
+
+  /// No description provided for @presaleDetail_usagePeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Usage Period'**
+  String get presaleDetail_usagePeriod;
+
+  /// No description provided for @presaleDetail_perUserLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Per Person Limit'**
+  String get presaleDetail_perUserLimit;
+
+  /// No description provided for @presaleDetail_noLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'No limit'**
+  String get presaleDetail_noLimit;
+
+  /// No description provided for @presaleDetail_pickupNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Pickup Notes'**
+  String get presaleDetail_pickupNotes;
+
+  /// No description provided for @presaleDetail_gallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery'**
+  String get presaleDetail_gallery;
+
+  /// No description provided for @presaleDetail_price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get presaleDetail_price;
+
+  /// No description provided for @presaleDetail_bonus.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus'**
+  String get presaleDetail_bonus;
+
+  /// No description provided for @presaleDetail_bonusDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Bonus details'**
+  String get presaleDetail_bonusDescription;
+
+  /// No description provided for @presaleDetail_bonusCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} images'**
+  String presaleDetail_bonusCount(int count);
+
   /// No description provided for @comingSoon_presale.
   ///
   /// In en, this message translates to:
   /// **'Presale'**
   String get comingSoon_presale;
+
+  /// No description provided for @comingSoon_presaleTicketBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Presale Ticket'**
+  String get comingSoon_presaleTicketBadge;
 
   /// No description provided for @comingSoon_releaseDate.
   ///
@@ -2859,156 +3045,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pull to refresh'**
   String get comingSoon_pullToRefresh;
-
-  /// No description provided for @comingSoon_presaleTicketBadge.
-  ///
-  /// In en, this message translates to:
-  /// **'Presale Ticket'**
-  String get comingSoon_presaleTicketBadge;
-
-  /// No description provided for @movieDetail_viewPresaleTicket.
-  ///
-  /// In en, this message translates to:
-  /// **'View Presale Ticket'**
-  String get movieDetail_viewPresaleTicket;
-
-  /// No description provided for @movieDetail_hasBonus.
-  ///
-  /// In en, this message translates to:
-  /// **'With Bonus'**
-  String get movieDetail_hasBonus;
-
-  /// No description provided for @movieDetail_presaleHasBonus.
-  ///
-  /// In en, this message translates to:
-  /// **'Presale with bonus'**
-  String get movieDetail_presaleHasBonus;
-
-  /// No description provided for @presaleDetail_title.
-  ///
-  /// In en, this message translates to:
-  /// **'Presale Ticket Detail'**
-  String get presaleDetail_title;
-
-  /// No description provided for @presaleDetail_applyMovie.
-  ///
-  /// In en, this message translates to:
-  /// **'Apply to Movie'**
-  String get presaleDetail_applyMovie;
-
-  /// No description provided for @presaleDetail_salePeriod.
-  ///
-  /// In en, this message translates to:
-  /// **'Sale Period'**
-  String get presaleDetail_salePeriod;
-
-  /// No description provided for @presaleDetail_salePeriodNote.
-  ///
-  /// In en, this message translates to:
-  /// **'This product is a presale ticket. Sales period:'**
-  String get presaleDetail_salePeriodNote;
-
-  /// No description provided for @presaleDetail_usagePeriod.
-  ///
-  /// In en, this message translates to:
-  /// **'Usage Period'**
-  String get presaleDetail_usagePeriod;
-
-  /// No description provided for @presaleDetail_perUserLimit.
-  ///
-  /// In en, this message translates to:
-  /// **'Per User Limit'**
-  String get presaleDetail_perUserLimit;
-
-  /// No description provided for @presaleDetail_noLimit.
-  ///
-  /// In en, this message translates to:
-  /// **'No limit'**
-  String get presaleDetail_noLimit;
-
-  /// No description provided for @presaleDetail_pickupNotes.
-  ///
-  /// In en, this message translates to:
-  /// **'Pickup Notes'**
-  String get presaleDetail_pickupNotes;
-
-  /// No description provided for @presaleDetail_description.
-  ///
-  /// In en, this message translates to:
-  /// **'Description'**
-  String get presaleDetail_description;
-
-  /// No description provided for @presaleDetail_specs.
-  ///
-  /// In en, this message translates to:
-  /// **'Specs & Price'**
-  String get presaleDetail_specs;
-
-  /// No description provided for @presaleDetail_bonus.
-  ///
-  /// In en, this message translates to:
-  /// **'Bonus'**
-  String get presaleDetail_bonus;
-
-  /// No description provided for @presaleDetail_price.
-  ///
-  /// In en, this message translates to:
-  /// **'Price'**
-  String get presaleDetail_price;
-
-  /// No description provided for @presaleDetail_stock.
-  ///
-  /// In en, this message translates to:
-  /// **'Stock'**
-  String get presaleDetail_stock;
-
-  /// No description provided for @presaleDetail_delivery.
-  ///
-  /// In en, this message translates to:
-  /// **'Delivery'**
-  String get presaleDetail_delivery;
-
-  /// No description provided for @presaleDetail_gallery.
-  ///
-  /// In en, this message translates to:
-  /// **'Gallery'**
-  String get presaleDetail_gallery;
-
-  /// No description provided for @presaleDetail_buy.
-  ///
-  /// In en, this message translates to:
-  /// **'Buy'**
-  String get presaleDetail_buy;
-
-  /// No description provided for @presaleDetail_addToCart.
-  ///
-  /// In en, this message translates to:
-  /// **'Add to Cart'**
-  String get presaleDetail_addToCart;
-
-  /// No description provided for @presaleDetail_buyNow.
-  ///
-  /// In en, this message translates to:
-  /// **'Buy Now'**
-  String get presaleDetail_buyNow;
-
-  /// No description provided for @presaleDetail_finalPrice.
-  ///
-  /// In en, this message translates to:
-  /// **'Price'**
-  String get presaleDetail_finalPrice;
-
-  /// No description provided for @presaleDetail_bonusDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Bonus details'**
-  String get presaleDetail_bonusDescription;
-
-  /// No description provided for @presaleDetail_bonusCount.
-  ///
-  /// In en, this message translates to:
-  /// **'{count} images'**
-  String presaleDetail_bonusCount(Object count);
 }
 
 class _AppLocalizationsDelegate

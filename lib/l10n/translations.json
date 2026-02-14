@@ -944,6 +944,11 @@
           "ja": "地域",
           "en": "Area"
         },
+        "dimensionType": {
+          "zh": "放映类型",
+          "ja": "上映タイプ",
+          "en": "Dimension"
+        },
         "screenSpec": {
           "zh": "规格",
           "ja": "仕様",
@@ -1297,6 +1302,16 @@
         "ja": "チケット購入",
         "en": "Buy Ticket"
       }
+    },
+    "viewPresaleTicket": {
+      "zh": "预售票",
+      "ja": "前売り券",
+      "en": "Presale Ticket"
+    },
+    "presaleHasBonus": {
+      "zh": "含特典",
+      "ja": "特典付き",
+      "en": "With Bonus"
     },
     "comment": {
       "reply": {
@@ -1679,6 +1694,126 @@
       "zh": "实付",
       "ja": "実際の支払い",
       "en": "Actual Payment"
+    },
+    "mubitikeTitle": {
+      "zh": "ムビチケ前売り券",
+      "ja": "ムビチケ前売り券",
+      "en": "Movie Ticket Presale (Mubitike)"
+    },
+    "mubitikeDescription": {
+      "zh": "使用后可抵消票面价格，3D、IMAX 等加价需另付。",
+      "ja": "使用でチケット料金を相殺。3D・IMAX等の加算料金は別途お支払いください。",
+      "en": "Offsets the ticket price; 3D, IMAX and other surcharges still apply."
+    },
+    "mubitikeCode": {
+      "zh": "购票号码（10位）",
+      "ja": "購票番号（10桁）",
+      "en": "Ticket code (10 digits)"
+    },
+    "mubitikeCodeHint": {
+      "zh": "请输入10位购票号码",
+      "ja": "10桁の購票番号を入力",
+      "en": "Enter 10-digit code"
+    },
+    "mubitikePassword": {
+      "zh": "密码（4位）",
+      "ja": "パスワード（4桁）",
+      "en": "Password (4 digits)"
+    },
+    "mubitikePasswordHint": {
+      "zh": "请输入4位密码",
+      "ja": "4桁のパスワードを入力",
+      "en": "Enter 4-digit password"
+    },
+    "mubitikeUseCount": {
+      "zh": "使用张数",
+      "ja": "使用枚数",
+      "en": "Number to use"
+    },
+    "mubitikeTapToInput": {
+      "zh": "点击输入",
+      "ja": "タップして入力",
+      "en": "Tap to input"
+    },
+    "mubitikeUsageLimit": {
+      "zh": "每张预售券仅限1人1次观影使用",
+      "ja": "1枚の前売り券は1人1回の鑑賞のみに使用可能です",
+      "en": "Each presale ticket is limited to 1 person for 1 viewing only"
+    },
+    "mubitikeDetailsTitle": {
+      "zh": "使用明细",
+      "ja": "利用明細",
+      "en": "Usage Details"
+    },
+    "mubitikeDetails": {
+      "zh": "• 使用后可抵消票面价格\n• 3D、IMAX 等加价需另付\n• 每张券仅限1人1次观影使用",
+      "ja": "• 使用でチケット料金を相殺\n• 3D・IMAX等の加算料金は別途\n• 1枚1人1回のみ使用可能",
+      "en": "• Offsets ticket price\n• 3D, IMAX surcharges apply separately\n• 1 ticket per person per viewing"
+    },
+    "fixedPrice": {
+      "zh": "固定票价",
+      "ja": "固定料金",
+      "en": "Fixed price"
+    },
+    "noSeatInfoRetry": {
+      "zh": "未获取到当前选座信息，请重新选择座位",
+      "ja": "座席情報を取得できませんでした。座席を再度選択してください",
+      "en": "Seat selection info not available, please select seats again"
+    },
+    "sessionSurchargeTitle": {
+      "zh": "本场次加价：",
+      "ja": "本上映の加算：",
+      "en": "This session surcharge: "
+    },
+    "unavailableSeatsWithNames": {
+      "zh": {
+        "text": "部分座位不可用，请重新选择：{names}",
+        "placeholders": {
+          "names": {"type": "String"}
+        }
+      },
+      "ja": {
+        "text": "一部の座席は利用できません。再度選択してください：{names}",
+        "placeholders": {
+          "names": {"type": "String"}
+        }
+      },
+      "en": {
+        "text": "Some seats are unavailable, please reselect: {names}",
+        "placeholders": {
+          "names": {"type": "String"}
+        }
+      }
+    },
+    "createOrderNoOrderNumber": {
+      "zh": "创建订单失败，未返回订单号",
+      "ja": "注文作成に失敗しました。注文番号が返されませんでした",
+      "en": "Failed to create order, no order number returned"
+    },
+    "unknownTicketType": {
+      "zh": "未知票种",
+      "ja": "不明なチケット種類",
+      "en": "Unknown ticket type"
+    },
+    "priceRuleFormula_fixed": {
+      "zh": "单人票价 = 固定票价 + 区域加价 + 规格加价 + 放映类型加价（2D/3D）",
+      "ja": "1座あたり料金 = 固定料金 + エリア加算 + 仕様加算 + 上映类型加算（2D/3D）",
+      "en": "Price per seat = Fixed price + Area surcharge + Spec surcharge + Display type surcharge (2D/3D)"
+    },
+    "priceDetailTitle": {
+      "zh": "价格明细",
+      "ja": "料金明細",
+      "en": "Price Details"
+    },
+    "priceDetail_mubitikeOffset": {
+      "zh": "券抵",
+      "ja": "券抵",
+      "en": "Discounted"
+    },
+    "priceDetail_fullPrice": {
+      "zh": "全价",
+      "ja": "通常料金",
+      "en": "Full"
     }
   },
   "seatCancel": {
@@ -1852,6 +1987,31 @@
       "zh": "取消座位选择失败，请重试",
       "ja": "座席選択のキャンセルに失敗しました。再試行してください",
       "en": "Failed to cancel seat selection, please try again"
+    },
+    "hasLockedOrderTitle": {
+      "zh": "未完成订单",
+      "ja": "未完了の注文",
+      "en": "Unfinished Order"
+    },
+    "hasLockedOrderMessage": {
+      "zh": "您有未完成的订单，座位已被锁定。请前往支付或取消订单",
+      "ja": "未完了の注文があります。座席がロックされています。お支払いまたは注文のキャンセルをお願いします",
+      "en": "You have an unfinished order and seats are locked. Please complete payment or cancel the order"
+    },
+    "later": {
+      "zh": "稍后",
+      "ja": "後で",
+      "en": "Later"
+    },
+    "goToPay": {
+      "zh": "去支付",
+      "ja": "支払う",
+      "en": "Pay Now"
+    },
+    "screen": {
+      "zh": "屏幕",
+      "ja": "スクリーン",
+      "en": "Screen"
     }
   },
   "user": {
@@ -2191,6 +2351,11 @@
         "zh": "地区",
         "ja": "地域",
         "en": "Area"
+      },
+      "dimensionType": {
+        "zh": "放映类型",
+        "ja": "上映タイプ",
+        "en": "Dimension"
       },
       "screenSpec": {
         "zh": "放映规格",
@@ -2644,6 +2809,66 @@
     }
   },
   "presaleDetail": {
+    "title": {
+      "zh": "预售券",
+      "ja": "前売り券",
+      "en": "Presale Ticket"
+    },
+    "specs": {
+      "zh": "规格",
+      "ja": "仕様",
+      "en": "Spec"
+    },
+    "salePeriodNote": {
+      "zh": "※ 销售期间与使用期间可能因影院而异，请以各影院公告为准",
+      "ja": "※ 販売期間・利用期間は劇場により異なる場合があります。各劇場の案内をご確認ください",
+      "en": "※ Sale and usage periods may vary by theater. Please check each theater's notice"
+    },
+    "applyMovie": {
+      "zh": "适用电影",
+      "ja": "対象作品",
+      "en": "Applicable Movie"
+    },
+    "salePeriod": {
+      "zh": "销售期间",
+      "ja": "販売期間",
+      "en": "Sale Period"
+    },
+    "usagePeriod": {
+      "zh": "使用期间",
+      "ja": "利用期間",
+      "en": "Usage Period"
+    },
+    "perUserLimit": {
+      "zh": "每人限购",
+      "ja": "お一人様",
+      "en": "Per Person Limit"
+    },
+    "noLimit": {
+      "zh": "不限",
+      "ja": "制限なし",
+      "en": "No limit"
+    },
+    "pickupNotes": {
+      "zh": "取票说明",
+      "ja": "チケット受け取りについて",
+      "en": "Pickup Notes"
+    },
+    "gallery": {
+      "zh": "图集",
+      "ja": "ギャラリー",
+      "en": "Gallery"
+    },
+    "price": {
+      "zh": "价格",
+      "ja": "価格",
+      "en": "Price"
+    },
+    "bonus": {
+      "zh": "特典",
+      "ja": "特典",
+      "en": "Bonus"
+    },
     "bonusDescription": {
       "zh": "特典说明",
       "ja": "特典の説明",
@@ -2681,6 +2906,11 @@
       "zh": "预售",
       "ja": "前売り",
       "en": "Presale"
+    },
+    "presaleTicketBadge": {
+      "zh": "预售票",
+      "ja": "前売り券",
+      "en": "Presale Ticket"
     },
     "releaseDate": {
       "zh": "上映",

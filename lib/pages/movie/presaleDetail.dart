@@ -362,7 +362,7 @@ class _PresaleDetailState extends State<PresaleDetail> {
                                                 borderRadius: BorderRadius.circular(10.r),
                                               ),
                                               child: Dict(
-                                                name: 'presale_mubitike_type',
+                                                name: 'presaleMubitikeType',
                                                 code: ticketTypeCode,
                                                 style: TextStyle(fontSize: 26.sp, color: Colors.white),
                                               ),
@@ -383,7 +383,7 @@ class _PresaleDetailState extends State<PresaleDetail> {
                                         if (ticketTypeCode != null) ...[
                                           SizedBox(height: 6.h),
                                           Dict(
-                                            name: 'presale_mubitike_type',
+                                            name: 'presaleMubitikeType',
                                             code: ticketTypeCode,
                                             style: TextStyle(fontSize: 26.sp, color: Colors.grey.shade600),
                                           ),

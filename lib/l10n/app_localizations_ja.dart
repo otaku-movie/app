@@ -531,6 +531,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get about_movieShowList_dropdown_area => '地域';
 
   @override
+  String get about_movieShowList_dropdown_dimensionType => '上映タイプ';
+
+  @override
   String get about_movieShowList_dropdown_screenSpec => '仕様';
 
   @override
@@ -541,9 +544,6 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get about_movieShowList_dropdown_version => 'バージョン';
-
-  @override
-  String get about_movieShowList_dropdown_dimensionType => '2D/3D';
 
   @override
   String get enum_seatType_coupleSeat => 'カップルシート';
@@ -721,6 +721,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieDetail_button_buy => 'チケット購入';
 
   @override
+  String get movieDetail_viewPresaleTicket => '前売り券';
+
+  @override
+  String get movieDetail_presaleHasBonus => '特典付き';
+
+  @override
   String get movieDetail_comment_reply => '返信';
 
   @override
@@ -876,6 +882,44 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieTicketType_actualPrice => '実際の支払い';
 
   @override
+  String get movieTicketType_mubitikeTitle => 'ムビチケ前売り券';
+
+  @override
+  String get movieTicketType_mubitikeDescription =>
+      '使用でチケット料金を相殺。3D・IMAX等の加算料金は別途お支払いください。';
+
+  @override
+  String get movieTicketType_mubitikeCode => '購票番号（10桁）';
+
+  @override
+  String get movieTicketType_mubitikeCodeHint => '10桁の購票番号を入力';
+
+  @override
+  String get movieTicketType_mubitikePassword => 'パスワード（4桁）';
+
+  @override
+  String get movieTicketType_mubitikePasswordHint => '4桁のパスワードを入力';
+
+  @override
+  String get movieTicketType_mubitikeUseCount => '使用枚数';
+
+  @override
+  String get movieTicketType_mubitikeTapToInput => 'タップして入力';
+
+  @override
+  String get movieTicketType_mubitikeUsageLimit => '1枚の前売り券は1人1回の鑑賞のみに使用可能です';
+
+  @override
+  String get movieTicketType_mubitikeDetailsTitle => '利用明細';
+
+  @override
+  String get movieTicketType_mubitikeDetails =>
+      '• 使用でチケット料金を相殺\n• 3D・IMAX等の加算料金は別途\n• 1枚1人1回のみ使用可能';
+
+  @override
+  String get movieTicketType_fixedPrice => '固定料金';
+
+  @override
   String get seatCancel_confirmTitle => '座席選択をキャンセル';
 
   @override
@@ -975,17 +1019,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get seatSelection_cancelSeatFailed => '座席選択のキャンセルに失敗しました。再試行してください';
 
   @override
-  String get seatSelection_hasLockedOrderTitle => '未払い注文';
+  String get seatSelection_hasLockedOrderTitle => '未完了の注文';
 
   @override
   String get seatSelection_hasLockedOrderMessage =>
-      '未払いの注文があります。先に支払いを完了してください';
-
-  @override
-  String get seatSelection_goToPay => '支払いへ';
+      '未完了の注文があります。座席がロックされています。お支払いまたは注文のキャンセルをお願いします';
 
   @override
   String get seatSelection_later => '後で';
+
+  @override
+  String get seatSelection_goToPay => '支払う';
+
+  @override
+  String get seatSelection_screen => 'スクリーン';
 
   @override
   String get user_title => 'マイページ';
@@ -1171,6 +1218,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get movieShowList_dropdown_area => '地域';
+
+  @override
+  String get movieShowList_dropdown_dimensionType => '上映タイプ';
 
   @override
   String get movieShowList_dropdown_screenSpec => '上映仕様';
@@ -1437,7 +1487,55 @@ class AppLocalizationsJa extends AppLocalizations {
   String get forgotPassword_passwordResetSuccess => 'パスワードリセットが成功しました';
 
   @override
+  String get presaleDetail_title => '前売り券';
+
+  @override
+  String get presaleDetail_specs => '仕様';
+
+  @override
+  String get presaleDetail_salePeriodNote =>
+      '※ 販売期間・利用期間は劇場により異なる場合があります。各劇場の案内をご確認ください';
+
+  @override
+  String get presaleDetail_applyMovie => '対象作品';
+
+  @override
+  String get presaleDetail_salePeriod => '販売期間';
+
+  @override
+  String get presaleDetail_usagePeriod => '利用期間';
+
+  @override
+  String get presaleDetail_perUserLimit => 'お一人様';
+
+  @override
+  String get presaleDetail_noLimit => '制限なし';
+
+  @override
+  String get presaleDetail_pickupNotes => 'チケット受け取りについて';
+
+  @override
+  String get presaleDetail_gallery => 'ギャラリー';
+
+  @override
+  String get presaleDetail_price => '価格';
+
+  @override
+  String get presaleDetail_bonus => '特典';
+
+  @override
+  String get presaleDetail_bonusDescription => '特典の説明';
+
+  @override
+  String presaleDetail_bonusCount(int count) {
+    return '$count枚';
+  }
+
+  @override
   String get comingSoon_presale => '前売り';
+
+  @override
+  String get comingSoon_presaleTicketBadge => '前売り券';
 
   @override
   String get comingSoon_releaseDate => '公開';
@@ -1451,81 +1549,4 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get comingSoon_pullToRefresh => '下にスワイプして更新';
-
-  @override
-  String get comingSoon_presaleTicketBadge => '前売り券';
-
-  @override
-  String get movieDetail_viewPresaleTicket => '前売り券を見る';
-
-  @override
-  String get movieDetail_hasBonus => '特典付き';
-
-  @override
-  String get movieDetail_presaleHasBonus => '前売り券特典付き';
-
-  @override
-  String get presaleDetail_title => '前売り券詳細';
-
-  @override
-  String get presaleDetail_applyMovie => '対象映画';
-
-  @override
-  String get presaleDetail_salePeriod => '販売期間';
-
-  @override
-  String get presaleDetail_salePeriodNote => '本商品は前売り券です。販売期間は以下のとおりです。';
-
-  @override
-  String get presaleDetail_usagePeriod => '利用期間';
-
-  @override
-  String get presaleDetail_perUserLimit => 'お一人様限り';
-
-  @override
-  String get presaleDetail_noLimit => '制限なし';
-
-  @override
-  String get presaleDetail_pickupNotes => 'チケット受け取り';
-
-  @override
-  String get presaleDetail_description => '説明';
-
-  @override
-  String get presaleDetail_specs => '仕様・価格';
-
-  @override
-  String get presaleDetail_bonus => '特典';
-
-  @override
-  String get presaleDetail_price => '価格';
-
-  @override
-  String get presaleDetail_stock => '在庫';
-
-  @override
-  String get presaleDetail_delivery => '配送';
-
-  @override
-  String get presaleDetail_gallery => 'ギャラリー';
-
-  @override
-  String get presaleDetail_buy => '購入';
-
-  @override
-  String get presaleDetail_addToCart => 'カートに入れる';
-
-  @override
-  String get presaleDetail_buyNow => '今すぐ購入';
-
-  @override
-  String get presaleDetail_finalPrice => 'お届け価格';
-
-  @override
-  String get presaleDetail_bonusDescription => '特典の説明';
-
-  @override
-  String presaleDetail_bonusCount(Object count) {
-    return '$count枚';
-  }
 }

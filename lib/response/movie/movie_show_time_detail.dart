@@ -41,6 +41,8 @@ class MovieShowTimeDetailResponse {
     int? specId;
     @JsonKey(name: "specName")
     String? specName;
+    @JsonKey(name: "dimensionType")
+    int? dimensionType;
     @JsonKey(name: "open")
     bool? open;
     @JsonKey(name: "theaterHallSpec")
@@ -67,6 +69,7 @@ class MovieShowTimeDetailResponse {
         this.movieShowTimeTags,
         this.specId,
         this.specName,
+        this.dimensionType,
         this.open,
         this.theaterHallSpec,
         this.seatCount,

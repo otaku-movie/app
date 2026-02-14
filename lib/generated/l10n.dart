@@ -18,8 +18,10 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(_current != null,
-        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    assert(
+      _current != null,
+      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
+    );
     return _current!;
   }
 
@@ -41,8 +43,10 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(instance != null,
-        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    assert(
+      instance != null,
+      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
+    );
     return instance!;
   }
 
@@ -222,12 +226,7 @@ class S {
 
   /// `Level`
   String get search_level {
-    return Intl.message(
-      'Level',
-      name: 'search_level',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Level', name: 'search_level', desc: '', args: []);
   }
 
   /// `Address`
@@ -292,12 +291,7 @@ class S {
 
   /// `TEL`
   String get cinemaDetail_tel {
-    return Intl.message(
-      'TEL',
-      name: 'cinemaDetail_tel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('TEL', name: 'cinemaDetail_tel', desc: '', args: []);
   }
 
   /// `Address`
@@ -412,42 +406,22 @@ class S {
 
   /// `home`
   String get home_home {
-    return Intl.message(
-      'home',
-      name: 'home_home',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('home', name: 'home_home', desc: '', args: []);
   }
 
   /// `My Ticket`
   String get home_ticket {
-    return Intl.message(
-      'My Ticket',
-      name: 'home_ticket',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('My Ticket', name: 'home_ticket', desc: '', args: []);
   }
 
   /// `cinema`
   String get home_cinema {
-    return Intl.message(
-      'cinema',
-      name: 'home_cinema',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('cinema', name: 'home_cinema', desc: '', args: []);
   }
 
   /// `my page`
   String get home_me {
-    return Intl.message(
-      'my page',
-      name: 'home_me',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('my page', name: 'home_me', desc: '', args: []);
   }
 
   /// `Show Time`
@@ -512,12 +486,7 @@ class S {
 
   /// `Used`
   String get ticket_status_used {
-    return Intl.message(
-      'Used',
-      name: 'ticket_status_used',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Used', name: 'ticket_status_used', desc: '', args: []);
   }
 
   /// `Expired`
@@ -692,12 +661,7 @@ class S {
 
   /// ` tickets`
   String get ticket_tickets {
-    return Intl.message(
-      ' tickets',
-      name: 'ticket_tickets',
-      desc: '',
-      args: [],
-    );
+    return Intl.message(' tickets', name: 'ticket_tickets', desc: '', args: []);
   }
 
   /// `Tap to view details`
@@ -762,12 +726,7 @@ class S {
 
   /// `Retry`
   String get common_retry {
-    return Intl.message(
-      'Retry',
-      name: 'common_retry',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Retry', name: 'common_retry', desc: '', args: []);
   }
 
   /// `Server connection refused, please try again later`
@@ -862,22 +821,12 @@ class S {
 
   /// `JPY`
   String get common_unit_jpy {
-    return Intl.message(
-      'JPY',
-      name: 'common_unit_jpy',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('JPY', name: 'common_unit_jpy', desc: '', args: []);
   }
 
   /// `m`
   String get common_unit_meter {
-    return Intl.message(
-      'm',
-      name: 'common_unit_meter',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('m', name: 'common_unit_meter', desc: '', args: []);
   }
 
   /// `km`
@@ -892,12 +841,7 @@ class S {
 
   /// `pts`
   String get common_unit_point {
-    return Intl.message(
-      'pts',
-      name: 'common_unit_point',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('pts', name: 'common_unit_point', desc: '', args: []);
   }
 
   /// `Crop the picture`
@@ -1282,22 +1226,12 @@ class S {
 
   /// `About`
   String get about_title {
-    return Intl.message(
-      'About',
-      name: 'about_title',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('About', name: 'about_title', desc: '', args: []);
   }
 
   /// `Version`
   String get about_version {
-    return Intl.message(
-      'Version',
-      name: 'about_version',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Version', name: 'about_version', desc: '', args: []);
   }
 
   /// `Committed to providing convenient ticket purchasing experience for movie enthusiasts.`
@@ -1572,12 +1506,7 @@ class S {
 
   /// `or`
   String get about_login_or {
-    return Intl.message(
-      'or',
-      name: 'about_login_or',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('or', name: 'about_login_or', desc: '', args: []);
   }
 
   /// `Login with Google`
@@ -1700,6 +1629,16 @@ class S {
     );
   }
 
+  /// `Dimension`
+  String get about_movieShowList_dropdown_dimensionType {
+    return Intl.message(
+      'Dimension',
+      name: 'about_movieShowList_dropdown_dimensionType',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Screen Spec`
   String get about_movieShowList_dropdown_screenSpec {
     return Intl.message(
@@ -1735,16 +1674,6 @@ class S {
     return Intl.message(
       'Version',
       name: 'about_movieShowList_dropdown_version',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `2D/3D`
-  String get about_movieShowList_dropdown_dimensionType {
-    return Intl.message(
-      '2D/3D',
-      name: 'about_movieShowList_dropdown_dimensionType',
       desc: '',
       args: [],
     );
@@ -1802,42 +1731,22 @@ class S {
 
   /// `Sold`
   String get enum_seatType_sold {
-    return Intl.message(
-      'Sold',
-      name: 'enum_seatType_sold',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Sold', name: 'enum_seatType_sold', desc: '', args: []);
   }
 
   /// `point`
   String get unit_point {
-    return Intl.message(
-      'point',
-      name: 'unit_point',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('point', name: 'unit_point', desc: '', args: []);
   }
 
   /// `JPY`
   String get unit_jpy {
-    return Intl.message(
-      'JPY',
-      name: 'unit_jpy',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('JPY', name: 'unit_jpy', desc: '', args: []);
   }
 
   /// `Email`
   String get login_email_text {
-    return Intl.message(
-      'Email',
-      name: 'login_email_text',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Email', name: 'login_email_text', desc: '', args: []);
   }
 
   /// `Email cannot be empty`
@@ -1892,12 +1801,7 @@ class S {
 
   /// `Login`
   String get login_loginButton {
-    return Intl.message(
-      'Login',
-      name: 'login_loginButton',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Login', name: 'login_loginButton', desc: '', args: []);
   }
 
   /// `Welcome back, please log in to your account`
@@ -1912,12 +1816,7 @@ class S {
 
   /// `or`
   String get login_or {
-    return Intl.message(
-      'or',
-      name: 'login_or',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('or', name: 'login_or', desc: '', args: []);
   }
 
   /// `Sign in with Google`
@@ -2212,12 +2111,7 @@ class S {
 
   /// `Send`
   String get register_send {
-    return Intl.message(
-      'Send',
-      name: 'register_send',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Send', name: 'register_send', desc: '', args: []);
   }
 
   /// `Already have an account?`
@@ -2325,6 +2219,26 @@ class S {
     return Intl.message(
       'Buy Ticket',
       name: 'movieDetail_button_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Presale Ticket`
+  String get movieDetail_viewPresaleTicket {
+    return Intl.message(
+      'Presale Ticket',
+      name: 'movieDetail_viewPresaleTicket',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `With Bonus`
+  String get movieDetail_presaleHasBonus {
+    return Intl.message(
+      'With Bonus',
+      name: 'movieDetail_presaleHasBonus',
       desc: '',
       args: [],
     );
@@ -2800,6 +2714,216 @@ class S {
     );
   }
 
+  /// `Movie Ticket Presale (Mubitike)`
+  String get movieTicketType_mubitikeTitle {
+    return Intl.message(
+      'Movie Ticket Presale (Mubitike)',
+      name: 'movieTicketType_mubitikeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Offsets the ticket price; 3D, IMAX and other surcharges still apply.`
+  String get movieTicketType_mubitikeDescription {
+    return Intl.message(
+      'Offsets the ticket price; 3D, IMAX and other surcharges still apply.',
+      name: 'movieTicketType_mubitikeDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ticket code (10 digits)`
+  String get movieTicketType_mubitikeCode {
+    return Intl.message(
+      'Ticket code (10 digits)',
+      name: 'movieTicketType_mubitikeCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter 10-digit code`
+  String get movieTicketType_mubitikeCodeHint {
+    return Intl.message(
+      'Enter 10-digit code',
+      name: 'movieTicketType_mubitikeCodeHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password (4 digits)`
+  String get movieTicketType_mubitikePassword {
+    return Intl.message(
+      'Password (4 digits)',
+      name: 'movieTicketType_mubitikePassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter 4-digit password`
+  String get movieTicketType_mubitikePasswordHint {
+    return Intl.message(
+      'Enter 4-digit password',
+      name: 'movieTicketType_mubitikePasswordHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Number to use`
+  String get movieTicketType_mubitikeUseCount {
+    return Intl.message(
+      'Number to use',
+      name: 'movieTicketType_mubitikeUseCount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap to input`
+  String get movieTicketType_mubitikeTapToInput {
+    return Intl.message(
+      'Tap to input',
+      name: 'movieTicketType_mubitikeTapToInput',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Each presale ticket is limited to 1 person for 1 viewing only`
+  String get movieTicketType_mubitikeUsageLimit {
+    return Intl.message(
+      'Each presale ticket is limited to 1 person for 1 viewing only',
+      name: 'movieTicketType_mubitikeUsageLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usage Details`
+  String get movieTicketType_mubitikeDetailsTitle {
+    return Intl.message(
+      'Usage Details',
+      name: 'movieTicketType_mubitikeDetailsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `• Offsets ticket price\n• 3D, IMAX surcharges apply separately\n• 1 ticket per person per viewing`
+  String get movieTicketType_mubitikeDetails {
+    return Intl.message(
+      '• Offsets ticket price\n• 3D, IMAX surcharges apply separately\n• 1 ticket per person per viewing',
+      name: 'movieTicketType_mubitikeDetails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fixed price`
+  String get movieTicketType_fixedPrice {
+    return Intl.message(
+      'Fixed price',
+      name: 'movieTicketType_fixedPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seat selection info not available, please select seats again`
+  String get movieTicketType_noSeatInfoRetry {
+    return Intl.message(
+      'Seat selection info not available, please select seats again',
+      name: 'movieTicketType_noSeatInfoRetry',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This session surcharge: `
+  String get movieTicketType_sessionSurchargeTitle {
+    return Intl.message(
+      'This session surcharge: ',
+      name: 'movieTicketType_sessionSurchargeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Some seats are unavailable, please reselect: {names}`
+  String movieTicketType_unavailableSeatsWithNames(String names) {
+    return Intl.message(
+      'Some seats are unavailable, please reselect: $names',
+      name: 'movieTicketType_unavailableSeatsWithNames',
+      desc: '',
+      args: [names],
+    );
+  }
+
+  /// `Failed to create order, no order number returned`
+  String get movieTicketType_createOrderNoOrderNumber {
+    return Intl.message(
+      'Failed to create order, no order number returned',
+      name: 'movieTicketType_createOrderNoOrderNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown ticket type`
+  String get movieTicketType_unknownTicketType {
+    return Intl.message(
+      'Unknown ticket type',
+      name: 'movieTicketType_unknownTicketType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price per seat = Fixed price + Area surcharge + Spec surcharge + Display type surcharge (2D/3D)`
+  String get movieTicketType_priceRuleFormula_fixed {
+    return Intl.message(
+      'Price per seat = Fixed price + Area surcharge + Spec surcharge + Display type surcharge (2D/3D)',
+      name: 'movieTicketType_priceRuleFormula_fixed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price Details`
+  String get movieTicketType_priceDetailTitle {
+    return Intl.message(
+      'Price Details',
+      name: 'movieTicketType_priceDetailTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discounted`
+  String get movieTicketType_priceDetail_mubitikeOffset {
+    return Intl.message(
+      'Discounted',
+      name: 'movieTicketType_priceDetail_mubitikeOffset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full`
+  String get movieTicketType_priceDetail_fullPrice {
+    return Intl.message(
+      'Full',
+      name: 'movieTicketType_priceDetail_fullPrice',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Cancel Seat Selection`
   String get seatCancel_confirmTitle {
     return Intl.message(
@@ -2912,12 +3036,7 @@ class S {
 
   /// `Buy`
   String get confirmOrder_pay {
-    return Intl.message(
-      'Buy',
-      name: 'confirmOrder_pay',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Buy', name: 'confirmOrder_pay', desc: '', args: []);
   }
 
   /// `Selected Seats`
@@ -3120,31 +3239,21 @@ class S {
     );
   }
 
-  /// `Unpaid Order`
+  /// `Unfinished Order`
   String get seatSelection_hasLockedOrderTitle {
     return Intl.message(
-      'Unpaid Order',
+      'Unfinished Order',
       name: 'seatSelection_hasLockedOrderTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `You have an unpaid order. Please complete payment first.`
+  /// `You have an unfinished order and seats are locked. Please complete payment or cancel the order`
   String get seatSelection_hasLockedOrderMessage {
     return Intl.message(
-      'You have an unpaid order. Please complete payment first.',
+      'You have an unfinished order and seats are locked. Please complete payment or cancel the order',
       name: 'seatSelection_hasLockedOrderMessage',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Go to Pay`
-  String get seatSelection_goToPay {
-    return Intl.message(
-      'Go to Pay',
-      name: 'seatSelection_goToPay',
       desc: '',
       args: [],
     );
@@ -3160,14 +3269,29 @@ class S {
     );
   }
 
-  /// `My Profile`
-  String get user_title {
+  /// `Pay Now`
+  String get seatSelection_goToPay {
     return Intl.message(
-      'My Profile',
-      name: 'user_title',
+      'Pay Now',
+      name: 'seatSelection_goToPay',
       desc: '',
       args: [],
     );
+  }
+
+  /// `Screen`
+  String get seatSelection_screen {
+    return Intl.message(
+      'Screen',
+      name: 'seatSelection_screen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Profile`
+  String get user_title {
+    return Intl.message('My Profile', name: 'user_title', desc: '', args: []);
   }
 
   /// `Order Count`
@@ -3232,12 +3356,7 @@ class S {
 
   /// `Language`
   String get user_language {
-    return Intl.message(
-      'Language',
-      name: 'user_language',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Language', name: 'user_language', desc: '', args: []);
   }
 
   /// `Edit Profile`
@@ -3272,22 +3391,12 @@ class S {
 
   /// `About`
   String get user_about {
-    return Intl.message(
-      'About',
-      name: 'user_about',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('About', name: 'user_about', desc: '', args: []);
   }
 
   /// `Logout`
   String get user_logout {
-    return Intl.message(
-      'Logout',
-      name: 'user_logout',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Logout', name: 'user_logout', desc: '', args: []);
   }
 
   /// `Current Version`
@@ -3322,32 +3431,17 @@ class S {
 
   /// `Cancel`
   String get user_cancel {
-    return Intl.message(
-      'Cancel',
-      name: 'user_cancel',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Cancel', name: 'user_cancel', desc: '', args: []);
   }
 
   /// `Update`
   String get user_update {
-    return Intl.message(
-      'Update',
-      name: 'user_update',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Update', name: 'user_update', desc: '', args: []);
   }
 
   /// `Updating`
   String get user_updating {
-    return Intl.message(
-      'Updating',
-      name: 'user_updating',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Updating', name: 'user_updating', desc: '', args: []);
   }
 
   /// `Downloading update, please wait...`
@@ -3402,12 +3496,7 @@ class S {
 
   /// `OK`
   String get user_ok {
-    return Intl.message(
-      'OK',
-      name: 'user_ok',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('OK', name: 'user_ok', desc: '', args: []);
   }
 
   /// `Order List`
@@ -3682,12 +3771,7 @@ class S {
 
   /// `Email`
   String get userProfile_email {
-    return Intl.message(
-      'Email',
-      name: 'userProfile_email',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Email', name: 'userProfile_email', desc: '', args: []);
   }
 
   /// `Register Time`
@@ -3702,12 +3786,7 @@ class S {
 
   /// `Save`
   String get userProfile_save {
-    return Intl.message(
-      'Save',
-      name: 'userProfile_save',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Save', name: 'userProfile_save', desc: '', args: []);
   }
 
   /// `Click save button to save changes`
@@ -3745,6 +3824,16 @@ class S {
     return Intl.message(
       'Area',
       name: 'movieShowList_dropdown_area',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dimension`
+  String get movieShowList_dropdown_dimensionType {
+    return Intl.message(
+      'Dimension',
+      name: 'movieShowList_dropdown_dimensionType',
       desc: '',
       args: [],
     );
@@ -4192,12 +4281,7 @@ class S {
 
   /// `Back`
   String get payError_back {
-    return Intl.message(
-      'Back',
-      name: 'payError_back',
-      desc: '',
-      args: [],
-    );
+    return Intl.message('Back', name: 'payError_back', desc: '', args: []);
   }
 
   /// `All Areas`
@@ -4600,11 +4684,161 @@ class S {
     );
   }
 
+  /// `Presale Ticket`
+  String get presaleDetail_title {
+    return Intl.message(
+      'Presale Ticket',
+      name: 'presaleDetail_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Spec`
+  String get presaleDetail_specs {
+    return Intl.message(
+      'Spec',
+      name: 'presaleDetail_specs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `※ Sale and usage periods may vary by theater. Please check each theater's notice`
+  String get presaleDetail_salePeriodNote {
+    return Intl.message(
+      '※ Sale and usage periods may vary by theater. Please check each theater\'s notice',
+      name: 'presaleDetail_salePeriodNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Applicable Movie`
+  String get presaleDetail_applyMovie {
+    return Intl.message(
+      'Applicable Movie',
+      name: 'presaleDetail_applyMovie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sale Period`
+  String get presaleDetail_salePeriod {
+    return Intl.message(
+      'Sale Period',
+      name: 'presaleDetail_salePeriod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usage Period`
+  String get presaleDetail_usagePeriod {
+    return Intl.message(
+      'Usage Period',
+      name: 'presaleDetail_usagePeriod',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Per Person Limit`
+  String get presaleDetail_perUserLimit {
+    return Intl.message(
+      'Per Person Limit',
+      name: 'presaleDetail_perUserLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No limit`
+  String get presaleDetail_noLimit {
+    return Intl.message(
+      'No limit',
+      name: 'presaleDetail_noLimit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pickup Notes`
+  String get presaleDetail_pickupNotes {
+    return Intl.message(
+      'Pickup Notes',
+      name: 'presaleDetail_pickupNotes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery`
+  String get presaleDetail_gallery {
+    return Intl.message(
+      'Gallery',
+      name: 'presaleDetail_gallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price`
+  String get presaleDetail_price {
+    return Intl.message(
+      'Price',
+      name: 'presaleDetail_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bonus`
+  String get presaleDetail_bonus {
+    return Intl.message(
+      'Bonus',
+      name: 'presaleDetail_bonus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bonus details`
+  String get presaleDetail_bonusDescription {
+    return Intl.message(
+      'Bonus details',
+      name: 'presaleDetail_bonusDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{count} images`
+  String presaleDetail_bonusCount(int count) {
+    return Intl.message(
+      '$count images',
+      name: 'presaleDetail_bonusCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Presale`
   String get comingSoon_presale {
     return Intl.message(
       'Presale',
       name: 'comingSoon_presale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Presale Ticket`
+  String get comingSoon_presaleTicketBadge {
+    return Intl.message(
+      'Presale Ticket',
+      name: 'comingSoon_presaleTicketBadge',
       desc: '',
       args: [],
     );
@@ -4647,256 +4881,6 @@ class S {
       name: 'comingSoon_pullToRefresh',
       desc: '',
       args: [],
-    );
-  }
-
-  /// `Presale Ticket`
-  String get comingSoon_presaleTicketBadge {
-    return Intl.message(
-      'Presale Ticket',
-      name: 'comingSoon_presaleTicketBadge',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `View Presale Ticket`
-  String get movieDetail_viewPresaleTicket {
-    return Intl.message(
-      'View Presale Ticket',
-      name: 'movieDetail_viewPresaleTicket',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `With Bonus`
-  String get movieDetail_hasBonus {
-    return Intl.message(
-      'With Bonus',
-      name: 'movieDetail_hasBonus',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Presale with bonus`
-  String get movieDetail_presaleHasBonus {
-    return Intl.message(
-      'Presale with bonus',
-      name: 'movieDetail_presaleHasBonus',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Presale Ticket Detail`
-  String get presaleDetail_title {
-    return Intl.message(
-      'Presale Ticket Detail',
-      name: 'presaleDetail_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Apply to Movie`
-  String get presaleDetail_applyMovie {
-    return Intl.message(
-      'Apply to Movie',
-      name: 'presaleDetail_applyMovie',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Sale Period`
-  String get presaleDetail_salePeriod {
-    return Intl.message(
-      'Sale Period',
-      name: 'presaleDetail_salePeriod',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This product is a presale ticket. Sales period:`
-  String get presaleDetail_salePeriodNote {
-    return Intl.message(
-      'This product is a presale ticket. Sales period:',
-      name: 'presaleDetail_salePeriodNote',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Usage Period`
-  String get presaleDetail_usagePeriod {
-    return Intl.message(
-      'Usage Period',
-      name: 'presaleDetail_usagePeriod',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Per User Limit`
-  String get presaleDetail_perUserLimit {
-    return Intl.message(
-      'Per User Limit',
-      name: 'presaleDetail_perUserLimit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `No limit`
-  String get presaleDetail_noLimit {
-    return Intl.message(
-      'No limit',
-      name: 'presaleDetail_noLimit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Pickup Notes`
-  String get presaleDetail_pickupNotes {
-    return Intl.message(
-      'Pickup Notes',
-      name: 'presaleDetail_pickupNotes',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Description`
-  String get presaleDetail_description {
-    return Intl.message(
-      'Description',
-      name: 'presaleDetail_description',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Specs & Price`
-  String get presaleDetail_specs {
-    return Intl.message(
-      'Specs & Price',
-      name: 'presaleDetail_specs',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Bonus`
-  String get presaleDetail_bonus {
-    return Intl.message(
-      'Bonus',
-      name: 'presaleDetail_bonus',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Price`
-  String get presaleDetail_price {
-    return Intl.message(
-      'Price',
-      name: 'presaleDetail_price',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Stock`
-  String get presaleDetail_stock {
-    return Intl.message(
-      'Stock',
-      name: 'presaleDetail_stock',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delivery`
-  String get presaleDetail_delivery {
-    return Intl.message(
-      'Delivery',
-      name: 'presaleDetail_delivery',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Gallery`
-  String get presaleDetail_gallery {
-    return Intl.message(
-      'Gallery',
-      name: 'presaleDetail_gallery',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Buy`
-  String get presaleDetail_buy {
-    return Intl.message(
-      'Buy',
-      name: 'presaleDetail_buy',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Add to Cart`
-  String get presaleDetail_addToCart {
-    return Intl.message(
-      'Add to Cart',
-      name: 'presaleDetail_addToCart',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Buy Now`
-  String get presaleDetail_buyNow {
-    return Intl.message(
-      'Buy Now',
-      name: 'presaleDetail_buyNow',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Price`
-  String get presaleDetail_finalPrice {
-    return Intl.message(
-      'Price',
-      name: 'presaleDetail_finalPrice',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Bonus details`
-  String get presaleDetail_bonusDescription {
-    return Intl.message(
-      'Bonus details',
-      name: 'presaleDetail_bonusDescription',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `{count} images`
-  String presaleDetail_bonusCount(Object count) {
-    return Intl.message(
-      '$count images',
-      name: 'presaleDetail_bonusCount',
-      desc: '',
-      args: [count],
     );
   }
 }

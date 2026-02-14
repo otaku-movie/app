@@ -518,6 +518,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get about_movieShowList_dropdown_area => '地区';
 
   @override
+  String get about_movieShowList_dropdown_dimensionType => '放映类型';
+
+  @override
   String get about_movieShowList_dropdown_screenSpec => '规格';
 
   @override
@@ -528,9 +531,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get about_movieShowList_dropdown_version => '版本';
-
-  @override
-  String get about_movieShowList_dropdown_dimensionType => '2D/3D';
 
   @override
   String get enum_seatType_coupleSeat => '情侣座';
@@ -708,6 +708,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieDetail_button_buy => '购票';
 
   @override
+  String get movieDetail_viewPresaleTicket => '预售票';
+
+  @override
+  String get movieDetail_presaleHasBonus => '含特典';
+
+  @override
   String get movieDetail_comment_reply => '回复';
 
   @override
@@ -862,6 +868,44 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieTicketType_actualPrice => '实付';
 
   @override
+  String get movieTicketType_mubitikeTitle => 'ムビチケ前売り券';
+
+  @override
+  String get movieTicketType_mubitikeDescription =>
+      '使用后可抵消票面价格，3D、IMAX 等加价需另付。';
+
+  @override
+  String get movieTicketType_mubitikeCode => '购票号码（10位）';
+
+  @override
+  String get movieTicketType_mubitikeCodeHint => '请输入10位购票号码';
+
+  @override
+  String get movieTicketType_mubitikePassword => '密码（4位）';
+
+  @override
+  String get movieTicketType_mubitikePasswordHint => '请输入4位密码';
+
+  @override
+  String get movieTicketType_mubitikeUseCount => '使用张数';
+
+  @override
+  String get movieTicketType_mubitikeTapToInput => '点击输入';
+
+  @override
+  String get movieTicketType_mubitikeUsageLimit => '每张预售券仅限1人1次观影使用';
+
+  @override
+  String get movieTicketType_mubitikeDetailsTitle => '使用明细';
+
+  @override
+  String get movieTicketType_mubitikeDetails =>
+      '• 使用后可抵消票面价格\n• 3D、IMAX 等加价需另付\n• 每张券仅限1人1次观影使用';
+
+  @override
+  String get movieTicketType_fixedPrice => '固定票价';
+
+  @override
   String get seatCancel_confirmTitle => '取消座位选择';
 
   @override
@@ -960,16 +1004,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get seatSelection_cancelSeatFailed => '取消座位选择失败，请重试';
 
   @override
-  String get seatSelection_hasLockedOrderTitle => '未支付订单';
+  String get seatSelection_hasLockedOrderTitle => '未完成订单';
 
   @override
-  String get seatSelection_hasLockedOrderMessage => '您有未支付的订单，请先完成支付';
+  String get seatSelection_hasLockedOrderMessage =>
+      '您有未完成的订单，座位已被锁定。请前往支付或取消订单';
+
+  @override
+  String get seatSelection_later => '稍后';
 
   @override
   String get seatSelection_goToPay => '去支付';
 
   @override
-  String get seatSelection_later => '稍后';
+  String get seatSelection_screen => '屏幕';
 
   @override
   String get user_title => '我的';
@@ -1155,6 +1203,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get movieShowList_dropdown_area => '地区';
+
+  @override
+  String get movieShowList_dropdown_dimensionType => '放映类型';
 
   @override
   String get movieShowList_dropdown_screenSpec => '放映规格';
@@ -1420,7 +1471,54 @@ class AppLocalizationsZh extends AppLocalizations {
   String get forgotPassword_passwordResetSuccess => '密码重置成功';
 
   @override
+  String get presaleDetail_title => '预售券';
+
+  @override
+  String get presaleDetail_specs => '规格';
+
+  @override
+  String get presaleDetail_salePeriodNote => '※ 销售期间与使用期间可能因影院而异，请以各影院公告为准';
+
+  @override
+  String get presaleDetail_applyMovie => '适用电影';
+
+  @override
+  String get presaleDetail_salePeriod => '销售期间';
+
+  @override
+  String get presaleDetail_usagePeriod => '使用期间';
+
+  @override
+  String get presaleDetail_perUserLimit => '每人限购';
+
+  @override
+  String get presaleDetail_noLimit => '不限';
+
+  @override
+  String get presaleDetail_pickupNotes => '取票说明';
+
+  @override
+  String get presaleDetail_gallery => '图集';
+
+  @override
+  String get presaleDetail_price => '价格';
+
+  @override
+  String get presaleDetail_bonus => '特典';
+
+  @override
+  String get presaleDetail_bonusDescription => '特典说明';
+
+  @override
+  String presaleDetail_bonusCount(int count) {
+    return '共$count张';
+  }
+
+  @override
   String get comingSoon_presale => '预售';
+
+  @override
+  String get comingSoon_presaleTicketBadge => '预售票';
 
   @override
   String get comingSoon_releaseDate => '上映';
@@ -1433,81 +1531,4 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get comingSoon_pullToRefresh => '下拉刷新';
-
-  @override
-  String get comingSoon_presaleTicketBadge => '预售券';
-
-  @override
-  String get movieDetail_viewPresaleTicket => '查看预售券';
-
-  @override
-  String get movieDetail_hasBonus => '含特典';
-
-  @override
-  String get movieDetail_presaleHasBonus => '预售券含特典';
-
-  @override
-  String get presaleDetail_title => '预售券详情';
-
-  @override
-  String get presaleDetail_applyMovie => '适用影片';
-
-  @override
-  String get presaleDetail_salePeriod => '发售时间';
-
-  @override
-  String get presaleDetail_salePeriodNote => '本商品为预售券，销售期间如下：';
-
-  @override
-  String get presaleDetail_usagePeriod => '使用时间';
-
-  @override
-  String get presaleDetail_perUserLimit => '每人限购';
-
-  @override
-  String get presaleDetail_noLimit => '不限';
-
-  @override
-  String get presaleDetail_pickupNotes => '取票说明';
-
-  @override
-  String get presaleDetail_description => '详情说明';
-
-  @override
-  String get presaleDetail_specs => '规格与价格';
-
-  @override
-  String get presaleDetail_bonus => '特典';
-
-  @override
-  String get presaleDetail_price => '价格';
-
-  @override
-  String get presaleDetail_stock => '库存';
-
-  @override
-  String get presaleDetail_delivery => '配送方式';
-
-  @override
-  String get presaleDetail_gallery => '图集';
-
-  @override
-  String get presaleDetail_buy => '购买';
-
-  @override
-  String get presaleDetail_addToCart => '加入购物车';
-
-  @override
-  String get presaleDetail_buyNow => '立即购买';
-
-  @override
-  String get presaleDetail_finalPrice => '到手价';
-
-  @override
-  String get presaleDetail_bonusDescription => '特典说明';
-
-  @override
-  String presaleDetail_bonusCount(Object count) {
-    return '共$count张';
-  }
 }

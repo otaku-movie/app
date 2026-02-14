@@ -12,6 +12,8 @@ class MovieTicketTypeResponse {
   
   final int? price;
   
+  final String? description;
+  
   final int? cinemaId;
   
   final String? createTime;
@@ -24,6 +26,7 @@ class MovieTicketTypeResponse {
     this.id,
     this.name,
     this.price,
+    this.description,
     this.cinemaId,
     this.createTime,
     this.updateTime,

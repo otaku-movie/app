@@ -68,6 +68,7 @@ TheaterHallShowTime _$TheaterHallShowTimeFromJson(Map<String, dynamic> json) =>
       seatStatus: (json['seatStatus'] as num?)?.toInt(),
       availableSeats: (json['availableSeats'] as num?)?.toInt(),
       totalSeats: (json['totalSeats'] as num?)?.toInt(),
+      open: json['open'] as bool?,
     );
 
 Map<String, dynamic> _$TheaterHallShowTimeToJson(
@@ -87,6 +88,7 @@ Map<String, dynamic> _$TheaterHallShowTimeToJson(
       'seatStatus': instance.seatStatus,
       'availableSeats': instance.availableSeats,
       'totalSeats': instance.totalSeats,
+      'open': instance.open,
     };
 
 ShowTimeTag _$ShowTimeTagFromJson(Map<String, dynamic> json) => ShowTimeTag(

@@ -23,6 +23,15 @@ class UserSelectSeatDataResponse {
   
   /// 放映类型（2D/3D），用于 Dict 组件字典 dimensionType
   final int? dimensionType;
+
+  /// 是否支持ムビチケ等前売り券
+  final bool? allowPresale;
+
+  /// 定价模式：1=系统活动 2=固定价格
+  final int? pricingMode;
+
+  /// 固定价格模式下的单价（pricing_mode=2）
+  final num? fixedAmount;
   
   final int? cinemaId;
   
@@ -53,6 +62,9 @@ class UserSelectSeatDataResponse {
     this.endTime,
     this.specName,
     this.dimensionType,
+    this.allowPresale,
+    this.pricingMode,
+    this.fixedAmount,
     this.cinemaId,
     this.cinemaName,
     this.theaterHallId,

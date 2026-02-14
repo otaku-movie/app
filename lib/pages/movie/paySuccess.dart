@@ -95,8 +95,8 @@ class _PageState extends State<PaySuccess> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // 禁用返回
+    return PopScope(
+      canPop: false, // 禁用返回
       child: Scaffold(
         backgroundColor: const Color(0xFFF7F8FA),
       appBar: CustomAppBar(
@@ -108,8 +108,8 @@ class _PageState extends State<PaySuccess> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(
-                    color: const Color(0xFF1989FA),
+                  const CircularProgressIndicator(
+                    color: Color(0xFF1989FA),
                   ),
                   SizedBox(height: 20.h),
                   Text(
@@ -304,8 +304,8 @@ class _PageState extends State<PaySuccess> {
                     // 分割线
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 12.h),
-                      child: Divider(
-                        color: const Color(0xFFEBEDF0),
+                      child: const Divider(
+                        color:  Color(0xFFEBEDF0),
                         height: 1,
                       ),
                     ),

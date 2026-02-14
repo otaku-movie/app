@@ -90,6 +90,10 @@ class ShowTime {
     @JsonKey(name: "dimensionType")
     int? dimensionType;
 
+    /// 是否开放售票：true-可售，false-已禁用
+    @JsonKey(name: "open")
+    bool? open;
+
     ShowTime({
         this.id,
         this.theaterHallId,
@@ -107,6 +111,7 @@ class ShowTime {
         this.movieVersionId,
         this.versionCode,
         this.dimensionType,
+        this.open,
     });
 
     factory ShowTime.fromJson(Map<String, dynamic> json) => _$ShowTimeFromJson(json);

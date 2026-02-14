@@ -542,6 +542,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                 controller: _tabController,
                 // ignore: prefer_is_empty
                 children: (data.data ?? []).map((item) {
+                  // 过滤已禁用的场次（open == false）
+                  final showTimes = (item.data ?? [])
+                      .where((s) => s.open != false)
+                      .toList();
                   return Builder(
                     builder: (BuildContext context) {
                       return CustomScrollView(
@@ -556,10 +560,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                             padding: const EdgeInsets.all(0.0),
                             sliver: SliverList(
                               delegate: SliverChildBuilderDelegate(
-                                childCount: item.data!.length,
+                                childCount: showTimes.length,
                                 (BuildContext context, int index) {
                                   TheaterHallShowTime children =
-                                      item.data![index];
+                                      showTimes[index];
 
                                   return Container(
                                     margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
