@@ -2901,6 +2901,118 @@
       }
     }
   },
+  "benefit": {
+    "hasBenefitsLabel": {
+      "zh": "有入场者特典",
+      "ja": "入場者特典あり",
+      "en": "Entrance benefits"
+    },
+    "pageTitle": {
+      "zh": "入场者特典",
+      "ja": "入場者特典",
+      "en": "Entrance Benefits"
+    },
+    "empty": {
+      "zh": "该电影暂无特典信息",
+      "ja": "この作品に特典情報はありません",
+      "en": "No benefits for this movie"
+    },
+    "phase": {
+      "zh": "阶段",
+      "ja": "フェーズ",
+      "en": "Phase"
+    },
+    "period": {
+      "zh": "期间",
+      "ja": "期間",
+      "en": "Period"
+    },
+    "items": {
+      "zh": "物料",
+      "ja": "物料",
+      "en": "Items"
+    },
+    "total": {
+      "zh": "总数",
+      "ja": "総数",
+      "en": "Total"
+    },
+    "remaining": {
+      "zh": "剩余",
+      "ja": "残り",
+      "en": "Remaining"
+    },
+    "status_sufficient": {
+      "zh": "充足",
+      "ja": "十分",
+      "en": "Sufficient"
+    },
+    "status_few": {
+      "zh": "少量",
+      "ja": "残りわずか",
+      "en": "Few"
+    },
+    "status_veryFew": {
+      "zh": "极少",
+      "ja": "ほぼ無し",
+      "en": "Very few"
+    },
+    "status_soldOut": {
+      "zh": "已领完",
+      "ja": "終了",
+      "en": "Sold out"
+    },
+    "status_unknown": {
+      "zh": "未知",
+      "ja": "不明",
+      "en": "Unknown"
+    },
+    "phaseStatus_before": {
+      "zh": "之前",
+      "ja": "開始前",
+      "en": "Upcoming"
+    },
+    "phaseStatus_ongoing": {
+      "zh": "进行中",
+      "ja": "実施中",
+      "en": "Ongoing"
+    },
+    "phaseStatus_ended": {
+      "zh": "已结束",
+      "ja": "終了",
+      "en": "Ended"
+    },
+    "unit_thousand": {
+      "zh": "千",
+      "ja": "千",
+      "en": "K"
+    },
+    "unit_tenThousand": {
+      "zh": "万",
+      "ja": "万",
+      "en": "万"
+    },
+    "limit": {
+      "zh": "限定",
+      "ja": "限定",
+      "en": "Limit"
+    },
+    "limit_cinema": {
+      "zh": "仅限指定影院",
+      "ja": "指定劇場のみ",
+      "en": "Specific cinemas only"
+    },
+    "limit_dimension_2d": {
+      "zh": "2D",
+      "ja": "2D",
+      "en": "2D"
+    },
+    "limit_dimension_3d": {
+      "zh": "3D",
+      "ja": "3D",
+      "en": "3D"
+    }
+  },
   "comingSoon": {
     "presale": {
       "zh": "预售",

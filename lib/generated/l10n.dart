@@ -694,6 +694,22 @@ class S {
     );
   }
 
+  String get ticket_benefit_feedback_lead {
+    return Intl.message('Help others by confirming benefit stock', name: 'ticket_benefit_feedback_lead', desc: '', args: []);
+  }
+
+  String get ticket_benefit_feedback_btn {
+    return Intl.message('Feedback', name: 'ticket_benefit_feedback_btn', desc: '', args: []);
+  }
+
+  String get ticket_benefit_feedback_select_ticket {
+    return Intl.message('Select show to feedback', name: 'ticket_benefit_feedback_select_ticket', desc: '', args: []);
+  }
+
+  String get showTime_benefit_feedback_soldOut {
+    return Intl.message('User feedback: Sold out today', name: 'showTime_benefit_feedback_soldOut', desc: '', args: []);
+  }
+
   /// `Loading...`
   String get common_loading {
     return Intl.message(
@@ -1399,6 +1415,16 @@ class S {
     return Intl.message(
       'Available',
       name: 'about_components_showTimeList_seatStatus_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Benefits`
+  String get about_components_showTimeList_benefitBadge {
+    return Intl.message(
+      'Benefits',
+      name: 'about_components_showTimeList_benefitBadge',
       desc: '',
       args: [],
     );
@@ -3689,6 +3715,31 @@ class S {
     );
   }
 
+  String get orderDetail_benefit_feedback_title {
+    return Intl.message('Benefit Feedback', name: 'orderDetail_benefit_feedback_title', desc: '', args: []);
+  }
+
+  String get orderDetail_benefit_feedback_hint {
+    return Intl.message(
+      'If you found that the benefit below was sold out at this cinema, tap submit and we\'ll update the stock hint for other viewers.',
+      name: 'orderDetail_benefit_feedback_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get orderDetail_benefit_feedback_cinema_label {
+    return Intl.message('Cinema', name: 'orderDetail_benefit_feedback_cinema_label', desc: '', args: []);
+  }
+
+  String get orderDetail_benefit_feedback_benefit_label {
+    return Intl.message('Benefit', name: 'orderDetail_benefit_feedback_benefit_label', desc: '', args: []);
+  }
+
+  String get orderDetail_benefit_feedback_submit {
+    return Intl.message('Submit: Sold out at this cinema', name: 'orderDetail_benefit_feedback_submit', desc: '', args: []);
+  }
+
   /// `Payment Successful`
   String get payResult_title {
     return Intl.message(
@@ -4822,6 +4873,253 @@ class S {
       desc: '',
       args: [count],
     );
+  }
+
+  /// `Entrance benefits`
+  String get benefit_hasBenefitsLabel {
+    return Intl.message(
+      'Entrance benefits',
+      name: 'benefit_hasBenefitsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Entrance Benefits`
+  String get benefit_pageTitle {
+    return Intl.message(
+      'Entrance Benefits',
+      name: 'benefit_pageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No benefits for this movie`
+  String get benefit_empty {
+    return Intl.message(
+      'No benefits for this movie',
+      name: 'benefit_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phase`
+  String get benefit_phase {
+    return Intl.message('Phase', name: 'benefit_phase', desc: '', args: []);
+  }
+
+  /// `Period`
+  String get benefit_period {
+    return Intl.message('Period', name: 'benefit_period', desc: '', args: []);
+  }
+
+  /// `Items`
+  String get benefit_items {
+    return Intl.message('Items', name: 'benefit_items', desc: '', args: []);
+  }
+
+  /// `Total`
+  String get benefit_total {
+    return Intl.message('Total', name: 'benefit_total', desc: '', args: []);
+  }
+
+  /// `Remaining`
+  String get benefit_remaining {
+    return Intl.message(
+      'Remaining',
+      name: 'benefit_remaining',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sufficient`
+  String get benefit_status_sufficient {
+    return Intl.message(
+      'Sufficient',
+      name: 'benefit_status_sufficient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Few`
+  String get benefit_status_few {
+    return Intl.message('Few', name: 'benefit_status_few', desc: '', args: []);
+  }
+
+  /// `Very few`
+  String get benefit_status_veryFew {
+    return Intl.message(
+      'Very few',
+      name: 'benefit_status_veryFew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sold out`
+  String get benefit_status_soldOut {
+    return Intl.message(
+      'Sold out',
+      name: 'benefit_status_soldOut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown`
+  String get benefit_status_unknown {
+    return Intl.message(
+      'Unknown',
+      name: 'benefit_status_unknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upcoming`
+  String get benefit_phaseStatus_before {
+    return Intl.message(
+      'Upcoming',
+      name: 'benefit_phaseStatus_before',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ongoing`
+  String get benefit_phaseStatus_ongoing {
+    return Intl.message(
+      'Ongoing',
+      name: 'benefit_phaseStatus_ongoing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ended`
+  String get benefit_phaseStatus_ended {
+    return Intl.message(
+      'Ended',
+      name: 'benefit_phaseStatus_ended',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `K`
+  String get benefit_unit_thousand {
+    return Intl.message('K', name: 'benefit_unit_thousand', desc: '', args: []);
+  }
+
+  /// `万`
+  String get benefit_unit_tenThousand {
+    return Intl.message(
+      '万',
+      name: 'benefit_unit_tenThousand',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limit`
+  String get benefit_limit {
+    return Intl.message('Limit', name: 'benefit_limit', desc: '', args: []);
+  }
+
+  /// `Specific cinemas only`
+  String get benefit_limit_cinema {
+    return Intl.message(
+      'Specific cinemas only',
+      name: 'benefit_limit_cinema',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `2D`
+  String get benefit_limit_dimension_2d {
+    return Intl.message(
+      '2D',
+      name: 'benefit_limit_dimension_2d',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `3D`
+  String get benefit_limit_dimension_3d {
+    return Intl.message(
+      '3D',
+      name: 'benefit_limit_dimension_3d',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you found that a cinema has run out of this phase's benefits, select the cinema and submit feedback. No ticket purchase required.`
+  String get benefit_feedback_hint {
+    return Intl.message(
+      'If you notice that the benefit below has already been fully claimed at a specific cinema, please select the cinema and submit feedback so we can update the stock hint for other viewers.',
+      name: 'benefit_feedback_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select cinema`
+  String get benefit_feedback_select_cinema {
+    return Intl.message(
+      'Select cinema',
+      name: 'benefit_feedback_select_cinema',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Feedback: sold out at this cinema`
+  String get benefit_feedback_submit {
+    return Intl.message(
+      'Feedback: sold out at this cinema',
+      name: 'benefit_feedback_submit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Thank you for your feedback`
+  String get benefit_feedback_success {
+    return Intl.message(
+      'Thank you for your feedback',
+      name: 'benefit_feedback_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a cinema first`
+  String get benefit_feedback_please_select_cinema {
+    return Intl.message(
+      'Please select a cinema first',
+      name: 'benefit_feedback_please_select_cinema',
+      desc: '',
+      args: [],
+    );
+  }
+
+  String get benefit_feedback_button {
+    return Intl.message('Feedback', name: 'benefit_feedback_button', desc: '', args: []);
+  }
+
+  String get benefit_feedback_select_phase {
+    return Intl.message('Select phase', name: 'benefit_feedback_select_phase', desc: '', args: []);
+  }
+
+  String get benefit_feedback_please_select_phase {
+    return Intl.message('Please select a phase first', name: 'benefit_feedback_please_select_phase', desc: '', args: []);
   }
 
   /// `Presale`

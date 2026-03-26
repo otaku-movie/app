@@ -29,12 +29,22 @@ enum SelectSeatState {
 //   sold = 4,       // 对应 4
 // }
 
+/// 后端订单状态码（与接口 orderState 字段一致）
+class OrderStateCode {
+  OrderStateCode._();
+  static const int created = 1;
+  static const int succeed = 2;
+  static const int failed = 3;
+  static const int canceledOrder = 4;
+  static const int timeout = 5;
+}
+
 enum OrderState {
   // 订单已创建 1
   created,
   // 订单完成 2
   succeed,
-  // 订单失败 4
+  // 订单失败 3
   failed,
   // 取消订单 4
   canceledOrder,

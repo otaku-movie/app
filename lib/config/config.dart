@@ -20,7 +20,7 @@ class EnvironmentConfig {
     switch (env) {
       case EnvironmentType.dev:
         // 优先使用传入的 IP，其次使用 dart-define 中的 DEV_SERVER_IP，最后使用默认 IP
-        final devServerIp = const String.fromEnvironment('DEV_SERVER_IP', defaultValue: '');
+        final devServerIp = const String.fromEnvironment('DEV_SERVER_IP', defaultValue: '192.168.1.71');
         final ip = localIp ?? (devServerIp.isNotEmpty ? devServerIp : '192.168.3.47');
         return EnvironmentConfig(
           apiUrl: 'http://$ip:8080/api',

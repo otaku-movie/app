@@ -12,7 +12,9 @@ import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/order/order_detail_response.dart';
+import 'package:otaku_movie/response/benefit/app_benefit_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
+import 'package:otaku_movie/utils/toast.dart';
 
 class OrderDetail extends StatefulWidget {
   final String? orderNumber;
@@ -30,6 +32,8 @@ class _PageState extends State<OrderDetail> {
   Uint8List? QRcodeBytes;
   bool loading = false;
   bool error = false;
+  /// 本单是否已在本次会话中提交过特典反馈（已反馈则不再展示底部反馈入口）
+  bool _benefitFeedbackSubmitted = false;
 
   Future<void> getData() async {
     if (widget.orderNumber == null || widget.orderNumber!.isEmpty) return;
@@ -52,6 +56,8 @@ class _PageState extends State<OrderDetail> {
         setState(() {
           data = res.data!;
           error = false;
+          // 后端返回已反馈或本次会话已反馈时，不再展示反馈入口
+          _benefitFeedbackSubmitted = data.benefitFeedbackSubmitted == true || _benefitFeedbackSubmitted;
         });
       } else if (mounted) {
         setState(() => error = true);
@@ -509,8 +515,9 @@ class _PageState extends State<OrderDetail> {
                                         ],
                                       ),
                                     ),
-                                    if (data.orderState == OrderState.succeed)
+                                    if (data.orderState == OrderStateCode.succeed)
                                       Container(
+                                        width: 130.w,
                                         height: 50.h,                  
                                         padding: EdgeInsets.symmetric(horizontal: 20.w),
                                         decoration: BoxDecoration(
@@ -648,124 +655,83 @@ class _PageState extends State<OrderDetail> {
                 ),
               
               // 二维码取票卡片
-               data.orderState == OrderState.succeed ? Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(32.w),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.r),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 10,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    // 二维码标题
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.qr_code_2,
-                          size: 32.sp,
-                          color: const Color(0xFF1989FA),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          S.of(context).orderDetail_ticketCount(data.seat == null ? 0 : data.seat!.length),
-                          style: TextStyle(
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF323233),
-                          ),
-                        ),
-                      ],
-                    ),
-                    
-                    SizedBox(height: 32.h),
-                    
-                    // 二维码
-                    if (QRcodeBytes != null)
-                      Container(
-                        padding: EdgeInsets.all(20.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.r),
-                          border: Border.all(
-                            color: const Color(0xFFEBEDF0),
-                            width: 2,
-                          ),
-                        ),
-                        child: Image.memory(
-                          QRcodeBytes!,
-                          width: 320.w,
-                          height: 320.w,
-                          fit: BoxFit.contain,
-                        ),
-                      )
-                    else
-                      Container(
-                        width: 320.w,
-                        height: 320.w,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF7F8FA),
-                          borderRadius: BorderRadius.circular(16.r),
-                        ),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: const Color(0xFF1989FA),
-                          ),
-                        ),
+              if (data.orderState == OrderStateCode.succeed)
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(32.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
                       ),
-                    
-                    SizedBox(height: 32.h),
-                    
-                    // 取票码
-              Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 24.w),
-                decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFFF7F8FA),
-                            const Color(0xFFFFFFFF),
-                          ],
-                        ),
-                        borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(
-                          color: const Color(0xFFEBEDF0),
-                          width: 1.5,
-                        ),
-                      ),
-                      child: Row(
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                        children: [
+                          Icon(Icons.qr_code_2, size: 32.sp, color: const Color(0xFF1989FA)),
+                          SizedBox(width: 8.w),
                           Text(
-                            '${S.of(context).orderDetail_ticketCode}：',
-                            style: TextStyle(
-                              fontSize: 28.sp,
-                              color: const Color(0xFF969799),
-                            ),
-                          ),
-                          Text(
-                            '1234567890',
-                            style: TextStyle(
-                              fontSize: 32.sp,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF323233),
-                              letterSpacing: 2,
-                              fontFamily: 'Poppins',
-                            ),
+                            S.of(context).orderDetail_ticketCount(data.seat == null ? 0 : data.seat!.length),
+                            style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w600, color: const Color(0xFF323233)),
                           ),
                         ],
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 32.h),
+                      if (QRcodeBytes != null)
+                        Container(
+                          padding: EdgeInsets.all(20.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16.r),
+                            border: Border.all(color: const Color(0xFFEBEDF0), width: 2),
+                          ),
+                          child: Image.memory(
+                            QRcodeBytes!,
+                            width: 320.w,
+                            height: 320.w,
+                            fit: BoxFit.contain,
+                          ),
+                        )
+                      else
+                        Container(
+                          width: 320.w,
+                          height: 320.w,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF7F8FA),
+                            borderRadius: BorderRadius.circular(16.r),
+                          ),
+                          child: Center(child: CircularProgressIndicator(color: const Color(0xFF1989FA))),
+                        ),
+                      SizedBox(height: 32.h),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 24.w),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [const Color(0xFFF7F8FA), const Color(0xFFFFFFFF)]),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: const Color(0xFFEBEDF0), width: 1.5),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('${S.of(context).orderDetail_ticketCode}：', style: TextStyle(fontSize: 28.sp, color: const Color(0xFF969799))),
+                            Text(
+                              data.payNumber?.toString() ?? data.orderNumber ?? '—',
+                              style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w600, color: const Color(0xFF323233), letterSpacing: 2, fontFamily: 'Poppins'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ) : Container(),
               
               // 订单详情卡片
               Container(
@@ -850,7 +816,44 @@ class _PageState extends State<OrderDetail> {
                   ],
                 ),
               ),
-              
+              // 特典反馈（仅订单成功且未反馈过时显示）
+              if (data.orderState == OrderStateCode.succeed && !_benefitFeedbackSubmitted && data.benefitFeedbackSubmitted != true) ...[
+                SizedBox(height: 24.h),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(20.w),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF7F8FA),
+                    borderRadius: BorderRadius.circular(16.r),
+                    border: Border.all(color: const Color(0xFFEBEDF0)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).ticket_benefit_feedback_lead,
+                        style: TextStyle(fontSize: 26.sp, color: const Color(0xFF646566), height: 1.45),
+                      ),
+                      SizedBox(height: 20.h),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 88.h,
+                        child: ElevatedButton.icon(
+                          onPressed: () => _showBenefitFeedbackSheet(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF1989FA),
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                          ),
+                          icon: Icon(Icons.feedback_outlined, size: 22.sp, color: Colors.white),
+                          label: Text(S.of(context).ticket_benefit_feedback_btn, style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
               SizedBox(height: 40.h),
             ],
           ),
@@ -858,6 +861,164 @@ class _PageState extends State<OrderDetail> {
       ),
     ),
     ),
+    );
+  }
+
+  int? _orderCinemaId() {
+    final c = data.cinemaId;
+    if (c == null) return null;
+    if (c is int) return c;
+    if (c is num) return c.toInt();
+    if (c is String) return int.tryParse(c);
+    return null;
+  }
+
+  Future<void> _showBenefitFeedbackSheet(BuildContext context) async {
+    final movieId = data.movieId;
+    final cinemaId = _orderCinemaId();
+    if (movieId == null || cinemaId == null) return;
+
+    // 根据电影 + 影院 + 场次时间 + 购票规格查询特典，取第一个作为本场次对应特典
+    final queryParams = <String, dynamic>{
+      'movieId': movieId,
+      'cinemaId': cinemaId,
+    };
+    if (data.dimensionType != null) queryParams['dimensionType'] = data.dimensionType;
+    if (data.date != null && data.date!.isNotEmpty) queryParams['date'] = data.date;
+    if (data.startTime != null && data.startTime!.isNotEmpty) queryParams['startTime'] = data.startTime;
+
+    List<AppBenefitDetailResponse> benefitList = [];
+    bool loadingBenefits = true;
+    try {
+      final res = await ApiRequest().request<List<AppBenefitDetailResponse>>(
+        path: '/app/benefit/list',
+        method: 'GET',
+        queryParameters: queryParams,
+        fromJsonT: (json) {
+          if (json is! List) return <AppBenefitDetailResponse>[];
+          return json.map((e) => AppBenefitDetailResponse.fromJson(e as Map<String, dynamic>)).toList();
+        },
+      );
+      benefitList = res.data ?? [];
+    } catch (_) {}
+    loadingBenefits = false;
+
+    final benefit = benefitList.isNotEmpty ? benefitList.first : null;
+
+    if (!context.mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+          ),
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, 24.h + MediaQuery.of(ctx).viewPadding.bottom),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 40.w,
+                      height: 4.h,
+                      margin: EdgeInsets.only(bottom: 20.h),
+                      decoration: BoxDecoration(color: const Color(0xFFDCDEE0), borderRadius: BorderRadius.circular(2.r)),
+                    ),
+                  ),
+                  Text(
+                    S.of(context).orderDetail_benefit_feedback_title,
+                    style: TextStyle(fontSize: 34.sp, fontWeight: FontWeight.w600, color: const Color(0xFF323233)),
+                  ),
+                  SizedBox(height: 8.h),
+                  Text(
+                    S.of(context).orderDetail_benefit_feedback_hint,
+                    style: TextStyle(fontSize: 26.sp, color: const Color(0xFF969799), height: 1.45),
+                  ),
+                  SizedBox(height: 24.h),
+                  if (loadingBenefits)
+                    Padding(padding: EdgeInsets.symmetric(vertical: 24.h), child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
+                  if (!loadingBenefits && benefit == null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24.h),
+                      child: Text(S.of(context).benefit_empty, style: TextStyle(fontSize: 26.sp, color: const Color(0xFF969799))),
+                    ),
+                  if (!loadingBenefits && benefit != null) ...[
+                    Container(
+                      padding: EdgeInsets.all(16.w),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF7F8FA),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: const Color(0xFFEBEDF0)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 120.w,
+                                child: Text(S.of(context).orderDetail_benefit_feedback_cinema_label, style: TextStyle(fontSize: 26.sp, color: const Color(0xFF969799))),
+                              ),
+                              Expanded(child: Text(data.cinemaName ?? '—', style: TextStyle(fontSize: 26.sp, color: const Color(0xFF323233), fontWeight: FontWeight.w500))),
+                            ],
+                          ),
+                          SizedBox(height: 12.h),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 120.w,
+                                child: Text(S.of(context).orderDetail_benefit_feedback_benefit_label, style: TextStyle(fontSize: 26.sp, color: const Color(0xFF969799))),
+                              ),
+                              Expanded(child: Text(benefit.name ?? '—', style: TextStyle(fontSize: 26.sp, color: const Color(0xFF323233), fontWeight: FontWeight.w500))),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 24.h),
+                    SizedBox(
+                      height: 88.h,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF1989FA),
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                        ),
+                        onPressed: () async {
+                          try {
+                            await ApiRequest().request<void>(
+                              path: '/app/benefit/feedback',
+                              method: 'POST',
+                              data: {'cinemaId': cinemaId, 'benefitId': benefit.id, 'feedbackType': 1},
+                              fromJsonT: (_) => null,
+                            );
+                            if (ctx.mounted) {
+                              setState(() => _benefitFeedbackSubmitted = true);
+                              ToastService.showToast(S.of(context).benefit_feedback_success, type: ToastType.success);
+                              Navigator.of(ctx).pop();
+                            }
+                          } catch (_) {}
+                        },
+                        child: Text(S.of(context).orderDetail_benefit_feedback_submit, style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w600)),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -929,7 +1090,7 @@ class _PageState extends State<OrderDetail> {
   // 判断是否应该显示倒计时
   bool _shouldShowCountdown() {
     // 只有订单状态为已支付成功时才显示
-    if (data.orderState != OrderState.succeed.index + 1) {
+    if (data.orderState != OrderStateCode.succeed) {
       return false;
     }
 
@@ -987,3 +1148,4 @@ class _PageState extends State<OrderDetail> {
     }
   }
 }
+

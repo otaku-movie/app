@@ -225,6 +225,18 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get ticket_benefit_feedback_lead => '帮其他小伙伴确认下特典库存吧';
+
+  @override
+  String get ticket_benefit_feedback_btn => '去反馈';
+
+  @override
+  String get ticket_benefit_feedback_select_ticket => '选择要反馈的场次';
+
+  @override
+  String get showTime_benefit_feedback_soldOut => '网友反馈：今日已领完';
+
+  @override
   String get common_loading => '加载中...';
 
   @override
@@ -447,6 +459,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get about_components_showTimeList_seatStatus_available => '充足';
+
+  @override
+  String get about_components_showTimeList_benefitBadge => '特典';
 
   @override
   String get about_login_verificationCode => '验证码';
@@ -906,6 +921,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieTicketType_fixedPrice => '固定票价';
 
   @override
+  String get movieTicketType_noSeatInfoRetry => '未获取到当前选座信息，请重新选择座位';
+
+  @override
+  String get movieTicketType_sessionSurchargeTitle => '本场次加价：';
+
+  @override
+  String movieTicketType_unavailableSeatsWithNames(String names) {
+    return '部分座位不可用，请重新选择：$names';
+  }
+
+  @override
+  String get movieTicketType_createOrderNoOrderNumber => '创建订单失败，未返回订单号';
+
+  @override
+  String get movieTicketType_unknownTicketType => '未知票种';
+
+  @override
+  String get movieTicketType_priceRuleFormula_fixed =>
+      '单人票价 = 固定票价 + 区域加价 + 规格加价 + 放映类型加价（2D/3D）';
+
+  @override
+  String get movieTicketType_priceDetailTitle => '价格明细';
+
+  @override
+  String get movieTicketType_priceDetail_mubitikeOffset => '券抵';
+
+  @override
+  String get movieTicketType_priceDetail_fullPrice => '全价';
+
+  @override
   String get seatCancel_confirmTitle => '取消座位选择';
 
   @override
@@ -1158,6 +1203,22 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get orderDetail_failureReason => '失败原因';
+
+  @override
+  String get orderDetail_benefit_feedback_title => '特典反馈';
+
+  @override
+  String get orderDetail_benefit_feedback_hint =>
+      '若您在该影院观影时发现下方特典已领完，点击提交后我们会更新库存提示，方便其他观众。';
+
+  @override
+  String get orderDetail_benefit_feedback_cinema_label => '反馈影院';
+
+  @override
+  String get orderDetail_benefit_feedback_benefit_label => '特典';
+
+  @override
+  String get orderDetail_benefit_feedback_submit => '确认：该影院已领完';
 
   @override
   String get payResult_title => '支付完成';
@@ -1513,6 +1574,97 @@ class AppLocalizationsZh extends AppLocalizations {
   String presaleDetail_bonusCount(int count) {
     return '共$count张';
   }
+
+  @override
+  String get benefit_hasBenefitsLabel => '有入场者特典';
+
+  @override
+  String get benefit_pageTitle => '入场者特典';
+
+  @override
+  String get benefit_empty => '该电影暂无特典信息';
+
+  @override
+  String get benefit_phase => '阶段';
+
+  @override
+  String get benefit_period => '期间';
+
+  @override
+  String get benefit_items => '物料';
+
+  @override
+  String get benefit_total => '总数';
+
+  @override
+  String get benefit_remaining => '剩余';
+
+  @override
+  String get benefit_status_sufficient => '充足';
+
+  @override
+  String get benefit_status_few => '少量';
+
+  @override
+  String get benefit_status_veryFew => '极少';
+
+  @override
+  String get benefit_status_soldOut => '已领完';
+
+  @override
+  String get benefit_status_unknown => '未知';
+
+  @override
+  String get benefit_phaseStatus_before => '之前';
+
+  @override
+  String get benefit_phaseStatus_ongoing => '进行中';
+
+  @override
+  String get benefit_phaseStatus_ended => '已结束';
+
+  @override
+  String get benefit_unit_thousand => '千';
+
+  @override
+  String get benefit_unit_tenThousand => '万';
+
+  @override
+  String get benefit_limit => '限定';
+
+  @override
+  String get benefit_limit_cinema => '仅限指定影院';
+
+  @override
+  String get benefit_limit_dimension_2d => '2D';
+
+  @override
+  String get benefit_limit_dimension_3d => '3D';
+
+  @override
+  String get benefit_feedback_hint =>
+      '如果你在某家影院观影时发现下方这份特典已经领完，请选择影院并提交反馈，我们会更新库存提示，方便其他观众。';
+
+  @override
+  String get benefit_feedback_select_cinema => '选择影院';
+
+  @override
+  String get benefit_feedback_submit => '反馈：该影院已领完';
+
+  @override
+  String get benefit_feedback_success => '感谢您的反馈';
+
+  @override
+  String get benefit_feedback_please_select_cinema => '请先选择影院';
+
+  @override
+  String get benefit_feedback_button => '反馈';
+
+  @override
+  String get benefit_feedback_select_phase => '选择阶段';
+
+  @override
+  String get benefit_feedback_please_select_phase => '请先选择阶段';
 
   @override
   String get comingSoon_presale => '预售';

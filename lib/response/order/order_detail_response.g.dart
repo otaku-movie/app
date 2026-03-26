@@ -36,6 +36,7 @@ OrderDetailResponse _$OrderDetailResponseFromJson(Map<String, dynamic> json) =>
       dimensionType: (json['dimensionType'] as num?)?.toInt(),
       payDeadline: json['payDeadline'] as String?,
       failureReason: json['failureReason'] as String?,
+      benefitFeedbackSubmitted: json['benefitFeedbackSubmitted'] as bool?,
       seat: (json['seat'] as List<dynamic>?)
           ?.map((e) => Seat.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -70,6 +71,7 @@ Map<String, dynamic> _$OrderDetailResponseToJson(
       'dimensionType': instance.dimensionType,
       'payDeadline': instance.payDeadline,
       'failureReason': instance.failureReason,
+      'benefitFeedbackSubmitted': instance.benefitFeedbackSubmitted,
       'seat': instance.seat?.map((e) => e.toJson()).toList(),
     };
 

@@ -977,6 +977,57 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
+                                            // 特典标识（该影院下任意场次有特典时显示）
+                                            if ((children.showTimes ?? []).any((st) => st.hasBenefits == true))
+                                              Padding(
+                                                padding: EdgeInsets.only(right: 8.w),
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.deepPurple.withValues(alpha: 0.12),
+                                                    borderRadius: BorderRadius.circular(6.r),
+                                                    border: Border.all(color: Colors.deepPurple.withValues(alpha: 0.4)),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text('🎁', style: TextStyle(fontSize: 18.sp)),
+                                                      SizedBox(width: 4.w),
+                                                      Text(
+                                                        S.of(context).about_components_showTimeList_benefitBadge,
+                                                        style: TextStyle(
+                                                          fontSize: 20.sp,
+                                                          color: Colors.deepPurple.shade700,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            // 网友反馈：今日已领完（轻展示）
+                                            if ((children.showTimes ?? []).any((st) => st.benefitFeedbackSoldOut == true))
+                                              Padding(
+                                                padding: EdgeInsets.only(right: 8.w),
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red.withValues(alpha: 0.12),
+                                                    borderRadius: BorderRadius.circular(6.r),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text('🔴', style: TextStyle(fontSize: 16.sp)),
+                                                      SizedBox(width: 4.w),
+                                                      Text(
+                                                        S.of(context).showTime_benefit_feedback_soldOut,
+                                                        style: TextStyle(fontSize: 20.sp, color: Colors.red.shade700, fontWeight: FontWeight.w500),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
                                             SizedBox(width: 12.w),
                                             // 显示距离
                                             if (children.distance != null)
@@ -1232,19 +1283,20 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // 开始时间（大字体突出显示）
-                    Text(
-                      DateFormatUtil.formatShowTime(
-                        dateTime: showTime.startTime,
-                        use30HourFormat: (filterParams['use30HourFormat'] is bool && filterParams['use30HourFormat']) || 
-                                        (filterParams['use30HourFormat'] == 'true' || filterParams['use30HourFormat'] == true),
-                        baseDate: _getCurrentTabDate(),
-                      ),
-                      style: TextStyle(
-                        fontSize: 32.sp,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                        height: 1.2,
+                    Expanded(
+                      child: Text(
+                        DateFormatUtil.formatShowTime(
+                          dateTime: showTime.startTime,
+                          use30HourFormat: (filterParams['use30HourFormat'] is bool && filterParams['use30HourFormat']) || 
+                                          (filterParams['use30HourFormat'] == 'true' || filterParams['use30HourFormat'] == true),
+                          baseDate: _getCurrentTabDate(),
+                        ),
+                        style: TextStyle(
+                          fontSize: 32.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          height: 1.2,
+                        ),
                       ),
                     ),
                     // 右侧座位状态（图标形式）

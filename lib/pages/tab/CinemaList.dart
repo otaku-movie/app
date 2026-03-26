@@ -994,38 +994,56 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       // 电影海报
-                                      Container(
-                                        width: 160.w,
-                                        height: 173.h, // 调整高度以保持与NowShowing相同的比例 (160:173 ≈ 240:260)
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(12.r),
-                                          color: Colors.grey.shade100, // 使用淡灰色背景
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withValues(alpha: 0.1),
-                                              blurRadius: 8,
-                                              offset: const Offset(0, 2),
-                                            ),
-                                          ],
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(12.r),
-                                          child: movie.poster != null && movie.poster!.isNotEmpty
-                                              ? CustomExtendedImage(
-                                                  movie.poster!,
-                                                  width: 160.w,
-                                                  height: 173.h,
-                                                  fit: BoxFit.contain,
-                                                )
-                                              : Container(
-                                                  color: Colors.grey.shade300,
-                                                  child: Icon(
-                                                    Icons.movie_rounded,
-                                                    color: Colors.grey.shade600,
-                                                    size: 32.sp,
-                                                  ),
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          Container(
+                                            width: 160.w,
+                                            height: 173.h, // 调整高度以保持与NowShowing相同的比例 (160:173 ≈ 240:260)
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(12.r),
+                                              color: Colors.grey.shade100, // 使用淡灰色背景
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black.withValues(alpha: 0.1),
+                                                  blurRadius: 8,
+                                                  offset: const Offset(0, 2),
                                                 ),
-                                        ),
+                                              ],
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(12.r),
+                                              child: movie.poster != null && movie.poster!.isNotEmpty
+                                                  ? CustomExtendedImage(
+                                                      movie.poster!,
+                                                      width: 160.w,
+                                                      height: 173.h,
+                                                      fit: BoxFit.contain,
+                                                    )
+                                                  : Container(
+                                                      color: Colors.grey.shade300,
+                                                      child: Icon(
+                                                        Icons.movie_rounded,
+                                                        color: Colors.grey.shade600,
+                                                        size: 32.sp,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
+                                          if (movie.hasBenefits == true)
+                                            Positioned(
+                                              top: 6.h,
+                                              right: 6.w,
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.deepPurple,
+                                                  borderRadius: BorderRadius.circular(6.r),
+                                                ),
+                                                child: Text('🎁', style: TextStyle(fontSize: 18.sp)),
+                                              ),
+                                            ),
+                                        ],
                                       ),
                                       SizedBox(height: 6.h), // 减少间距
 

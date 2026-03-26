@@ -15,6 +15,7 @@ import 'package:otaku_movie/pages/movie/ShowTimeList.dart';
 import 'package:otaku_movie/pages/movie/confirmOrder.dart';
 import 'package:otaku_movie/pages/movie/movieDetail.dart';
 import 'package:otaku_movie/pages/movie/presaleDetail.dart';
+import 'package:otaku_movie/pages/movie/MovieBenefits.dart';
 import 'package:otaku_movie/pages/movie/payError.dart';
 import 'package:otaku_movie/pages/movie/paySuccess.dart';
 import 'package:otaku_movie/pages/order/orderDetail.dart';
@@ -138,6 +139,16 @@ final GoRouter routerConfig = GoRouter(
           name: 'presaleDetail',
           builder: (BuildContext context, GoRouterState state) {
             return PresaleDetail(id: state.pathParameters['id']);
+          },
+        ),
+        GoRoute(
+          path: '/movie/benefits/:id',
+          name: 'movieBenefits',
+          builder: (BuildContext context, GoRouterState state) {
+            return MovieBenefits(
+              id: state.pathParameters['id'],
+              movieName: state.uri.queryParameters['movieName'],
+            );
           },
         ),
         GoRoute(

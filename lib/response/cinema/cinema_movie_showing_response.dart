@@ -16,12 +16,15 @@ class CinemaMovieShowingResponse {
     
     final String? levelName;
 
+    final bool? hasBenefits;
+
     CinemaMovieShowingResponse({
         this.id,
         this.name,
         this.poster,
         this.time,
         this.levelName,
+        this.hasBenefits,
     });
 
     factory CinemaMovieShowingResponse.fromJson(Map<String, dynamic> json) => _$CinemaMovieShowingResponseFromJson(json);

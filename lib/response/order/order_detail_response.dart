@@ -62,6 +62,9 @@ class OrderDetailResponse {
     /// 订单失败/取消/超时原因，仅失败/取消/超时时有值
     final String? failureReason;
 
+    /// 当前用户是否已对该订单对应场次的特典提交过反馈（已反馈则详情页不展示反馈入口）
+    final bool? benefitFeedbackSubmitted;
+
     final List<Seat>? seat;
 
     OrderDetailResponse({
@@ -91,6 +94,7 @@ class OrderDetailResponse {
         this.dimensionType,
         this.payDeadline,
         this.failureReason,
+        this.benefitFeedbackSubmitted,
         this.seat,
     });
 

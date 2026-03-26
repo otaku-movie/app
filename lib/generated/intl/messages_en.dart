@@ -97,6 +97,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage("No showtime information"),
     "about_components_showTimeList_seatStatus_available":
         MessageLookupByLibrary.simpleMessage("Available"),
+    "about_components_showTimeList_benefitBadge":
+        MessageLookupByLibrary.simpleMessage("Benefits"),
     "about_components_showTimeList_seatStatus_limited":
         MessageLookupByLibrary.simpleMessage("Limited"),
     "about_components_showTimeList_seatStatus_soldOut":
@@ -187,6 +189,54 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "about_title": MessageLookupByLibrary.simpleMessage("About"),
     "about_version": MessageLookupByLibrary.simpleMessage("Version"),
+    "benefit_empty": MessageLookupByLibrary.simpleMessage(
+      "No benefits for this movie",
+    ),
+    "benefit_hasBenefitsLabel": MessageLookupByLibrary.simpleMessage(
+      "Entrance benefits",
+    ),
+    "benefit_items": MessageLookupByLibrary.simpleMessage("Items"),
+    "benefit_limit": MessageLookupByLibrary.simpleMessage("Limit"),
+    "benefit_limit_cinema": MessageLookupByLibrary.simpleMessage(
+      "Specific cinemas only",
+    ),
+    "benefit_limit_dimension_2d": MessageLookupByLibrary.simpleMessage("2D"),
+    "benefit_limit_dimension_3d": MessageLookupByLibrary.simpleMessage("3D"),
+    "benefit_feedback_hint": MessageLookupByLibrary.simpleMessage(
+      "If you found that a cinema has run out of this phase's benefits, select the cinema and submit feedback. No ticket purchase required.",
+    ),
+    "benefit_feedback_select_cinema": MessageLookupByLibrary.simpleMessage("Select cinema"),
+    "benefit_feedback_submit": MessageLookupByLibrary.simpleMessage(
+      "Feedback: sold out at this cinema",
+    ),
+    "benefit_feedback_success": MessageLookupByLibrary.simpleMessage("Thank you for your feedback"),
+    "benefit_feedback_please_select_cinema": MessageLookupByLibrary.simpleMessage("Please select a cinema first"),
+    "benefit_feedback_button": MessageLookupByLibrary.simpleMessage("Feedback"),
+    "benefit_feedback_select_phase": MessageLookupByLibrary.simpleMessage("Select phase"),
+    "benefit_feedback_please_select_phase": MessageLookupByLibrary.simpleMessage("Please select a phase first"),
+    "benefit_pageTitle": MessageLookupByLibrary.simpleMessage(
+      "Entrance Benefits",
+    ),
+    "benefit_period": MessageLookupByLibrary.simpleMessage("Period"),
+    "benefit_phase": MessageLookupByLibrary.simpleMessage("Phase"),
+    "benefit_phaseStatus_before": MessageLookupByLibrary.simpleMessage(
+      "Upcoming",
+    ),
+    "benefit_phaseStatus_ended": MessageLookupByLibrary.simpleMessage("Ended"),
+    "benefit_phaseStatus_ongoing": MessageLookupByLibrary.simpleMessage(
+      "Ongoing",
+    ),
+    "benefit_remaining": MessageLookupByLibrary.simpleMessage("Remaining"),
+    "benefit_status_few": MessageLookupByLibrary.simpleMessage("Few"),
+    "benefit_status_soldOut": MessageLookupByLibrary.simpleMessage("Sold out"),
+    "benefit_status_sufficient": MessageLookupByLibrary.simpleMessage(
+      "Sufficient",
+    ),
+    "benefit_status_unknown": MessageLookupByLibrary.simpleMessage("Unknown"),
+    "benefit_status_veryFew": MessageLookupByLibrary.simpleMessage("Very few"),
+    "benefit_total": MessageLookupByLibrary.simpleMessage("Total"),
+    "benefit_unit_tenThousand": MessageLookupByLibrary.simpleMessage("万"),
+    "benefit_unit_thousand": MessageLookupByLibrary.simpleMessage("K"),
     "cinemaDetail_address": MessageLookupByLibrary.simpleMessage("Address"),
     "cinemaDetail_homepage": MessageLookupByLibrary.simpleMessage("WebSite"),
     "cinemaDetail_maxSelectSeat": MessageLookupByLibrary.simpleMessage(
@@ -805,6 +855,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "orderDetail_failureReason": MessageLookupByLibrary.simpleMessage(
       "Failure Reason",
     ),
+    "orderDetail_benefit_feedback_title": MessageLookupByLibrary.simpleMessage("Benefit Feedback"),
+    "orderDetail_benefit_feedback_hint": MessageLookupByLibrary.simpleMessage("If you found that the benefit below was sold out at this cinema, tap submit and we'll update the stock hint for other viewers."),
+    "orderDetail_benefit_feedback_cinema_label": MessageLookupByLibrary.simpleMessage("Cinema"),
+    "orderDetail_benefit_feedback_benefit_label": MessageLookupByLibrary.simpleMessage("Benefit"),
+    "orderDetail_benefit_feedback_submit": MessageLookupByLibrary.simpleMessage("Submit: Sold out at this cinema"),
     "orderDetail_orderCreateTime": MessageLookupByLibrary.simpleMessage(
       "Order Creation Time",
     ),
@@ -1090,6 +1145,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "ticket_seatCount": MessageLookupByLibrary.simpleMessage("Seat Count"),
     "ticket_shareTicket": m20,
+    "ticket_benefit_feedback_lead": MessageLookupByLibrary.simpleMessage("Help others by confirming benefit stock"),
+    "ticket_benefit_feedback_btn": MessageLookupByLibrary.simpleMessage("Feedback"),
+    "ticket_benefit_feedback_select_ticket": MessageLookupByLibrary.simpleMessage("Select show to feedback"),
+    "showTime_benefit_feedback_soldOut": MessageLookupByLibrary.simpleMessage("User feedback: Sold out today"),
     "ticket_showTime": MessageLookupByLibrary.simpleMessage("Show Time"),
     "ticket_status_cancelled": MessageLookupByLibrary.simpleMessage(
       "Cancelled",

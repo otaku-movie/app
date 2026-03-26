@@ -11,6 +11,7 @@ class NowShowingMovie {
   final String? levelName;
   final double? rate;
   final int? totalRatings;
+  final bool? hasBenefits;
 
   NowShowingMovie({
     this.id,
@@ -20,6 +21,7 @@ class NowShowingMovie {
     this.levelName,
     this.rate,
     this.totalRatings,
+    this.hasBenefits,
   });
 
   factory NowShowingMovie.fromJson(Map<String, dynamic> json) => _$NowShowingMovieFromJson(json);

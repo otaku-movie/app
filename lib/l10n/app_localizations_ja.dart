@@ -225,6 +225,18 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get ticket_benefit_feedback_lead => '他のお客様のため、特典在庫を教えてください';
+
+  @override
+  String get ticket_benefit_feedback_btn => 'フィードバック';
+
+  @override
+  String get ticket_benefit_feedback_select_ticket => 'フィードバックする回を選択';
+
+  @override
+  String get showTime_benefit_feedback_soldOut => '网友反馈：本日終了';
+
+  @override
   String get common_loading => '読み込み中...';
 
   @override
@@ -460,6 +472,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get about_components_showTimeList_seatStatus_available => '余裕あり';
+
+  @override
+  String get about_components_showTimeList_benefitBadge => '特典';
 
   @override
   String get about_login_verificationCode => '認証コード';
@@ -920,6 +935,37 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieTicketType_fixedPrice => '固定料金';
 
   @override
+  String get movieTicketType_noSeatInfoRetry => '座席情報を取得できませんでした。座席を再度選択してください';
+
+  @override
+  String get movieTicketType_sessionSurchargeTitle => '本上映の加算：';
+
+  @override
+  String movieTicketType_unavailableSeatsWithNames(String names) {
+    return '一部の座席は利用できません。再度選択してください：$names';
+  }
+
+  @override
+  String get movieTicketType_createOrderNoOrderNumber =>
+      '注文作成に失敗しました。注文番号が返されませんでした';
+
+  @override
+  String get movieTicketType_unknownTicketType => '不明なチケット種類';
+
+  @override
+  String get movieTicketType_priceRuleFormula_fixed =>
+      '1座あたり料金 = 固定料金 + エリア加算 + 仕様加算 + 上映类型加算（2D/3D）';
+
+  @override
+  String get movieTicketType_priceDetailTitle => '料金明細';
+
+  @override
+  String get movieTicketType_priceDetail_mubitikeOffset => '券抵';
+
+  @override
+  String get movieTicketType_priceDetail_fullPrice => '通常料金';
+
+  @override
   String get seatCancel_confirmTitle => '座席選択をキャンセル';
 
   @override
@@ -1173,6 +1219,22 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get orderDetail_failureReason => '失敗理由';
+
+  @override
+  String get orderDetail_benefit_feedback_title => '特典フィードバック';
+
+  @override
+  String get orderDetail_benefit_feedback_hint =>
+      'この劇場で鑑賞時に、下記特典が終了していた場合は送信してください。在庫表示を更新し、他のお客様の参考にします。';
+
+  @override
+  String get orderDetail_benefit_feedback_cinema_label => '対象劇場';
+
+  @override
+  String get orderDetail_benefit_feedback_benefit_label => '特典';
+
+  @override
+  String get orderDetail_benefit_feedback_submit => '送信：この劇場で終了';
 
   @override
   String get payResult_title => '支払い完了';
@@ -1530,6 +1592,97 @@ class AppLocalizationsJa extends AppLocalizations {
   String presaleDetail_bonusCount(int count) {
     return '$count枚';
   }
+
+  @override
+  String get benefit_hasBenefitsLabel => '入場者特典あり';
+
+  @override
+  String get benefit_pageTitle => '入場者特典';
+
+  @override
+  String get benefit_empty => 'この作品に特典情報はありません';
+
+  @override
+  String get benefit_phase => 'フェーズ';
+
+  @override
+  String get benefit_period => '期間';
+
+  @override
+  String get benefit_items => '物料';
+
+  @override
+  String get benefit_total => '総数';
+
+  @override
+  String get benefit_remaining => '残り';
+
+  @override
+  String get benefit_status_sufficient => '十分';
+
+  @override
+  String get benefit_status_few => '残りわずか';
+
+  @override
+  String get benefit_status_veryFew => 'ほぼ無し';
+
+  @override
+  String get benefit_status_soldOut => '終了';
+
+  @override
+  String get benefit_status_unknown => '不明';
+
+  @override
+  String get benefit_phaseStatus_before => '開始前';
+
+  @override
+  String get benefit_phaseStatus_ongoing => '実施中';
+
+  @override
+  String get benefit_phaseStatus_ended => '終了';
+
+  @override
+  String get benefit_unit_thousand => '千';
+
+  @override
+  String get benefit_unit_tenThousand => '万';
+
+  @override
+  String get benefit_limit => '限定';
+
+  @override
+  String get benefit_limit_cinema => '指定劇場のみ';
+
+  @override
+  String get benefit_limit_dimension_2d => '2D';
+
+  @override
+  String get benefit_limit_dimension_3d => '3D';
+
+  @override
+  String get benefit_feedback_hint =>
+      '某劇場でこのフェーズの特典が終了している場合は、劇場を選択してフィードバックしてください。チケット購入は不要です。';
+
+  @override
+  String get benefit_feedback_select_cinema => '劇場を選択';
+
+  @override
+  String get benefit_feedback_submit => 'フィードバック：この劇場で終了';
+
+  @override
+  String get benefit_feedback_success => 'フィードバックありがとうございます';
+
+  @override
+  String get benefit_feedback_please_select_cinema => '先に劇場を選択してください';
+
+  @override
+  String get benefit_feedback_button => 'フィードバック';
+
+  @override
+  String get benefit_feedback_select_phase => 'フェーズを選択';
+
+  @override
+  String get benefit_feedback_please_select_phase => '先にフェーズを選択してください';
 
   @override
   String get comingSoon_presale => '前売り';

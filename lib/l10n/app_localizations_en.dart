@@ -228,6 +228,20 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get ticket_benefit_feedback_lead =>
+      'Help others by confirming benefit stock';
+
+  @override
+  String get ticket_benefit_feedback_btn => 'Feedback';
+
+  @override
+  String get ticket_benefit_feedback_select_ticket => 'Select show to feedback';
+
+  @override
+  String get showTime_benefit_feedback_soldOut =>
+      'User feedback: Sold out today';
+
+  @override
   String get common_loading => 'Loading...';
 
   @override
@@ -474,6 +488,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_components_showTimeList_seatStatus_available => 'Available';
+
+  @override
+  String get about_components_showTimeList_benefitBadge => 'Benefits';
 
   @override
   String get about_login_verificationCode => 'Verification Code';
@@ -949,6 +966,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieTicketType_fixedPrice => 'Fixed price';
 
   @override
+  String get movieTicketType_noSeatInfoRetry =>
+      'Seat selection info not available, please select seats again';
+
+  @override
+  String get movieTicketType_sessionSurchargeTitle =>
+      'This session surcharge: ';
+
+  @override
+  String movieTicketType_unavailableSeatsWithNames(String names) {
+    return 'Some seats are unavailable, please reselect: $names';
+  }
+
+  @override
+  String get movieTicketType_createOrderNoOrderNumber =>
+      'Failed to create order, no order number returned';
+
+  @override
+  String get movieTicketType_unknownTicketType => 'Unknown ticket type';
+
+  @override
+  String get movieTicketType_priceRuleFormula_fixed =>
+      'Price per seat = Fixed price + Area surcharge + Spec surcharge + Display type surcharge (2D/3D)';
+
+  @override
+  String get movieTicketType_priceDetailTitle => 'Price Details';
+
+  @override
+  String get movieTicketType_priceDetail_mubitikeOffset => 'Discounted';
+
+  @override
+  String get movieTicketType_priceDetail_fullPrice => 'Full';
+
+  @override
   String get seatCancel_confirmTitle => 'Cancel Seat Selection';
 
   @override
@@ -1211,6 +1261,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get orderDetail_failureReason => 'Failure Reason';
+
+  @override
+  String get orderDetail_benefit_feedback_title => 'Benefit Feedback';
+
+  @override
+  String get orderDetail_benefit_feedback_hint =>
+      'If you found that the benefit below was sold out at this cinema, tap submit and we\'ll update the stock hint for other viewers.';
+
+  @override
+  String get orderDetail_benefit_feedback_cinema_label => 'Cinema';
+
+  @override
+  String get orderDetail_benefit_feedback_benefit_label => 'Benefit';
+
+  @override
+  String get orderDetail_benefit_feedback_submit =>
+      'Submit: Sold out at this cinema';
 
   @override
   String get payResult_title => 'Payment Successful';
@@ -1594,6 +1661,99 @@ class AppLocalizationsEn extends AppLocalizations {
   String presaleDetail_bonusCount(int count) {
     return '$count images';
   }
+
+  @override
+  String get benefit_hasBenefitsLabel => 'Entrance benefits';
+
+  @override
+  String get benefit_pageTitle => 'Entrance Benefits';
+
+  @override
+  String get benefit_empty => 'No benefits for this movie';
+
+  @override
+  String get benefit_phase => 'Phase';
+
+  @override
+  String get benefit_period => 'Period';
+
+  @override
+  String get benefit_items => 'Items';
+
+  @override
+  String get benefit_total => 'Total';
+
+  @override
+  String get benefit_remaining => 'Remaining';
+
+  @override
+  String get benefit_status_sufficient => 'Sufficient';
+
+  @override
+  String get benefit_status_few => 'Few';
+
+  @override
+  String get benefit_status_veryFew => 'Very few';
+
+  @override
+  String get benefit_status_soldOut => 'Sold out';
+
+  @override
+  String get benefit_status_unknown => 'Unknown';
+
+  @override
+  String get benefit_phaseStatus_before => 'Upcoming';
+
+  @override
+  String get benefit_phaseStatus_ongoing => 'Ongoing';
+
+  @override
+  String get benefit_phaseStatus_ended => 'Ended';
+
+  @override
+  String get benefit_unit_thousand => 'K';
+
+  @override
+  String get benefit_unit_tenThousand => '万';
+
+  @override
+  String get benefit_limit => 'Limit';
+
+  @override
+  String get benefit_limit_cinema => 'Specific cinemas only';
+
+  @override
+  String get benefit_limit_dimension_2d => '2D';
+
+  @override
+  String get benefit_limit_dimension_3d => '3D';
+
+  @override
+  String get benefit_feedback_hint =>
+      'If you found that a cinema has run out of this phase\'s benefits, select the cinema and submit feedback. No ticket purchase required.';
+
+  @override
+  String get benefit_feedback_select_cinema => 'Select cinema';
+
+  @override
+  String get benefit_feedback_submit => 'Feedback: sold out at this cinema';
+
+  @override
+  String get benefit_feedback_success => 'Thank you for your feedback';
+
+  @override
+  String get benefit_feedback_please_select_cinema =>
+      'Please select a cinema first';
+
+  @override
+  String get benefit_feedback_button => 'Feedback';
+
+  @override
+  String get benefit_feedback_select_phase => 'Select phase';
+
+  @override
+  String get benefit_feedback_please_select_phase =>
+      'Please select a phase first';
 
   @override
   String get comingSoon_presale => 'Presale';

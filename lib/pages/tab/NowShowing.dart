@@ -287,6 +287,43 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                         ),
                       ),
                     ),
+                  // 入场者特典标识：点击跳转该电影特典页
+                  if (item.hasBenefits == true)
+                    Positioned(
+                      top: 8.h,
+                      right: 8.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          context.pushNamed(
+                            'movieBenefits',
+                            pathParameters: { 'id': '${item.id}' },
+                            queryParameters: { 'movieName': item.name },
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          decoration: BoxDecoration(
+                            color: Colors.deepPurple,
+                            borderRadius: BorderRadius.circular(8.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.deepPurple.withValues(alpha: 0.3),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            S.of(context).benefit_hasBenefitsLabel,
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   // 音频/字幕标签
                   if (item.helloMovie != null) ...[
                     Positioned(

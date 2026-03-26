@@ -15,6 +15,7 @@ NowShowingMovie _$NowShowingMovieFromJson(Map<String, dynamic> json) =>
       levelName: json['levelName'] as String?,
       rate: (json['rate'] as num?)?.toDouble(),
       totalRatings: (json['totalRatings'] as num?)?.toInt(),
+      hasBenefits: json['hasBenefits'] as bool?,
     );
 
 Map<String, dynamic> _$NowShowingMovieToJson(NowShowingMovie instance) =>
@@ -26,6 +27,7 @@ Map<String, dynamic> _$NowShowingMovieToJson(NowShowingMovie instance) =>
       'levelName': instance.levelName,
       'rate': instance.rate,
       'totalRatings': instance.totalRatings,
+      'hasBenefits': instance.hasBenefits,
     };
 
 CinemaListResponse _$CinemaListResponseFromJson(Map<String, dynamic> json) =>

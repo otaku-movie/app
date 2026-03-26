@@ -14,6 +14,7 @@ CinemaMovieShowingResponse _$CinemaMovieShowingResponseFromJson(
       poster: json['poster'] as String?,
       time: (json['time'] as num?)?.toInt(),
       levelName: json['levelName'] as String?,
+      hasBenefits: json['hasBenefits'] as bool?,
     );
 
 Map<String, dynamic> _$CinemaMovieShowingResponseToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$CinemaMovieShowingResponseToJson(
       'poster': instance.poster,
       'time': instance.time,
       'levelName': instance.levelName,
+      'hasBenefits': instance.hasBenefits,
     };

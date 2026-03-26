@@ -508,6 +508,30 @@ abstract class AppLocalizations {
   /// **'Share movie ticket: {movieName}'**
   String ticket_shareTicket(Object movieName);
 
+  /// No description provided for @ticket_benefit_feedback_lead.
+  ///
+  /// In en, this message translates to:
+  /// **'Help others by confirming benefit stock'**
+  String get ticket_benefit_feedback_lead;
+
+  /// No description provided for @ticket_benefit_feedback_btn.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get ticket_benefit_feedback_btn;
+
+  /// No description provided for @ticket_benefit_feedback_select_ticket.
+  ///
+  /// In en, this message translates to:
+  /// **'Select show to feedback'**
+  String get ticket_benefit_feedback_select_ticket;
+
+  /// No description provided for @showTime_benefit_feedback_soldOut.
+  ///
+  /// In en, this message translates to:
+  /// **'User feedback: Sold out today'**
+  String get showTime_benefit_feedback_soldOut;
+
   /// No description provided for @common_loading.
   ///
   /// In en, this message translates to:
@@ -951,6 +975,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Available'**
   String get about_components_showTimeList_seatStatus_available;
+
+  /// No description provided for @about_components_showTimeList_benefitBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Benefits'**
+  String get about_components_showTimeList_benefitBadge;
 
   /// No description provided for @about_login_verificationCode.
   ///
@@ -1834,6 +1864,60 @@ abstract class AppLocalizations {
   /// **'Fixed price'**
   String get movieTicketType_fixedPrice;
 
+  /// No description provided for @movieTicketType_noSeatInfoRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Seat selection info not available, please select seats again'**
+  String get movieTicketType_noSeatInfoRetry;
+
+  /// No description provided for @movieTicketType_sessionSurchargeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This session surcharge: '**
+  String get movieTicketType_sessionSurchargeTitle;
+
+  /// No description provided for @movieTicketType_unavailableSeatsWithNames.
+  ///
+  /// In en, this message translates to:
+  /// **'Some seats are unavailable, please reselect: {names}'**
+  String movieTicketType_unavailableSeatsWithNames(String names);
+
+  /// No description provided for @movieTicketType_createOrderNoOrderNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create order, no order number returned'**
+  String get movieTicketType_createOrderNoOrderNumber;
+
+  /// No description provided for @movieTicketType_unknownTicketType.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown ticket type'**
+  String get movieTicketType_unknownTicketType;
+
+  /// No description provided for @movieTicketType_priceRuleFormula_fixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Price per seat = Fixed price + Area surcharge + Spec surcharge + Display type surcharge (2D/3D)'**
+  String get movieTicketType_priceRuleFormula_fixed;
+
+  /// No description provided for @movieTicketType_priceDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Price Details'**
+  String get movieTicketType_priceDetailTitle;
+
+  /// No description provided for @movieTicketType_priceDetail_mubitikeOffset.
+  ///
+  /// In en, this message translates to:
+  /// **'Discounted'**
+  String get movieTicketType_priceDetail_mubitikeOffset;
+
+  /// No description provided for @movieTicketType_priceDetail_fullPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Full'**
+  String get movieTicketType_priceDetail_fullPrice;
+
   /// No description provided for @seatCancel_confirmTitle.
   ///
   /// In en, this message translates to:
@@ -2319,6 +2403,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failure Reason'**
   String get orderDetail_failureReason;
+
+  /// No description provided for @orderDetail_benefit_feedback_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Benefit Feedback'**
+  String get orderDetail_benefit_feedback_title;
+
+  /// No description provided for @orderDetail_benefit_feedback_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'If you found that the benefit below was sold out at this cinema, tap submit and we\'ll update the stock hint for other viewers.'**
+  String get orderDetail_benefit_feedback_hint;
+
+  /// No description provided for @orderDetail_benefit_feedback_cinema_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Cinema'**
+  String get orderDetail_benefit_feedback_cinema_label;
+
+  /// No description provided for @orderDetail_benefit_feedback_benefit_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Benefit'**
+  String get orderDetail_benefit_feedback_benefit_label;
+
+  /// No description provided for @orderDetail_benefit_feedback_submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit: Sold out at this cinema'**
+  String get orderDetail_benefit_feedback_submit;
 
   /// No description provided for @payResult_title.
   ///
@@ -3009,6 +3123,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} images'**
   String presaleDetail_bonusCount(int count);
+
+  /// No description provided for @benefit_hasBenefitsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Entrance benefits'**
+  String get benefit_hasBenefitsLabel;
+
+  /// No description provided for @benefit_pageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Entrance Benefits'**
+  String get benefit_pageTitle;
+
+  /// No description provided for @benefit_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No benefits for this movie'**
+  String get benefit_empty;
+
+  /// No description provided for @benefit_phase.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase'**
+  String get benefit_phase;
+
+  /// No description provided for @benefit_period.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get benefit_period;
+
+  /// No description provided for @benefit_items.
+  ///
+  /// In en, this message translates to:
+  /// **'Items'**
+  String get benefit_items;
+
+  /// No description provided for @benefit_total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get benefit_total;
+
+  /// No description provided for @benefit_remaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get benefit_remaining;
+
+  /// No description provided for @benefit_status_sufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Sufficient'**
+  String get benefit_status_sufficient;
+
+  /// No description provided for @benefit_status_few.
+  ///
+  /// In en, this message translates to:
+  /// **'Few'**
+  String get benefit_status_few;
+
+  /// No description provided for @benefit_status_veryFew.
+  ///
+  /// In en, this message translates to:
+  /// **'Very few'**
+  String get benefit_status_veryFew;
+
+  /// No description provided for @benefit_status_soldOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold out'**
+  String get benefit_status_soldOut;
+
+  /// No description provided for @benefit_status_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get benefit_status_unknown;
+
+  /// No description provided for @benefit_phaseStatus_before.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get benefit_phaseStatus_before;
+
+  /// No description provided for @benefit_phaseStatus_ongoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing'**
+  String get benefit_phaseStatus_ongoing;
+
+  /// No description provided for @benefit_phaseStatus_ended.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get benefit_phaseStatus_ended;
+
+  /// No description provided for @benefit_unit_thousand.
+  ///
+  /// In en, this message translates to:
+  /// **'K'**
+  String get benefit_unit_thousand;
+
+  /// No description provided for @benefit_unit_tenThousand.
+  ///
+  /// In en, this message translates to:
+  /// **'万'**
+  String get benefit_unit_tenThousand;
+
+  /// No description provided for @benefit_limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Limit'**
+  String get benefit_limit;
+
+  /// No description provided for @benefit_limit_cinema.
+  ///
+  /// In en, this message translates to:
+  /// **'Specific cinemas only'**
+  String get benefit_limit_cinema;
+
+  /// No description provided for @benefit_limit_dimension_2d.
+  ///
+  /// In en, this message translates to:
+  /// **'2D'**
+  String get benefit_limit_dimension_2d;
+
+  /// No description provided for @benefit_limit_dimension_3d.
+  ///
+  /// In en, this message translates to:
+  /// **'3D'**
+  String get benefit_limit_dimension_3d;
+
+  /// No description provided for @benefit_feedback_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'If you found that a cinema has run out of this phase\'s benefits, select the cinema and submit feedback. No ticket purchase required.'**
+  String get benefit_feedback_hint;
+
+  /// No description provided for @benefit_feedback_select_cinema.
+  ///
+  /// In en, this message translates to:
+  /// **'Select cinema'**
+  String get benefit_feedback_select_cinema;
+
+  /// No description provided for @benefit_feedback_submit.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback: sold out at this cinema'**
+  String get benefit_feedback_submit;
+
+  /// No description provided for @benefit_feedback_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your feedback'**
+  String get benefit_feedback_success;
+
+  /// No description provided for @benefit_feedback_please_select_cinema.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a cinema first'**
+  String get benefit_feedback_please_select_cinema;
+
+  /// No description provided for @benefit_feedback_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get benefit_feedback_button;
+
+  /// No description provided for @benefit_feedback_select_phase.
+  ///
+  /// In en, this message translates to:
+  /// **'Select phase'**
+  String get benefit_feedback_select_phase;
+
+  /// No description provided for @benefit_feedback_please_select_phase.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a phase first'**
+  String get benefit_feedback_please_select_phase;
 
   /// No description provided for @comingSoon_presale.
   ///

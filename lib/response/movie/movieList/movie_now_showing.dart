@@ -12,6 +12,9 @@ class MovieNowShowingResponse extends MovieResponse {
   @override
   final List<HelloMovieResponse>? helloMovie;
 
+  /// 是否有入场者特典（设计 3.4）
+  final bool? hasBenefits;
+
   MovieNowShowingResponse({
     super.id,
     super.name,
@@ -20,6 +23,7 @@ class MovieNowShowingResponse extends MovieResponse {
     this.helloMovie,
     super.levelName,
     super.startDate,
+    this.hasBenefits,
   });
 
   factory MovieNowShowingResponse.fromJson(Map<String, dynamic> json) =>
