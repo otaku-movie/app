@@ -20,6 +20,7 @@ import 'package:otaku_movie/response/movie/movieList/comment/comment_response.da
 import 'package:otaku_movie/response/movie/movieList/movie.dart';
 import 'package:otaku_movie/response/movie/movie_staff.dart';
 import 'package:otaku_movie/response/movie/movie_version.dart';
+import 'package:otaku_movie/response/movie/re_release_history.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -42,6 +43,7 @@ class _PageState extends State<MovieDetail> {
   List<MovieStaffResponse> staffListData = [];
   List<CommentResponse> commentListData = [];
   List<MovieVersionResponse> versionList = [];
+  List<ReReleaseHistoryItem> reReleaseHistory = [];
   bool loading = false;
   bool error = false;
 
@@ -103,6 +105,32 @@ class _PageState extends State<MovieDetail> {
           versionList = res.data!;
         });
       }
+    });
+  }
+
+  // 获取重映历史（电影详情页展示）
+  getReReleaseHistory() {
+    final movieId = int.tryParse(widget.id ?? '');
+    if (movieId == null) return;
+    ApiRequest().request(
+      path: '/app/movie/reReleaseHistory',
+      method: 'GET',
+      queryParameters: {
+        "movieId": movieId,
+      },
+      fromJsonT: (json) {
+        if (json is List<dynamic>) {
+          return json
+              .whereType<Map<String, dynamic>>()
+              .map((item) => ReReleaseHistoryItem.fromJson(item))
+              .toList();
+        }
+      },
+    ).then((res) {
+      if (!mounted) return;
+      setState(() {
+        reReleaseHistory = res.data ?? [];
+      });
     });
   }
 
@@ -194,6 +222,7 @@ class _PageState extends State<MovieDetail> {
     super.initState();
     getData();
     getVersionList(); // 先获取版本列表
+    getReReleaseHistory();
     getStaffData();
     getCommentData();
 
@@ -798,7 +827,7 @@ List<Widget> generateComment() {
           return <Widget>[
             SliverAppBar(
               floating: true,
-              snap: true,
+              snap: false,
               pinned: true,
               collapsedHeight: 100.h >= 56.0 ? 100.h : 56.0,
               expandedHeight: 415.h,
@@ -1170,6 +1199,7 @@ List<Widget> generateComment() {
                             S.of(context).movieDetail_detail_time,
                             _formatDuration(data.time?.toString()),
                           ),
+                         
                           // 上映规格
                           if (data.spec != null && data.spec!.isNotEmpty)
                             Padding(
@@ -1411,7 +1441,101 @@ List<Widget> generateComment() {
                           ),
                         ),
                       ],
-                      
+                       // 重映历史
+                          if (reReleaseHistory.isNotEmpty) ...[
+                            SizedBox(height: 12.h),
+                            Text(
+                              S.of(context).movieDetail_reReleaseHistory_title,
+                              style: TextStyle(
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF323233),
+                              ),
+                            ),
+                            SizedBox(height: 8.h),
+                            ...reReleaseHistory.map((rr) {
+                              final title = (rr.displayNameOverride != null && rr.displayNameOverride!.trim().isNotEmpty)
+                                  ? rr.displayNameOverride!.trim()
+                                  : (rr.versionInfo != null && rr.versionInfo!.trim().isNotEmpty)
+                                      ? rr.versionInfo!.trim()
+                                      : '${S.of(context).movieList_tag_reRelease} #${rr.id ?? ''}';
+                              final timeText = (rr.timeOverride != null && rr.timeOverride! > 0) ? '${rr.timeOverride}分' : '';
+                              final isEnabled = (rr.status == null || rr.status == 1);
+
+                              Widget pill({required String text, Color? bg, Color? border, Color? fg}) {
+                                return Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                                  decoration: BoxDecoration(
+                                    color: bg ?? const Color(0xFFF2F3F5),
+                                    borderRadius: BorderRadius.circular(999.r),
+                                    border: Border.all(color: border ?? const Color(0xFFE7E8EA)),
+                                  ),
+                                  child: Text(
+                                    text,
+                                    style: TextStyle(
+                                      fontSize: 22.sp,
+                                      color: fg ?? const Color(0xFF646566),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                );
+                              }
+
+                              return Opacity(
+                                opacity: isEnabled ? 1 : 0.6,
+                                child: Container(
+                                  margin: EdgeInsets.only(bottom: 10.h),
+                                  padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade50,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    border: Border.all(color: Colors.grey.shade200),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              title,
+                                              style: TextStyle(
+                                                fontSize: 26.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: const Color(0xFF323233),
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          if (!isEnabled)
+                                            pill(
+                                              text: S.of(context).movieDetail_reReleaseHistory_disabled,
+                                              bg: Colors.red.shade50,
+                                              border: Colors.red.shade100,
+                                              fg: Colors.red.shade400,
+                                            ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Wrap(
+                                        spacing: 12.w,
+                                        runSpacing: 6.h,
+                                        children: [
+                                          if (rr.startDate != null && rr.startDate!.isNotEmpty)
+                                            pill(text: '${S.of(context).movieDetail_reReleaseHistory_start} ${rr.startDate}'),
+                                          if (rr.endDate != null && rr.endDate!.isNotEmpty)
+                                            pill(text: '${S.of(context).movieDetail_reReleaseHistory_end} ${rr.endDate}'),
+                                          if (timeText.isNotEmpty)
+                                            pill(text: '${S.of(context).movieDetail_reReleaseHistory_duration} $timeText'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ],
                       // 版本列表和角色列表（分别显示每个版本）
                       if (versionList.isNotEmpty) ...[
                         // 遍历所有版本，每个版本显示其角色列表

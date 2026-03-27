@@ -18,10 +18,8 @@ class S {
   static S? _current;
 
   static S get current {
-    assert(
-      _current != null,
-      'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.',
-    );
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
     return _current!;
   }
 
@@ -43,10 +41,8 @@ class S {
 
   static S of(BuildContext context) {
     final instance = S.maybeOf(context);
-    assert(
-      instance != null,
-      'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?',
-    );
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
     return instance!;
   }
 
@@ -226,7 +222,12 @@ class S {
 
   /// `Level`
   String get search_level {
-    return Intl.message('Level', name: 'search_level', desc: '', args: []);
+    return Intl.message(
+      'Level',
+      name: 'search_level',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Address`
@@ -291,7 +292,12 @@ class S {
 
   /// `TEL`
   String get cinemaDetail_tel {
-    return Intl.message('TEL', name: 'cinemaDetail_tel', desc: '', args: []);
+    return Intl.message(
+      'TEL',
+      name: 'cinemaDetail_tel',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Address`
@@ -406,22 +412,42 @@ class S {
 
   /// `home`
   String get home_home {
-    return Intl.message('home', name: 'home_home', desc: '', args: []);
+    return Intl.message(
+      'home',
+      name: 'home_home',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `My Ticket`
   String get home_ticket {
-    return Intl.message('My Ticket', name: 'home_ticket', desc: '', args: []);
+    return Intl.message(
+      'My Ticket',
+      name: 'home_ticket',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `cinema`
   String get home_cinema {
-    return Intl.message('cinema', name: 'home_cinema', desc: '', args: []);
+    return Intl.message(
+      'cinema',
+      name: 'home_cinema',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `my page`
   String get home_me {
-    return Intl.message('my page', name: 'home_me', desc: '', args: []);
+    return Intl.message(
+      'my page',
+      name: 'home_me',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Show Time`
@@ -486,7 +512,12 @@ class S {
 
   /// `Used`
   String get ticket_status_used {
-    return Intl.message('Used', name: 'ticket_status_used', desc: '', args: []);
+    return Intl.message(
+      'Used',
+      name: 'ticket_status_used',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Expired`
@@ -661,7 +692,12 @@ class S {
 
   /// ` tickets`
   String get ticket_tickets {
-    return Intl.message(' tickets', name: 'ticket_tickets', desc: '', args: []);
+    return Intl.message(
+      ' tickets',
+      name: 'ticket_tickets',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Tap to view details`
@@ -694,20 +730,44 @@ class S {
     );
   }
 
+  /// `Help others by confirming benefit stock`
   String get ticket_benefit_feedback_lead {
-    return Intl.message('Help others by confirming benefit stock', name: 'ticket_benefit_feedback_lead', desc: '', args: []);
+    return Intl.message(
+      'Help others by confirming benefit stock',
+      name: 'ticket_benefit_feedback_lead',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `Feedback`
   String get ticket_benefit_feedback_btn {
-    return Intl.message('Feedback', name: 'ticket_benefit_feedback_btn', desc: '', args: []);
+    return Intl.message(
+      'Feedback',
+      name: 'ticket_benefit_feedback_btn',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `Select show to feedback`
   String get ticket_benefit_feedback_select_ticket {
-    return Intl.message('Select show to feedback', name: 'ticket_benefit_feedback_select_ticket', desc: '', args: []);
+    return Intl.message(
+      'Select show to feedback',
+      name: 'ticket_benefit_feedback_select_ticket',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `User feedback: Sold out today`
   String get showTime_benefit_feedback_soldOut {
-    return Intl.message('User feedback: Sold out today', name: 'showTime_benefit_feedback_soldOut', desc: '', args: []);
+    return Intl.message(
+      'User feedback: Sold out today',
+      name: 'showTime_benefit_feedback_soldOut',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Loading...`
@@ -742,7 +802,12 @@ class S {
 
   /// `Retry`
   String get common_retry {
-    return Intl.message('Retry', name: 'common_retry', desc: '', args: []);
+    return Intl.message(
+      'Retry',
+      name: 'common_retry',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Server connection refused, please try again later`
@@ -837,12 +902,22 @@ class S {
 
   /// `JPY`
   String get common_unit_jpy {
-    return Intl.message('JPY', name: 'common_unit_jpy', desc: '', args: []);
+    return Intl.message(
+      'JPY',
+      name: 'common_unit_jpy',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `m`
   String get common_unit_meter {
-    return Intl.message('m', name: 'common_unit_meter', desc: '', args: []);
+    return Intl.message(
+      'm',
+      name: 'common_unit_meter',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `km`
@@ -857,7 +932,12 @@ class S {
 
   /// `pts`
   String get common_unit_point {
-    return Intl.message('pts', name: 'common_unit_point', desc: '', args: []);
+    return Intl.message(
+      'pts',
+      name: 'common_unit_point',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Crop the picture`
@@ -1242,12 +1322,22 @@ class S {
 
   /// `About`
   String get about_title {
-    return Intl.message('About', name: 'about_title', desc: '', args: []);
+    return Intl.message(
+      'About',
+      name: 'about_title',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Version`
   String get about_version {
-    return Intl.message('Version', name: 'about_version', desc: '', args: []);
+    return Intl.message(
+      'Version',
+      name: 'about_version',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Committed to providing convenient ticket purchasing experience for movie enthusiasts.`
@@ -1532,7 +1622,12 @@ class S {
 
   /// `or`
   String get about_login_or {
-    return Intl.message('or', name: 'about_login_or', desc: '', args: []);
+    return Intl.message(
+      'or',
+      name: 'about_login_or',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Login with Google`
@@ -1757,22 +1852,42 @@ class S {
 
   /// `Sold`
   String get enum_seatType_sold {
-    return Intl.message('Sold', name: 'enum_seatType_sold', desc: '', args: []);
+    return Intl.message(
+      'Sold',
+      name: 'enum_seatType_sold',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `point`
   String get unit_point {
-    return Intl.message('point', name: 'unit_point', desc: '', args: []);
+    return Intl.message(
+      'point',
+      name: 'unit_point',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `JPY`
   String get unit_jpy {
-    return Intl.message('JPY', name: 'unit_jpy', desc: '', args: []);
+    return Intl.message(
+      'JPY',
+      name: 'unit_jpy',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Email`
   String get login_email_text {
-    return Intl.message('Email', name: 'login_email_text', desc: '', args: []);
+    return Intl.message(
+      'Email',
+      name: 'login_email_text',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Email cannot be empty`
@@ -1827,7 +1942,12 @@ class S {
 
   /// `Login`
   String get login_loginButton {
-    return Intl.message('Login', name: 'login_loginButton', desc: '', args: []);
+    return Intl.message(
+      'Login',
+      name: 'login_loginButton',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Welcome back, please log in to your account`
@@ -1842,7 +1962,12 @@ class S {
 
   /// `or`
   String get login_or {
-    return Intl.message('or', name: 'login_or', desc: '', args: []);
+    return Intl.message(
+      'or',
+      name: 'login_or',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Sign in with Google`
@@ -2137,7 +2262,12 @@ class S {
 
   /// `Send`
   String get register_send {
-    return Intl.message('Send', name: 'register_send', desc: '', args: []);
+    return Intl.message(
+      'Send',
+      name: 'register_send',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Already have an account?`
@@ -2215,6 +2345,16 @@ class S {
     return Intl.message(
       'Buy Ticket',
       name: 'movieList_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Re-release`
+  String get movieList_tag_reRelease {
+    return Intl.message(
+      'Re-release',
+      name: 'movieList_tag_reRelease',
       desc: '',
       args: [],
     );
@@ -2355,6 +2495,56 @@ class S {
     return Intl.message(
       'Duration',
       name: 'movieDetail_detail_time',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Re-release history`
+  String get movieDetail_reReleaseHistory_title {
+    return Intl.message(
+      'Re-release history',
+      name: 'movieDetail_reReleaseHistory_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disabled`
+  String get movieDetail_reReleaseHistory_disabled {
+    return Intl.message(
+      'Disabled',
+      name: 'movieDetail_reReleaseHistory_disabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start`
+  String get movieDetail_reReleaseHistory_start {
+    return Intl.message(
+      'Start',
+      name: 'movieDetail_reReleaseHistory_start',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End`
+  String get movieDetail_reReleaseHistory_end {
+    return Intl.message(
+      'End',
+      name: 'movieDetail_reReleaseHistory_end',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Duration`
+  String get movieDetail_reReleaseHistory_duration {
+    return Intl.message(
+      'Duration',
+      name: 'movieDetail_reReleaseHistory_duration',
       desc: '',
       args: [],
     );
@@ -3062,7 +3252,12 @@ class S {
 
   /// `Buy`
   String get confirmOrder_pay {
-    return Intl.message('Buy', name: 'confirmOrder_pay', desc: '', args: []);
+    return Intl.message(
+      'Buy',
+      name: 'confirmOrder_pay',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Selected Seats`
@@ -3317,7 +3512,12 @@ class S {
 
   /// `My Profile`
   String get user_title {
-    return Intl.message('My Profile', name: 'user_title', desc: '', args: []);
+    return Intl.message(
+      'My Profile',
+      name: 'user_title',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Order Count`
@@ -3382,7 +3582,12 @@ class S {
 
   /// `Language`
   String get user_language {
-    return Intl.message('Language', name: 'user_language', desc: '', args: []);
+    return Intl.message(
+      'Language',
+      name: 'user_language',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Edit Profile`
@@ -3417,12 +3622,22 @@ class S {
 
   /// `About`
   String get user_about {
-    return Intl.message('About', name: 'user_about', desc: '', args: []);
+    return Intl.message(
+      'About',
+      name: 'user_about',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Logout`
   String get user_logout {
-    return Intl.message('Logout', name: 'user_logout', desc: '', args: []);
+    return Intl.message(
+      'Logout',
+      name: 'user_logout',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Current Version`
@@ -3457,17 +3672,32 @@ class S {
 
   /// `Cancel`
   String get user_cancel {
-    return Intl.message('Cancel', name: 'user_cancel', desc: '', args: []);
+    return Intl.message(
+      'Cancel',
+      name: 'user_cancel',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Update`
   String get user_update {
-    return Intl.message('Update', name: 'user_update', desc: '', args: []);
+    return Intl.message(
+      'Update',
+      name: 'user_update',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Updating`
   String get user_updating {
-    return Intl.message('Updating', name: 'user_updating', desc: '', args: []);
+    return Intl.message(
+      'Updating',
+      name: 'user_updating',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Downloading update, please wait...`
@@ -3522,7 +3752,12 @@ class S {
 
   /// `OK`
   String get user_ok {
-    return Intl.message('OK', name: 'user_ok', desc: '', args: []);
+    return Intl.message(
+      'OK',
+      name: 'user_ok',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Order List`
@@ -3715,10 +3950,17 @@ class S {
     );
   }
 
+  /// `Benefit Feedback`
   String get orderDetail_benefit_feedback_title {
-    return Intl.message('Benefit Feedback', name: 'orderDetail_benefit_feedback_title', desc: '', args: []);
+    return Intl.message(
+      'Benefit Feedback',
+      name: 'orderDetail_benefit_feedback_title',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `If you found that the benefit below was sold out at this cinema, tap submit and we'll update the stock hint for other viewers.`
   String get orderDetail_benefit_feedback_hint {
     return Intl.message(
       'If you found that the benefit below was sold out at this cinema, tap submit and we\'ll update the stock hint for other viewers.',
@@ -3728,16 +3970,34 @@ class S {
     );
   }
 
+  /// `Cinema`
   String get orderDetail_benefit_feedback_cinema_label {
-    return Intl.message('Cinema', name: 'orderDetail_benefit_feedback_cinema_label', desc: '', args: []);
+    return Intl.message(
+      'Cinema',
+      name: 'orderDetail_benefit_feedback_cinema_label',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `Benefit`
   String get orderDetail_benefit_feedback_benefit_label {
-    return Intl.message('Benefit', name: 'orderDetail_benefit_feedback_benefit_label', desc: '', args: []);
+    return Intl.message(
+      'Benefit',
+      name: 'orderDetail_benefit_feedback_benefit_label',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `Submit: Sold out at this cinema`
   String get orderDetail_benefit_feedback_submit {
-    return Intl.message('Submit: Sold out at this cinema', name: 'orderDetail_benefit_feedback_submit', desc: '', args: []);
+    return Intl.message(
+      'Submit: Sold out at this cinema',
+      name: 'orderDetail_benefit_feedback_submit',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Payment Successful`
@@ -3822,7 +4082,12 @@ class S {
 
   /// `Email`
   String get userProfile_email {
-    return Intl.message('Email', name: 'userProfile_email', desc: '', args: []);
+    return Intl.message(
+      'Email',
+      name: 'userProfile_email',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Register Time`
@@ -3837,7 +4102,12 @@ class S {
 
   /// `Save`
   String get userProfile_save {
-    return Intl.message('Save', name: 'userProfile_save', desc: '', args: []);
+    return Intl.message(
+      'Save',
+      name: 'userProfile_save',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Click save button to save changes`
@@ -4332,7 +4602,12 @@ class S {
 
   /// `Back`
   String get payError_back {
-    return Intl.message('Back', name: 'payError_back', desc: '', args: []);
+    return Intl.message(
+      'Back',
+      name: 'payError_back',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `All Areas`
@@ -4885,6 +5160,16 @@ class S {
     );
   }
 
+  /// `Re-release benefits`
+  String get benefit_hasBenefitsLabel_reRelease {
+    return Intl.message(
+      'Re-release benefits',
+      name: 'benefit_hasBenefitsLabel_reRelease',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Entrance Benefits`
   String get benefit_pageTitle {
     return Intl.message(
@@ -4907,22 +5192,42 @@ class S {
 
   /// `Phase`
   String get benefit_phase {
-    return Intl.message('Phase', name: 'benefit_phase', desc: '', args: []);
+    return Intl.message(
+      'Phase',
+      name: 'benefit_phase',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Period`
   String get benefit_period {
-    return Intl.message('Period', name: 'benefit_period', desc: '', args: []);
+    return Intl.message(
+      'Period',
+      name: 'benefit_period',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Items`
   String get benefit_items {
-    return Intl.message('Items', name: 'benefit_items', desc: '', args: []);
+    return Intl.message(
+      'Items',
+      name: 'benefit_items',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Total`
   String get benefit_total {
-    return Intl.message('Total', name: 'benefit_total', desc: '', args: []);
+    return Intl.message(
+      'Total',
+      name: 'benefit_total',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Remaining`
@@ -4947,7 +5252,12 @@ class S {
 
   /// `Few`
   String get benefit_status_few {
-    return Intl.message('Few', name: 'benefit_status_few', desc: '', args: []);
+    return Intl.message(
+      'Few',
+      name: 'benefit_status_few',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Very few`
@@ -5012,7 +5322,12 @@ class S {
 
   /// `K`
   String get benefit_unit_thousand {
-    return Intl.message('K', name: 'benefit_unit_thousand', desc: '', args: []);
+    return Intl.message(
+      'K',
+      name: 'benefit_unit_thousand',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `万`
@@ -5027,7 +5342,12 @@ class S {
 
   /// `Limit`
   String get benefit_limit {
-    return Intl.message('Limit', name: 'benefit_limit', desc: '', args: []);
+    return Intl.message(
+      'Limit',
+      name: 'benefit_limit',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Specific cinemas only`
@@ -5063,7 +5383,7 @@ class S {
   /// `If you found that a cinema has run out of this phase's benefits, select the cinema and submit feedback. No ticket purchase required.`
   String get benefit_feedback_hint {
     return Intl.message(
-      'If you notice that the benefit below has already been fully claimed at a specific cinema, please select the cinema and submit feedback so we can update the stock hint for other viewers.',
+      'If you found that a cinema has run out of this phase\'s benefits, select the cinema and submit feedback. No ticket purchase required.',
       name: 'benefit_feedback_hint',
       desc: '',
       args: [],
@@ -5110,16 +5430,34 @@ class S {
     );
   }
 
+  /// `Feedback`
   String get benefit_feedback_button {
-    return Intl.message('Feedback', name: 'benefit_feedback_button', desc: '', args: []);
+    return Intl.message(
+      'Feedback',
+      name: 'benefit_feedback_button',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `Select phase`
   String get benefit_feedback_select_phase {
-    return Intl.message('Select phase', name: 'benefit_feedback_select_phase', desc: '', args: []);
+    return Intl.message(
+      'Select phase',
+      name: 'benefit_feedback_select_phase',
+      desc: '',
+      args: [],
+    );
   }
 
+  /// `Please select a phase first`
   String get benefit_feedback_please_select_phase {
-    return Intl.message('Please select a phase first', name: 'benefit_feedback_please_select_phase', desc: '', args: []);
+    return Intl.message(
+      'Please select a phase first',
+      name: 'benefit_feedback_please_select_phase',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Presale`

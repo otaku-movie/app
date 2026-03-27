@@ -17,8 +17,9 @@ import 'package:otaku_movie/utils/toast.dart';
 class MovieBenefits extends StatefulWidget {
   final String? id;
   final String? movieName;
+  final String? reReleaseId;
 
-  const MovieBenefits({super.key, this.id, this.movieName});
+  const MovieBenefits({super.key, this.id, this.movieName, this.reReleaseId});
 
   @override
   State<MovieBenefits> createState() => _MovieBenefitsState();
@@ -208,6 +209,7 @@ class _MovieBenefitsState extends State<MovieBenefits> {
 
   Future<void> _load() async {
     final movieId = widget.id != null ? int.tryParse(widget.id!) : null;
+    final reReleaseId = widget.reReleaseId != null ? int.tryParse(widget.reReleaseId!) : null;
     if (movieId == null) {
       setState(() {
         _loading = false;
@@ -223,7 +225,10 @@ class _MovieBenefitsState extends State<MovieBenefits> {
       final res = await ApiRequest().request<List<AppBenefitDetailResponse>>(
         path: '/app/benefit/list',
         method: 'GET',
-        queryParameters: {'movieId': movieId},
+        queryParameters: {
+          'movieId': movieId,
+          if (reReleaseId != null) 'reReleaseId': reReleaseId,
+        },
         fromJsonT: (json) {
           if (json is! List) return <AppBenefitDetailResponse>[];
           return json.map((e) => AppBenefitDetailResponse.fromJson(e as Map<String, dynamic>)).toList();

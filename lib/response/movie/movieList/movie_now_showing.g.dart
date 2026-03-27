@@ -20,7 +20,13 @@ MovieNowShowingResponse _$MovieNowShowingResponseFromJson(
           .toList(),
       levelName: json['levelName'] as String?,
       startDate: json['startDate'] as String?,
+      presaleId: (json['presaleId'] as num?)?.toInt(),
+      hasPresaleTicket: json['hasPresaleTicket'] as bool?,
+      hasBonus: json['hasBonus'] as bool?,
       hasBenefits: json['hasBenefits'] as bool?,
+      isReRelease: json['isReRelease'] as bool?,
+      reReleaseId: (json['reReleaseId'] as num?)?.toInt(),
+      reReleaseVersionInfo: json['reReleaseVersionInfo'] as String?,
     );
 
 Map<String, dynamic> _$MovieNowShowingResponseToJson(
@@ -31,9 +37,15 @@ Map<String, dynamic> _$MovieNowShowingResponseToJson(
       'name': instance.name,
       'startDate': instance.startDate,
       'levelName': instance.levelName,
+      'presaleId': instance.presaleId,
+      'hasPresaleTicket': instance.hasPresaleTicket,
+      'hasBonus': instance.hasBonus,
       'cast': instance.cast?.map((e) => e.toJson()).toList(),
       'helloMovie': instance.helloMovie?.map((e) => e.toJson()).toList(),
       'hasBenefits': instance.hasBenefits,
+      'isReRelease': instance.isReRelease,
+      'reReleaseId': instance.reReleaseId,
+      'reReleaseVersionInfo': instance.reReleaseVersionInfo,
     };
 
 Cast _$CastFromJson(Map<String, dynamic> json) => Cast(

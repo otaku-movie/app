@@ -377,70 +377,87 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                         maxLines: 1,
                                       ),
                                       SizedBox(height: 8.h),
-                                      Row(
+                                      Wrap(
+                                        spacing: 8.w,
+                                        runSpacing: 6.h,
+                                        crossAxisAlignment: WrapCrossAlignment.center,
                                         children: [
-                                          // 预售券/预售标签（有则显示，预售券可点击跳转）
-                                          if (_isPresale(item))
-                                            GestureDetector(
-                                              onTap: _hasPresaleTicket(item)
-                                                  ? () {
-                                                      context.pushNamed(
-                                                        'presaleDetail',
-                                                        pathParameters: {'id': '${item!.presaleId}'},
-                                                      );
-                                                    }
-                                                  : null,
-                                              behavior: HitTestBehavior.opaque,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xFFFF6B35),
-                                                  borderRadius: BorderRadius.circular(18.r),
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Icon(
-                                                      Icons.local_fire_department,
-                                                      size: 20.sp,
-                                                      color: Colors.white,
-                                                    ),
-                                                    SizedBox(width: 4.w),
-                                                    Text(
-                                                      _hasPresaleTicket(item)
-                                                          ? S.of(context).comingSoon_presaleTicketBadge
-                                                          : S.of(context).comingSoon_presale,
-                                                      style: TextStyle(
-                                                        fontSize: 18.sp,
-                                                        color: Colors.white,
-                                                        fontWeight: FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ],
+                                          // 重映标记
+                                          if (item?.isReRelease == true)
+                                            Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius: BorderRadius.circular(18.r),
+                                              ),
+                                              child: Text(
+                                                S.of(context).movieList_tag_reRelease,
+                                                style: TextStyle(
+                                                  fontSize: 18.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
                                               ),
                                             ),
+                                          // 预售券/预售标签（有则显示，预售券可点击跳转）
+                                          // if (_isPresale(item))
+                                          //   GestureDetector(
+                                          //     onTap: _hasPresaleTicket(item)
+                                          //         ? () {
+                                          //             context.pushNamed(
+                                          //               'presaleDetail',
+                                          //               pathParameters: {'id': '${item!.presaleId}'},
+                                          //             );
+                                          //           }
+                                          //         : null,
+                                          //     behavior: HitTestBehavior.opaque,
+                                          //     child: Container(
+                                          //       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                          //       decoration: BoxDecoration(
+                                          //         color: const Color(0xFFFF6B35),
+                                          //         borderRadius: BorderRadius.circular(18.r),
+                                          //       ),
+                                          //       child: Row(
+                                          //         mainAxisSize: MainAxisSize.min,
+                                          //         children: [
+                                          //           Icon(
+                                          //             Icons.local_fire_department,
+                                          //             size: 20.sp,
+                                          //             color: Colors.white,
+                                          //           ),
+                                          //           SizedBox(width: 4.w),
+                                          //           Text(
+                                          //             _hasPresaleTicket(item)
+                                          //                 ? S.of(context).comingSoon_presaleTicketBadge
+                                          //                 : S.of(context).comingSoon_presale,
+                                          //             style: TextStyle(
+                                          //               fontSize: 18.sp,
+                                          //               color: Colors.white,
+                                          //               fontWeight: FontWeight.w600,
+                                          //             ),
+                                          //           ),
+                                          //         ],
+                                          //       ),
+                                          //     ),
+                                          //   ),
                                           // 分级标签
                                           if (_shouldShowRating(item?.levelName))
-                                            Padding(
-                                              padding: EdgeInsets.only(left: _isPresale(item) ? 8.w : 0),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                                                decoration: BoxDecoration(
-                                                  color: _getRatingColor(item?.levelName),
-                                                  borderRadius: BorderRadius.circular(18.r),
-                                                  border: Border.all(
-                                                    color: _getRatingColor(item?.levelName).withValues(alpha: 0.3),
-                                                    width: 1,
-                                                  ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                              decoration: BoxDecoration(
+                                                color: _getRatingColor(item?.levelName),
+                                                borderRadius: BorderRadius.circular(18.r),
+                                                border: Border.all(
+                                                  color: _getRatingColor(item?.levelName).withValues(alpha: 0.3),
+                                                  width: 1,
                                                 ),
-                                                child: Text(
-                                                  item?.levelName ?? '',
-                                                  style: TextStyle(
-                                                    fontSize: 16.sp,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
+                                              ),
+                                              child: Text(
+                                                item?.levelName ?? '',
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w700,
                                                 ),
                                               ),
                                             ),

@@ -1564,6 +1564,36 @@ abstract class AppLocalizations {
   /// **'Duration'**
   String get movieDetail_detail_time;
 
+  /// No description provided for @movieDetail_reReleaseHistory_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-release history'**
+  String get movieDetail_reReleaseHistory_title;
+
+  /// No description provided for @movieDetail_reReleaseHistory_disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get movieDetail_reReleaseHistory_disabled;
+
+  /// No description provided for @movieDetail_reReleaseHistory_start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get movieDetail_reReleaseHistory_start;
+
+  /// No description provided for @movieDetail_reReleaseHistory_end.
+  ///
+  /// In en, this message translates to:
+  /// **'End'**
+  String get movieDetail_reReleaseHistory_end;
+
+  /// No description provided for @movieDetail_reReleaseHistory_duration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get movieDetail_reReleaseHistory_duration;
+
   /// No description provided for @movieDetail_detail_spec.
   ///
   /// In en, this message translates to:
@@ -3129,6 +3159,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Entrance benefits'**
   String get benefit_hasBenefitsLabel;
+
+  /// No description provided for @benefit_hasBenefitsLabel_reRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-release benefits'**
+  String get benefit_hasBenefitsLabel_reRelease;
 
   /// No description provided for @benefit_pageTitle.
   ///

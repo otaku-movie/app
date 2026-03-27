@@ -102,6 +102,14 @@ class ShowTime {
     @JsonKey(name: "benefitFeedbackSoldOut")
     bool? benefitFeedbackSoldOut;
 
+    /// 关联重映计划ID（为空表示普通上映场次）
+    @JsonKey(name: "reReleaseId")
+    int? reReleaseId;
+
+    /// 重映特殊版本说明（可空）
+    @JsonKey(name: "reReleaseVersionInfo")
+    String? reReleaseVersionInfo;
+
     ShowTime({
         this.id,
         this.theaterHallId,
@@ -122,6 +130,8 @@ class ShowTime {
         this.open,
         this.hasBenefits,
         this.benefitFeedbackSoldOut,
+        this.reReleaseId,
+        this.reReleaseVersionInfo,
     });
 
     factory ShowTime.fromJson(Map<String, dynamic> json) => _$ShowTimeFromJson(json);

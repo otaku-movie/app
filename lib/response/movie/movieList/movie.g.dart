@@ -43,6 +43,9 @@ MovieResponse _$MovieResponseFromJson(Map<String, dynamic> json) =>
       presaleId: (json['presaleId'] as num?)?.toInt(),
       hasPresaleTicket: json['hasPresaleTicket'] as bool?,
       hasBonus: json['hasBonus'] as bool?,
+      isReRelease: json['isReRelease'] as bool?,
+      reReleaseId: (json['reReleaseId'] as num?)?.toInt(),
+      reReleaseVersionInfo: json['reReleaseVersionInfo'] as String?,
     );
 
 Map<String, dynamic> _$MovieResponseToJson(MovieResponse instance) =>
@@ -76,6 +79,9 @@ Map<String, dynamic> _$MovieResponseToJson(MovieResponse instance) =>
       'presaleId': instance.presaleId,
       'hasPresaleTicket': instance.hasPresaleTicket,
       'hasBonus': instance.hasBonus,
+      'isReRelease': instance.isReRelease,
+      'reReleaseId': instance.reReleaseId,
+      'reReleaseVersionInfo': instance.reReleaseVersionInfo,
     };
 
 Spec _$SpecFromJson(Map<String, dynamic> json) => Spec(

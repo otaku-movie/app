@@ -38,6 +38,13 @@ class MovieResponse {
   /// 该预售券是否含特典
   final bool? hasBonus;
 
+  /// 是否来自重映计划（comingSoon 等列表会复用 MovieResponse）
+  final bool? isReRelease;
+  /// 关联重映计划ID（可空）
+  final int? reReleaseId;
+  /// 重映版本信息（可空）
+  final String? reReleaseVersionInfo;
+
   MovieResponse({
     this.id,
     this.cover,
@@ -67,7 +74,10 @@ class MovieResponse {
     this.earliestShowTime,
     this.presaleId,
     this.hasPresaleTicket,
-    this.hasBonus
+    this.hasBonus,
+    this.isReRelease,
+    this.reReleaseId,
+    this.reReleaseVersionInfo
   });
 
   factory MovieResponse.fromJson(Map<String, dynamic> json) =>

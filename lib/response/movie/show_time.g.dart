@@ -68,6 +68,8 @@ ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
       open: json['open'] as bool?,
       hasBenefits: json['hasBenefits'] as bool?,
       benefitFeedbackSoldOut: json['benefitFeedbackSoldOut'] as bool?,
+      reReleaseId: (json['reReleaseId'] as num?)?.toInt(),
+      reReleaseVersionInfo: json['reReleaseVersionInfo'] as String?,
     );
 
 Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
@@ -90,4 +92,6 @@ Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
       'open': instance.open,
       'hasBenefits': instance.hasBenefits,
       'benefitFeedbackSoldOut': instance.benefitFeedbackSoldOut,
+      'reReleaseId': instance.reReleaseId,
+      'reReleaseVersionInfo': instance.reReleaseVersionInfo,
     };

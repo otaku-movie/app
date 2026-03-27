@@ -29,8 +29,9 @@ import 'package:otaku_movie/utils/date_format_util.dart';
 class ShowTimeList extends StatefulWidget {
   final String? id;
   final String? movieName;
+  final String? reReleaseId;
 
-  const ShowTimeList({super.key, this.id, this.movieName});
+  const ShowTimeList({super.key, this.id, this.movieName, this.reReleaseId});
 
   @override
   State<ShowTimeList> createState() => _PageState();
@@ -291,6 +292,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
       "page": 1,
     };
 
+    final rrId = int.tryParse((widget.reReleaseId ?? '').trim());
+    if (rrId != null) {
+      requestData["reReleaseId"] = rrId;
+    }
+
     // 地区筛选
     final areaIdList = filterParams['areaId'] ?? [];
     if (areaIdList.isNotEmpty) {
@@ -405,16 +411,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
         if (!mounted) return;
         
         // 查找新数据中对应日期的index
-        int? targetIndex;
+        int targetIndex = 0;
         if (previousTabDate != null) {
           targetIndex = list.indexWhere((item) => item.date == previousTabDate);
           // 如果找不到相同的日期，使用第一个tab（index 0）
-          if (targetIndex < 0 || targetIndex >= list.length) {
-            targetIndex = 0;
-          }
-        } else {
-          // 如果没有之前的tab日期，使用第一个tab（index 0）
-          targetIndex = 0;
+          if (targetIndex < 0 || targetIndex >= list.length) targetIndex = 0;
         }
         
         setState(() {
@@ -432,7 +433,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
           _tabController = TabController(
             length: tabLength, 
             vsync: this,
-            initialIndex: targetIndex ?? 0,
+            initialIndex: targetIndex,
           );
           // 添加tab切换监听，更新时间范围筛选器的日期
           _tabController!.addListener(_onTabChanged);
@@ -1106,20 +1107,6 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
           ],
         ),
       );
-  }
-
-  FutureOr _onRefresh() async {
-    // 重新获取数据
-    await getData(refresh: true);
-    await getCinemaSpec();
-    await getAreaTree();
-    await getLanguageList();
-    await getShowTimeTagList();
-    await getVersionList();
-    await getLocation();
-  }
-
-  FutureOr _onLoad() {
   }
 
   // 获取版本名称

@@ -259,33 +259,44 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                       ),
                     ),
                   ),
-                  // 预售标签（左上角）
-                  if (_isPresale(item.startDate))
+                  // ムビチケ/前売り券角标（有前卖券则可点击跳转）
+                  if (item.hasPresaleTicket == true || item.presaleId != null)
                     Positioned(
                       top: 8.h,
                       left: 8.w,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFF6B35),
-                          borderRadius: BorderRadius.circular(8.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                      child: GestureDetector(
+                        onTap: (item.presaleId != null)
+                            ? () {
+                                context.pushNamed(
+                                  'presaleDetail',
+                                  pathParameters: {'id': '${item.presaleId}'},
+                                );
+                              }
+                            : null,
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF6B35),
+                            borderRadius: BorderRadius.circular(8.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            S.of(context).comingSoon_presaleTicketBadge,
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
                             ),
-                          ],
-                        ),
-                        child: Text(
-                          S.of(context).comingSoon_presale,
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                      ),
+                      )
                     ),
                   // 入场者特典标识：点击跳转该电影特典页
                   if (item.hasBenefits == true)
@@ -297,7 +308,11 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                           context.pushNamed(
                             'movieBenefits',
                             pathParameters: { 'id': '${item.id}' },
-                            queryParameters: { 'movieName': item.name },
+                            queryParameters: {
+                              'movieName': item.name,
+                              if (item.isReRelease == true && item.reReleaseId != null)
+                                'reReleaseId': '${item.reReleaseId}',
+                            },
                           );
                         },
                         child: Container(
@@ -314,7 +329,9 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                             ],
                           ),
                           child: Text(
-                            S.of(context).benefit_hasBenefitsLabel,
+                          (item.isReRelease == true)
+                              ? S.of(context).benefit_hasBenefitsLabel_reRelease
+                              : S.of(context).benefit_hasBenefitsLabel,
                             style: TextStyle(
                               fontSize: 18.sp,
                               color: Colors.white,
@@ -394,6 +411,44 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
           ),
         ),
         SizedBox(height: 12.h),
+
+        // 重映标识/版本信息
+        if (item.isReRelease == true || (item.reReleaseVersionInfo != null && item.reReleaseVersionInfo!.isNotEmpty))
+          Padding(
+            padding: EdgeInsets.only(bottom: 10.h),
+            child: Wrap(
+              spacing: 10.w,
+              runSpacing: 8.h,
+              children: [
+                if (item.isReRelease == true)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF07C160).withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: Text(
+                      S.of(context).movieList_tag_reRelease,
+                      style: TextStyle(fontSize: 22.sp, color: const Color(0xFF07C160), fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                if (item.reReleaseVersionInfo != null && item.reReleaseVersionInfo!.isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1989FA).withValues(alpha: 0.10),
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                    child: Text(
+                      item.reReleaseVersionInfo!,
+                      style: TextStyle(fontSize: 22.sp, color: const Color(0xFF1989FA), fontWeight: FontWeight.w500),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+              ],
+            ),
+          ),
         
         // 等级信息（G 不显示，PG12/PG13/R15/R18 使用特殊颜色）
         if (_shouldShowRating(item.levelName))
@@ -503,7 +558,9 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                 "id": '${item.id}'
               }, 
               queryParameters: {
-                'movieName': item.name
+                'movieName': item.name,
+                if (item.isReRelease == true && item.reReleaseId != null)
+                  'reReleaseId': '${item.reReleaseId}',
               }
             );
           },

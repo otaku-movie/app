@@ -148,6 +148,7 @@ final GoRouter routerConfig = GoRouter(
             return MovieBenefits(
               id: state.pathParameters['id'],
               movieName: state.uri.queryParameters['movieName'],
+              reReleaseId: state.uri.queryParameters['reReleaseId'],
             );
           },
         ),
@@ -167,7 +168,8 @@ final GoRouter routerConfig = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             return ShowTimeList(
               id: state.pathParameters['id'],
-              movieName: state.uri.queryParameters['movieName']
+              movieName: state.uri.queryParameters['movieName'],
+              reReleaseId: state.uri.queryParameters['reReleaseId'],
             );
           },
         ),

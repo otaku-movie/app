@@ -760,6 +760,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieDetail_detail_time => '时长';
 
   @override
+  String get movieDetail_reReleaseHistory_title => '重映历史';
+
+  @override
+  String get movieDetail_reReleaseHistory_disabled => '未启用';
+
+  @override
+  String get movieDetail_reReleaseHistory_start => '开始';
+
+  @override
+  String get movieDetail_reReleaseHistory_end => '结束';
+
+  @override
+  String get movieDetail_reReleaseHistory_duration => '时长';
+
+  @override
   String get movieDetail_detail_spec => '上映规格';
 
   @override
@@ -1577,6 +1592,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get benefit_hasBenefitsLabel => '有入场者特典';
+
+  @override
+  String get benefit_hasBenefitsLabel_reRelease => '重映特典';
 
   @override
   String get benefit_pageTitle => '入场者特典';

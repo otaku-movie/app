@@ -15,6 +15,15 @@ class MovieNowShowingResponse extends MovieResponse {
   /// 是否有入场者特典（设计 3.4）
   final bool? hasBenefits;
 
+  /// 是否来自重映计划
+  final bool? isReRelease;
+
+  /// 关联重映计划ID
+  final int? reReleaseId;
+
+  /// 重映特殊版本说明（可空）
+  final String? reReleaseVersionInfo;
+
   MovieNowShowingResponse({
     super.id,
     super.name,
@@ -23,7 +32,13 @@ class MovieNowShowingResponse extends MovieResponse {
     this.helloMovie,
     super.levelName,
     super.startDate,
+    super.presaleId,
+    super.hasPresaleTicket,
+    super.hasBonus,
     this.hasBenefits,
+    this.isReRelease,
+    this.reReleaseId,
+    this.reReleaseVersionInfo,
   });
 
   factory MovieNowShowingResponse.fromJson(Map<String, dynamic> json) =>

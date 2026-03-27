@@ -802,6 +802,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieDetail_detail_time => 'Duration';
 
   @override
+  String get movieDetail_reReleaseHistory_title => 'Re-release history';
+
+  @override
+  String get movieDetail_reReleaseHistory_disabled => 'Disabled';
+
+  @override
+  String get movieDetail_reReleaseHistory_start => 'Start';
+
+  @override
+  String get movieDetail_reReleaseHistory_end => 'End';
+
+  @override
+  String get movieDetail_reReleaseHistory_duration => 'Duration';
+
+  @override
   String get movieDetail_detail_spec => 'Screening Spec';
 
   @override
@@ -1664,6 +1679,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get benefit_hasBenefitsLabel => 'Entrance benefits';
+
+  @override
+  String get benefit_hasBenefitsLabel_reRelease => 'Re-release benefits';
 
   @override
   String get benefit_pageTitle => 'Entrance Benefits';

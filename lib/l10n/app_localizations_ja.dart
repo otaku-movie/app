@@ -773,6 +773,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieDetail_detail_time => '上映時間';
 
   @override
+  String get movieDetail_reReleaseHistory_title => '再上映履歴';
+
+  @override
+  String get movieDetail_reReleaseHistory_disabled => '無効';
+
+  @override
+  String get movieDetail_reReleaseHistory_start => '開始';
+
+  @override
+  String get movieDetail_reReleaseHistory_end => '終了';
+
+  @override
+  String get movieDetail_reReleaseHistory_duration => '上映時間';
+
+  @override
   String get movieDetail_detail_spec => '上映仕様';
 
   @override
@@ -1595,6 +1610,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get benefit_hasBenefitsLabel => '入場者特典あり';
+
+  @override
+  String get benefit_hasBenefitsLabel_reRelease => '再上映特典';
 
   @override
   String get benefit_pageTitle => '入場者特典';
