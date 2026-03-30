@@ -714,6 +714,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieList_buy => '购票';
 
   @override
+  String get movieList_tag_reRelease => '重映';
+
+  @override
   String get movieDetail_button_want => '想看';
 
   @override
@@ -1150,6 +1153,32 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get user_updateErrorMessage => '更新过程中出现错误，请稍后重试。';
+
+  @override
+  String get user_noUpdateAvailable => '当前已是最新版本';
+
+  @override
+  String get user_forceUpdateHint => '当前版本过低，请先更新后继续使用';
+
+  @override
+  String get user_updateReleaseNotes => '更新说明';
+
+  @override
+  String get user_updateDialogTitle => '发现新版本';
+
+  @override
+  String get user_updateToLatestHint => '更新至最新版本';
+
+  @override
+  String get user_updatePackageSizeLabel => '大小';
+
+  @override
+  String user_updateWhatsNewInVersion(String version) {
+    return 'v$version 更新内容';
+  }
+
+  @override
+  String get user_updateRemindLater => '稍后提醒';
 
   @override
   String get user_ok => '确定';

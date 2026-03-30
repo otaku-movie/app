@@ -140,4 +140,28 @@ class Config {
   static String get baseUrl => environmentConfig.apiUrl;
   static String get imageBaseUrl => environmentConfig.imageBaseUrl;
   static String get appTitle => environmentConfig.appTitle;
+
+  /// Android：与 `android/app/build.gradle` 的 `applicationId` 一致；发布前可用 `--dart-define=GOOGLE_PLAY_APPLICATION_ID=...` 覆盖。
+  static const String googlePlayApplicationId = String.fromEnvironment(
+    'GOOGLE_PLAY_APPLICATION_ID',
+    defaultValue: 'com.example.otaku_movie',
+  );
+
+  /// iOS：App Store Connect 中的数字 App ID（非 Bundle ID）。未配置时「立即更新」回退使用接口返回的 `downloadUrl`。
+  /// 构建示例：`--dart-define=APP_STORE_APP_ID=1234567890`
+  static const String appStoreAppId = String.fromEnvironment(
+    'APP_STORE_APP_ID',
+    defaultValue: '',
+  );
+
+  /// Google Play 应用详情页（https）。
+  static String get googlePlayStoreUrl =>
+      'https://play.google.com/store/apps/details?id=$googlePlayApplicationId';
+
+  /// App Store 应用页（https）；未配置 [appStoreAppId] 时返回 null。
+  static String? get appStoreListingUrl {
+    final id = appStoreAppId.trim();
+    if (id.isEmpty) return null;
+    return 'https://apps.apple.com/app/id$id';
+  }
 }

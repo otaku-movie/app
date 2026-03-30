@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m23(minutes) => "あと${minutes}分";
 
+  static String m24(version) => "v${version} の新機能";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about_components_filterBar_confirm":
@@ -960,9 +962,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_data_wantCount": MessageLookupByLibrary.simpleMessage("観たい数"),
         "user_data_watchHistory": MessageLookupByLibrary.simpleMessage("鑑賞履歴"),
         "user_editProfile": MessageLookupByLibrary.simpleMessage("プロフィール編集"),
+        "user_forceUpdateHint": MessageLookupByLibrary.simpleMessage(
+            "現在のバージョンはサポート対象外です。更新後にご利用ください。"),
         "user_language": MessageLookupByLibrary.simpleMessage("言語"),
         "user_latestVersion": MessageLookupByLibrary.simpleMessage("最新バージョン"),
         "user_logout": MessageLookupByLibrary.simpleMessage("ログアウト"),
+        "user_noUpdateAvailable":
+            MessageLookupByLibrary.simpleMessage("すでに最新バージョンです"),
         "user_ok": MessageLookupByLibrary.simpleMessage("OK"),
         "user_privateAgreement":
             MessageLookupByLibrary.simpleMessage("プライバシーポリシー"),
@@ -971,14 +977,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_update": MessageLookupByLibrary.simpleMessage("更新"),
         "user_updateAvailable":
             MessageLookupByLibrary.simpleMessage("新しいバージョンが見つかりました。今すぐ更新しますか？"),
+        "user_updateDialogTitle":
+            MessageLookupByLibrary.simpleMessage("アップデートのご案内"),
         "user_updateError": MessageLookupByLibrary.simpleMessage("更新失敗"),
         "user_updateErrorMessage": MessageLookupByLibrary.simpleMessage(
             "更新中にエラーが発生しました。後でもう一度お試しください。"),
+        "user_updatePackageSizeLabel":
+            MessageLookupByLibrary.simpleMessage("サイズ"),
         "user_updateProgress":
             MessageLookupByLibrary.simpleMessage("更新をダウンロード中です。お待ちください..."),
+        "user_updateReleaseNotes": MessageLookupByLibrary.simpleMessage("更新内容"),
+        "user_updateRemindLater": MessageLookupByLibrary.simpleMessage("あとで通知"),
         "user_updateSuccess": MessageLookupByLibrary.simpleMessage("更新成功"),
         "user_updateSuccessMessage":
             MessageLookupByLibrary.simpleMessage("アプリが最新バージョンに正常に更新されました！"),
+        "user_updateToLatestHint":
+            MessageLookupByLibrary.simpleMessage("最新版にアップデート"),
+        "user_updateWhatsNewInVersion": m24,
         "user_updating": MessageLookupByLibrary.simpleMessage("更新中"),
         "writeComment_contentTitle":
             MessageLookupByLibrary.simpleMessage("映画の感想を書いてください"),

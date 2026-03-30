@@ -3750,6 +3750,86 @@ class S {
     );
   }
 
+  /// `You already have the latest version`
+  String get user_noUpdateAvailable {
+    return Intl.message(
+      'You already have the latest version',
+      name: 'user_noUpdateAvailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your current version is no longer supported. Please update to continue.`
+  String get user_forceUpdateHint {
+    return Intl.message(
+      'Your current version is no longer supported. Please update to continue.',
+      name: 'user_forceUpdateHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What's new`
+  String get user_updateReleaseNotes {
+    return Intl.message(
+      'What\'s new',
+      name: 'user_updateReleaseNotes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Software Update Available`
+  String get user_updateDialogTitle {
+    return Intl.message(
+      'Software Update Available',
+      name: 'user_updateDialogTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update to the latest version`
+  String get user_updateToLatestHint {
+    return Intl.message(
+      'Update to the latest version',
+      name: 'user_updateToLatestHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SIZE`
+  String get user_updatePackageSizeLabel {
+    return Intl.message(
+      'SIZE',
+      name: 'user_updatePackageSizeLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What's new in v{version}`
+  String user_updateWhatsNewInVersion(String version) {
+    return Intl.message(
+      'What\'s new in v$version',
+      name: 'user_updateWhatsNewInVersion',
+      desc: '',
+      args: [version],
+    );
+  }
+
+  /// `Remind me later`
+  String get user_updateRemindLater {
+    return Intl.message(
+      'Remind me later',
+      name: 'user_updateRemindLater',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `OK`
   String get user_ok {
     return Intl.message(

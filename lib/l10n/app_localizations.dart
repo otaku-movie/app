@@ -1480,6 +1480,12 @@ abstract class AppLocalizations {
   /// **'Buy Ticket'**
   String get movieList_buy;
 
+  /// No description provided for @movieList_tag_reRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-release'**
+  String get movieList_tag_reRelease;
+
   /// No description provided for @movieDetail_button_want.
   ///
   /// In en, this message translates to:
@@ -2313,6 +2319,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred during update. Please try again later.'**
   String get user_updateErrorMessage;
+
+  /// No description provided for @user_noUpdateAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have the latest version'**
+  String get user_noUpdateAvailable;
+
+  /// No description provided for @user_forceUpdateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current version is no longer supported. Please update to continue.'**
+  String get user_forceUpdateHint;
+
+  /// No description provided for @user_updateReleaseNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new'**
+  String get user_updateReleaseNotes;
+
+  /// No description provided for @user_updateDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Software Update Available'**
+  String get user_updateDialogTitle;
+
+  /// No description provided for @user_updateToLatestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Update to the latest version'**
+  String get user_updateToLatestHint;
+
+  /// No description provided for @user_updatePackageSizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'SIZE'**
+  String get user_updatePackageSizeLabel;
+
+  /// No description provided for @user_updateWhatsNewInVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s new in v{version}'**
+  String user_updateWhatsNewInVersion(String version);
+
+  /// No description provided for @user_updateRemindLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me later'**
+  String get user_updateRemindLater;
 
   /// No description provided for @user_ok.
   ///

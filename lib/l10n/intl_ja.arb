@@ -443,6 +443,21 @@
   "user_updateSuccessMessage": "アプリが最新バージョンに正常に更新されました！",
   "user_updateError": "更新失敗",
   "user_updateErrorMessage": "更新中にエラーが発生しました。後でもう一度お試しください。",
+  "user_noUpdateAvailable": "すでに最新バージョンです",
+  "user_forceUpdateHint": "現在のバージョンはサポート対象外です。更新後にご利用ください。",
+  "user_updateReleaseNotes": "更新内容",
+  "user_updateDialogTitle": "アップデートのご案内",
+  "user_updateToLatestHint": "最新版にアップデート",
+  "user_updatePackageSizeLabel": "サイズ",
+  "user_updateWhatsNewInVersion": "v{version} の新機能",
+  "@user_updateWhatsNewInVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "user_updateRemindLater": "あとで通知",
   "user_ok": "OK",
   "orderList_title": "注文一覧",
   "orderList_orderNumber": "注文番号",

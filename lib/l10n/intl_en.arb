@@ -443,6 +443,21 @@
   "user_updateSuccessMessage": "App has been successfully updated to the latest version!",
   "user_updateError": "Update Failed",
   "user_updateErrorMessage": "An error occurred during update. Please try again later.",
+  "user_noUpdateAvailable": "You already have the latest version",
+  "user_forceUpdateHint": "Your current version is no longer supported. Please update to continue.",
+  "user_updateReleaseNotes": "What's new",
+  "user_updateDialogTitle": "Software Update Available",
+  "user_updateToLatestHint": "Update to the latest version",
+  "user_updatePackageSizeLabel": "SIZE",
+  "user_updateWhatsNewInVersion": "What's new in v{version}",
+  "@user_updateWhatsNewInVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "user_updateRemindLater": "Remind me later",
   "user_ok": "OK",
   "orderList_title": "Order List",
   "orderList_orderNumber": "Order Number",

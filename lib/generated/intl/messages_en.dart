@@ -71,6 +71,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m23(minutes) => "${minutes} minutes left";
 
+  static String m24(version) => "What\'s new in v${version}";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about_components_filterBar_confirm":
@@ -1059,10 +1061,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Watch History"),
         "user_editProfile":
             MessageLookupByLibrary.simpleMessage("Edit Profile"),
+        "user_forceUpdateHint": MessageLookupByLibrary.simpleMessage(
+            "Your current version is no longer supported. Please update to continue."),
         "user_language": MessageLookupByLibrary.simpleMessage("Language"),
         "user_latestVersion":
             MessageLookupByLibrary.simpleMessage("Latest Version"),
         "user_logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "user_noUpdateAvailable": MessageLookupByLibrary.simpleMessage(
+            "You already have the latest version"),
         "user_ok": MessageLookupByLibrary.simpleMessage("OK"),
         "user_privateAgreement":
             MessageLookupByLibrary.simpleMessage("Privacy Agreement"),
@@ -1072,16 +1078,27 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_update": MessageLookupByLibrary.simpleMessage("Update"),
         "user_updateAvailable": MessageLookupByLibrary.simpleMessage(
             "New version found. Update now?"),
+        "user_updateDialogTitle":
+            MessageLookupByLibrary.simpleMessage("Software Update Available"),
         "user_updateError":
             MessageLookupByLibrary.simpleMessage("Update Failed"),
         "user_updateErrorMessage": MessageLookupByLibrary.simpleMessage(
             "An error occurred during update. Please try again later."),
+        "user_updatePackageSizeLabel":
+            MessageLookupByLibrary.simpleMessage("SIZE"),
         "user_updateProgress": MessageLookupByLibrary.simpleMessage(
             "Downloading update, please wait..."),
+        "user_updateReleaseNotes":
+            MessageLookupByLibrary.simpleMessage("What\'s new"),
+        "user_updateRemindLater":
+            MessageLookupByLibrary.simpleMessage("Remind me later"),
         "user_updateSuccess":
             MessageLookupByLibrary.simpleMessage("Update Successful"),
         "user_updateSuccessMessage": MessageLookupByLibrary.simpleMessage(
             "App has been successfully updated to the latest version!"),
+        "user_updateToLatestHint": MessageLookupByLibrary.simpleMessage(
+            "Update to the latest version"),
+        "user_updateWhatsNewInVersion": m24,
         "user_updating": MessageLookupByLibrary.simpleMessage("Updating"),
         "writeComment_contentTitle":
             MessageLookupByLibrary.simpleMessage("Share your movie experience"),

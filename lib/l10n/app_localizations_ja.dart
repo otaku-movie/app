@@ -727,6 +727,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieList_buy => 'チケット購入';
 
   @override
+  String get movieList_tag_reRelease => '再上映';
+
+  @override
   String get movieDetail_button_want => '見たい';
 
   @override
@@ -1166,6 +1169,32 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get user_updateErrorMessage => '更新中にエラーが発生しました。後でもう一度お試しください。';
+
+  @override
+  String get user_noUpdateAvailable => 'すでに最新バージョンです';
+
+  @override
+  String get user_forceUpdateHint => '現在のバージョンはサポート対象外です。更新後にご利用ください。';
+
+  @override
+  String get user_updateReleaseNotes => '更新内容';
+
+  @override
+  String get user_updateDialogTitle => 'アップデートのご案内';
+
+  @override
+  String get user_updateToLatestHint => '最新版にアップデート';
+
+  @override
+  String get user_updatePackageSizeLabel => 'サイズ';
+
+  @override
+  String user_updateWhatsNewInVersion(String version) {
+    return 'v$version の新機能';
+  }
+
+  @override
+  String get user_updateRemindLater => 'あとで通知';
 
   @override
   String get user_ok => 'OK';

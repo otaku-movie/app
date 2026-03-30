@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/router/router.dart';
+import 'package:otaku_movie/service/version_check_service.dart';
 import 'package:otaku_movie/utils/seat_cancel_manager.dart';
 
 class MyApp extends StatefulWidget {
@@ -19,10 +20,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  bool _versionChecked = false;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_versionChecked && mounted) {
+        _versionChecked = true;
+        VersionCheckService.checkOnStartup(context);
+      }
+    });
   }
 
   @override

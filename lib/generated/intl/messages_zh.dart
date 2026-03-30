@@ -68,6 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m23(minutes) => "还有${minutes}分钟";
 
+  static String m24(version) => "v${version} 更新内容";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about_components_filterBar_confirm":
@@ -921,9 +923,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_data_wantCount": MessageLookupByLibrary.simpleMessage("想看数"),
         "user_data_watchHistory": MessageLookupByLibrary.simpleMessage("观影记录"),
         "user_editProfile": MessageLookupByLibrary.simpleMessage("编辑个人信息"),
+        "user_forceUpdateHint":
+            MessageLookupByLibrary.simpleMessage("当前版本过低，请先更新后继续使用"),
         "user_language": MessageLookupByLibrary.simpleMessage("语言"),
         "user_latestVersion": MessageLookupByLibrary.simpleMessage("最新版本"),
         "user_logout": MessageLookupByLibrary.simpleMessage("退出登录"),
+        "user_noUpdateAvailable":
+            MessageLookupByLibrary.simpleMessage("当前已是最新版本"),
         "user_ok": MessageLookupByLibrary.simpleMessage("确定"),
         "user_privateAgreement": MessageLookupByLibrary.simpleMessage("隐私协议"),
         "user_registerTime": MessageLookupByLibrary.simpleMessage("注册时间"),
@@ -931,14 +937,22 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_update": MessageLookupByLibrary.simpleMessage("更新"),
         "user_updateAvailable":
             MessageLookupByLibrary.simpleMessage("发现新版本，是否立即更新？"),
+        "user_updateDialogTitle": MessageLookupByLibrary.simpleMessage("发现新版本"),
         "user_updateError": MessageLookupByLibrary.simpleMessage("更新失败"),
         "user_updateErrorMessage":
             MessageLookupByLibrary.simpleMessage("更新过程中出现错误，请稍后重试。"),
+        "user_updatePackageSizeLabel":
+            MessageLookupByLibrary.simpleMessage("大小"),
         "user_updateProgress":
             MessageLookupByLibrary.simpleMessage("正在下载更新，请稍候..."),
+        "user_updateReleaseNotes": MessageLookupByLibrary.simpleMessage("更新说明"),
+        "user_updateRemindLater": MessageLookupByLibrary.simpleMessage("稍后提醒"),
         "user_updateSuccess": MessageLookupByLibrary.simpleMessage("更新成功"),
         "user_updateSuccessMessage":
             MessageLookupByLibrary.simpleMessage("应用已成功更新到最新版本！"),
+        "user_updateToLatestHint":
+            MessageLookupByLibrary.simpleMessage("更新至最新版本"),
+        "user_updateWhatsNewInVersion": m24,
         "user_updating": MessageLookupByLibrary.simpleMessage("正在更新"),
         "writeComment_contentTitle":
             MessageLookupByLibrary.simpleMessage("写下你的观影感受"),

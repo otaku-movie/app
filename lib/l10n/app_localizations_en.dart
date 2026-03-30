@@ -756,6 +756,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieList_buy => 'Buy Ticket';
 
   @override
+  String get movieList_tag_reRelease => 'Re-release';
+
+  @override
   String get movieDetail_button_want => 'Want to Watch';
 
   @override
@@ -1208,6 +1211,33 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get user_updateErrorMessage =>
       'An error occurred during update. Please try again later.';
+
+  @override
+  String get user_noUpdateAvailable => 'You already have the latest version';
+
+  @override
+  String get user_forceUpdateHint =>
+      'Your current version is no longer supported. Please update to continue.';
+
+  @override
+  String get user_updateReleaseNotes => 'What\'s new';
+
+  @override
+  String get user_updateDialogTitle => 'Software Update Available';
+
+  @override
+  String get user_updateToLatestHint => 'Update to the latest version';
+
+  @override
+  String get user_updatePackageSizeLabel => 'SIZE';
+
+  @override
+  String user_updateWhatsNewInVersion(String version) {
+    return 'What\'s new in v$version';
+  }
+
+  @override
+  String get user_updateRemindLater => 'Remind me later';
 
   @override
   String get user_ok => 'OK';
