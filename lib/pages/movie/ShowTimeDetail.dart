@@ -5,18 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:get/get.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/components/space.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_show_time_detail_response.dart';
 import 'package:otaku_movie/response/cinema/cinema_movie_showing_response.dart';
 import 'package:otaku_movie/components/dict.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 import '../../generated/l10n.dart';
 
 class ShowTimeDetail extends StatefulWidget {
   final String? cinemaId;
   final String? movieId;
+  final String? reReleaseId;
 
-  const ShowTimeDetail({super.key, this.cinemaId, this.movieId});
+  const ShowTimeDetail({super.key, this.cinemaId, this.movieId, this.reReleaseId});
 
   @override
   State<ShowTimeDetail> createState() => _PageState();
@@ -30,30 +34,26 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   List<Widget> tabWidget = [];
   CinemaMovieShowTimeDetailResponse data = CinemaMovieShowTimeDetailResponse();
   List<CinemaMovieShowingResponse> cinemaMovieShowingList = [];
-  bool is24HourFormat = true; // 默认使用24小时制
+  late final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
 
-  // 转换时间格式（24小时制 <-> 30小时制）
-  String convertTimeFormat(String? time) {
-    if (time == null || time.isEmpty) return '';
-    
-    try {
-      final parts = time.split(':');
-      if (parts.length < 2) return time;
-      
-      int hour = int.parse(parts[0]);
-      final minute = parts[1];
-      
-      if (!is24HourFormat) {
-        // 转换为30小时制：凌晨0-5点显示为24-29点
-        if (hour >= 0 && hour <= 5) {
-          hour += 24;
-        }
-      }
-      
-      return '$hour:$minute';
-    } catch (e) {
-      return time;
-    }
+  /// 把场次的 "HH:mm[:ss]" 字符串按当前全局 24h/30h 偏好格式化。
+  /// 当 [referenceStartTime] 提供且当前时间字符串小于它（即结束时间跨日）时，
+  /// 30h 模式会自动把次日凌晨 0–5 点显示为 24–29 点。
+  String _formatShowTime(
+    String? time, {
+    String? dateStr,
+    String? referenceStartTime,
+  }) {
+    final fullStr = DateFormatUtil.combineDateTime(
+      date: dateStr,
+      time: time,
+      referenceStartTime: referenceStartTime,
+    );
+    return DateFormatUtil.formatShowTimeFromString(
+      timeStr: fullStr,
+      use30HourFormat: timeFormatController.use30HourFormat.value,
+    );
   }
 
   // 格式化电影时长（分钟 -> 小时分钟）
@@ -116,12 +116,16 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   }
 
   getData(int movieId) {
+    final reReleaseId = widget.reReleaseId != null && widget.reReleaseId!.isNotEmpty
+        ? int.tryParse(widget.reReleaseId!)
+        : null;
     ApiRequest().request(
       path: '/app/cinema/movie/showTime',
       method: 'POST',
       data: {
         "movieId": movieId,
-        "cinemaId": int.parse(widget.cinemaId!)
+        "cinemaId": int.parse(widget.cinemaId!),
+        if (reReleaseId != null) "reReleaseId": reReleaseId,
       },
       fromJsonT: (json) {
         return CinemaMovieShowTimeDetailResponse.fromJson(json);
@@ -171,8 +175,11 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     ).then((res) {
       if (res.data != null) {
         setState(() {
-          currentMovieIndex = res.data!.indexWhere((item) => item.id == int.parse(widget.movieId!));
           cinemaMovieShowingList = res.data ?? [];
+          final idx = cinemaMovieShowingList.indexWhere(
+              (item) => item.id == int.parse(widget.movieId!));
+          // indexWhere 未找到时为 -1，避免 cinemaMovieShowingList[-1]
+          currentMovieIndex = idx >= 0 ? idx : 0;
         });
       }
     });
@@ -232,6 +239,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final int carouselSafeIndex = cinemaMovieShowingList.isEmpty
+        ? 0
+        : currentMovieIndex.clamp(0, cinemaMovieShowingList.length - 1);
+
     // if (tabWidget.isEmpty) {
     //   return const Scaffold(
     //     body: Center(child: CircularProgressIndicator()),
@@ -239,14 +250,18 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     // }
 
     List<Widget> renderCarouselSlider () {
-      CinemaMovieShowingResponse movie = cinemaMovieShowingList[currentMovieIndex];
+      if (cinemaMovieShowingList.isEmpty) return [];
+      final safeIndex = currentMovieIndex.clamp(
+          0, cinemaMovieShowingList.length - 1);
+      CinemaMovieShowingResponse movie =
+          cinemaMovieShowingList[safeIndex];
 
       return [
          CarouselSlider(
           carouselController: carouselSliderController,
           options: CarouselOptions(
             // height: 305.h,
-            initialPage: currentMovieIndex,
+            initialPage: safeIndex,
             viewportFraction: 0.40,
             enlargeCenterPage: true,
             enlargeFactor: 0.20,
@@ -302,7 +317,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                 crossAxisAlignment:
                     CrossAxisAlignment.center,
                 children: [
-              Text(cinemaMovieShowingList[currentMovieIndex].name ?? '',
+              Text(cinemaMovieShowingList[safeIndex].name ?? '',
                   style: TextStyle(
                       fontSize: 36.sp,
                       color: Colors.white
@@ -359,53 +374,15 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                         GoRouter.of(context).pop();
                       },
                     ),
-                    actions: [
-                      // 时间格式切换按钮
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     setState(() {
-                      //       is24HourFormat = !is24HourFormat;
-                      //     });
-                      //   },
-                      //   child: Container(
-                      //     margin: EdgeInsets.only(right: 16.w),
-                      //     padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.white.withValues(alpha: 0.2),
-                      //       borderRadius: BorderRadius.circular(20.r),
-                      //       border: Border.all(
-                      //         color: Colors.white.withValues(alpha: 0.5),
-                      //         width: 1,
-                      //       ),
-                      //     ),
-                      //     child: Row(
-                      //       mainAxisSize: MainAxisSize.min,
-                      //       children: [
-                      //         Icon(
-                      //           Icons.schedule,
-                      //           color: Colors.white,
-                      //           size: 18.sp,
-                      //         ),
-                      //         SizedBox(width: 4.w),
-                      //         Text(
-                      //           is24HourFormat ? '24h' : '30h',
-                      //           style: TextStyle(
-                      //             color: Colors.white,
-                      //             fontSize: 24.sp,
-                      //             fontWeight: FontWeight.w600,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
+                    actions: const [],
                     flexibleSpace: FlexibleSpaceBar(
                       background: Stack(
                         clipBehavior: Clip.none,
                         children: cinemaMovieShowingList.isEmpty ? [] : [
                           CustomExtendedImage(
-                            cinemaMovieShowingList[currentMovieIndex].poster ?? '',
+                            cinemaMovieShowingList[carouselSafeIndex]
+                                    .poster ??
+                                '',
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
@@ -592,11 +569,14 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                               child: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  // 时间展示
-                                                  Row(
+                                                  // 时间展示（响应全局 24h/30h 切换）
+                                                  Obx(() => Row(
                                                     children: [
                                                       Text(
-                                                        convertTimeFormat(children.startTime),
+                                                        _formatShowTime(
+                                                          children.startTime,
+                                                          dateStr: item.date,
+                                                        ),
                                                         style: TextStyle(
                                                           fontSize: 44.sp,
                                                           fontWeight: FontWeight.bold,
@@ -613,7 +593,11 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                         ),
                                                       ),
                                                       Text(
-                                                        convertTimeFormat(children.endTime),
+                                                        _formatShowTime(
+                                                          children.endTime,
+                                                          dateStr: item.date,
+                                                          referenceStartTime: children.startTime,
+                                                        ),
                                                         style: TextStyle(
                                                           fontSize: 28.sp,
                                                           color: Colors.grey.shade500,
@@ -621,7 +605,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                         ),
                                                       ),
                                                     ],
-                                                  ),
+                                                  )),
                                                   SizedBox(height: 16.h),
                                                   // 影厅和规格信息
                                                   Wrap(

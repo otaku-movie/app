@@ -12,7 +12,10 @@ import 'package:jiffy/jiffy.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'dart:ui';
 
+import 'package:get/get.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/response/ticket/ticket_detail_response.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 
 class Ticket extends StatefulWidget {
   const Ticket({super.key});
@@ -29,6 +32,8 @@ class _PageState extends State<Ticket> {
   bool hasMore = true; // 是否还有更多数据
   int totalCount = 0; // 总条数
   late EasyRefreshController easyRefreshController;
+  late final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
   Future<void> getData({bool refresh = true}) async {
     if (mounted) {
       setState(() {
@@ -154,16 +159,26 @@ class _PageState extends State<Ticket> {
     }
   }
 
-  String _formatShowTime(String? dateString, String? timeString) {
+  /// 把 "放映时间"（年月日 + 周几）按当前 24h/30h 偏好渲染。
+  ///
+  /// 30h 模式下，若场次的真实开场小时 < 06:00，营业日 = 真实日期 - 1 天，
+  /// 因此返回 "2026年11月25日 周三" 而非 "2026年11月26日 周四"。
+  String _formatShowTime(
+    String? dateString,
+    String? timeString, {
+    bool use30HourFormat = false,
+  }) {
     if (dateString == null || dateString.isEmpty || timeString == null || timeString.isEmpty) {
       return S.of(context).ticket_time_unknown;
     }
-    
+
     try {
-      // 组合日期和时间
       final dateTime = DateTime.parse('$dateString $timeString');
-      final jiffy = Jiffy.parseFromDateTime(dateTime);
-      final weekday = _getWeekdayText(dateTime.weekday);
+      final effective = (use30HourFormat && dateTime.hour < 6)
+          ? dateTime.subtract(const Duration(days: 1))
+          : dateTime;
+      final jiffy = Jiffy.parseFromDateTime(effective);
+      final weekday = _getWeekdayText(effective.weekday);
       return '${jiffy.format(pattern: 'yyyy年MM月dd日')} $weekday';
     } catch (e) {
       return S.of(context).ticket_time_formatError;
@@ -201,26 +216,6 @@ class _PageState extends State<Ticket> {
         return S.of(context).ticket_time_weekdays_sunday;
       default:
         return S.of(context).ticket_time_unknown;
-    }
-  }
-
-  String _formatTime(String? timeString) {
-    if (timeString == null || timeString.isEmpty) return '--:--';
-    
-    try {
-      // 如果时间字符串只包含时间部分，直接解析
-      if (timeString.contains(':')) {
-        final parts = timeString.split(':');
-        if (parts.length >= 2) {
-          return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
-        }
-      }
-      // 如果是完整的日期时间字符串，解析后提取时间
-      final dateTime = DateTime.parse(timeString);
-      final jiffy = Jiffy.parseFromDateTime(dateTime);
-      return jiffy.format(pattern: 'HH:mm');
-    } catch (e) {
-      return '--:--';
     }
   }
 
@@ -529,14 +524,22 @@ class _PageState extends State<Ticket> {
                                       ],
                                     ),
                                     SizedBox(height: 8.h),
-                                    Text(
-                                      _formatShowTime(ticket.date, ticket.startTime),
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF323233),
-                                      ),
-                                    ),
+                                    Obx(() {
+                                      final use30 = timeFormatController
+                                          .use30HourFormat.value;
+                                      return Text(
+                                        _formatShowTime(
+                                          ticket.date,
+                                          ticket.startTime,
+                                          use30HourFormat: use30,
+                                        ),
+                                        style: TextStyle(
+                                          fontSize: 28.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF323233),
+                                        ),
+                                      );
+                                    }),
                                   ],
                                 ),
                               ),
@@ -571,16 +574,41 @@ class _PageState extends State<Ticket> {
                                     ),
                                   ),
                                   SizedBox(height: 8.h),
-                                  Text(
-                                    "${_formatTime(ticket.startTime)} ~ ${_formatTime(ticket.endTime)}",
-                                    style: TextStyle(
-                                      fontSize: 32.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: const Color(0xFF667EEA),
-                                      letterSpacing: 2,
-                                      height: 1,
-                                    ),
-                                  ),
+                                  Obx(() {
+                                    final use30 = timeFormatController
+                                        .use30HourFormat.value;
+                                    final startStr = DateFormatUtil
+                                        .combineDateTime(
+                                      date: ticket.date,
+                                      time: ticket.startTime,
+                                    );
+                                    final endStr = DateFormatUtil
+                                        .combineDateTime(
+                                      date: ticket.date,
+                                      time: ticket.endTime,
+                                      referenceStartTime: ticket.startTime,
+                                    );
+                                    final start = DateFormatUtil
+                                        .formatShowTimeFromString(
+                                      timeStr: startStr,
+                                      use30HourFormat: use30,
+                                    );
+                                    final end = DateFormatUtil
+                                        .formatShowTimeFromString(
+                                      timeStr: endStr,
+                                      use30HourFormat: use30,
+                                    );
+                                    return Text(
+                                      "$start ~ $end",
+                                      style: TextStyle(
+                                        fontSize: 32.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xFF667EEA),
+                                        letterSpacing: 2,
+                                        height: 1,
+                                      ),
+                                    );
+                                  }),
                                 ],
                               ),
                             ],

@@ -23,6 +23,7 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/controller/DictController.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/response/dict_response.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
 
@@ -47,12 +48,12 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   List<DictItemResponse> versionList = []; // 版本列表（字典 dubbingVersion）
   List<DictItemResponse> dimensionList = []; // 2D/3D 列表（字典 dimensionType）
   late DictController dictController; // 字典控制器
+  late TimeFormatController timeFormatController;
+  Worker? _timeFormatWorker;
   int tabLength = 0;
   bool loading = false;
   bool error = false;
-  Map<String, dynamic> filterParams = {
-    'use30HourFormat': true,
-  };
+  Map<String, dynamic> filterParams = {};
   Placemark? location;
   Position? position;
   String? currentAddressFull;
@@ -67,11 +68,21 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   void initState() {
     super.initState();
     dictController = Get.find<DictController>();
+    timeFormatController = Get.find<TimeFormatController>();
+    _timeFormatWorker = ever<bool>(
+      timeFormatController.use30HourFormat,
+      (value) {
+        if (!mounted) return;
+        setState(() {});
+        getData();
+      },
+    );
     _loadInitialData();
   }
 
   @override
   void dispose() {
+    _timeFormatWorker?.dispose();
     _tabController?.removeListener(_onTabChanged);
     _tabController?.dispose();
     _tabController = null;
@@ -350,11 +361,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
       }
     }
 
-    // 30小时制开关
-    final use30HourFormat = filterParams['use30HourFormat'];
-    if (use30HourFormat is bool && use30HourFormat) {
-      requestData["use30HourFormat"] = true;
-    } else if (use30HourFormat == 'true') {
+    // 30小时制开关统一使用全局偏好。
+    if (timeFormatController.use30HourFormat.value) {
       requestData["use30HourFormat"] = true;
     }
 
@@ -596,11 +604,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
           DateTime newEndDateTime;
           
           // 检查结束时间是否是下一天（30小时制）
-          final use30HourFormat = filterParams['use30HourFormat'];
-          final isUse30HourFormat = (use30HourFormat is bool && use30HourFormat) || 
-                                    (use30HourFormat == 'true' || use30HourFormat == true);
-          
-          if (isUse30HourFormat && endDateTime.day > startDateTime.day) {
+          if (timeFormatController.use30HourFormat.value && endDateTime.day > startDateTime.day) {
             // 结束时间是下一天，保持这个逻辑
             newStartDateTime = DateTime(
               newBaseDate.year,
@@ -675,18 +679,15 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
 
   /// 创建 Drawer 筛选项配置
   List<FilterOption> _buildDrawerFilters(BuildContext context) {
-    // 从 filterParams 中获取 use30HourFormat 的值，默认为 false（24小时制）
-    final use30HourFormat = filterParams['use30HourFormat'];
-    final isUse30HourFormat = (use30HourFormat is bool && use30HourFormat) || 
-                              (use30HourFormat == 'true' || use30HourFormat == true);
+    final use30HourFormat = timeFormatController.use30HourFormat.value;
     
     return [
-      // 时间范围筛选（动态30小时制，根据 use30HourFormat 开关决定）
+      // 时间范围筛选（统一跟随全局 24h/30h 偏好）
       FilterOption(
         key: 'timeRange',
         title: S.of(context).about_components_showTimeList_timeRange,
         type: FilterType.timeRange,
-        use30HourFormat: isUse30HourFormat, // 根据开关动态使用30小时制或24小时制
+        use30HourFormat: use30HourFormat,
         values: [], // 时间范围不需要 values
       ),
       // 时间范围筛选（30小时制示例，可根据需要启用）
@@ -1271,11 +1272,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Text(
+                      child: Obx(() => Text(
                         DateFormatUtil.formatShowTime(
                           dateTime: showTime.startTime,
-                          use30HourFormat: (filterParams['use30HourFormat'] is bool && filterParams['use30HourFormat']) || 
-                                          (filterParams['use30HourFormat'] == 'true' || filterParams['use30HourFormat'] == true),
+                          use30HourFormat:
+                              timeFormatController.use30HourFormat.value,
                           baseDate: _getCurrentTabDate(),
                         ),
                         style: TextStyle(
@@ -1284,7 +1285,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                           color: Colors.black,
                           height: 1.2,
                         ),
-                      ),
+                      )),
                     ),
                     // 右侧座位状态（图标形式）
                     Tooltip(
@@ -1315,11 +1316,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // 结束时间（左对齐）
-                    Text(
+                    Obx(() => Text(
                       DateFormatUtil.formatShowTime(
                         dateTime: showTime.endTime,
-                        use30HourFormat: (filterParams['use30HourFormat'] is bool && filterParams['use30HourFormat']) || 
-                                        (filterParams['use30HourFormat'] == 'true' || filterParams['use30HourFormat'] == true),
+                        use30HourFormat:
+                            timeFormatController.use30HourFormat.value,
                         baseDate: _getCurrentTabDate(),
                       ),
                       style: TextStyle(
@@ -1327,7 +1328,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                         color: Colors.grey.shade600,
                         fontWeight: FontWeight.w500,
                       ),
-                    ),
+                    )),
                     // 时长（右对齐）
                     if (durationText != null)
                       Text(

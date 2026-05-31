@@ -11,8 +11,12 @@ import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/enum/index.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:get/get.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/response/order/order_detail_response.dart';
 import 'package:otaku_movie/response/benefit/app_benefit_detail_response.dart';
+import 'package:otaku_movie/service/share_service.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
 
@@ -32,6 +36,8 @@ class _PageState extends State<OrderDetail> {
   Uint8List? QRcodeBytes;
   bool loading = false;
   bool error = false;
+  late final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
   /// 本单是否已在本次会话中提交过特典反馈（已反馈则不再展示底部反馈入口）
   bool _benefitFeedbackSubmitted = false;
 
@@ -111,6 +117,29 @@ class _PageState extends State<OrderDetail> {
       backgroundColor: const Color(0xFFF7F8FA),
       appBar: CustomAppBar(
          title: Text(S.of(context).orderDetail_title, style: const TextStyle(color: Colors.white)),
+         actions: [
+           Builder(
+             builder: (btnContext) => IconButton(
+               icon: const Icon(Icons.share, color: Colors.white),
+               // 仅在订单加载成功且有订单号时才允许分享，避免分享空数据
+               onPressed: data.orderNumber == null || data.orderNumber!.isEmpty
+                   ? null
+                   : () {
+                       final showTime = [
+                         data.date,
+                         data.startTime,
+                       ].where((s) => s != null && s.isNotEmpty).join(' ');
+                       ShareService.instance.shareTicket(
+                         orderNumber: data.orderNumber!,
+                         movieName: data.movieName ?? '',
+                         showTime: showTime.isEmpty ? null : showTime,
+                         cinemaName: data.cinemaName,
+                         sharePositionOrigin: btnContext,
+                       );
+                     },
+             ),
+           ),
+         ],
       ),
       body: AppErrorWidget(
         loading: loading,
@@ -379,15 +408,40 @@ class _PageState extends State<OrderDetail> {
                                           ),
                                           SizedBox(width: 6.w),
                                           Flexible(
-                                            child: Text(
-                                              '${data.date ?? ''} ${data.startTime} ~ ${data.endTime}',
-                                          style: TextStyle(
-                                                fontSize: 24.sp,
-                                                color: const Color(0xFF646566),
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                            child: Obx(() {
+                                              final use30 = timeFormatController
+                                                  .use30HourFormat.value;
+                                              final start = DateFormatUtil
+                                                  .formatShowTimeFromString(
+                                                timeStr: DateFormatUtil
+                                                    .combineDateTime(
+                                                  date: data.date,
+                                                  time: data.startTime,
+                                                ),
+                                                use30HourFormat: use30,
+                                              );
+                                              final end = DateFormatUtil
+                                                  .formatShowTimeFromString(
+                                                timeStr: DateFormatUtil
+                                                    .combineDateTime(
+                                                  date: data.date,
+                                                  time: data.endTime,
+                                                  referenceStartTime:
+                                                      data.startTime,
+                                                ),
+                                                use30HourFormat: use30,
+                                              );
+                                              return Text(
+                                                '${data.date ?? ''} $start ~ $end',
+                                                style: TextStyle(
+                                                  fontSize: 24.sp,
+                                                  color:
+                                                      const Color(0xFF646566),
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              );
+                                            }),
                                           ),
                                         ],
                                       ),

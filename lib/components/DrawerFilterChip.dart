@@ -202,9 +202,18 @@ class _DrawerFilterChipState extends State<DrawerFilterChip> {
   @override
   void didUpdateWidget(DrawerFilterChip oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 当 selectedIds 发生变化时，重新初始化时间范围值（用于重置功能）
+    final newUse30HourFormat = widget.filter.use30HourFormat ?? false;
+    final formatChanged = widget.filter.type == FilterType.timeRange &&
+        newUse30HourFormat != _use30HourFormat;
+
+    if (formatChanged) {
+      _use30HourFormat = newUse30HourFormat;
+      _maxHour = _use30HourFormat ? 30 : 24;
+    }
+
+    // 当 selectedIds 或时间制式发生变化时，重新初始化时间范围值（用于重置或全局切换）
     if (widget.filter.type == FilterType.timeRange && 
-        widget.selectedIds != oldWidget.selectedIds) {
+        (widget.selectedIds != oldWidget.selectedIds || formatChanged)) {
       setState(() {
         _initializeTimeRangeValues(useSetState: false);
       });

@@ -6,6 +6,7 @@ import 'package:otaku_movie/myApp.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'controller/LanguageController.dart';
+import 'controller/TimeFormatController.dart';
 import 'package:jiffy/jiffy.dart';
 
 // import "package:flutter_flavorizr/flutter_flavorizr.dart";
@@ -33,6 +34,8 @@ void main() async {
   // 初始化 GetX 控制器
   Get.put(LanguageController());
   Get.lazyPut(() => DictController());
+  final timeFormatController = Get.put(TimeFormatController(), permanent: true);
+  await timeFormatController.init();
 
   // 启动应用
   runApp(MyApp(

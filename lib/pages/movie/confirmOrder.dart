@@ -20,6 +20,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/controller/SeatSelectionController.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
 
 class ConfirmOrder extends StatefulWidget {
@@ -36,6 +37,8 @@ class _PageState extends State<ConfirmOrder> {
   OrderDetailResponse data = OrderDetailResponse();
   List<PaymentMethodResponse> paymentMethodData = [];
   bool payLoading = false;
+  late final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
   /// 同步防抖：防止 setState 未生效前重复点击
   bool _paySubmitting = false;
   bool loading = false;
@@ -747,14 +750,37 @@ class _PageState extends State<ConfirmOrder> {
                                         color: Colors.orange.shade600,
                                       ),
                                       SizedBox(width: 8.w),
-                                Text(
-                                        '${data.startTime} ~ ${data.endTime}',
-                                        style: TextStyle(
-                                          fontSize: 22.sp,
-                                          color: Colors.orange.shade700,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
+                                      Obx(() {
+                                        final use30 = timeFormatController
+                                            .use30HourFormat.value;
+                                        final start = DateFormatUtil
+                                            .formatShowTimeFromString(
+                                          timeStr: DateFormatUtil
+                                              .combineDateTime(
+                                            date: data.date,
+                                            time: data.startTime,
+                                          ),
+                                          use30HourFormat: use30,
+                                        );
+                                        final end = DateFormatUtil
+                                            .formatShowTimeFromString(
+                                          timeStr: DateFormatUtil
+                                              .combineDateTime(
+                                            date: data.date,
+                                            time: data.endTime,
+                                            referenceStartTime: data.startTime,
+                                          ),
+                                          use30HourFormat: use30,
+                                        );
+                                        return Text(
+                                          '$start ~ $end',
+                                          style: TextStyle(
+                                            fontSize: 22.sp,
+                                            color: Colors.orange.shade700,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        );
+                                      }),
                                       SizedBox(width: 8.w),
                                       Container(
                                         padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),

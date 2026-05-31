@@ -8,8 +8,11 @@ import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/order/order_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 
 class PaySuccess extends StatefulWidget {
   final String? orderNumber;
@@ -25,6 +28,8 @@ class _PageState extends State<PaySuccess> {
   OrderDetailResponse data = OrderDetailResponse();
   Uint8List? QRcodeBytes;
   bool loading = false;
+  late final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
 
   getData() {
     setState(() {
@@ -392,15 +397,40 @@ class _PageState extends State<PaySuccess> {
                                           ),
                                           SizedBox(width: 6.w),
                                           Flexible(
-                                            child: Text(
-                                              '${data.date ?? ''} ${data.startTime} ~ ${data.endTime}',
-                                              style: TextStyle(
-                                                fontSize: 24.sp,
-                                                color: const Color(0xFF646566),
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                            child: Obx(() {
+                                              final use30 = timeFormatController
+                                                  .use30HourFormat.value;
+                                              final start = DateFormatUtil
+                                                  .formatShowTimeFromString(
+                                                timeStr: DateFormatUtil
+                                                    .combineDateTime(
+                                                  date: data.date,
+                                                  time: data.startTime,
+                                                ),
+                                                use30HourFormat: use30,
+                                              );
+                                              final end = DateFormatUtil
+                                                  .formatShowTimeFromString(
+                                                timeStr: DateFormatUtil
+                                                    .combineDateTime(
+                                                  date: data.date,
+                                                  time: data.endTime,
+                                                  referenceStartTime:
+                                                      data.startTime,
+                                                ),
+                                                use30HourFormat: use30,
+                                              );
+                                              return Text(
+                                                '${data.date ?? ''} $start ~ $end',
+                                                style: TextStyle(
+                                                  fontSize: 24.sp,
+                                                  color:
+                                                      const Color(0xFF646566),
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              );
+                                            }),
                                           ),
                                         ],
                                       ),

@@ -521,5 +521,122 @@ class DateFormatUtil {
     
     return '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')}';
   }
+
+  /// 把"完整时刻 datetime 字符串"按 24h / 30h 规则格式化为展示文本。
+  ///
+  /// 参数：
+  /// - [timeStr]：完整 datetime 字符串（含年月日时分秒），例如：
+  ///   `'2026-11-26 00:00:00'`、`'2026-11-26T02:35:00'`。
+  ///   只接受可被 [DateTime.parse] 解析的字符串；纯 "HH:mm" 请先用
+  ///   [combineDateTime] 拼成完整 datetime 再传入。
+  /// - [use30HourFormat]：是否使用 30 小时制。
+  ///   `true` 且小时 < 06:00 时，会被视作"前一营业日的凌晨场"，
+  ///   pattern 里的**日期占位会自动回退一天**，**小时占位会变成 24~29**。
+  ///   例如：`'2026-11-26 00:00:00'` → `'2026-11-25 24:00:00'`；
+  ///        `'2026-11-26 02:35:00'` → `'2026-11-25 26:35:00'`。
+  /// - [pattern]：输出 pattern（默认 `'HH:mm'`），遵循 [DateFormat] 规则。
+  ///
+  /// 解析失败时回退到原始字符串。
+  static String formatShowTimeFromString({
+    required String? timeStr,
+    required bool use30HourFormat,
+    String pattern = 'HH:mm',
+  }) {
+    if (timeStr == null || timeStr.trim().isEmpty) return '--:--';
+    final clean = timeStr.trim();
+    try {
+      final dt = DateTime.parse(clean.replaceFirst(' ', 'T'));
+
+      // 24h 模式 / 非凌晨场：直接按原 pattern 渲染原 datetime。
+      if (!use30HourFormat || dt.hour >= 6) {
+        return DateFormat(pattern).format(dt);
+      }
+
+      // 30h 模式 + 凌晨场：日期回退一天，小时 +24。
+      // 用占位符把 pattern 中的 H/HH 暂换成"字面量字符串"，
+      // 让 DateFormat 不去解析，剩余的 yyyy/MM/dd/E 等正常按"前一天日期"渲染。
+      const hhPlaceholder = '__OM_HH__';
+      const hPlaceholder = '__OM_H__';
+      final hasHH = pattern.contains('HH');
+      final escaped = pattern
+          .replaceAll('HH', "'$hhPlaceholder'")
+          .replaceAllMapped(
+            RegExp(r"(?<![A-Za-z'])H(?![A-Za-z'])"),
+            (_) => "'$hPlaceholder'",
+          );
+      final displayDt = dt.subtract(const Duration(days: 1));
+      var rendered = DateFormat(escaped).format(displayDt);
+      if (hasHH) {
+        rendered = rendered.replaceAll(
+          hhPlaceholder,
+          (dt.hour + 24).toString().padLeft(2, '0'),
+        );
+      }
+      rendered = rendered.replaceAll(
+        hPlaceholder,
+        (dt.hour + 24).toString(),
+      );
+      return rendered;
+    } catch (_) {
+      return clean;
+    }
+  }
+
+  /// 把"营业日 + 纯时间（HH:mm[:ss]）"拼成 `yyyy-MM-dd HH:mm:ss` 形式的
+  /// 完整 datetime 字符串，便于直接传给 [formatShowTimeFromString]。
+  ///
+  /// 参数：
+  /// - [date]：营业日，格式 `yyyy-MM-dd`（也可包含时分秒，会被截到日）。
+  /// - [time]：纯时间字符串，格式 `HH:mm[:ss]`。
+  /// - [referenceStartTime]：可选；当 [time] 数值上 < [referenceStartTime] 时，
+  ///   自动把日期 +1 天，用于"场次跨过 24:00 的结束时间"。
+  ///   支持 `HH:mm[:ss]` 或完整 datetime 字符串。
+  ///
+  /// 任一关键参数缺失或解析失败时返回 `null`。
+  static String? combineDateTime({
+    required String? date,
+    required String? time,
+    String? referenceStartTime,
+  }) {
+    if (date == null || date.trim().isEmpty) return null;
+    if (time == null || time.trim().isEmpty) return null;
+    try {
+      final t = time.trim();
+      final parts = t.split(':');
+      final hour = parts.isNotEmpty ? int.parse(parts[0]) : 0;
+      final minute = parts.length >= 2 ? int.parse(parts[1]) : 0;
+      final second = parts.length >= 3 ? int.parse(parts[2]) : 0;
+
+      final baseDate = DateTime.parse(date.trim());
+      var dt = DateTime(
+        baseDate.year,
+        baseDate.month,
+        baseDate.day,
+        hour,
+        minute,
+        second,
+      );
+
+      if (referenceStartTime != null &&
+          referenceStartTime.trim().isNotEmpty) {
+        try {
+          final refClean = referenceStartTime.trim();
+          final refParts = (refClean.contains(' ') || refClean.contains('T'))
+              ? refClean.replaceFirst('T', ' ').split(' ').last.split(':')
+              : refClean.split(':');
+          final refMinutes = int.parse(refParts[0]) * 60 +
+              (refParts.length >= 2 ? int.parse(refParts[1]) : 0);
+          final curMinutes = hour * 60 + minute;
+          if (curMinutes < refMinutes) {
+            dt = dt.add(const Duration(days: 1));
+          }
+        } catch (_) {/* 解析失败则不偏移 */}
+      }
+
+      return DateFormat('yyyy-MM-dd HH:mm:ss').format(dt);
+    } catch (_) {
+      return null;
+    }
+  }
 }
 

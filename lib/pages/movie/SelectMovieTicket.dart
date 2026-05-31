@@ -13,8 +13,8 @@ import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/utils/seat_cancel_manager.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/controller/SeatSelectionController.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:otaku_movie/controller/TimeFormatController.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../api/index.dart';
@@ -52,6 +52,8 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
       Get.isRegistered<SeatSelectionController>()
           ? Get.find<SeatSelectionController>()
           : Get.put(SeatSelectionController(), permanent: true);
+  late final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
 
   int ticketCountDown = 0; // 秒
 
@@ -520,14 +522,39 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                               color: Colors.orange.shade600,
                                             ),
                                             SizedBox(width: 8.w),
-                                            Text(
-                                              '${data.startTime} ~ ${data.endTime}',
-                                              style: TextStyle(
-                                                fontSize: 22.sp,
-                                                color: Colors.orange.shade700,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
+                                            Obx(() {
+                                              final use30 = timeFormatController
+                                                  .use30HourFormat.value;
+                                              final start = DateFormatUtil
+                                                  .formatShowTimeFromString(
+                                                timeStr: DateFormatUtil
+                                                    .combineDateTime(
+                                                  date: data.date,
+                                                  time: data.startTime,
+                                                ),
+                                                use30HourFormat: use30,
+                                              );
+                                              final end = DateFormatUtil
+                                                  .formatShowTimeFromString(
+                                                timeStr: DateFormatUtil
+                                                    .combineDateTime(
+                                                  date: data.date,
+                                                  time: data.endTime,
+                                                  referenceStartTime:
+                                                      data.startTime,
+                                                ),
+                                                use30HourFormat: use30,
+                                              );
+                                              return Text(
+                                                '$start ~ $end',
+                                                style: TextStyle(
+                                                  fontSize: 22.sp,
+                                                  color:
+                                                      Colors.orange.shade700,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              );
+                                            }),
                                             SizedBox(width: 8.w),
                                             Container(
                                               padding: EdgeInsets.symmetric(

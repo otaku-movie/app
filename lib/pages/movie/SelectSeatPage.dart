@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:otaku_movie/controller/SeatSelectionController.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
+import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -48,6 +51,9 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
   Set<int> selectSeatSet = {};
   List<SeatItem> selectSeatList = [];
   bool seatDataLoaded = false; // 座位数据是否已加载完成
+
+  late final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
 
   // int code = SelectSeatState.available.code;
 
@@ -976,32 +982,74 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                             ),
                           ),
                           SizedBox(width: 16.w),
-                          Text(
-                            formatTime(timeString: _showTimeData.startTime, format: 'HH:mm'),
-                            style: TextStyle(
-                              fontSize: 26.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          Text(
-                            ' ~ ',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.grey.shade500,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          Text(
-                            formatTime(timeString: _showTimeData.endTime, format: 'HH:mm'),
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black87,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
+                          Obx(() {
+                            final use30 =
+                                timeFormatController.use30HourFormat.value;
+                            final start =
+                                DateFormatUtil.formatShowTimeFromString(
+                              timeStr: _showTimeData.startTime,
+                              use30HourFormat: use30,
+                            );
+                            // _showTimeData.startTime / endTime 都是完整 datetime；
+                            // 若 endTime 数值上 <= startTime（跨过 24:00）则补一天。
+                            String? endStr = _showTimeData.endTime;
+                            try {
+                              if (endStr != null &&
+                                  _showTimeData.startTime != null) {
+                                final s = DateTime.parse(
+                                  _showTimeData.startTime!.replaceFirst(
+                                    ' ',
+                                    'T',
+                                  ),
+                                );
+                                final e = DateTime.parse(
+                                  endStr.replaceFirst(' ', 'T'),
+                                );
+                                if (!e.isAfter(s)) {
+                                  endStr = DateFormat('yyyy-MM-dd HH:mm:ss')
+                                      .format(
+                                    e.add(const Duration(days: 1)),
+                                  );
+                                }
+                              }
+                            } catch (_) {/* 解析失败保持原值 */}
+                            final end =
+                                DateFormatUtil.formatShowTimeFromString(
+                              timeStr: endStr,
+                              use30HourFormat: use30,
+                            );
+                            return Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  start,
+                                  style: TextStyle(
+                                    fontSize: 26.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                Text(
+                                  ' ~ ',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: Colors.grey.shade500,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                                Text(
+                                  end,
+                                  style: TextStyle(
+                                    fontSize: 22.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
                         ],
                       ),
                       SizedBox(height: 12.h),
