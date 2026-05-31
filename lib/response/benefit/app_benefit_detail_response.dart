@@ -24,6 +24,8 @@ class AppBenefitDetailResponse {
   final int? orderNum;
   /// 阶段状态：字典 benefitPhaseStatus 1=之前 2=进行中 3=已结束
   final int? status;
+  /// 当前仍有有效库存记录的影院数（后端统计）
+  final int? availableCinemaCount;
   final List<AppBenefitItemResponse>? items;
 
   AppBenefitDetailResponse({
@@ -45,6 +47,7 @@ class AppBenefitDetailResponse {
     this.endDate,
     this.orderNum,
     this.status,
+    this.availableCinemaCount,
     this.items,
   });
 
@@ -94,6 +97,7 @@ class AppBenefitDetailResponse {
       endDate: json['endDate'] as String?,
       orderNum: (json['orderNum'] as num?)?.toInt(),
       status: (json['status'] as num?)?.toInt(),
+      availableCinemaCount: (json['availableCinemaCount'] as num?)?.toInt(),
       items: items,
     );
   }

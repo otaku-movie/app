@@ -1,6 +1,7 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
@@ -11,15 +12,24 @@ import 'package:otaku_movie/response/benefit/app_benefit_detail_response.dart';
 import 'package:otaku_movie/response/cinema/cinemaList.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/area_response.dart';
+import 'package:otaku_movie/service/share_service.dart';
 import 'package:otaku_movie/utils/toast.dart';
 
 /// 电影入场者特典页（C 端）- 展示该电影下所有特典阶段与物料
 class MovieBenefits extends StatefulWidget {
   final String? id;
   final String? movieName;
+  /// 电影封面（透传到可领影院页作 header 背景）
+  final String? movieCoverUrl;
   final String? reReleaseId;
 
-  const MovieBenefits({super.key, this.id, this.movieName, this.reReleaseId});
+  const MovieBenefits({
+    super.key,
+    this.id,
+    this.movieName,
+    this.movieCoverUrl,
+    this.reReleaseId,
+  });
 
   @override
   State<MovieBenefits> createState() => _MovieBenefitsState();
@@ -262,6 +272,37 @@ class _MovieBenefitsState extends State<MovieBenefits> {
   }
 
   /// 数字格式化：千、万（中日用千/万，英文用K/万）
+  String? _firstBenefitImageUrl(AppBenefitDetailResponse phase) {
+    final urls = phase.imageUrls;
+    if (urls == null || urls.isEmpty) return null;
+    for (final u in urls) {
+      final t = u.trim();
+      if (t.isNotEmpty) return t;
+    }
+    return null;
+  }
+
+  void _openCinemaAvailability(AppBenefitDetailResponse phase) {
+    if (phase.id == null || widget.id == null) return;
+    final benefitImg = _firstBenefitImageUrl(phase);
+    context.pushNamed(
+      'benefitCinemaAvailability',
+      pathParameters: {
+        'movieId': widget.id!,
+        'benefitId': '${phase.id}',
+      },
+      queryParameters: {
+        if (phase.name != null && phase.name!.isNotEmpty) 'benefitName': phase.name!,
+        if (widget.movieName != null && widget.movieName!.isNotEmpty) 'movieName': widget.movieName!,
+        if (benefitImg != null) 'benefitCoverUrl': benefitImg,
+        if (widget.movieCoverUrl != null && widget.movieCoverUrl!.trim().isNotEmpty)
+          'movieCoverUrl': widget.movieCoverUrl!.trim(),
+        if (widget.reReleaseId != null && widget.reReleaseId!.isNotEmpty) 'reReleaseId': widget.reReleaseId!,
+        'phaseStatus': '${_effectivePhaseStatus(phase)}',
+      },
+    );
+  }
+
   String _formatNumber(int? n) {
     if (n == null) return '—';
     final s = S.of(context);
@@ -523,11 +564,17 @@ class _MovieBenefitsState extends State<MovieBenefits> {
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16.r), bottom: Radius.circular(16.r)),
+            onTap: phase.id == null ? null : () => _openCinemaAvailability(phase),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 12.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -585,8 +632,101 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                     },
                   ),
                 ],
+                if (phase.id != null && widget.id != null && widget.id!.isNotEmpty) ...[
+                  SizedBox(width: 4.w),
+                  Builder(
+                    builder: (btnContext) => InkWell(
+                      onTap: () {
+                        ShareService.instance.shareBenefit(
+                          movieId: widget.id!,
+                          benefitId: '${phase.id}',
+                          benefitName: phase.name ?? '',
+                          movieName: widget.movieName ?? phase.movieName,
+                          sharePositionOrigin: btnContext,
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(20.r),
+                      child: Padding(
+                        padding: EdgeInsets.all(6.w),
+                        child: Icon(
+                          Icons.share_outlined,
+                          size: 26.sp,
+                          color: const Color(0xFF1989FA),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
+            if (phase.id != null) ...[
+              SizedBox(height: 12.h),
+              Container(
+                padding: EdgeInsets.fromLTRB(12.w, 10.h, 8.w, 10.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8F3FF),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: const Color(0xFFC8E0FF), width: 1),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Icon(
+                        Icons.storefront_rounded,
+                        size: 22.sp,
+                        color: const Color(0xFF1989FA),
+                      ),
+                    ),
+                    SizedBox(width: 10.w),
+                    Expanded(
+                      child: Text(
+                        S.of(context).benefit_availability_count_label(phase.availableCinemaCount ?? 0),
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF323233),
+                          height: 1.25,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton(
+                        onPressed: () => _openCinemaAvailability(phase),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFF1989FA),
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Color(0xFF1989FA), width: 1),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                          minimumSize: Size(0, 40.h),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              S.of(context).benefit_availability_view_cinemas,
+                              style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(width: 2.w),
+                            Icon(Icons.chevron_right_rounded, size: 22.sp),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             SizedBox(height: 8.h),
             if (phase.startDate != null && phase.startDate!.isNotEmpty || phase.endDate != null && phase.endDate!.isNotEmpty)
               Row(
@@ -694,9 +834,14 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                     ),
                   )),
             ],
-            if (_effectivePhaseStatus(phase) == 2) ...[
-              SizedBox(height: 12.h),
-              Align(
+                ],
+              ),
+            ),
+          ),
+          if (_effectivePhaseStatus(phase) == 2)
+            Padding(
+              padding: EdgeInsets.fromLTRB(12.w, 0, 12.w, 12.h),
+              child: Align(
                 alignment: Alignment.centerRight,
                 child: TextButton.icon(
                   onPressed: () => _showFeedbackSheet(context, initialPhase: phase),
@@ -712,9 +857,8 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                   ),
                 ),
               ),
-            ],
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

@@ -310,6 +310,8 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                             pathParameters: { 'id': '${item.id}' },
                             queryParameters: {
                               'movieName': item.name,
+                              if (item.cover != null && item.cover!.trim().isNotEmpty)
+                                'movieCoverUrl': item.cover!.trim(),
                               if (item.isReRelease == true && item.reReleaseId != null)
                                 'reReleaseId': '${item.reReleaseId}',
                             },
