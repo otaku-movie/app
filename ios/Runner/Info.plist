@@ -4,23 +4,17 @@
 <dict>
 	<!-- 相册权限 -->
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App needs access to your photo library.</string>
+	<string>用于选择头像、评论图片或反馈截图。我们只会访问您主动选择的图片。</string>
 	<key>NSCameraUsageDescription</key>
-	<string>App needs access to your camera.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>App needs access to your microphone.</string>
+	<string>用于拍摄头像、评论图片或反馈截图。</string>
 	<!-- 获取位置权限 -->
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>用于查找附近影院、计算距离和展示当前城市。</string>
 	<!-- 打开网页 -->
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 			<string>http</string>
 			<string>https</string>
-	</array>
-	<!-- 打开电话 -->
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
 			<string>tel</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
@@ -43,6 +37,9 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<!-- 仅使用 HTTPS / 系统标准加密，免除年度加密合规导出申报 -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -66,5 +63,25 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!--
+		X (Twitter) OAuth 2.0 PKCE 回调 URL Scheme。
+		flutter_appauth 在 iOS 上通过 ASWebAuthenticationSession 接收回调，
+		系统需要 App 在这里声明 `otakumovie` scheme 才会把 `otakumovie://x-login-callback`
+		派发回 App。scheme 必须与 AuthConfig.xRedirectUri 中 "://" 前的部分一致，
+		也要与 X Developer Portal 中配置的 Callback URI 完全一致。
+	-->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>x-login-callback</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>otakumovie</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

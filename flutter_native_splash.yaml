@@ -1,0 +1,29 @@
+# Native Splash 配置
+#
+# 这一份用来生成原生（iOS LaunchScreen / Android drawable）的启动屏，
+# 解决冷启动时 Flutter 引擎还没起来的「黑屏一闪」。
+# Flutter 引擎起来后会立刻渲染我们自己写的 `splash_screen.dart`，
+# 两层视觉风格保持一致即可无缝衔接。
+#
+# 修改后执行：
+#   dart run flutter_native_splash:create
+# 即可生成/更新 iOS 与 Android 的资源。
+flutter_native_splash:
+  # 与 lib/pages/splash_screen.dart 的 Scaffold backgroundColor 保持一致
+  color: "#0E1B2C"
+
+  # 中心 Logo / 主视觉。建议使用 1080x1080 居中透明 PNG。
+  image: assets/image/run.png
+
+  # Android 12+ 强制使用系统 SplashScreen API，需要单独配置
+  android_12:
+    color: "#0E1B2C"
+    image: assets/image/run.png
+
+  # 全屏 splash，避免顶部刘海留白
+  fullscreen: true
+
+  # iOS / Android 同时生成
+  android: true
+  ios: true
+  web: false

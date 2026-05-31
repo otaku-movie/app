@@ -24,13 +24,19 @@ class EnvironmentConfig {
         final ip = localIp ?? (devServerIp.isNotEmpty ? devServerIp : '192.168.3.47');
         return EnvironmentConfig(
           apiUrl: 'http://$ip:8080/api',
-          imageBaseUrl: 'http://drive.bangumi.xyz:9000/test-movie',
+          imageBaseUrl: const String.fromEnvironment(
+            'IMAGE_BASE_URL',
+            defaultValue: 'https://images.otaku-movie.com',
+          ),
           appTitle: 'Dev Otaku Movie',
         );
       case EnvironmentType.test:
         return const EnvironmentConfig(
           apiUrl: 'http://test-api.otaku-movie.com/api',
-          imageBaseUrl: 'https://drive.bangumi.xyz:9000/test-movie',
+          imageBaseUrl: String.fromEnvironment(
+            'IMAGE_BASE_URL',
+            defaultValue: 'https://images.otaku-movie.com',
+          ),
           appTitle: 'Test Otaku Movie',
         );
       case EnvironmentType.preprod:
@@ -42,7 +48,10 @@ class EnvironmentConfig {
       case EnvironmentType.prod:
         return const EnvironmentConfig(
           apiUrl: '',
-          imageBaseUrl: 'https://cdn.otaku-movie.com/images',
+          imageBaseUrl: String.fromEnvironment(
+            'IMAGE_BASE_URL',
+            defaultValue: 'https://images.otaku-movie.com',
+          ),
           appTitle: 'Prod Otaku Movie',
         );
     }

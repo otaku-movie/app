@@ -86,12 +86,25 @@ dependencies:
   image_editor: ^1.6.0
   # 谷歌登录
   google_sign_in: ^6.2.1
+  # Apple 登录（仅 iOS 展示）
+  sign_in_with_apple: ^6.1.4
+  # X (Twitter) 登录 - OAuth 2.0 PKCE
+  # 通过系统浏览器跳到 X 授权页 → 回调拿 code → 交换 access_token，
+  # 客户端无须保存 client_secret，安全性优于旧的 OAuth 1.0a 流程。
+  flutter_appauth: ^7.0.0
+  # Keychain / Keystore 安全存储 token
+  flutter_secure_storage: ^9.2.2
+  uuid: ^4.5.1
+  # 系统分享面板（电影/订单/特典分享）
+  share_plus: ^11.1.0
 
 dev_dependencies:
   json_serializable: ^6.8.0
   build_runner: ^2.4.11
   # 多环境构建
   flutter_flavorizr: ^2.2.3
+  # 冷启动 native splash → flutter splash 无缝衔接（消除黑屏）
+  flutter_native_splash: ^2.4.2
 
 
   flutter_test:
@@ -117,6 +130,7 @@ flutter:
     - assets/image/
     - assets/icons/
     - assets/icons/pay/
+    - assets/icons/social/
   fonts:
     - family: iconfont
       fonts:

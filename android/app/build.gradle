@@ -47,6 +47,10 @@ android {
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
 
+        // flutter_appauth：把 OAuth 2.0 redirect URI 的 scheme 告诉插件，
+        // 它会在自己的 manifest 里注册一个 RedirectUriReceiverActivity 来接收回调。
+        // 必须与 AuthConfig.xRedirectUri 中 "://" 前的部分保持一致。
+        manifestPlaceholders += [appAuthRedirectScheme: 'otakumovie']
     }
 
     buildTypes {
