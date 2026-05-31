@@ -21,6 +21,7 @@ import 'package:otaku_movie/response/movie/movieList/movie.dart';
 import 'package:otaku_movie/response/movie/movie_staff.dart';
 import 'package:otaku_movie/response/movie/movie_version.dart';
 import 'package:otaku_movie/response/movie/re_release_history.dart';
+import 'package:otaku_movie/service/share_service.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -1104,10 +1105,21 @@ List<Widget> generateComment() {
                 ),
               ),
               actions: [
-                IconButton(
-                  onPressed: () {}, 
-                  icon: const Icon(Icons.share, color: Colors.white)
-                )
+                Builder(
+                  builder: (btnContext) => IconButton(
+                    onPressed: () {
+                      if (widget.id == null || widget.id!.isEmpty) return;
+                      ShareService.instance.shareMovie(
+                        movieId: widget.id!,
+                        movieName: data.name ?? '',
+                        description: data.description,
+                        coverUrl: data.cover,
+                        sharePositionOrigin: btnContext,
+                      );
+                    },
+                    icon: const Icon(Icons.share, color: Colors.white),
+                  ),
+                ),
               ],
             ),
             // buildSliverList(5), //构建一个 sliverList
