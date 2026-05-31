@@ -181,6 +181,331 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
     }
   }
 
+  // 构建已保存信用卡项：主信息 + 右侧 [编辑] + 选中标记（删除在 AppBar）
+  Widget _buildSavedCardItem(CreditCardResponse card, bool isSelected) {
+    final isDefault = card.isDefault == true;
+
+    return Container(
+      margin: EdgeInsets.only(bottom: 24.h),
+      decoration: BoxDecoration(
+        gradient: isSelected
+            ? const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF1E3A8A), Color(0xFF3B82F6)],
+              )
+            : null,
+        color: isSelected ? null : Colors.white,
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: isSelected ? const Color(0xFF3B82F6) : const Color(0xFFE5E7EB),
+          width: isSelected ? 2 : 1,
+        ),
+        boxShadow: [
+          if (isSelected)
+            BoxShadow(
+              color: const Color(0xFF3B82F6).withValues(alpha: 0.25),
+              blurRadius: 24,
+              offset: const Offset(0, 10),
+            )
+          else
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24.r),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                _selectedCardId = card.id;
+              });
+            },
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(28.w, 28.h, 16.w, 28.h),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // 卡 logo
+                  Container(
+                    width: 96.w,
+                    height: 60.h,
+                    padding: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.12),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: SvgPicture.asset(
+                      _getCardIcon(card.cardType ?? ''),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  SizedBox(width: 24.w),
+
+                  // 卡信息
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                '${card.cardType ?? ''} •••• ${card.lastFourDigits ?? ''}',
+                                style: TextStyle(
+                                  fontSize: 30.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSelected ? Colors.white : const Color(0xFF111827),
+                                  letterSpacing: 0.5,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (isDefault) ...[
+                              SizedBox(width: 12.w),
+                              _buildDefaultBadge(isSelected),
+                            ],
+                          ],
+                        ),
+                        SizedBox(height: 10.h),
+                        Text(
+                          card.cardHolderName ?? '',
+                          style: TextStyle(
+                            fontSize: 22.sp,
+                            color: isSelected ? Colors.white70 : const Color(0xFF6B7280),
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.3,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          '有效期 ${card.expiryDate ?? ''}',
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            color: isSelected ? Colors.white60 : const Color(0xFF9CA3AF),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 4.w),
+
+                  // 编辑按钮（紧贴选中标记左侧）
+                  IconButton(
+                    tooltip: S.of(context).creditCard_action_edit,
+                    onPressed: () => _editCard(card),
+                    splashRadius: 28.sp,
+                    padding: EdgeInsets.all(8.w),
+                    constraints: BoxConstraints(minWidth: 56.sp, minHeight: 56.sp),
+                    icon: Icon(
+                      Icons.edit_outlined,
+                      size: 32.sp,
+                      color: isSelected ? Colors.white : const Color(0xFF3B82F6),
+                    ),
+                  ),
+
+                  // 选中标记
+                  Icon(
+                    isSelected ? Icons.check_circle_rounded : Icons.radio_button_unchecked,
+                    color: isSelected ? Colors.white : const Color(0xFFD1D5DB),
+                    size: 40.sp,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 「默认」徽标
+  Widget _buildDefaultBadge(bool isSelected) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: isSelected ? Colors.white.withValues(alpha: 0.18) : const Color(0xFFF59E0B),
+        borderRadius: BorderRadius.circular(6.r),
+        border: isSelected
+            ? Border.all(color: Colors.white.withValues(alpha: 0.5), width: 1)
+            : null,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.star_rounded,
+            size: 22.sp,
+            color: Colors.white,
+          ),
+          SizedBox(width: 4.w),
+          Text(
+            S.of(context).creditCard_badge_default,
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+              height: 1.1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 管理模式：用户中心进入（无 orderNumber）；下单流程下不开放"删除"
+  bool get _isManageMode =>
+      widget.orderNumber == null || widget.orderNumber!.isEmpty;
+
+  // AppBar 删除按钮：删除当前选中卡；未选中给提示
+  void _handleHeaderDelete() {
+    final id = _selectedCardId;
+    if (id == null) {
+      ToastService.showWarning(S.of(context).creditCard_deleteHint_selectFirst);
+      return;
+    }
+    _confirmDeleteCard(id);
+  }
+
+  // 跳转到 AddCreditCard 编辑模式
+  Future<void> _editCard(CreditCardResponse card) async {
+    final result = await context.pushNamed(
+      'addCreditCard',
+      queryParameters: {
+        if (widget.orderNumber != null) 'orderNumber': widget.orderNumber!,
+      },
+      extra: card,
+    );
+    if (!mounted) return;
+    if (result == true) {
+      await _loadCreditCards();
+    }
+  }
+
+  // 删除卡：弹确认
+  Future<void> _confirmDeleteCard(int id) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
+        titlePadding: EdgeInsets.fromLTRB(32.w, 32.h, 32.w, 16.h),
+        contentPadding: EdgeInsets.fromLTRB(32.w, 0, 32.w, 16.h),
+        actionsPadding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
+        title: Row(
+          children: [
+            Container(
+              width: 56.sp,
+              height: 56.sp,
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEE2E2),
+                borderRadius: BorderRadius.circular(14.r),
+              ),
+              child: Icon(
+                Icons.delete_outline_rounded,
+                color: const Color(0xFFEF4444),
+                size: 32.sp,
+              ),
+            ),
+            SizedBox(width: 16.w),
+            Expanded(
+              child: Text(
+                S.of(context).creditCard_deleteConfirm_title,
+                style: TextStyle(
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF111827),
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          S.of(context).creditCard_deleteConfirm_content,
+          style: TextStyle(
+            fontSize: 24.sp,
+            color: const Color(0xFF6B7280),
+            height: 1.5,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+            ),
+            child: Text(
+              S.of(context).creditCard_edit_cancel,
+              style: TextStyle(
+                fontSize: 26.sp,
+                color: const Color(0xFF6B7280),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFEF4444),
+              foregroundColor: Colors.white,
+              elevation: 0,
+              padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+            ),
+            child: Text(
+              S.of(context).creditCard_action_delete,
+              style: TextStyle(
+                fontSize: 26.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    try {
+      final res = await ApiRequest().request<dynamic>(
+        path: '/creditCard/delete',
+        method: 'DELETE',
+        queryParameters: {'id': id},
+        fromJsonT: (json) => json,
+      );
+      if (!mounted) return;
+      if (res.code == 200) {
+        // 如果删的就是当前选中卡，清掉选中
+        if (_selectedCardId == id) {
+          _selectedCardId = null;
+        }
+        await _loadCreditCards();
+      } else {
+        ToastService.showError(res.message ?? S.of(context).creditCard_operationFailed);
+      }
+    } catch (_) {
+      if (!mounted) return;
+      ToastService.showError(S.of(context).creditCard_operationFailed);
+    }
+  }
+
   // 构建临时卡片项
   Widget _buildTempCardItem() {
     final isSelected = _tempCard != null && _selectedCardId == null;
@@ -369,7 +694,26 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: CustomAppBar(
-        title: Text(S.of(context).payment_selectCreditCard_title, style: const TextStyle(color: Colors.white)),
+        title: Text(
+          (widget.orderNumber == null || widget.orderNumber!.isEmpty)
+              ? S.of(context).user_creditCard
+              : S.of(context).payment_selectCreditCard_title,
+          style: const TextStyle(color: Colors.white),
+        ),
+        actions: _isManageMode
+            ? [
+                IconButton(
+                  tooltip: S.of(context).creditCard_action_delete,
+                  onPressed: _creditCards.isEmpty ? null : _handleHeaderDelete,
+                  icon: Icon(
+                    Icons.delete_outline_rounded,
+                    color: _creditCards.isEmpty ? Colors.white38 : Colors.white,
+                    size: 40.sp,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+              ]
+            : null,
       ),
       body: AppErrorWidget(
         loading: _isLoading,
@@ -417,123 +761,10 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                               return _buildTempCardItem();
                             }
                             
-                            // 显示已保存的卡片
                             final cardIndex = _tempCard != null ? index - 1 : index;
                             final card = _creditCards[cardIndex];
                             final isSelected = card.id == _selectedCardId;
-
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _selectedCardId = card.id;
-                                  // 不清除临时卡片，只是取消选中状态
-                                });
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(bottom: 24.h),
-                                padding: EdgeInsets.all(32.w),
-                                decoration: BoxDecoration(
-                                  gradient: isSelected
-                                      ? LinearGradient(
-                                          begin: Alignment.topLeft,
-                                          end: Alignment.bottomRight,
-                                          colors: [
-                                            const Color(0xFF1E3A8A),
-                                            const Color(0xFF3B82F6),
-                                          ],
-                                        )
-                                      : null,
-                                  color: isSelected ? null : Colors.white,
-                                  borderRadius: BorderRadius.circular(24.r),
-                                  border: Border.all(
-                                    color: isSelected
-                                        ? const Color(0xFF3B82F6)
-                                        : Colors.grey.shade300,
-                                    width: isSelected ? 3 : 1,
-                                  ),
-                                  boxShadow: [
-                                    if (isSelected)
-                                      BoxShadow(
-                                        color: Colors.blue.shade200,
-                                        blurRadius: 20,
-                                        offset: const Offset(0, 10),
-                                      ),
-                                  ],
-                                ),
-                                child: Row(
-                                  children: [
-                                    // 卡类型图标
-                                    Container(
-                                      width: 100.w,
-                                      height: 60.h,
-                                      padding: EdgeInsets.all(8.w),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(12.r),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        _getCardIcon(card.cardType ?? ''),
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                    SizedBox(width: 24.w),
-                                    
-                                    // 卡信息
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${card.cardType ?? ''} •••• ${card.lastFourDigits ?? ''}',
-                                            style: TextStyle(
-                                              fontSize: 32.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: isSelected
-                                                  ? Colors.white
-                                                  : Colors.black87,
-                                            ),
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          Text(
-                                            card.cardHolderName ?? '',
-                                            style: TextStyle(
-                                              fontSize: 24.sp,
-                                              color: isSelected
-                                                  ? Colors.white70
-                                                  : Colors.grey.shade600,
-                                            ),
-                                          ),
-                                          SizedBox(height: 4.h),
-                                          Text(
-                                            '有效期: ${card.expiryDate ?? ''}',
-                                            style: TextStyle(
-                                              fontSize: 22.sp,
-                                              color: isSelected
-                                                  ? Colors.white60
-                                                  : Colors.grey.shade500,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    
-                                    // 选中标记
-                                    if (isSelected)
-                                      Icon(
-                                        Icons.check_circle,
-                                        color: Colors.white,
-                                        size: 48.sp,
-                                      )
-                                    else
-                                      Icon(
-                                        Icons.radio_button_unchecked,
-                                        color: Colors.grey.shade400,
-                                        size: 48.sp,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            );
+                            return _buildSavedCardItem(card, isSelected);
                           },
                         ),
                 ),
@@ -576,52 +807,52 @@ class _SelectCreditCardState extends State<SelectCreditCard> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 24.h),
-                      
-                      // 支付按钮
-                      SizedBox(
-                        width: double.infinity,
-                        height: 96.h,
-                        child: ElevatedButton(
-                          onPressed: _isPaying || (_creditCards.isEmpty && _tempCard == null) ? null : _pay,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF3B82F6),
-                            disabledBackgroundColor: Colors.grey.shade300,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.r),
+                      if (widget.orderNumber != null && widget.orderNumber!.isNotEmpty) ...[
+                        SizedBox(height: 24.h),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 96.h,
+                          child: ElevatedButton(
+                            onPressed: _isPaying || (_creditCards.isEmpty && _tempCard == null) ? null : _pay,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFF3B82F6),
+                              disabledBackgroundColor: Colors.grey.shade300,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.r),
+                              ),
+                              elevation: 0,
                             ),
-                            elevation: 0,
-                          ),
-                          child: _isPaying
-                              ? SizedBox(
-                                  width: 48.w,
-                                  height: 48.w,
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 3,
-                                  ),
-                                )
-                              : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.payment,
-                                      size: 32.sp,
+                            child: _isPaying
+                                ? SizedBox(
+                                    width: 48.w,
+                                    height: 48.w,
+                                    child: const CircularProgressIndicator(
                                       color: Colors.white,
+                                      strokeWidth: 3,
                                     ),
-                                    SizedBox(width: 16.w),
-                                    Text(
-                                      S.of(context).payment_selectCreditCard_confirmPayment,
-                                      style: TextStyle(
-                                        fontSize: 32.sp,
-                                        fontWeight: FontWeight.bold,
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.payment,
+                                        size: 32.sp,
                                         color: Colors.white,
                                       ),
-                                    ),
-                                  ],
-                                ),
+                                      SizedBox(width: 16.w),
+                                      Text(
+                                        S.of(context).payment_selectCreditCard_confirmPayment,
+                                        style: TextStyle(
+                                          fontSize: 32.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),

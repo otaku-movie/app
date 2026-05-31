@@ -11,8 +11,11 @@ import 'package:otaku_movie/response/payment/credit_card_response.dart';
 
 class AddCreditCard extends StatefulWidget {
   final String? orderNumber;
-  
-  const AddCreditCard({super.key, this.orderNumber});
+  /// 非空时进入"编辑模式"：复用本页面但只允许改持卡人姓名 / 有效期 / 是否默认
+  /// 卡号 / CVV 出于 PCI DSS 合规禁止回显与修改
+  final CreditCardResponse? editCard;
+
+  const AddCreditCard({super.key, this.orderNumber, this.editCard});
 
   @override
   State<AddCreditCard> createState() => _AddCreditCardState();
@@ -27,7 +30,24 @@ class _AddCreditCardState extends State<AddCreditCard> {
   
   bool _isLoading = false;
   String _cardType = '';
-  bool _saveCard = true; // 默认保存到数据库
+  bool _saveCard = true; // 默认保存到数据库（新增模式）
+  bool _isDefault = false; // 编辑模式下的"设为默认"开关
+
+  bool get _isEditMode => widget.editCard != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final card = widget.editCard;
+    if (card != null) {
+      // 卡号/CVV 不回显：卡号字段只用于预览展示，存遮罩值
+      _cardNumberController.text = '•••• •••• •••• ${card.lastFourDigits ?? '••••'}';
+      _cardHolderController.text = card.cardHolderName ?? '';
+      _expiryDateController.text = card.expiryDate ?? '';
+      _cardType = card.cardType ?? '';
+      _isDefault = card.isDefault == true;
+    }
+  }
 
   @override
   void dispose() {
@@ -94,10 +114,46 @@ class _AddCreditCardState extends State<AddCreditCard> {
     }
 
     if (!mounted) return;
-    
+
     setState(() {
       _isLoading = true;
     });
+
+    // 编辑模式走 update 接口
+    if (_isEditMode) {
+      try {
+        final id = widget.editCard!.id;
+        final res = await ApiRequest().request<dynamic>(
+          path: '/creditCard/update',
+          method: 'POST',
+          data: {
+            'id': id,
+            'cardHolderName': _cardHolderController.text,
+            'expiryDate': _expiryDateController.text,
+            'isDefault': _isDefault,
+          },
+          fromJsonT: (json) => json,
+        );
+
+        if (!mounted) return;
+        if (res.code == 200) {
+          ToastService.showSuccess(S.of(context).payment_addCreditCard_cardSaved);
+          Navigator.of(context).pop(true);
+        } else {
+          ToastService.showError(res.message ?? S.of(context).payment_addCreditCard_operationFailed);
+        }
+      } catch (_) {
+        if (!mounted) return;
+        ToastService.showError(S.of(context).payment_addCreditCard_operationFailed);
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+      return;
+    }
 
     try {
       // 准备信用卡数据
@@ -107,7 +163,8 @@ class _AddCreditCardState extends State<AddCreditCard> {
         expiryDate: _expiryDateController.text,
         cvv: _cvvController.text,
         cardType: _cardType,
-        isDefault: false, // 可以根据需要设置
+        // 仅保存到账户的卡才有"默认"概念；临时卡固定 false
+        isDefault: _saveCard && _isDefault,
         saveCard: _saveCard,
       );
 
@@ -157,7 +214,12 @@ class _AddCreditCardState extends State<AddCreditCard> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: CustomAppBar(
-        title: Text(S.of(context).payment_addCreditCard_title, style: const TextStyle(color: Colors.white)),
+        title: Text(
+          _isEditMode
+              ? S.of(context).creditCard_edit_title
+              : S.of(context).payment_addCreditCard_title,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -370,25 +432,32 @@ class _AddCreditCardState extends State<AddCreditCard> {
                     TextFormField(
                       controller: _cardNumberController,
                       keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(16),
-                      ],
+                      enabled: !_isEditMode,
+                      inputFormatters: _isEditMode
+                          ? []
+                          : [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(16),
+                            ],
                       decoration: InputDecoration(
                         hintText: S.of(context).payment_addCreditCard_cardNumberHint,
                         prefixIcon: const Icon(Icons.credit_card),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16.r),
                         ),
+                        filled: _isEditMode,
+                        fillColor: _isEditMode ? Colors.grey.shade100 : null,
                       ),
                       style: TextStyle(fontSize: 28.sp),
                       onChanged: (value) {
+                        if (_isEditMode) return;
                         _detectCardType(value);
                         if (mounted) {
                           setState(() {});
                         }
                       },
                       validator: (value) {
+                        if (_isEditMode) return null;
                         if (value == null || value.isEmpty) {
                           return S.of(context).payment_addCreditCard_cardNumberError;
                         }
@@ -510,19 +579,27 @@ class _AddCreditCardState extends State<AddCreditCard> {
                                 controller: _cvvController,
                                 keyboardType: TextInputType.number,
                                 obscureText: true,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                  LengthLimitingTextInputFormatter(4),
-                                ],
+                                enabled: !_isEditMode,
+                                inputFormatters: _isEditMode
+                                    ? []
+                                    : [
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        LengthLimitingTextInputFormatter(4),
+                                      ],
                                 decoration: InputDecoration(
-                                  hintText: S.of(context).payment_addCreditCard_cvvHint,
+                                  hintText: _isEditMode
+                                      ? '•••'
+                                      : S.of(context).payment_addCreditCard_cvvHint,
                                   prefixIcon: const Icon(Icons.lock),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(16.r),
                                   ),
+                                  filled: _isEditMode,
+                                  fillColor: _isEditMode ? Colors.grey.shade100 : null,
                                 ),
                                 style: TextStyle(fontSize: 28.sp),
                                 validator: (value) {
+                                  if (_isEditMode) return null;
                                   if (value == null || value.isEmpty) {
                                     return S.of(context).payment_addCreditCard_cvvError;
                                   }
@@ -539,61 +616,52 @@ class _AddCreditCardState extends State<AddCreditCard> {
                     ),
                     SizedBox(height: 32.h),
                     
-                    // 保存选项
-                    Container(
-                      padding: EdgeInsets.all(24.w),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(color: Colors.blue.shade100),
+                    // 设为默认（编辑模式） / 保存到账户 + 设为默认（新增模式）
+                    if (_isEditMode)
+                      _buildToggleTile(
+                        icon: Icons.star_rounded,
+                        accent: const Color(0xFFF59E0B),
+                        title: S.of(context).creditCard_action_setDefault,
+                        subtitle: S.of(context).creditCard_setDefaultSubtitle,
+                        value: _isDefault,
+                        onChanged: (v) {
+                          if (mounted) setState(() => _isDefault = v);
+                        },
+                      )
+                    else ...[
+                      _buildToggleTile(
+                        icon: Icons.bookmark_added_rounded,
+                        accent: const Color(0xFF3B82F6),
+                        title: S.of(context).payment_addCreditCard_saveCard,
+                        subtitle: _saveCard
+                            ? S.of(context).payment_addCreditCard_saveToAccount
+                            : S.of(context).payment_addCreditCard_useOnce,
+                        value: _saveCard,
+                        onChanged: (v) {
+                          if (mounted) {
+                            setState(() {
+                              _saveCard = v;
+                              // 仅本次使用的临时卡不应被设为默认
+                              if (!v) _isDefault = false;
+                            });
+                          }
+                        },
                       ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.save,
-                            color: Colors.blue.shade700,
-                            size: 32.sp,
-                          ),
-                          SizedBox(width: 16.w),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  S.of(context).payment_addCreditCard_saveCard,
-                                  style: TextStyle(
-                                    fontSize: 28.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                                SizedBox(height: 4.h),
-                                Text(
-                                  _saveCard 
-                                    ? S.of(context).payment_addCreditCard_saveToAccount
-                                    : S.of(context).payment_addCreditCard_useOnce,
-                                  style: TextStyle(
-                                    fontSize: 22.sp,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Switch(
-                            value: _saveCard,
-                            onChanged: (value) {
-                              if (mounted) {
-                                setState(() {
-                                  _saveCard = value;
-                                });
-                              }
-                            },
-                            activeColor: const Color(0xFF3B82F6),
-                          ),
-                        ],
-                      ),
-                    ),
+                      // 仅"保存到账户"开启时才允许选择"设为默认"
+                      if (_saveCard) ...[
+                        SizedBox(height: 16.h),
+                        _buildToggleTile(
+                          icon: Icons.star_rounded,
+                          accent: const Color(0xFFF59E0B),
+                          title: S.of(context).creditCard_action_setDefault,
+                          subtitle: S.of(context).creditCard_setDefaultSubtitle,
+                          value: _isDefault,
+                          onChanged: (v) {
+                            if (mounted) setState(() => _isDefault = v);
+                          },
+                        ),
+                      ],
+                    ],
                     SizedBox(height: 48.h),
                     
                     // 提交按钮
@@ -619,8 +687,10 @@ class _AddCreditCardState extends State<AddCreditCard> {
                                   strokeWidth: 3,
                                 ),
                               )
-                            :                             Text(
-                                S.of(context).payment_addCreditCard_confirmAdd,
+                            : Text(
+                                _isEditMode
+                                    ? S.of(context).creditCard_edit_save
+                                    : S.of(context).payment_addCreditCard_confirmAdd,
                                 style: TextStyle(
                                   fontSize: 32.sp,
                                   fontWeight: FontWeight.bold,
@@ -635,6 +705,105 @@ class _AddCreditCardState extends State<AddCreditCard> {
             ),
             SizedBox(height: 48.h),
           ],
+        ),
+      ),
+    );
+  }
+
+  /// 统一开关项：左圆角 icon 背景 + 标题 + 副标题 + 右 Switch
+  /// - `accent`：选中态强调色（活动 track、icon 背景）
+  /// - `onChanged` 为 null 时显示为锁定/灰显
+  /// - 整行可点击切换
+  Widget _buildToggleTile({
+    required IconData icon,
+    required Color accent,
+    required String title,
+    String? subtitle,
+    required bool value,
+    required ValueChanged<bool>? onChanged,
+  }) {
+    final disabled = onChanged == null;
+    final iconColor = disabled ? const Color(0xFF9CA3AF) : accent;
+    final borderColor = (value && !disabled)
+        ? accent.withValues(alpha: 0.4)
+        : const Color(0xFFE5E7EB);
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: disabled ? null : () => onChanged(!value),
+        borderRadius: BorderRadius.circular(18.r),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18.r),
+            border: Border.all(color: borderColor, width: 1.2),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+          child: Row(
+            children: [
+              Container(
+                width: 64.sp,
+                height: 64.sp,
+                decoration: BoxDecoration(
+                  color: iconColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+                child: Icon(icon, size: 32.sp, color: iconColor),
+              ),
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 26.sp,
+                        fontWeight: FontWeight.w600,
+                        color: disabled ? const Color(0xFF6B7280) : const Color(0xFF111827),
+                        height: 1.2,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      SizedBox(height: 4.h),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 20.sp,
+                          color: const Color(0xFF6B7280),
+                          height: 1.3,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Transform.scale(
+                scale: 0.95,
+                child: Switch(
+                  value: value,
+                  onChanged: onChanged,
+                  activeThumbColor: Colors.white,
+                  activeTrackColor: accent,
+                  inactiveThumbColor: Colors.white,
+                  inactiveTrackColor: const Color(0xFFF3F4F6),
+                  trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.disabled)) {
+                      return const Color(0xFFD1D5DB);
+                    }
+                    if (states.contains(WidgetState.selected)) return accent;
+                    return const Color(0xFFD1D5DB);
+                  }),
+                  trackOutlineWidth: const WidgetStatePropertyAll(1.5),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
