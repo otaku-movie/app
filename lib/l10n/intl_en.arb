@@ -207,6 +207,11 @@
   "login_welcomeText": "Welcome back, please log in to your account",
   "login_or": "or",
   "login_googleLogin": "Sign in with Google",
+  "login_appleLogin": "Sign in with Apple",
+  "login_xLogin": "Sign in with X",
+  "login_googleLoginFailed": "Google sign-in failed, please try again",
+  "login_appleLoginFailed": "Apple sign-in failed, please try again",
+  "login_xLoginFailed": "X sign-in failed, please try again",
   "login_forgotPassword": "Forgot password?",
   "login_forgotPasswordTitle": "Forgot Password",
   "login_forgotPasswordDescription": "Enter your email address and we'll send you a verification code",
@@ -426,12 +431,31 @@
   "user_data_characterCount": "Character Count",
   "user_data_staffCount": "Staff Count",
   "user_registerTime": "Registration Time",
+  "user_loginSourceSingle": "Signed in via",
+  "user_loginSourceMultiple": "Linked",
   "user_language": "Language",
+  "user_timeFormat": "Time Format",
+  "user_timeFormat_24h": "24-hour",
+  "user_timeFormat_30h": "30-hour",
+  "user_timeFormat_subtitle_24h": "Standard 24-hour (00:00 ~ 23:59)",
+  "user_timeFormat_subtitle_30h": "30-hour: next day 0~5 shown as 24~29",
   "user_editProfile": "Edit Profile",
-  "user_privateAgreement": "Privacy Agreement",
+  "user_creditCard": "Manage Cards",
+  "user_userTerms": "User Terms",
+  "user_privateAgreement": "Privacy Policy",
+  "user_thirdPartySdk": "Third-party SDK List",
+  "agreement_consent_title": "Agreement Update",
+  "agreement_consent_subtitle": "We have updated the following agreements. Please review and accept to continue using the app.",
+  "agreement_consent_readAndAgree": "I have read and agree to all of the above agreements.",
+  "agreement_consent_agree": "Agree & Continue",
+  "agreement_consent_disagree": "Not Now",
+  "agreement_consent_disagreeWarning": "Without accepting the latest agreements, some features may not be available.",
+  "agreement_consent_currentVersion": "Current version",
+  "agreement_consent_viewDetail": "View",
   "user_checkUpdate": "Check Update",
   "user_about": "About",
   "user_logout": "Logout",
+  "user_logoutConfirmMessage": "Are you sure you want to log out?",
   "user_currentVersion": "Current Version",
   "user_latestVersion": "Latest Version",
   "user_updateAvailable": "New version found. Update now?",
@@ -548,6 +572,21 @@
   "payment_selectCreditCard_paymentFailed": "Payment failed, please try again",
   "payment_selectCreditCard_loadFailed": "Failed to load credit card list",
   "payment_selectCreditCard_tempCardSelected": "Temporary credit card selected",
+  "creditCard_action_setDefault": "Set as Default",
+  "creditCard_action_edit": "Edit",
+  "creditCard_action_delete": "Delete",
+  "creditCard_badge_default": "Default",
+  "creditCard_deleteConfirm_title": "Delete Card",
+  "creditCard_deleteConfirm_content": "This card will be removed permanently. Continue?",
+  "creditCard_edit_title": "Edit Card",
+  "creditCard_edit_holderName": "Cardholder Name",
+  "creditCard_edit_expiryDate": "Expiry (MM/YY)",
+  "creditCard_edit_save": "Save",
+  "creditCard_edit_cancel": "Cancel",
+  "creditCard_operationFailed": "Operation failed, please try again later",
+  "creditCard_deleteHint_selectFirst": "Please select a card to delete first",
+  "creditCard_setDefaultSubtitle": "Use this card first when paying",
+  "creditCard_currentDefaultHint": "This is your default card",
   "payError_title": "Payment Failed",
   "payError_message": "Something went wrong with your order. Please try again later.",
   "payError_back": "Back",
@@ -643,6 +682,78 @@
   "benefit_feedback_button": "Feedback",
   "benefit_feedback_select_phase": "Select phase",
   "benefit_feedback_please_select_phase": "Please select a phase first",
+  "benefit_availability_pageTitle": "Theaters with stock",
+  "benefit_availability_filter_region": "Region",
+  "benefit_availability_filter_sort": "Sort",
+  "benefit_availability_filter_search_hint": "Search theater name",
+  "benefit_availability_filter_search_clear": "Clear search",
+  "benefit_availability_sort_remainingDesc": "Most remaining first",
+  "benefit_availability_sort_distance": "Nearest first",
+  "benefit_availability_sort_default": "Default",
+  "benefit_availability_sort_locationDenied": "Location permission required for distance sort",
+  "benefit_availability_distance_km": "{km} km",
+  "@benefit_availability_distance_km": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "benefit_availability_feedback_n": "{n} users reported sold out",
+  "@benefit_availability_feedback_n": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benefit_availability_status_sufficient": "Plenty",
+  "benefit_availability_status_few": "Limited",
+  "benefit_availability_status_veryFew": "Very few",
+  "benefit_availability_status_soldOutAdmin": "Sold out",
+  "benefit_availability_status_unknown": "Unknown",
+  "benefit_availability_status_soldOutFeedback": "Sold out (user reports)",
+  "benefit_availability_phase_ended_banner": "This benefit phase has ended (for reference only)",
+  "benefit_availability_empty": "No theaters with this benefit",
+  "benefit_availability_count_label": "{n} theaters with stock",
+  "@benefit_availability_count_label": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benefit_availability_action_buy": "Buy tickets",
+  "benefit_availability_action_feedback": "Report sold out",
+  "benefit_availability_action_feedback_done": "Reported",
+  "benefit_availability_feedback_submit_failed": "Could not submit. Please try again.",
+  "benefit_availability_view_cinemas": "View theaters",
+  "benefit_availability_showtime_none": "No upcoming screenings",
+  "benefit_availability_showtime_n": "{n} upcoming screening(s)",
+  "@benefit_availability_showtime_n": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benefit_availability_nearest_showtime": "Next: {time}",
+  "@benefit_availability_nearest_showtime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "benefit_availability_remaining_not_reported": "Not reported",
+  "benefit_availability_remaining_quota_label": "Quota {n}",
+  "@benefit_availability_remaining_quota_label": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "comingSoon_presale": "Presale",
   "comingSoon_presaleTicketBadge": "Presale Ticket",
   "comingSoon_releaseDate": "Release",

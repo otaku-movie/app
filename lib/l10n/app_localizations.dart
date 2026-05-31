@@ -1258,6 +1258,36 @@ abstract class AppLocalizations {
   /// **'Sign in with Google'**
   String get login_googleLogin;
 
+  /// No description provided for @login_appleLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with Apple'**
+  String get login_appleLogin;
+
+  /// No description provided for @login_xLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in with X'**
+  String get login_xLogin;
+
+  /// No description provided for @login_googleLoginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign-in failed, please try again'**
+  String get login_googleLoginFailed;
+
+  /// No description provided for @login_appleLoginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple sign-in failed, please try again'**
+  String get login_appleLoginFailed;
+
+  /// No description provided for @login_xLoginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'X sign-in failed, please try again'**
+  String get login_xLoginFailed;
+
   /// No description provided for @login_forgotPassword.
   ///
   /// In en, this message translates to:
@@ -2218,11 +2248,53 @@ abstract class AppLocalizations {
   /// **'Registration Time'**
   String get user_registerTime;
 
+  /// No description provided for @user_loginSourceSingle.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in via'**
+  String get user_loginSourceSingle;
+
+  /// No description provided for @user_loginSourceMultiple.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked'**
+  String get user_loginSourceMultiple;
+
   /// No description provided for @user_language.
   ///
   /// In en, this message translates to:
   /// **'Language'**
   String get user_language;
+
+  /// No description provided for @user_timeFormat.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Format'**
+  String get user_timeFormat;
+
+  /// No description provided for @user_timeFormat_24h.
+  ///
+  /// In en, this message translates to:
+  /// **'24-hour'**
+  String get user_timeFormat_24h;
+
+  /// No description provided for @user_timeFormat_30h.
+  ///
+  /// In en, this message translates to:
+  /// **'30-hour'**
+  String get user_timeFormat_30h;
+
+  /// No description provided for @user_timeFormat_subtitle_24h.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard 24-hour (00:00 ~ 23:59)'**
+  String get user_timeFormat_subtitle_24h;
+
+  /// No description provided for @user_timeFormat_subtitle_30h.
+  ///
+  /// In en, this message translates to:
+  /// **'30-hour: next day 0~5 shown as 24~29'**
+  String get user_timeFormat_subtitle_30h;
 
   /// No description provided for @user_editProfile.
   ///
@@ -2230,11 +2302,77 @@ abstract class AppLocalizations {
   /// **'Edit Profile'**
   String get user_editProfile;
 
+  /// No description provided for @user_creditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Cards'**
+  String get user_creditCard;
+
+  /// No description provided for @user_userTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'User Terms'**
+  String get user_userTerms;
+
   /// No description provided for @user_privateAgreement.
   ///
   /// In en, this message translates to:
-  /// **'Privacy Agreement'**
+  /// **'Privacy Policy'**
   String get user_privateAgreement;
+
+  /// No description provided for @user_thirdPartySdk.
+  ///
+  /// In en, this message translates to:
+  /// **'Third-party SDK List'**
+  String get user_thirdPartySdk;
+
+  /// No description provided for @agreement_consent_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Agreement Update'**
+  String get agreement_consent_title;
+
+  /// No description provided for @agreement_consent_subtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We have updated the following agreements. Please review and accept to continue using the app.'**
+  String get agreement_consent_subtitle;
+
+  /// No description provided for @agreement_consent_readAndAgree.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read and agree to all of the above agreements.'**
+  String get agreement_consent_readAndAgree;
+
+  /// No description provided for @agreement_consent_agree.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree & Continue'**
+  String get agreement_consent_agree;
+
+  /// No description provided for @agreement_consent_disagree.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Now'**
+  String get agreement_consent_disagree;
+
+  /// No description provided for @agreement_consent_disagreeWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Without accepting the latest agreements, some features may not be available.'**
+  String get agreement_consent_disagreeWarning;
+
+  /// No description provided for @agreement_consent_currentVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Current version'**
+  String get agreement_consent_currentVersion;
+
+  /// No description provided for @agreement_consent_viewDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get agreement_consent_viewDetail;
 
   /// No description provided for @user_checkUpdate.
   ///
@@ -2253,6 +2391,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Logout'**
   String get user_logout;
+
+  /// No description provided for @user_logoutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out?'**
+  String get user_logoutConfirmMessage;
 
   /// No description provided for @user_currentVersion.
   ///
@@ -2866,6 +3010,96 @@ abstract class AppLocalizations {
   /// **'Temporary credit card selected'**
   String get payment_selectCreditCard_tempCardSelected;
 
+  /// No description provided for @creditCard_action_setDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as Default'**
+  String get creditCard_action_setDefault;
+
+  /// No description provided for @creditCard_action_edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get creditCard_action_edit;
+
+  /// No description provided for @creditCard_action_delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get creditCard_action_delete;
+
+  /// No description provided for @creditCard_badge_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get creditCard_badge_default;
+
+  /// No description provided for @creditCard_deleteConfirm_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Card'**
+  String get creditCard_deleteConfirm_title;
+
+  /// No description provided for @creditCard_deleteConfirm_content.
+  ///
+  /// In en, this message translates to:
+  /// **'This card will be removed permanently. Continue?'**
+  String get creditCard_deleteConfirm_content;
+
+  /// No description provided for @creditCard_edit_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Card'**
+  String get creditCard_edit_title;
+
+  /// No description provided for @creditCard_edit_holderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Cardholder Name'**
+  String get creditCard_edit_holderName;
+
+  /// No description provided for @creditCard_edit_expiryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry (MM/YY)'**
+  String get creditCard_edit_expiryDate;
+
+  /// No description provided for @creditCard_edit_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get creditCard_edit_save;
+
+  /// No description provided for @creditCard_edit_cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get creditCard_edit_cancel;
+
+  /// No description provided for @creditCard_operationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Operation failed, please try again later'**
+  String get creditCard_operationFailed;
+
+  /// No description provided for @creditCard_deleteHint_selectFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a card to delete first'**
+  String get creditCard_deleteHint_selectFirst;
+
+  /// No description provided for @creditCard_setDefaultSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this card first when paying'**
+  String get creditCard_setDefaultSubtitle;
+
+  /// No description provided for @creditCard_currentDefaultHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This is your default card'**
+  String get creditCard_currentDefaultHint;
+
   /// No description provided for @payError_title.
   ///
   /// In en, this message translates to:
@@ -3393,6 +3627,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please select a phase first'**
   String get benefit_feedback_please_select_phase;
+
+  /// No description provided for @benefit_availability_pageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Theaters with stock'**
+  String get benefit_availability_pageTitle;
+
+  /// No description provided for @benefit_availability_filter_region.
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get benefit_availability_filter_region;
+
+  /// No description provided for @benefit_availability_filter_sort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort'**
+  String get benefit_availability_filter_sort;
+
+  /// No description provided for @benefit_availability_filter_search_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search theater name'**
+  String get benefit_availability_filter_search_hint;
+
+  /// No description provided for @benefit_availability_filter_search_clear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get benefit_availability_filter_search_clear;
+
+  /// No description provided for @benefit_availability_sort_remainingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Most remaining first'**
+  String get benefit_availability_sort_remainingDesc;
+
+  /// No description provided for @benefit_availability_sort_distance.
+  ///
+  /// In en, this message translates to:
+  /// **'Nearest first'**
+  String get benefit_availability_sort_distance;
+
+  /// No description provided for @benefit_availability_sort_default.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get benefit_availability_sort_default;
+
+  /// No description provided for @benefit_availability_sort_locationDenied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission required for distance sort'**
+  String get benefit_availability_sort_locationDenied;
+
+  /// No description provided for @benefit_availability_distance_km.
+  ///
+  /// In en, this message translates to:
+  /// **'{km} km'**
+  String benefit_availability_distance_km(String km);
+
+  /// No description provided for @benefit_availability_feedback_n.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} users reported sold out'**
+  String benefit_availability_feedback_n(int n);
+
+  /// No description provided for @benefit_availability_status_sufficient.
+  ///
+  /// In en, this message translates to:
+  /// **'Plenty'**
+  String get benefit_availability_status_sufficient;
+
+  /// No description provided for @benefit_availability_status_few.
+  ///
+  /// In en, this message translates to:
+  /// **'Limited'**
+  String get benefit_availability_status_few;
+
+  /// No description provided for @benefit_availability_status_veryFew.
+  ///
+  /// In en, this message translates to:
+  /// **'Very few'**
+  String get benefit_availability_status_veryFew;
+
+  /// No description provided for @benefit_availability_status_soldOutAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold out'**
+  String get benefit_availability_status_soldOutAdmin;
+
+  /// No description provided for @benefit_availability_status_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get benefit_availability_status_unknown;
+
+  /// No description provided for @benefit_availability_status_soldOutFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold out (user reports)'**
+  String get benefit_availability_status_soldOutFeedback;
+
+  /// No description provided for @benefit_availability_phase_ended_banner.
+  ///
+  /// In en, this message translates to:
+  /// **'This benefit phase has ended (for reference only)'**
+  String get benefit_availability_phase_ended_banner;
+
+  /// No description provided for @benefit_availability_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No theaters with this benefit'**
+  String get benefit_availability_empty;
+
+  /// No description provided for @benefit_availability_count_label.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} theaters with stock'**
+  String benefit_availability_count_label(int n);
+
+  /// No description provided for @benefit_availability_action_buy.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy tickets'**
+  String get benefit_availability_action_buy;
+
+  /// No description provided for @benefit_availability_action_feedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Report sold out'**
+  String get benefit_availability_action_feedback;
+
+  /// No description provided for @benefit_availability_action_feedback_done.
+  ///
+  /// In en, this message translates to:
+  /// **'Reported'**
+  String get benefit_availability_action_feedback_done;
+
+  /// No description provided for @benefit_availability_feedback_submit_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not submit. Please try again.'**
+  String get benefit_availability_feedback_submit_failed;
+
+  /// No description provided for @benefit_availability_view_cinemas.
+  ///
+  /// In en, this message translates to:
+  /// **'View theaters'**
+  String get benefit_availability_view_cinemas;
+
+  /// No description provided for @benefit_availability_showtime_none.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming screenings'**
+  String get benefit_availability_showtime_none;
+
+  /// No description provided for @benefit_availability_showtime_n.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} upcoming screening(s)'**
+  String benefit_availability_showtime_n(int n);
+
+  /// No description provided for @benefit_availability_nearest_showtime.
+  ///
+  /// In en, this message translates to:
+  /// **'Next: {time}'**
+  String benefit_availability_nearest_showtime(String time);
+
+  /// No description provided for @benefit_availability_remaining_not_reported.
+  ///
+  /// In en, this message translates to:
+  /// **'Not reported'**
+  String get benefit_availability_remaining_not_reported;
+
+  /// No description provided for @benefit_availability_remaining_quota_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Quota {n}'**
+  String benefit_availability_remaining_quota_label(int n);
 
   /// No description provided for @comingSoon_presale.
   ///

@@ -615,6 +615,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get login_googleLogin => 'Googleでログイン';
 
   @override
+  String get login_appleLogin => 'Appleでログイン';
+
+  @override
+  String get login_xLogin => 'Xでログイン';
+
+  @override
+  String get login_googleLoginFailed => 'Googleログインに失敗しました。もう一度お試しください';
+
+  @override
+  String get login_appleLoginFailed => 'Appleログインに失敗しました。もう一度お試しください';
+
+  @override
+  String get login_xLoginFailed => 'Xログインに失敗しました。もう一度お試しください';
+
+  @override
   String get login_forgotPassword => 'パスワードを忘れましたか？';
 
   @override
@@ -1120,13 +1135,69 @@ class AppLocalizationsJa extends AppLocalizations {
   String get user_registerTime => '登録日時';
 
   @override
+  String get user_loginSourceSingle => 'ログイン元';
+
+  @override
+  String get user_loginSourceMultiple => '連携済み';
+
+  @override
   String get user_language => '言語';
+
+  @override
+  String get user_timeFormat => '時刻表示';
+
+  @override
+  String get user_timeFormat_24h => '24時間';
+
+  @override
+  String get user_timeFormat_30h => '30時間';
+
+  @override
+  String get user_timeFormat_subtitle_24h => '標準の24時間制（00:00 ~ 23:59）';
+
+  @override
+  String get user_timeFormat_subtitle_30h => '30時間制：翌日0~5時を24~29時で表示';
 
   @override
   String get user_editProfile => 'プロフィール編集';
 
   @override
+  String get user_creditCard => 'クレジットカード管理';
+
+  @override
+  String get user_userTerms => '利用規約';
+
+  @override
   String get user_privateAgreement => 'プライバシーポリシー';
+
+  @override
+  String get user_thirdPartySdk => 'サードパーティ SDK 一覧';
+
+  @override
+  String get agreement_consent_title => '規約更新のお知らせ';
+
+  @override
+  String get agreement_consent_subtitle =>
+      '以下の規約を更新いたしました。内容をご確認の上、同意いただくとアプリをご利用いただけます。';
+
+  @override
+  String get agreement_consent_readAndAgree => '上記すべての規約を読み、同意します。';
+
+  @override
+  String get agreement_consent_agree => '同意して続ける';
+
+  @override
+  String get agreement_consent_disagree => '同意しない';
+
+  @override
+  String get agreement_consent_disagreeWarning =>
+      '規約に同意いただけない場合、一部機能をご利用いただけません。';
+
+  @override
+  String get agreement_consent_currentVersion => '現在のバージョン';
+
+  @override
+  String get agreement_consent_viewDetail => '確認';
 
   @override
   String get user_checkUpdate => 'アップデート確認';
@@ -1136,6 +1207,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get user_logout => 'ログアウト';
+
+  @override
+  String get user_logoutConfirmMessage => '本当にログアウトしますか？';
 
   @override
   String get user_currentVersion => '現在のバージョン';
@@ -1457,6 +1531,51 @@ class AppLocalizationsJa extends AppLocalizations {
   String get payment_selectCreditCard_tempCardSelected => '一時クレジットカードが選択されました';
 
   @override
+  String get creditCard_action_setDefault => 'デフォルトに設定';
+
+  @override
+  String get creditCard_action_edit => '編集';
+
+  @override
+  String get creditCard_action_delete => '削除';
+
+  @override
+  String get creditCard_badge_default => 'デフォルト';
+
+  @override
+  String get creditCard_deleteConfirm_title => 'クレジットカードを削除';
+
+  @override
+  String get creditCard_deleteConfirm_content => '削除すると元に戻せません。よろしいですか？';
+
+  @override
+  String get creditCard_edit_title => 'クレジットカードを編集';
+
+  @override
+  String get creditCard_edit_holderName => 'カード名義';
+
+  @override
+  String get creditCard_edit_expiryDate => '有効期限 (MM/YY)';
+
+  @override
+  String get creditCard_edit_save => '保存';
+
+  @override
+  String get creditCard_edit_cancel => 'キャンセル';
+
+  @override
+  String get creditCard_operationFailed => '操作に失敗しました。しばらくしてから再度お試しください';
+
+  @override
+  String get creditCard_deleteHint_selectFirst => '削除するクレジットカードを選択してください';
+
+  @override
+  String get creditCard_setDefaultSubtitle => 'お支払い時に優先的に使用します';
+
+  @override
+  String get creditCard_currentDefaultHint => '現在のデフォルトカードです';
+
+  @override
   String get payError_title => '支払い失敗';
 
   @override
@@ -1730,6 +1849,109 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get benefit_feedback_please_select_phase => '先にフェーズを選択してください';
+
+  @override
+  String get benefit_availability_pageTitle => '配布可能な映画館';
+
+  @override
+  String get benefit_availability_filter_region => '地域';
+
+  @override
+  String get benefit_availability_filter_sort => '並び替え';
+
+  @override
+  String get benefit_availability_filter_search_hint => '映画館名で検索';
+
+  @override
+  String get benefit_availability_filter_search_clear => '検索をクリア';
+
+  @override
+  String get benefit_availability_sort_remainingDesc => '残りが多い順';
+
+  @override
+  String get benefit_availability_sort_distance => '近い順';
+
+  @override
+  String get benefit_availability_sort_default => 'デフォルト';
+
+  @override
+  String get benefit_availability_sort_locationDenied => '距離順には位置情報の許可が必要です';
+
+  @override
+  String benefit_availability_distance_km(String km) {
+    return '$km km';
+  }
+
+  @override
+  String benefit_availability_feedback_n(int n) {
+    return '売り切れ報告 $n 件';
+  }
+
+  @override
+  String get benefit_availability_status_sufficient => '十分';
+
+  @override
+  String get benefit_availability_status_few => 'やや少ない';
+
+  @override
+  String get benefit_availability_status_veryFew => '極少';
+
+  @override
+  String get benefit_availability_status_soldOutAdmin => '配布終了';
+
+  @override
+  String get benefit_availability_status_unknown => '不明';
+
+  @override
+  String get benefit_availability_status_soldOutFeedback => '配布終了（ユーザー報告）';
+
+  @override
+  String get benefit_availability_phase_ended_banner => 'この特典フェーズは終了しています（参考）';
+
+  @override
+  String get benefit_availability_empty => 'この特典を扱う映画館がありません';
+
+  @override
+  String benefit_availability_count_label(int n) {
+    return '配布可能 $n 館';
+  }
+
+  @override
+  String get benefit_availability_action_buy => 'チケットを買う';
+
+  @override
+  String get benefit_availability_action_feedback => '売り切れを報告';
+
+  @override
+  String get benefit_availability_action_feedback_done => '報告済み';
+
+  @override
+  String get benefit_availability_feedback_submit_failed =>
+      '送信に失敗しました。もう一度お試しください';
+
+  @override
+  String get benefit_availability_view_cinemas => '映画館一覧';
+
+  @override
+  String get benefit_availability_showtime_none => '今後の上映はありません';
+
+  @override
+  String benefit_availability_showtime_n(int n) {
+    return '今後の上映 $n 回';
+  }
+
+  @override
+  String benefit_availability_nearest_showtime(String time) {
+    return '直近の上映：$time';
+  }
+
+  @override
+  String get benefit_availability_remaining_not_reported => '未登録';
+
+  @override
+  String benefit_availability_remaining_quota_label(int n) {
+    return '配布数 $n';
+  }
 
   @override
   String get comingSoon_presale => '前売り';

@@ -1980,6 +1980,56 @@ class S {
     );
   }
 
+  /// `Sign in with Apple`
+  String get login_appleLogin {
+    return Intl.message(
+      'Sign in with Apple',
+      name: 'login_appleLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in with X`
+  String get login_xLogin {
+    return Intl.message(
+      'Sign in with X',
+      name: 'login_xLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Google sign-in failed, please try again`
+  String get login_googleLoginFailed {
+    return Intl.message(
+      'Google sign-in failed, please try again',
+      name: 'login_googleLoginFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apple sign-in failed, please try again`
+  String get login_appleLoginFailed {
+    return Intl.message(
+      'Apple sign-in failed, please try again',
+      name: 'login_appleLoginFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `X sign-in failed, please try again`
+  String get login_xLoginFailed {
+    return Intl.message(
+      'X sign-in failed, please try again',
+      name: 'login_xLoginFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Forgot password?`
   String get login_forgotPassword {
     return Intl.message(
@@ -3580,11 +3630,81 @@ class S {
     );
   }
 
+  /// `Signed in via`
+  String get user_loginSourceSingle {
+    return Intl.message(
+      'Signed in via',
+      name: 'user_loginSourceSingle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Linked`
+  String get user_loginSourceMultiple {
+    return Intl.message(
+      'Linked',
+      name: 'user_loginSourceMultiple',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Language`
   String get user_language {
     return Intl.message(
       'Language',
       name: 'user_language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Time Format`
+  String get user_timeFormat {
+    return Intl.message(
+      'Time Format',
+      name: 'user_timeFormat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `24-hour`
+  String get user_timeFormat_24h {
+    return Intl.message(
+      '24-hour',
+      name: 'user_timeFormat_24h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `30-hour`
+  String get user_timeFormat_30h {
+    return Intl.message(
+      '30-hour',
+      name: 'user_timeFormat_30h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Standard 24-hour (00:00 ~ 23:59)`
+  String get user_timeFormat_subtitle_24h {
+    return Intl.message(
+      'Standard 24-hour (00:00 ~ 23:59)',
+      name: 'user_timeFormat_subtitle_24h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `30-hour: next day 0~5 shown as 24~29`
+  String get user_timeFormat_subtitle_30h {
+    return Intl.message(
+      '30-hour: next day 0~5 shown as 24~29',
+      name: 'user_timeFormat_subtitle_30h',
       desc: '',
       args: [],
     );
@@ -3600,11 +3720,271 @@ class S {
     );
   }
 
-  /// `Privacy Agreement`
+  /// `Manage Cards`
+  String get user_creditCard {
+    return Intl.message(
+      'Manage Cards',
+      name: 'user_creditCard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set as Default`
+  String get creditCard_action_setDefault {
+    return Intl.message(
+      'Set as Default',
+      name: 'creditCard_action_setDefault',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get creditCard_action_edit {
+    return Intl.message(
+      'Edit',
+      name: 'creditCard_action_edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get creditCard_action_delete {
+    return Intl.message(
+      'Delete',
+      name: 'creditCard_action_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default`
+  String get creditCard_badge_default {
+    return Intl.message(
+      'Default',
+      name: 'creditCard_badge_default',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Card`
+  String get creditCard_deleteConfirm_title {
+    return Intl.message(
+      'Delete Card',
+      name: 'creditCard_deleteConfirm_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This card will be removed permanently. Continue?`
+  String get creditCard_deleteConfirm_content {
+    return Intl.message(
+      'This card will be removed permanently. Continue?',
+      name: 'creditCard_deleteConfirm_content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a card to delete first`
+  String get creditCard_deleteHint_selectFirst {
+    return Intl.message(
+      'Please select a card to delete first',
+      name: 'creditCard_deleteHint_selectFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use this card first when paying`
+  String get creditCard_setDefaultSubtitle {
+    return Intl.message(
+      'Use this card first when paying',
+      name: 'creditCard_setDefaultSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is your default card`
+  String get creditCard_currentDefaultHint {
+    return Intl.message(
+      'This is your default card',
+      name: 'creditCard_currentDefaultHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Card`
+  String get creditCard_edit_title {
+    return Intl.message(
+      'Edit Card',
+      name: 'creditCard_edit_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cardholder Name`
+  String get creditCard_edit_holderName {
+    return Intl.message(
+      'Cardholder Name',
+      name: 'creditCard_edit_holderName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry (MM/YY)`
+  String get creditCard_edit_expiryDate {
+    return Intl.message(
+      'Expiry (MM/YY)',
+      name: 'creditCard_edit_expiryDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get creditCard_edit_save {
+    return Intl.message(
+      'Save',
+      name: 'creditCard_edit_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get creditCard_edit_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'creditCard_edit_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operation failed, please try again later`
+  String get creditCard_operationFailed {
+    return Intl.message(
+      'Operation failed, please try again later',
+      name: 'creditCard_operationFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User Terms`
+  String get user_userTerms {
+    return Intl.message(
+      'User Terms',
+      name: 'user_userTerms',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Privacy Policy`
   String get user_privateAgreement {
     return Intl.message(
-      'Privacy Agreement',
+      'Privacy Policy',
       name: 'user_privateAgreement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Third-party SDK List`
+  String get user_thirdPartySdk {
+    return Intl.message(
+      'Third-party SDK List',
+      name: 'user_thirdPartySdk',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Agreement Update`
+  String get agreement_consent_title {
+    return Intl.message(
+      'Agreement Update',
+      name: 'agreement_consent_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We have updated the following agreements. Please review and accept to continue using the app.`
+  String get agreement_consent_subtitle {
+    return Intl.message(
+      'We have updated the following agreements. Please review and accept to continue using the app.',
+      name: 'agreement_consent_subtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I have read and agree to all of the above agreements.`
+  String get agreement_consent_readAndAgree {
+    return Intl.message(
+      'I have read and agree to all of the above agreements.',
+      name: 'agreement_consent_readAndAgree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Agree & Continue`
+  String get agreement_consent_agree {
+    return Intl.message(
+      'Agree & Continue',
+      name: 'agreement_consent_agree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Now`
+  String get agreement_consent_disagree {
+    return Intl.message(
+      'Not Now',
+      name: 'agreement_consent_disagree',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Without accepting the latest agreements, some features may not be available.`
+  String get agreement_consent_disagreeWarning {
+    return Intl.message(
+      'Without accepting the latest agreements, some features may not be available.',
+      name: 'agreement_consent_disagreeWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current version`
+  String get agreement_consent_currentVersion {
+    return Intl.message(
+      'Current version',
+      name: 'agreement_consent_currentVersion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View`
+  String get agreement_consent_viewDetail {
+    return Intl.message(
+      'View',
+      name: 'agreement_consent_viewDetail',
       desc: '',
       args: [],
     );
@@ -3635,6 +4015,16 @@ class S {
     return Intl.message(
       'Logout',
       name: 'user_logout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to log out?`
+  String get user_logoutConfirmMessage {
+    return Intl.message(
+      'Are you sure you want to log out?',
+      name: 'user_logoutConfirmMessage',
       desc: '',
       args: [],
     );
@@ -5537,6 +5927,306 @@ class S {
       name: 'benefit_feedback_please_select_phase',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `Theaters with stock`
+  String get benefit_availability_pageTitle {
+    return Intl.message(
+      'Theaters with stock',
+      name: 'benefit_availability_pageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Region`
+  String get benefit_availability_filter_region {
+    return Intl.message(
+      'Region',
+      name: 'benefit_availability_filter_region',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sort`
+  String get benefit_availability_filter_sort {
+    return Intl.message(
+      'Sort',
+      name: 'benefit_availability_filter_sort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search theater name`
+  String get benefit_availability_filter_search_hint {
+    return Intl.message(
+      'Search theater name',
+      name: 'benefit_availability_filter_search_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear search`
+  String get benefit_availability_filter_search_clear {
+    return Intl.message(
+      'Clear search',
+      name: 'benefit_availability_filter_search_clear',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Most remaining first`
+  String get benefit_availability_sort_remainingDesc {
+    return Intl.message(
+      'Most remaining first',
+      name: 'benefit_availability_sort_remainingDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nearest first`
+  String get benefit_availability_sort_distance {
+    return Intl.message(
+      'Nearest first',
+      name: 'benefit_availability_sort_distance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default`
+  String get benefit_availability_sort_default {
+    return Intl.message(
+      'Default',
+      name: 'benefit_availability_sort_default',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Location permission required for distance sort`
+  String get benefit_availability_sort_locationDenied {
+    return Intl.message(
+      'Location permission required for distance sort',
+      name: 'benefit_availability_sort_locationDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{km} km`
+  String benefit_availability_distance_km(String km) {
+    return Intl.message(
+      '$km km',
+      name: 'benefit_availability_distance_km',
+      desc: '',
+      args: [km],
+    );
+  }
+
+  /// `{n} users reported sold out`
+  String benefit_availability_feedback_n(int n) {
+    return Intl.message(
+      '$n users reported sold out',
+      name: 'benefit_availability_feedback_n',
+      desc: '',
+      args: [n],
+    );
+  }
+
+  /// `Plenty`
+  String get benefit_availability_status_sufficient {
+    return Intl.message(
+      'Plenty',
+      name: 'benefit_availability_status_sufficient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limited`
+  String get benefit_availability_status_few {
+    return Intl.message(
+      'Limited',
+      name: 'benefit_availability_status_few',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Very few`
+  String get benefit_availability_status_veryFew {
+    return Intl.message(
+      'Very few',
+      name: 'benefit_availability_status_veryFew',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sold out`
+  String get benefit_availability_status_soldOutAdmin {
+    return Intl.message(
+      'Sold out',
+      name: 'benefit_availability_status_soldOutAdmin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown`
+  String get benefit_availability_status_unknown {
+    return Intl.message(
+      'Unknown',
+      name: 'benefit_availability_status_unknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sold out (user reports)`
+  String get benefit_availability_status_soldOutFeedback {
+    return Intl.message(
+      'Sold out (user reports)',
+      name: 'benefit_availability_status_soldOutFeedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This benefit phase has ended (for reference only)`
+  String get benefit_availability_phase_ended_banner {
+    return Intl.message(
+      'This benefit phase has ended (for reference only)',
+      name: 'benefit_availability_phase_ended_banner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No theaters with this benefit`
+  String get benefit_availability_empty {
+    return Intl.message(
+      'No theaters with this benefit',
+      name: 'benefit_availability_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{n} theaters with stock`
+  String benefit_availability_count_label(int n) {
+    return Intl.message(
+      '$n theaters with stock',
+      name: 'benefit_availability_count_label',
+      desc: '',
+      args: [n],
+    );
+  }
+
+  /// `Buy tickets`
+  String get benefit_availability_action_buy {
+    return Intl.message(
+      'Buy tickets',
+      name: 'benefit_availability_action_buy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report sold out`
+  String get benefit_availability_action_feedback {
+    return Intl.message(
+      'Report sold out',
+      name: 'benefit_availability_action_feedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reported`
+  String get benefit_availability_action_feedback_done {
+    return Intl.message(
+      'Reported',
+      name: 'benefit_availability_action_feedback_done',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not submit. Please try again.`
+  String get benefit_availability_feedback_submit_failed {
+    return Intl.message(
+      'Could not submit. Please try again.',
+      name: 'benefit_availability_feedback_submit_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View theaters`
+  String get benefit_availability_view_cinemas {
+    return Intl.message(
+      'View theaters',
+      name: 'benefit_availability_view_cinemas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No upcoming screenings`
+  String get benefit_availability_showtime_none {
+    return Intl.message(
+      'No upcoming screenings',
+      name: 'benefit_availability_showtime_none',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{n} upcoming screening(s)`
+  String benefit_availability_showtime_n(int n) {
+    return Intl.message(
+      '$n upcoming screening(s)',
+      name: 'benefit_availability_showtime_n',
+      desc: '',
+      args: [n],
+    );
+  }
+
+  /// `Next: {time}`
+  String benefit_availability_nearest_showtime(String time) {
+    return Intl.message(
+      'Next: $time',
+      name: 'benefit_availability_nearest_showtime',
+      desc: '',
+      args: [time],
+    );
+  }
+
+  /// `Not reported`
+  String get benefit_availability_remaining_not_reported {
+    return Intl.message(
+      'Not reported',
+      name: 'benefit_availability_remaining_not_reported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Quota {n}`
+  String benefit_availability_remaining_quota_label(int n) {
+    return Intl.message(
+      'Quota $n',
+      name: 'benefit_availability_remaining_quota_label',
+      desc: '',
+      args: [n],
     );
   }
 

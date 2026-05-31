@@ -16,6 +16,10 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['createTime'] as String),
       token: json['token'] as String?,
+      accessToken: json['accessToken'] as String?,
+      refreshToken: json['refreshToken'] as String?,
+      accessExpiresIn: (json['accessExpiresIn'] as num?)?.toInt(),
+      refreshExpiresIn: (json['refreshExpiresIn'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
@@ -26,4 +30,8 @@ Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
       'email': instance.email,
       'createTime': instance.createTime?.toIso8601String(),
       'token': instance.token,
+      'accessToken': instance.accessToken,
+      'refreshToken': instance.refreshToken,
+      'accessExpiresIn': instance.accessExpiresIn,
+      'refreshExpiresIn': instance.refreshExpiresIn,
     };

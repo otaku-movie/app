@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/about.dart';
+import 'package:otaku_movie/pages/agreement/agreement_page.dart';
 import 'package:otaku_movie/pages/cinema/cinemaDetail.dart';
 import 'package:otaku_movie/pages/movie/commentDetail.dart';
 import 'package:otaku_movie/pages/movie/writeComment.dart';
@@ -16,6 +17,7 @@ import 'package:otaku_movie/pages/movie/confirmOrder.dart';
 import 'package:otaku_movie/pages/movie/movieDetail.dart';
 import 'package:otaku_movie/pages/movie/presaleDetail.dart';
 import 'package:otaku_movie/pages/movie/MovieBenefits.dart';
+import 'package:otaku_movie/pages/movie/BenefitCinemaAvailability.dart';
 import 'package:otaku_movie/pages/movie/payError.dart';
 import 'package:otaku_movie/pages/movie/paySuccess.dart';
 import 'package:otaku_movie/pages/order/orderDetail.dart';
@@ -28,6 +30,7 @@ import 'package:otaku_movie/pages/user/register.dart';
 import 'package:otaku_movie/pages/splash_screen.dart';
 import 'package:otaku_movie/pages/payment/AddCreditCard.dart';
 import 'package:otaku_movie/pages/payment/SelectCreditCard.dart';
+import 'package:otaku_movie/response/payment/credit_card_response.dart';
 
 
 final GoRouter routerConfig = GoRouter(
@@ -45,6 +48,13 @@ final GoRouter routerConfig = GoRouter(
           name: 'about',
           builder: (BuildContext context, GoRouterState state) {
             return AboutPage();
+          },
+        ),
+        GoRoute(
+          path: '/agreement/:code',
+          name: 'agreement',
+          builder: (BuildContext context, GoRouterState state) {
+            return AgreementPage(code: state.pathParameters['code'] ?? 'USER_TERMS');
           },
         ),
         GoRoute(
@@ -148,7 +158,24 @@ final GoRouter routerConfig = GoRouter(
             return MovieBenefits(
               id: state.pathParameters['id'],
               movieName: state.uri.queryParameters['movieName'],
+              movieCoverUrl: state.uri.queryParameters['movieCoverUrl'],
               reReleaseId: state.uri.queryParameters['reReleaseId'],
+            );
+          },
+        ),
+        GoRoute(
+          path: '/movie/benefits/:movieId/cinemas/:benefitId',
+          name: 'benefitCinemaAvailability',
+          builder: (BuildContext context, GoRouterState state) {
+            return BenefitCinemaAvailability(
+              movieId: state.pathParameters['movieId'] ?? '',
+              benefitId: state.pathParameters['benefitId'] ?? '',
+              benefitName: state.uri.queryParameters['benefitName'],
+              movieName: state.uri.queryParameters['movieName'],
+              benefitCoverUrl: state.uri.queryParameters['benefitCoverUrl'],
+              movieCoverUrl: state.uri.queryParameters['movieCoverUrl'],
+              reReleaseId: state.uri.queryParameters['reReleaseId'],
+              phaseStatus: state.uri.queryParameters['phaseStatus'],
             );
           },
         ),
@@ -179,7 +206,8 @@ final GoRouter routerConfig = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             return ShowTimeDetail(
               movieId: state.uri.queryParameters['movieId'],
-              cinemaId: state.uri.queryParameters['cinemaId']
+              cinemaId: state.uri.queryParameters['cinemaId'],
+              reReleaseId: state.uri.queryParameters['reReleaseId'],
             );
           },
         ),
@@ -225,8 +253,10 @@ final GoRouter routerConfig = GoRouter(
           path: '/payment/addCreditCard',
           name: 'addCreditCard',
           builder: (BuildContext context, GoRouterState state) {
+            final extra = state.extra;
             return AddCreditCard(
               orderNumber: state.uri.queryParameters['orderNumber'],
+              editCard: extra is CreditCardResponse ? extra : null,
             );
           },
         ),

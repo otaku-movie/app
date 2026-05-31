@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:otaku_movie/components/AgreementConsentDialog.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
 import 'package:otaku_movie/pages/tab/CinemaList.dart';
 import 'package:otaku_movie/pages/tab/Ticket.dart';
 import 'package:otaku_movie/pages/user/User.dart';
 import 'package:otaku_movie/controller/DictController.dart';
+import 'package:otaku_movie/service/agreement_service.dart';
 import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
@@ -35,6 +37,33 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
       const CinemaList(),
       const UserInfo(),
     ];
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkAgreements());
+  }
+
+  /// 启动时检查协议变更：若存在版本不一致的协议，弹出确认弹窗。
+  /// 含必接协议时禁用关闭，必须同意才能进入应用。
+  Future<void> _checkAgreements() async {
+    try {
+      final pending = await AgreementService.instance.findPending();
+      if (!mounted || pending.isEmpty) return;
+      final hasRequired = pending.any((e) => e.isRequiredAccept);
+      final agreed = await showDialog<bool>(
+        context: context,
+        barrierDismissible: !hasRequired,
+        builder: (_) => AgreementConsentDialog(agreements: pending),
+      );
+      if (!mounted) return;
+      if (hasRequired && agreed != true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context).agreement_consent_disagreeWarning),
+          ),
+        );
+      }
+    } catch (_) {
+      // 网络或协议解析异常不影响首页主流程
+    }
   }
 
   @override

@@ -7,7 +7,9 @@ import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/l10n/app_localizations.dart';
 import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/response.dart';
+import 'package:otaku_movie/response/user/login_response.dart';
 import 'package:otaku_movie/router/router.dart';
+import 'package:otaku_movie/service/auth_storage.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ApiRequest {
   late Dio _dio;
   SharedPreferences? _prefs;
+  static Future<bool>? _refreshing;
 
   /// 构造函数
   /// 初始化 Dio 实例，配置请求拦截器、响应拦截器和错误拦截器
@@ -25,8 +28,11 @@ class ApiRequest {
     _dio = Dio(
       BaseOptions(
         baseUrl: Config.baseUrl,
-        connectTimeout: const Duration(seconds: 60 * 30), // 连接超时时间：30分钟
-        receiveTimeout: const Duration(seconds: 60 * 30), // 接收超时时间：30分钟
+        // 连接超时：仅等待 TCP 建连，过长会导致「服务器宕机/地址错」时卡住半小时才报错
+        connectTimeout: const Duration(seconds: 15),
+        // 接收超时：等待首字节/完整响应；一般接口足够；大文件上传可单请求覆写 Options
+        receiveTimeout: const Duration(seconds: 120),
+        sendTimeout: const Duration(seconds: 120),
       ),
     );
 
@@ -39,7 +45,7 @@ class ApiRequest {
           _prefs ??= await SharedPreferences.getInstance();
 
           // 从本地存储获取 token
-          String? token = _prefs?.getString('token');
+          String? token = await AuthStorage.instance.accessToken;
           
           // 获取用户选择的语言环境（优先使用 LanguageController 中的语言，否则使用系统语言）
           Locale locale;
@@ -63,10 +69,15 @@ class ApiRequest {
           return handler.next(response);
         },
         /// 错误拦截器：处理 HTTP 错误，401 时跳转到登录页
-        onError: (DioException error, ErrorInterceptorHandler handler) {
+        onError: (DioException error, ErrorInterceptorHandler handler) async {
           if (error.response?.statusCode == 401) {
-            // 未授权，跳转到登录页
+            final retried = await _tryRefreshAndReplay(error);
+            if (retried != null) {
+              return handler.resolve(retried);
+            }
+            await AuthStorage.instance.clearTokens();
             routerConfig.pushNamed('login');
+            return handler.next(error);
           } else {
             return handler.next(error);
           }
@@ -97,6 +108,49 @@ class ApiRequest {
   /// 用于存储和获取 token 等本地数据
   Future<void> _initializeSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
+  }
+
+  Future<Response<dynamic>?> _tryRefreshAndReplay(DioException error) async {
+    final refreshToken = await AuthStorage.instance.refreshToken;
+    if (refreshToken == null || refreshToken.isEmpty) return null;
+    final ok = await _refreshAccessToken(refreshToken);
+    if (!ok) return null;
+
+    final accessToken = await AuthStorage.instance.accessToken;
+    final requestOptions = error.requestOptions;
+    requestOptions.headers['token'] = accessToken;
+    return _dio.fetch(requestOptions);
+  }
+
+  Future<bool> _refreshAccessToken(String refreshToken) async {
+    if (_refreshing != null) return _refreshing!;
+    _refreshing = () async {
+      try {
+        final deviceId = await AuthStorage.instance.getOrCreateDeviceId();
+        final dio = Dio(BaseOptions(baseUrl: Config.baseUrl));
+        final response = await dio.post('/user/refresh', data: {
+          'refreshToken': refreshToken,
+          'deviceId': deviceId,
+        });
+        final apiResponse = ApiResponse<LoginResponse>.fromJson(
+          response.data,
+          (json) => LoginResponse.fromJson(json as Map<String, dynamic>),
+        );
+        if (apiResponse.code == 200 && apiResponse.data != null) {
+          await AuthStorage.instance.saveTokens(
+            accessToken: apiResponse.data!.accessToken ?? apiResponse.data!.token,
+            refreshToken: apiResponse.data!.refreshToken,
+          );
+          return true;
+        }
+      } catch (e) {
+        log.e('Refresh token failed', error: e);
+      } finally {
+        _refreshing = null;
+      }
+      return false;
+    }();
+    return _refreshing!;
   }
 
   /// 将下划线命名转为驼峰命名

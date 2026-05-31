@@ -17,6 +17,14 @@ class LoginResponse {
     
     final String? token;
 
+    final String? accessToken;
+
+    final String? refreshToken;
+
+    final int? accessExpiresIn;
+
+    final int? refreshExpiresIn;
+
     LoginResponse({
         this.id,
         this.cover,
@@ -24,6 +32,10 @@ class LoginResponse {
         this.email,
         this.createTime,
         this.token,
+        this.accessToken,
+        this.refreshToken,
+        this.accessExpiresIn,
+        this.refreshExpiresIn,
     });
 
     factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);

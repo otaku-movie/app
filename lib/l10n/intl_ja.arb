@@ -207,6 +207,11 @@
   "login_welcomeText": "おかえりなさい、アカウントにログインしてください",
   "login_or": "または",
   "login_googleLogin": "Googleでログイン",
+  "login_appleLogin": "Appleでログイン",
+  "login_xLogin": "Xでログイン",
+  "login_googleLoginFailed": "Googleログインに失敗しました。もう一度お試しください",
+  "login_appleLoginFailed": "Appleログインに失敗しました。もう一度お試しください",
+  "login_xLoginFailed": "Xログインに失敗しました。もう一度お試しください",
   "login_forgotPassword": "パスワードを忘れましたか？",
   "login_forgotPasswordTitle": "パスワードを忘れた",
   "login_forgotPasswordDescription": "メールアドレスを入力してください。確認コードをお送りします",
@@ -426,12 +431,31 @@
   "user_data_characterCount": "キャラクター数",
   "user_data_staffCount": "スタッフ数",
   "user_registerTime": "登録日時",
+  "user_loginSourceSingle": "ログイン元",
+  "user_loginSourceMultiple": "連携済み",
   "user_language": "言語",
+  "user_timeFormat": "時刻表示",
+  "user_timeFormat_24h": "24時間",
+  "user_timeFormat_30h": "30時間",
+  "user_timeFormat_subtitle_24h": "標準の24時間制（00:00 ~ 23:59）",
+  "user_timeFormat_subtitle_30h": "30時間制：翌日0~5時を24~29時で表示",
   "user_editProfile": "プロフィール編集",
+  "user_creditCard": "クレジットカード管理",
+  "user_userTerms": "利用規約",
   "user_privateAgreement": "プライバシーポリシー",
+  "user_thirdPartySdk": "サードパーティ SDK 一覧",
+  "agreement_consent_title": "規約更新のお知らせ",
+  "agreement_consent_subtitle": "以下の規約を更新いたしました。内容をご確認の上、同意いただくとアプリをご利用いただけます。",
+  "agreement_consent_readAndAgree": "上記すべての規約を読み、同意します。",
+  "agreement_consent_agree": "同意して続ける",
+  "agreement_consent_disagree": "同意しない",
+  "agreement_consent_disagreeWarning": "規約に同意いただけない場合、一部機能をご利用いただけません。",
+  "agreement_consent_currentVersion": "現在のバージョン",
+  "agreement_consent_viewDetail": "確認",
   "user_checkUpdate": "アップデート確認",
   "user_about": "アプリについて",
   "user_logout": "ログアウト",
+  "user_logoutConfirmMessage": "本当にログアウトしますか？",
   "user_currentVersion": "現在のバージョン",
   "user_latestVersion": "最新バージョン",
   "user_updateAvailable": "新しいバージョンが見つかりました。今すぐ更新しますか？",
@@ -548,6 +572,21 @@
   "payment_selectCreditCard_paymentFailed": "支払いに失敗しました。再試行してください",
   "payment_selectCreditCard_loadFailed": "クレジットカード一覧の読み込みに失敗しました",
   "payment_selectCreditCard_tempCardSelected": "一時クレジットカードが選択されました",
+  "creditCard_action_setDefault": "デフォルトに設定",
+  "creditCard_action_edit": "編集",
+  "creditCard_action_delete": "削除",
+  "creditCard_badge_default": "デフォルト",
+  "creditCard_deleteConfirm_title": "クレジットカードを削除",
+  "creditCard_deleteConfirm_content": "削除すると元に戻せません。よろしいですか？",
+  "creditCard_edit_title": "クレジットカードを編集",
+  "creditCard_edit_holderName": "カード名義",
+  "creditCard_edit_expiryDate": "有効期限 (MM/YY)",
+  "creditCard_edit_save": "保存",
+  "creditCard_edit_cancel": "キャンセル",
+  "creditCard_operationFailed": "操作に失敗しました。しばらくしてから再度お試しください",
+  "creditCard_deleteHint_selectFirst": "削除するクレジットカードを選択してください",
+  "creditCard_setDefaultSubtitle": "お支払い時に優先的に使用します",
+  "creditCard_currentDefaultHint": "現在のデフォルトカードです",
   "payError_title": "支払い失敗",
   "payError_message": "注文に問題が発生しました。しばらくしてから再度お試しください。",
   "payError_back": "戻る",
@@ -643,6 +682,78 @@
   "benefit_feedback_button": "フィードバック",
   "benefit_feedback_select_phase": "フェーズを選択",
   "benefit_feedback_please_select_phase": "先にフェーズを選択してください",
+  "benefit_availability_pageTitle": "配布可能な映画館",
+  "benefit_availability_filter_region": "地域",
+  "benefit_availability_filter_sort": "並び替え",
+  "benefit_availability_filter_search_hint": "映画館名で検索",
+  "benefit_availability_filter_search_clear": "検索をクリア",
+  "benefit_availability_sort_remainingDesc": "残りが多い順",
+  "benefit_availability_sort_distance": "近い順",
+  "benefit_availability_sort_default": "デフォルト",
+  "benefit_availability_sort_locationDenied": "距離順には位置情報の許可が必要です",
+  "benefit_availability_distance_km": "{km} km",
+  "@benefit_availability_distance_km": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "benefit_availability_feedback_n": "売り切れ報告 {n} 件",
+  "@benefit_availability_feedback_n": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benefit_availability_status_sufficient": "十分",
+  "benefit_availability_status_few": "やや少ない",
+  "benefit_availability_status_veryFew": "極少",
+  "benefit_availability_status_soldOutAdmin": "配布終了",
+  "benefit_availability_status_unknown": "不明",
+  "benefit_availability_status_soldOutFeedback": "配布終了（ユーザー報告）",
+  "benefit_availability_phase_ended_banner": "この特典フェーズは終了しています（参考）",
+  "benefit_availability_empty": "この特典を扱う映画館がありません",
+  "benefit_availability_count_label": "配布可能 {n} 館",
+  "@benefit_availability_count_label": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benefit_availability_action_buy": "チケットを買う",
+  "benefit_availability_action_feedback": "売り切れを報告",
+  "benefit_availability_action_feedback_done": "報告済み",
+  "benefit_availability_feedback_submit_failed": "送信に失敗しました。もう一度お試しください",
+  "benefit_availability_view_cinemas": "映画館一覧",
+  "benefit_availability_showtime_none": "今後の上映はありません",
+  "benefit_availability_showtime_n": "今後の上映 {n} 回",
+  "@benefit_availability_showtime_n": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "benefit_availability_nearest_showtime": "直近の上映：{time}",
+  "@benefit_availability_nearest_showtime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "benefit_availability_remaining_not_reported": "未登録",
+  "benefit_availability_remaining_quota_label": "配布数 {n}",
+  "@benefit_availability_remaining_quota_label": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
   "comingSoon_presale": "前売り",
   "comingSoon_presaleTicketBadge": "前売り券",
   "comingSoon_releaseDate": "公開",

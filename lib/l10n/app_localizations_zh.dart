@@ -602,6 +602,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get login_googleLogin => '使用 Google 登录';
 
   @override
+  String get login_appleLogin => '使用 Apple 登录';
+
+  @override
+  String get login_xLogin => '使用 X 登录';
+
+  @override
+  String get login_googleLoginFailed => '谷歌登录失败，请重试';
+
+  @override
+  String get login_appleLoginFailed => 'Apple 登录失败，请重试';
+
+  @override
+  String get login_xLoginFailed => 'X 登录失败，请重试';
+
+  @override
   String get login_forgotPassword => '忘记密码？';
 
   @override
@@ -1104,13 +1119,67 @@ class AppLocalizationsZh extends AppLocalizations {
   String get user_registerTime => '注册时间';
 
   @override
+  String get user_loginSourceSingle => '通过';
+
+  @override
+  String get user_loginSourceMultiple => '已绑定';
+
+  @override
   String get user_language => '语言';
+
+  @override
+  String get user_timeFormat => '时间显示';
+
+  @override
+  String get user_timeFormat_24h => '24小时';
+
+  @override
+  String get user_timeFormat_30h => '30小时';
+
+  @override
+  String get user_timeFormat_subtitle_24h => '标准 24 小时制（00:00 ~ 23:59）';
+
+  @override
+  String get user_timeFormat_subtitle_30h => '30 小时制：次日 0~5 点显示为 24~29 点';
 
   @override
   String get user_editProfile => '编辑个人信息';
 
   @override
+  String get user_creditCard => '信用卡管理';
+
+  @override
+  String get user_userTerms => '用户协议';
+
+  @override
   String get user_privateAgreement => '隐私协议';
+
+  @override
+  String get user_thirdPartySdk => '第三方 SDK 清单';
+
+  @override
+  String get agreement_consent_title => '协议更新提示';
+
+  @override
+  String get agreement_consent_subtitle => '我们已更新以下协议，请您仔细阅读并同意后继续使用本应用。';
+
+  @override
+  String get agreement_consent_readAndAgree => '我已阅读并同意以上全部协议内容。';
+
+  @override
+  String get agreement_consent_agree => '同意并继续';
+
+  @override
+  String get agreement_consent_disagree => '暂不同意';
+
+  @override
+  String get agreement_consent_disagreeWarning => '未同意最新协议，部分功能可能无法正常使用。';
+
+  @override
+  String get agreement_consent_currentVersion => '当前版本';
+
+  @override
+  String get agreement_consent_viewDetail => '查看';
 
   @override
   String get user_checkUpdate => '检查更新';
@@ -1120,6 +1189,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get user_logout => '退出登录';
+
+  @override
+  String get user_logoutConfirmMessage => '确认要退出登录吗？';
 
   @override
   String get user_currentVersion => '当前版本';
@@ -1441,6 +1513,51 @@ class AppLocalizationsZh extends AppLocalizations {
   String get payment_selectCreditCard_tempCardSelected => '已选择临时信用卡';
 
   @override
+  String get creditCard_action_setDefault => '设为默认';
+
+  @override
+  String get creditCard_action_edit => '编辑';
+
+  @override
+  String get creditCard_action_delete => '删除';
+
+  @override
+  String get creditCard_badge_default => '默认';
+
+  @override
+  String get creditCard_deleteConfirm_title => '删除信用卡';
+
+  @override
+  String get creditCard_deleteConfirm_content => '删除后将无法恢复，确认删除？';
+
+  @override
+  String get creditCard_edit_title => '编辑信用卡';
+
+  @override
+  String get creditCard_edit_holderName => '持卡人姓名';
+
+  @override
+  String get creditCard_edit_expiryDate => '有效期 (MM/YY)';
+
+  @override
+  String get creditCard_edit_save => '保存';
+
+  @override
+  String get creditCard_edit_cancel => '取消';
+
+  @override
+  String get creditCard_operationFailed => '操作失败，请稍后重试';
+
+  @override
+  String get creditCard_deleteHint_selectFirst => '请先选择要删除的信用卡';
+
+  @override
+  String get creditCard_setDefaultSubtitle => '支付时优先选择此卡';
+
+  @override
+  String get creditCard_currentDefaultHint => '当前已是默认卡片';
+
+  @override
   String get payError_title => '支付失败';
 
   @override
@@ -1712,6 +1829,108 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get benefit_feedback_please_select_phase => '请先选择阶段';
+
+  @override
+  String get benefit_availability_pageTitle => '可领影院';
+
+  @override
+  String get benefit_availability_filter_region => '地区';
+
+  @override
+  String get benefit_availability_filter_sort => '排序';
+
+  @override
+  String get benefit_availability_filter_search_hint => '搜索影院名';
+
+  @override
+  String get benefit_availability_filter_search_clear => '清除搜索';
+
+  @override
+  String get benefit_availability_sort_remainingDesc => '剩余多优先';
+
+  @override
+  String get benefit_availability_sort_distance => '距离近优先';
+
+  @override
+  String get benefit_availability_sort_default => '默认';
+
+  @override
+  String get benefit_availability_sort_locationDenied => '未授权定位，无法按距离排序';
+
+  @override
+  String benefit_availability_distance_km(String km) {
+    return '$km km';
+  }
+
+  @override
+  String benefit_availability_feedback_n(int n) {
+    return '$n 人反馈已领完';
+  }
+
+  @override
+  String get benefit_availability_status_sufficient => '充足';
+
+  @override
+  String get benefit_availability_status_few => '少量';
+
+  @override
+  String get benefit_availability_status_veryFew => '极少';
+
+  @override
+  String get benefit_availability_status_soldOutAdmin => '已领完';
+
+  @override
+  String get benefit_availability_status_unknown => '未知';
+
+  @override
+  String get benefit_availability_status_soldOutFeedback => '已领完（用户反馈）';
+
+  @override
+  String get benefit_availability_phase_ended_banner => '本期特典已结束，仅供参考';
+
+  @override
+  String get benefit_availability_empty => '暂无可领取该特典的影院';
+
+  @override
+  String benefit_availability_count_label(int n) {
+    return '$n 家影院可领';
+  }
+
+  @override
+  String get benefit_availability_action_buy => '去购票';
+
+  @override
+  String get benefit_availability_action_feedback => '反馈已领完';
+
+  @override
+  String get benefit_availability_action_feedback_done => '已反馈';
+
+  @override
+  String get benefit_availability_feedback_submit_failed => '提交失败，请重试';
+
+  @override
+  String get benefit_availability_view_cinemas => '查看可领影院';
+
+  @override
+  String get benefit_availability_showtime_none => '暂无未来场次';
+
+  @override
+  String benefit_availability_showtime_n(int n) {
+    return '$n 场未来场次';
+  }
+
+  @override
+  String benefit_availability_nearest_showtime(String time) {
+    return '最近场次：$time';
+  }
+
+  @override
+  String get benefit_availability_remaining_not_reported => '未登记';
+
+  @override
+  String benefit_availability_remaining_quota_label(int n) {
+    return '配额 $n';
+  }
 
   @override
   String get comingSoon_presale => '预售';

@@ -9,6 +9,7 @@ import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/sendVerifyCode.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/user/login_response.dart';
+import 'package:otaku_movie/service/auth_storage.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/api/index.dart';
@@ -294,7 +295,10 @@ class _RegisterState extends State<Register> {
                         SizedBox(height: 24.h),
                         
                         _buildVerifyCodeField(),
-                        SizedBox(height: 32.h),
+                        SizedBox(height: 24.h),
+
+                        _buildAgreementNotice(),
+                        SizedBox(height: 24.h),
                         
                         _buildRegisterButton(),
                         SizedBox(height: 24.h),
@@ -811,7 +815,7 @@ class _RegisterState extends State<Register> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(16.r),
-          onTap: () {
+          onTap: () async {
             if (loading) {
               return;
             }
@@ -839,25 +843,30 @@ class _RegisterState extends State<Register> {
             setState(() {
               loading = true;
             });
+            final deviceId = await AuthStorage.instance.getOrCreateDeviceId();
             ApiRequest().request(
               path: '/user/register',
               method: 'POST',
               data: {
                 "email": emailController.text,
                 "password": pwd,
+                "name": usernameController.text,
                 "username": usernameController.text,
+                "code": verifyCode,
                 "verifyCode": verifyCode,
-                "token": emailToken
+                "token": emailToken,
+                "deviceId": deviceId
               },
               fromJsonT: (json) {
                 return LoginResponse.fromJson(json);
               },
             ).then((res) async {
               if (res.data != null) {
+                await AuthStorage.instance.saveTokens(
+                  accessToken: res.data?.accessToken ?? res.data?.token,
+                  refreshToken: res.data?.refreshToken,
+                );
                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                // 存储 token
-                prefs.setString('token', res.data?.token ?? '');
-                
                 // 存储用户信息（可以将 Map 转换为 JSON 字符串存储）
                 prefs.setString('userInfo', res.data.toString());
                 // ignore: use_build_context_synchronously
@@ -899,6 +908,51 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
+    );
+  }
+
+  String _agreementNoticeText() {
+    final lang = Localizations.localeOf(context).languageCode;
+    if (lang == 'zh') return '注册即表示您已阅读并同意';
+    if (lang == 'en') return 'By registering, you agree to';
+    return '登録により、以下に同意したものとみなされます';
+  }
+
+  Widget _buildAgreementNotice() {
+    final linkStyle = TextStyle(
+      fontSize: 22.sp,
+      color: const Color(0xFF1989FA),
+      fontWeight: FontWeight.w600,
+    );
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 4.w,
+      runSpacing: 4.h,
+      children: [
+        Text(
+          _agreementNoticeText(),
+          style: TextStyle(fontSize: 22.sp, color: const Color(0xFF969799)),
+        ),
+        GestureDetector(
+          onTap: () => context.pushNamed(
+            'agreement',
+            pathParameters: {'code': 'USER_TERMS'},
+          ),
+          child: Text(S.of(context).user_userTerms, style: linkStyle),
+        ),
+        Text(
+          '/',
+          style: TextStyle(fontSize: 22.sp, color: const Color(0xFF969799)),
+        ),
+        GestureDetector(
+          onTap: () => context.pushNamed(
+            'agreement',
+            pathParameters: {'code': 'PRIVACY_POLICY'},
+          ),
+          child: Text(S.of(context).user_privateAgreement, style: linkStyle),
+        ),
+      ],
     );
   }
 

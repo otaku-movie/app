@@ -1,20 +1,30 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
+import 'package:otaku_movie/config/auth_config.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/log/index.dart';
 import 'package:otaku_movie/response/user/login_response.dart';
+import 'package:otaku_movie/service/auth_provider_service.dart';
+import 'package:otaku_movie/service/auth_storage.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -28,9 +38,19 @@ class _LoginPageState extends State<Login> {
   final LanguageController languageController = Get.find();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  // 关键：serverClientId 必须是「Web 应用」类型的 Client ID，
+  // 这样后端拿到的 idToken 的 audience 才会落在 oauth.google.client-ids 列表中，
+  // 否则会被 OAuthIdTokenVerifier 抛 "id_token audience invalid"。
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    serverClientId: AuthConfig.googleWebClientId.isEmpty
+        ? null
+        : AuthConfig.googleWebClientId,
+    scopes: const ['email', 'profile', 'openid'],
+  );
+  Map<String, bool> _authProviderVisibility =
+      AuthProviderService.instance.fallbackVisibility;
 
-  String selectedLanguage = PlatformDispatcher.instance.locales.first.languageCode;
+  late String selectedLanguage;
 
   // 控制密码是否可见
   bool _obscureText = true;
@@ -38,17 +58,40 @@ class _LoginPageState extends State<Login> {
   @override
   void initState() {
     super.initState();
-   
+
+    final controllerLang = languageController.locale.value.languageCode;
+    selectedLanguage = controllerLang.isNotEmpty
+        ? controllerLang
+        : PlatformDispatcher.instance.locales.first.languageCode;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       languageController.changeLanguage(selectedLanguage);
     });
-    emailController.text = 'diy4869@gmail.com';
-    passwordController.text = '123456';
 
+    // 开发期自动填充测试账号，方便调试；生产构建不会执行。
+    if (kDebugMode) {
+      emailController.text = 'diy4869@gmail.com';
+      passwordController.text = '123456';
+    }
+    _loadAuthProviders();
+  }
+
+  Future<void> _loadAuthProviders() async {
+    final visibility = await AuthProviderService.instance.loadVisibility();
+    if (!mounted) return;
+    setState(() {
+      _authProviderVisibility = visibility;
+    });
+  }
+
+  bool _isAuthProviderVisible(String code) {
+    return _authProviderVisibility[code.toUpperCase()] ?? false;
   }
 
   @override
   void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -99,21 +142,25 @@ class _LoginPageState extends State<Login> {
     String pwd = md5.convert(utf8.encode(passwordController.text)).toString();
 
     _showLoadingDialog(context);
+    AuthStorage.instance.getOrCreateDeviceId().then((deviceId) {
     ApiRequest().request(
       path: '/user/login',
       method: 'POST',
       data: {
         "email": emailController.text,
-        "password": pwd
+        "password": pwd,
+        "deviceId": deviceId
       },
       fromJsonT: (json) {
         return LoginResponse.fromJson(json);
       },
     ).then((res) async {
       if (res.data != null) {
+        await AuthStorage.instance.saveTokens(
+          accessToken: res.data?.accessToken ?? res.data?.token,
+          refreshToken: res.data?.refreshToken,
+        );
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        // 存储 token
-        prefs.setString('token', res.data?.token ?? '');
         
         // 存储用户信息（可以将 Map 转换为 JSON 字符串存储）
         prefs.setString('userInfo', res.data.toString());
@@ -131,6 +178,7 @@ class _LoginPageState extends State<Login> {
       //   loading = false;
       // });
     });
+    });
   }
 
   void handleGoogleLogin() async {
@@ -145,25 +193,30 @@ class _LoginPageState extends State<Login> {
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       
+      if (googleAuth.idToken == null) {
+        _hideLoadingDialog(context);
+        ToastService.showError(S.of(context).login_googleLoginFailed);
+        return;
+      }
+      final deviceId = await AuthStorage.instance.getOrCreateDeviceId();
       // 调用后端API进行谷歌登录
       ApiRequest().request(
         path: '/user/googleLogin',
         method: 'POST',
         data: {
-          "googleId": googleUser.id,
-          "email": googleUser.email,
-          "name": googleUser.displayName,
-          "photoUrl": googleUser.photoUrl,
-          "accessToken": googleAuth.accessToken,
+          "idToken": googleAuth.idToken,
+          "deviceId": deviceId,
         },
         fromJsonT: (json) {
           return LoginResponse.fromJson(json);
         },
       ).then((res) async {
         if (res.data != null) {
+          await AuthStorage.instance.saveTokens(
+            accessToken: res.data?.accessToken ?? res.data?.token,
+            refreshToken: res.data?.refreshToken,
+          );
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          // 存储 token
-          prefs.setString('token', res.data?.token ?? '');
           
           // 存储用户信息
           prefs.setString('userInfo', res.data.toString());
@@ -171,20 +224,170 @@ class _LoginPageState extends State<Login> {
           context.pushNamed('home');
         }
       }).catchError((err) {
-        ToastService.showError('谷歌登录失败，请重试');
+        ToastService.showError(S.of(context).login_googleLoginFailed);
       }).whenComplete(() {
         _hideLoadingDialog(context);
       });
       
-    } catch (error) {
+    } catch (error, stackTrace) {
       _hideLoadingDialog(context);
-      ToastService.showError('谷歌登录失败，请重试');
-      print('Google login error: $error');
+      ToastService.showError(S.of(context).login_googleLoginFailed);
+      log.e('Google login error', error: error, stackTrace: stackTrace);
     }
   }
 
-  void handleLineLogin() {
-    print("Line login clicked");
+  /// 生成符合 Apple 文档要求的随机 nonce 字符串（32 字节，URL-safe）。
+  /// 真正传给 Apple 的是它的 sha256，原文留在本地由后端二次校验。
+  String _generateNonce([int length = 32]) {
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+  }
+
+  /// nonce 原文 → sha256 hex（小写），与 Apple 文档示例一致。
+  String _sha256OfString(String input) {
+    return sha256.convert(utf8.encode(input)).toString();
+  }
+
+  Future<void> handleAppleLogin() async {
+    if (!Platform.isIOS) return;
+    try {
+      _showLoadingDialog(context);
+
+      // Apple 防重放：客户端生成 rawNonce，把 sha256(rawNonce) 传给 Apple，
+      // 拿到 idToken 后把 rawNonce 原文回传给后端，由后端再次 sha256 比对。
+      final rawNonce = _generateNonce();
+      final hashedNonce = _sha256OfString(rawNonce);
+
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+        nonce: hashedNonce,
+      );
+      final idToken = credential.identityToken;
+      if (idToken == null) {
+        _hideLoadingDialog(context);
+        ToastService.showError(S.of(context).login_appleLoginFailed);
+        return;
+      }
+      final deviceId = await AuthStorage.instance.getOrCreateDeviceId();
+      ApiRequest().request(
+        path: '/user/appleLogin',
+        method: 'POST',
+        data: {
+          'idToken': idToken,
+          'deviceId': deviceId,
+          'nonce': rawNonce,
+          // Apple 只在「首次登录」返回 givenName / familyName，二次登录后这两个字段为 null。
+          // 客户端无条件回传，后端只在 idToken 本身没有 name 时拿来兜底。
+          if (credential.givenName != null) 'firstName': credential.givenName,
+          if (credential.familyName != null) 'lastName': credential.familyName,
+        },
+        fromJsonT: (json) {
+          return LoginResponse.fromJson(json);
+        },
+      ).then((res) async {
+        if (res.data != null) {
+          await AuthStorage.instance.saveTokens(
+            accessToken: res.data?.accessToken ?? res.data?.token,
+            refreshToken: res.data?.refreshToken,
+          );
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('userInfo', res.data.toString());
+          context.pushNamed('home');
+        }
+      }).catchError((err) {
+        ToastService.showError(S.of(context).login_appleLoginFailed);
+      }).whenComplete(() {
+        _hideLoadingDialog(context);
+      });
+    } catch (error, stackTrace) {
+      _hideLoadingDialog(context);
+      ToastService.showError(S.of(context).login_appleLoginFailed);
+      log.e('Apple login error', error: error, stackTrace: stackTrace);
+    }
+  }
+
+  /// X 登录走 OAuth 2.0 Authorization Code Flow + PKCE。
+  ///
+  /// 1. `flutter_appauth` 自动生成 `code_verifier` / `code_challenge`，
+  ///    打开系统浏览器到 X 授权页
+  /// 2. 用户授权后 X 通过 [AuthConfig.xRedirectUri] 回调到 App，携带 `code`
+  /// 3. `flutter_appauth` 自动用 code + code_verifier 到 X token endpoint 换 access_token
+  /// 4. App 把 access_token 回传给后端，由后端调 X `/2/users/me` 验真并取 profile
+  Future<void> handleXLogin() async {
+    if (AuthConfig.xClientId.isEmpty) {
+      ToastService.showError(S.of(context).login_xLoginFailed);
+      log.e('X login disabled: X_CLIENT_ID not configured at build time');
+      return;
+    }
+    try {
+      _showLoadingDialog(context);
+
+      const appAuth = FlutterAppAuth();
+      // allowInsecureConnections 仅在 X_REDIRECT_URI 是 http 时才需要打开，
+      // 我们用的 custom scheme（otakumovie://）走 native intent，无影响。
+      final result = await appAuth.authorizeAndExchangeCode(
+        AuthorizationTokenRequest(
+          AuthConfig.xClientId,
+          AuthConfig.xRedirectUri,
+          serviceConfiguration: const AuthorizationServiceConfiguration(
+            authorizationEndpoint: AuthConfig.xAuthorizationEndpoint,
+            tokenEndpoint: AuthConfig.xTokenEndpoint,
+          ),
+          scopes: AuthConfig.xScopes,
+          // X 要求 PKCE，flutter_appauth 默认就会附带 code_challenge，这里显式声明仅为可读性。
+          // promptValues 不传：让用户自然选择已登录的 X 账号。
+        ),
+      );
+
+      final accessToken = result.accessToken;
+      if (accessToken == null || accessToken.isEmpty) {
+        _hideLoadingDialog(context);
+        ToastService.showError(S.of(context).login_xLoginFailed);
+        return;
+      }
+
+      final deviceId = await AuthStorage.instance.getOrCreateDeviceId();
+      await ApiRequest().request(
+        path: '/user/twitterLogin',
+        method: 'POST',
+        data: {
+          'accessToken': accessToken,
+          'deviceId': deviceId,
+        },
+        fromJsonT: (json) {
+          return LoginResponse.fromJson(json);
+        },
+      ).then((res) async {
+        if (res.data != null) {
+          await AuthStorage.instance.saveTokens(
+            accessToken: res.data?.accessToken ?? res.data?.token,
+            refreshToken: res.data?.refreshToken,
+          );
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('userInfo', res.data.toString());
+          if (!mounted) return;
+          context.pushNamed('home');
+        }
+      }).catchError((err) {
+        ToastService.showError(S.of(context).login_xLoginFailed);
+      }).whenComplete(() {
+        _hideLoadingDialog(context);
+      });
+    } catch (error, stackTrace) {
+      _hideLoadingDialog(context);
+      // 用户在 X 授权页点了「取消」或按返回键时，flutter_appauth 会抛带 cancel 关键字的异常，
+      // 这里静默处理；不同平台版本的异常类型不一致，统一用消息内容匹配。
+      final msg = error.toString().toLowerCase();
+      if (msg.contains('cancel')) {
+        return;
+      }
+      ToastService.showError(S.of(context).login_xLoginFailed);
+      log.e('X login error', error: error, stackTrace: stackTrace);
+    }
   }
 
   Widget _getLanguageFlag(String languageCode) {
@@ -297,7 +500,9 @@ class _LoginPageState extends State<Login> {
                   onChanged: (value) {
                     if (value != null) {
                       languageController.changeLanguage(value);
-                      selectedLanguage = value;
+                      setState(() {
+                        selectedLanguage = value;
+                      });
                     }
                   },
                 ),
@@ -422,12 +627,22 @@ class _LoginPageState extends State<Login> {
                         _buildDivider(),
                         SizedBox(height: 24.h),
                         
-                        // 谷歌登录按钮
-                        _buildGoogleLoginButton(),
-                SizedBox(height: 24.h),
+                        // 第三方登录按钮区
+                        if (_isAuthProviderVisible('GOOGLE')) ...[
+                          _buildGoogleLoginButton(),
+                          SizedBox(height: 16.h),
+                        ],
+                        if (_isAuthProviderVisible('APPLE') && Platform.isIOS) ...[
+                          _buildAppleLoginButton(),
+                          SizedBox(height: 16.h),
+                        ],
+                        if (_isAuthProviderVisible('X')) _buildXLoginButton(),
+                        SizedBox(height: 24.h),
                         
                         // 注册链接
                         _buildRegisterLink(),
+                        SizedBox(height: 16.h),
+                        _buildAgreementNotice(),
                       ],
                     ),
                   ),
@@ -729,59 +944,12 @@ class _LoginPageState extends State<Login> {
           onTap: handleGoogleLogin,
           child: Center(
             child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                Container(
-                  width: 40.w,
-                  height: 40.h,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.r),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Stack(
-                      children: [
-                        // 谷歌Logo背景
-                        Container(
-                          width: 32.w,
-                          height: 32.h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.r),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFF4285F4), // 蓝色
-                                Color(0xFF34A853), // 绿色
-                                Color(0xFFFBBC05), // 黄色
-                                Color(0xFFEA4335), // 红色
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                        ),
-                        // 白色G字母
-                        Positioned.fill(
-                          child: Center(
-                            child: Text(
-                              'G',
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/social/google.svg',
+                  width: 36.w,
+                  height: 36.w,
                 ),
                 SizedBox(width: 12.w),
                 Text(
@@ -790,6 +958,141 @@ class _LoginPageState extends State<Login> {
                     fontSize: 28.sp,
                     color: const Color(0xFF323233),
                     fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _agreementNoticeText() {
+    final lang = languageController.locale.value.languageCode;
+    if (lang == 'zh') return '登录或注册即表示您已阅读并同意';
+    if (lang == 'en') return 'By signing in or registering, you agree to';
+    return 'ログインまたは登録により、以下に同意したものとみなされます';
+  }
+
+  Widget _buildAgreementNotice() {
+    final linkStyle = TextStyle(
+      fontSize: 22.sp,
+      color: const Color(0xFF1989FA),
+      fontWeight: FontWeight.w600,
+    );
+    return Wrap(
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: 4.w,
+      runSpacing: 4.h,
+      children: [
+        Text(
+          _agreementNoticeText(),
+          style: TextStyle(fontSize: 22.sp, color: const Color(0xFF969799)),
+        ),
+        GestureDetector(
+          onTap: () => context.pushNamed(
+            'agreement',
+            pathParameters: {'code': 'USER_TERMS'},
+          ),
+          child: Text(S.of(context).user_userTerms, style: linkStyle),
+        ),
+        Text(
+          '/',
+          style: TextStyle(fontSize: 22.sp, color: const Color(0xFF969799)),
+        ),
+        GestureDetector(
+          onTap: () => context.pushNamed(
+            'agreement',
+            pathParameters: {'code': 'PRIVACY_POLICY'},
+          ),
+          child: Text(S.of(context).user_privateAgreement, style: linkStyle),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAppleLoginButton() {
+    return Container(
+      height: 80.h,
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16.r),
+          onTap: handleAppleLogin,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/social/apple.svg',
+                  width: 32.w,
+                  height: 32.w,
+                ),
+                SizedBox(width: 12.w),
+                Text(
+                  S.of(context).login_appleLogin,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildXLoginButton() {
+    return Container(
+      height: 80.h,
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16.r),
+          onTap: handleXLogin,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/social/x.svg',
+                  width: 28.w,
+                  height: 28.w,
+                ),
+                SizedBox(width: 12.w),
+                Text(
+                  S.of(context).login_xLogin,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],

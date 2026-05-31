@@ -637,6 +637,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get login_googleLogin => 'Sign in with Google';
 
   @override
+  String get login_appleLogin => 'Sign in with Apple';
+
+  @override
+  String get login_xLogin => 'Sign in with X';
+
+  @override
+  String get login_googleLoginFailed =>
+      'Google sign-in failed, please try again';
+
+  @override
+  String get login_appleLoginFailed => 'Apple sign-in failed, please try again';
+
+  @override
+  String get login_xLoginFailed => 'X sign-in failed, please try again';
+
+  @override
   String get login_forgotPassword => 'Forgot password?';
 
   @override
@@ -1160,13 +1176,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user_registerTime => 'Registration Time';
 
   @override
+  String get user_loginSourceSingle => 'Signed in via';
+
+  @override
+  String get user_loginSourceMultiple => 'Linked';
+
+  @override
   String get user_language => 'Language';
+
+  @override
+  String get user_timeFormat => 'Time Format';
+
+  @override
+  String get user_timeFormat_24h => '24-hour';
+
+  @override
+  String get user_timeFormat_30h => '30-hour';
+
+  @override
+  String get user_timeFormat_subtitle_24h => 'Standard 24-hour (00:00 ~ 23:59)';
+
+  @override
+  String get user_timeFormat_subtitle_30h =>
+      '30-hour: next day 0~5 shown as 24~29';
 
   @override
   String get user_editProfile => 'Edit Profile';
 
   @override
-  String get user_privateAgreement => 'Privacy Agreement';
+  String get user_creditCard => 'Manage Cards';
+
+  @override
+  String get user_userTerms => 'User Terms';
+
+  @override
+  String get user_privateAgreement => 'Privacy Policy';
+
+  @override
+  String get user_thirdPartySdk => 'Third-party SDK List';
+
+  @override
+  String get agreement_consent_title => 'Agreement Update';
+
+  @override
+  String get agreement_consent_subtitle =>
+      'We have updated the following agreements. Please review and accept to continue using the app.';
+
+  @override
+  String get agreement_consent_readAndAgree =>
+      'I have read and agree to all of the above agreements.';
+
+  @override
+  String get agreement_consent_agree => 'Agree & Continue';
+
+  @override
+  String get agreement_consent_disagree => 'Not Now';
+
+  @override
+  String get agreement_consent_disagreeWarning =>
+      'Without accepting the latest agreements, some features may not be available.';
+
+  @override
+  String get agreement_consent_currentVersion => 'Current version';
+
+  @override
+  String get agreement_consent_viewDetail => 'View';
 
   @override
   String get user_checkUpdate => 'Check Update';
@@ -1176,6 +1250,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get user_logout => 'Logout';
+
+  @override
+  String get user_logoutConfirmMessage => 'Are you sure you want to log out?';
 
   @override
   String get user_currentVersion => 'Current Version';
@@ -1520,6 +1597,54 @@ class AppLocalizationsEn extends AppLocalizations {
       'Temporary credit card selected';
 
   @override
+  String get creditCard_action_setDefault => 'Set as Default';
+
+  @override
+  String get creditCard_action_edit => 'Edit';
+
+  @override
+  String get creditCard_action_delete => 'Delete';
+
+  @override
+  String get creditCard_badge_default => 'Default';
+
+  @override
+  String get creditCard_deleteConfirm_title => 'Delete Card';
+
+  @override
+  String get creditCard_deleteConfirm_content =>
+      'This card will be removed permanently. Continue?';
+
+  @override
+  String get creditCard_edit_title => 'Edit Card';
+
+  @override
+  String get creditCard_edit_holderName => 'Cardholder Name';
+
+  @override
+  String get creditCard_edit_expiryDate => 'Expiry (MM/YY)';
+
+  @override
+  String get creditCard_edit_save => 'Save';
+
+  @override
+  String get creditCard_edit_cancel => 'Cancel';
+
+  @override
+  String get creditCard_operationFailed =>
+      'Operation failed, please try again later';
+
+  @override
+  String get creditCard_deleteHint_selectFirst =>
+      'Please select a card to delete first';
+
+  @override
+  String get creditCard_setDefaultSubtitle => 'Use this card first when paying';
+
+  @override
+  String get creditCard_currentDefaultHint => 'This is your default card';
+
+  @override
   String get payError_title => 'Payment Failed';
 
   @override
@@ -1802,6 +1927,112 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get benefit_feedback_please_select_phase =>
       'Please select a phase first';
+
+  @override
+  String get benefit_availability_pageTitle => 'Theaters with stock';
+
+  @override
+  String get benefit_availability_filter_region => 'Region';
+
+  @override
+  String get benefit_availability_filter_sort => 'Sort';
+
+  @override
+  String get benefit_availability_filter_search_hint => 'Search theater name';
+
+  @override
+  String get benefit_availability_filter_search_clear => 'Clear search';
+
+  @override
+  String get benefit_availability_sort_remainingDesc => 'Most remaining first';
+
+  @override
+  String get benefit_availability_sort_distance => 'Nearest first';
+
+  @override
+  String get benefit_availability_sort_default => 'Default';
+
+  @override
+  String get benefit_availability_sort_locationDenied =>
+      'Location permission required for distance sort';
+
+  @override
+  String benefit_availability_distance_km(String km) {
+    return '$km km';
+  }
+
+  @override
+  String benefit_availability_feedback_n(int n) {
+    return '$n users reported sold out';
+  }
+
+  @override
+  String get benefit_availability_status_sufficient => 'Plenty';
+
+  @override
+  String get benefit_availability_status_few => 'Limited';
+
+  @override
+  String get benefit_availability_status_veryFew => 'Very few';
+
+  @override
+  String get benefit_availability_status_soldOutAdmin => 'Sold out';
+
+  @override
+  String get benefit_availability_status_unknown => 'Unknown';
+
+  @override
+  String get benefit_availability_status_soldOutFeedback =>
+      'Sold out (user reports)';
+
+  @override
+  String get benefit_availability_phase_ended_banner =>
+      'This benefit phase has ended (for reference only)';
+
+  @override
+  String get benefit_availability_empty => 'No theaters with this benefit';
+
+  @override
+  String benefit_availability_count_label(int n) {
+    return '$n theaters with stock';
+  }
+
+  @override
+  String get benefit_availability_action_buy => 'Buy tickets';
+
+  @override
+  String get benefit_availability_action_feedback => 'Report sold out';
+
+  @override
+  String get benefit_availability_action_feedback_done => 'Reported';
+
+  @override
+  String get benefit_availability_feedback_submit_failed =>
+      'Could not submit. Please try again.';
+
+  @override
+  String get benefit_availability_view_cinemas => 'View theaters';
+
+  @override
+  String get benefit_availability_showtime_none => 'No upcoming screenings';
+
+  @override
+  String benefit_availability_showtime_n(int n) {
+    return '$n upcoming screening(s)';
+  }
+
+  @override
+  String benefit_availability_nearest_showtime(String time) {
+    return 'Next: $time';
+  }
+
+  @override
+  String get benefit_availability_remaining_not_reported => 'Not reported';
+
+  @override
+  String benefit_availability_remaining_quota_label(int n) {
+    return 'Quota $n';
+  }
 
   @override
   String get comingSoon_presale => 'Presale';
