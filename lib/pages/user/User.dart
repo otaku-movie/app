@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/app_version_check_response.dart';
 import 'package:otaku_movie/response/user/user_detail_response.dart';
+import 'package:otaku_movie/service/auth_logout_service.dart';
 import 'package:otaku_movie/service/version_check_service.dart';
-import 'package:otaku_movie/utils/index.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class UserInfo extends StatefulWidget {
@@ -21,6 +24,8 @@ class UserInfo extends StatefulWidget {
 
 class _PageState extends State<UserInfo> {
   final LanguageController languageController = Get.find();
+  final TimeFormatController timeFormatController =
+      Get.find<TimeFormatController>();
   UserDetailResponse data = UserDetailResponse();
   
   String langName = '';
@@ -189,6 +194,281 @@ class _PageState extends State<UserInfo> {
       },
     );
   }
+
+  /// 退出登录：弹出确认框 -> 清除本地 token -> 跳转登录页
+  Future<void> _handleLogout() async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(28.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 72.w,
+                  height: 72.w,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.red.shade400, Colors.red.shade600],
+                    ),
+                    borderRadius: BorderRadius.circular(36.r),
+                  ),
+                  child: Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                    size: 36.sp,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Text(
+                  S.of(context).user_logout,
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  S.of(context).user_logoutConfirmMessage,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.grey.shade600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () =>
+                            Navigator.of(dialogContext).pop(false),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.grey.shade700,
+                          side: BorderSide(color: Colors.grey.shade300),
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: Text(
+                          S.of(context).user_cancel,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            Navigator.of(dialogContext).pop(true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.shade600,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          elevation: 2,
+                        ),
+                        child: Text(
+                          S.of(context).user_ok,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    // 走完整的「后端登出 + 三方 signOut + 清本地」链路，
+    // 避免出现「退了登录还能用旧 token」或「Google 自动续上同一账号」的问题。
+    await AuthLogoutService.instance.logout();
+
+    if (!mounted) return;
+    context.goNamed('login');
+  }
+
+  String _deleteAccountText(String key) {
+    final lang = languageController.locale.value.languageCode;
+    final zh = {
+      'title': '注销账号',
+      'message': '注销后账号资料将被删除或匿名化，当前登录状态会立即失效。历史订单等依法需保留的数据会按隐私政策继续保存。是否继续？',
+      'confirm': '确认注销',
+      'success': '账号已注销',
+      'failed': '注销失败，请稍后重试',
+    };
+    final ja = {
+      'title': 'アカウントを削除',
+      'message': '削除後、アカウント情報は削除または匿名化され、現在のログイン状態は直ちに無効になります。法令上保持が必要な注文履歴等はプライバシーポリシーに従って保持されます。続行しますか？',
+      'confirm': '削除する',
+      'success': 'アカウントを削除しました',
+      'failed': '削除に失敗しました。しばらくしてから再度お試しください',
+    };
+    final en = {
+      'title': 'Delete Account',
+      'message': 'After deletion, your account profile will be deleted or anonymized and your current session will be invalidated. Data that must be retained for legal reasons, such as order history, will be kept according to the Privacy Policy. Continue?',
+      'confirm': 'Delete',
+      'success': 'Account deleted',
+      'failed': 'Failed to delete account. Please try again later.',
+    };
+    final source = lang == 'zh' ? zh : (lang == 'en' ? en : ja);
+    return source[key] ?? key;
+  }
+
+  Future<void> _handleDeleteAccount() async {
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(28.w),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.r),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 72.w,
+                  height: 72.w,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.red.shade500, Colors.red.shade700],
+                    ),
+                    borderRadius: BorderRadius.circular(36.r),
+                  ),
+                  child: Icon(
+                    Icons.delete_forever_outlined,
+                    color: Colors.white,
+                    size: 38.sp,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                Text(
+                  _deleteAccountText('title'),
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  _deleteAccountText('message'),
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Colors.grey.shade600,
+                    height: 1.5,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () =>
+                            Navigator.of(dialogContext).pop(false),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.grey.shade700,
+                          side: BorderSide(color: Colors.grey.shade300),
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: Text(
+                          S.of(context).user_cancel,
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () =>
+                            Navigator.of(dialogContext).pop(true),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red.shade700,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          elevation: 2,
+                        ),
+                        child: Text(
+                          _deleteAccountText('confirm'),
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await ApiRequest().request<Object?>(
+        path: '/user/deleteAccount',
+        method: 'POST',
+        fromJsonT: (_) => null,
+      );
+      // 后端注销后再走一遍统一登出链路：清三方 signOut 缓存 + 本地 token。
+      await AuthLogoutService.instance.logout();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_deleteAccountText('success'))),
+      );
+      context.goNamed('login');
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_deleteAccountText('failed'))),
+      );
+    }
+  }
+
   void _showLanguageSheet(BuildContext context) {
     final currentCode = languageController.locale.value.languageCode;
     showModalBottomSheet<void>(
@@ -348,102 +628,135 @@ class _PageState extends State<UserInfo> {
           slivers: [
           // 自定义AppBar
           SliverAppBar(
-            expandedHeight: 280.h,
+            expandedHeight: 260.h,
             floating: false,
             pinned: true,
-            backgroundColor: Colors.blue.shade600,
+            backgroundColor: const Color(0xFF1E40AF),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.blue.shade600,
-                      Colors.blue.shade800,
+                      Color(0xFF3B82F6), // blue-500
+                      Color(0xFF1E40AF), // blue-800
                     ],
                   ),
                 ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: EdgeInsets.all(20.w),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // 用户头像和基本信息
-                        Row(
+                child: Stack(
+                  children: [
+                    // 装饰光晕：右上 + 左下
+                    Positioned(
+                      top: -60.h,
+                      right: -50.w,
+                      child: Container(
+                        width: 240.w,
+                        height: 240.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.08),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: -80.h,
+                      left: -60.w,
+                      child: Container(
+                        width: 220.w,
+                        height: 220.w,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.05),
+                        ),
+                      ),
+                    ),
+                    SafeArea(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(24.w, 16.h, 24.w, 24.h),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 头像
-                            Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.white, width: 3.w),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.1),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
+                            // 头像 + 用户名 + 邮箱
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _buildAvatar(),
+                                SizedBox(width: 20.w),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        data.name ?? S.of(context).user_title,
+                                        style: TextStyle(
+                                          fontSize: 36.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          letterSpacing: 0.3,
+                                          height: 1.15,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      if ((data.email ?? '').isNotEmpty) ...[
+                                        SizedBox(height: 6.h),
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.mail_outline_rounded,
+                                              size: 22.sp,
+                                              color: Colors.white.withValues(alpha: 0.75),
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Flexible(
+                                              child: Text(
+                                                data.email!,
+                                                style: TextStyle(
+                                                  fontSize: 22.sp,
+                                                  color: Colors.white.withValues(alpha: 0.85),
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: CircleAvatar(
-                                radius: 50.w,
-                                backgroundColor: Colors.grey.shade300,
-                                backgroundImage: data.cover != null 
-                                  ? NetworkImage('${Config.imageBaseUrl}${data.cover}')
-                                  : null,
-                                child: data.cover == null 
-                                  ? Icon(Icons.person, size: 50.sp, color: Colors.grey.shade600)
-                                  : null,
-                              ),
+                                ),
+                              ],
                             ),
-                            SizedBox(width: 20.w),
-                            // 用户信息
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data.name ?? S.of(context).user_title,
-                                    style: TextStyle(
-                                      fontSize: 32.sp,
-                                      fontWeight: FontWeight.bold,
+                            SizedBox(height: 16.h),
+                            // 元信息 chip 行（注册时间 + 第三方登录绑定）
+                            Wrap(
+                              spacing: 8.w,
+                              runSpacing: 8.h,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                if ((data.createTime ?? '').isNotEmpty)
+                                  _buildHeaderChip(
+                                    leading: Icon(
+                                      Icons.schedule_rounded,
+                                      size: 22.sp,
                                       color: Colors.white,
                                     ),
+                                    label: _formatRegisterDate(data.createTime!),
                                   ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    data.email ?? '',
-                                    style: TextStyle(
-                                      fontSize: 24.sp,
-                                      color: Colors.white70,
-                                    ),
-                                  ),
-                                  SizedBox(height: 12.h),
-                                  // 注册时间
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.2),
-                                      borderRadius: BorderRadius.circular(20.r),
-                                    ),
-                                    child: Text(
-                                      '${S.of(context).user_registerTime}: ${data.createTime ?? ''}',
-                                      style: TextStyle(
-                                        fontSize: 20.sp,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                if (data.oauthBindings != null &&
+                                    data.oauthBindings!.isNotEmpty)
+                                  ...data.oauthBindings!
+                                      .map((b) => _buildProviderChip(b.provider ?? '')),
+                              ],
                             ),
                           ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -476,102 +789,155 @@ class _PageState extends State<UserInfo> {
       ),
     );
   }
-  // 统计卡片
+  /// 顶部「订单数」数据卡片。
+  /// 渐变深色块 + 左侧大图标 + 右侧大号数字与标签，整体更现代。
   Widget _buildStatsCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    return _buildStatTile(
+      icon: Icons.receipt_long_rounded,
+      label: S.of(context).user_data_orderCount,
+      value: data.orderCount ?? 0,
+      gradient: const LinearGradient(
+        colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
-      child: Padding(
-        padding: EdgeInsets.all(20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              S.of(context).user_data_orderCount,
-              style: TextStyle(
-                fontSize: 24.sp,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade800,
+      onTap: () => context.pushNamed('orderList'),
+    );
+  }
+
+  Widget _buildStatTile({
+    required IconData icon,
+    required String label,
+    required int value,
+    required Gradient gradient,
+    required VoidCallback onTap,
+  }) {
+    final shadowColor = gradient is LinearGradient
+        ? gradient.colors.first.withValues(alpha: 0.35)
+        : Colors.black.withValues(alpha: 0.12);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24.r),
+        child: Ink(
+          decoration: BoxDecoration(
+            gradient: gradient,
+            borderRadius: BorderRadius.circular(24.r),
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor,
+                blurRadius: 22,
+                offset: const Offset(0, 10),
               ),
-            ),
-            SizedBox(height: 16.h),
-            Row(
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(24.r),
+            child: Stack(
               children: [
-                Expanded(
-                  child: _buildStatItem(
-                    icon: Icons.receipt_long,
-                    title: S.of(context).user_data_orderCount,
-                    value: '${data.orderCount ?? 0}',
-                    color: Colors.blue,
-                    onTap: () => context.pushNamed('orderList'),
+                // 装饰光晕
+                Positioned(
+                  top: -40.h,
+                  right: -30.w,
+                  child: Container(
+                    width: 180.w,
+                    height: 180.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(alpha: 0.10),
+                    ),
                   ),
                 ),
-                SizedBox(width: 16.w),
-                Expanded(
-                  child: _buildStatItem(
-                    icon: Icons.movie,
-                    title: S.of(context).user_data_watchHistory,
-                    value: '${data.orderCount ?? 0}',
-                    color: Colors.green,
-                    onTap: () => context.pushNamed('orderList'),
+                Positioned(
+                  bottom: -60.h,
+                  right: 40.w,
+                  child: Container(
+                    width: 120.w,
+                    height: 120.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withValues(alpha: 0.08),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(22.w, 22.h, 22.w, 24.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // 顶部：icon + label + 圆形箭头
+                      Row(
+                        children: [
+                          Container(
+                            width: 76.sp,
+                            height: 76.sp,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.22),
+                              borderRadius: BorderRadius.circular(18.r),
+                            ),
+                            child: Icon(icon, color: Colors.white, size: 40.sp),
+                          ),
+                          SizedBox(width: 16.w),
+                          Expanded(
+                            child: Text(
+                              label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 26.sp,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 56.sp,
+                            height: 56.sp,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.18),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 28.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 22.h),
+                      // 底部：大数字
+                      Padding(
+                        padding: EdgeInsets.only(left: 4.w),
+                        child: Text(
+                          '$value',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 64.sp,
+                            fontWeight: FontWeight.w800,
+                            height: 1,
+                            fontFamily: 'Poppins',
+                            shadows: [
+                              Shadow(
+                                color: Colors.black.withValues(alpha: 0.12),
+                                blurRadius: 6,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 统计项目
-  Widget _buildStatItem({
-    required IconData icon,
-    required String title,
-    required String value,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(16.w),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: color.withValues(alpha: 0.2)),
-        ),
-        child: Column(
-          children: [
-            Icon(icon, color: color, size: 32.sp),
-            SizedBox(height: 8.h),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 28.sp,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Colors.grey.shade600,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -594,7 +960,15 @@ class _PageState extends State<UserInfo> {
       child: Column(
         children: [
           _buildModernListTile(
-            icon: Icons.edit,
+            icon: Icons.credit_card_rounded,
+            iconColor: const Color(0xFF3B82F6), // blue-500
+            title: S.of(context).user_creditCard,
+            onTap: () => context.pushNamed('selectCreditCard'),
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.person_outline_rounded,
+            iconColor: const Color(0xFF8B5CF6), // violet-500
             title: S.of(context).user_editProfile,
             onTap: () {
               context.pushNamed('userProfile', queryParameters: {
@@ -604,10 +978,127 @@ class _PageState extends State<UserInfo> {
           ),
           _buildDivider(),
           _buildModernListTile(
-            icon: Icons.language,
+            icon: Icons.translate_rounded,
+            iconColor: const Color(0xFF10B981), // emerald-500
             title: S.of(context).user_language,
             trailing: langName,
             onTap: () => _showLanguageSheet(context),
+          ),
+          _buildDivider(),
+          _buildTimeFormatTile(),
+        ],
+      ),
+    );
+  }
+
+  /// 24h / 30h 切换行：行内 segmented，点击单段或整行都可切换。
+  Widget _buildTimeFormatTile() {
+    return Obx(() {
+      final use30 = timeFormatController.use30HourFormat.value;
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => timeFormatController.toggle(),
+          borderRadius: BorderRadius.circular(12.r),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+            child: Row(
+              children: [
+                Container(
+                  width: 64.sp,
+                  height: 64.sp,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF59E0B).withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(14.r),
+                  ),
+                  child: Icon(
+                    Icons.schedule_rounded,
+                    color: const Color(0xFFF59E0B),
+                    size: 32.sp,
+                  ),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        S.of(context).user_timeFormat,
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey.shade800,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        use30
+                            ? S.of(context).user_timeFormat_subtitle_30h
+                            : S.of(context).user_timeFormat_subtitle_24h,
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          color: Colors.grey.shade500,
+                          height: 1.3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                _buildTimeFormatSegmented(use30),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget _buildTimeFormatSegmented(bool use30) {
+    const primary = Color(0xFF1989FA);
+    Widget segment({required String label, required bool selected, required VoidCallback onTap}) {
+      return GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+          decoration: BoxDecoration(
+            color: selected ? primary : Colors.transparent,
+            borderRadius: BorderRadius.circular(8.r),
+          ),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+              color: selected ? Colors.white : Colors.grey.shade600,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      padding: EdgeInsets.all(3.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF2F4F7),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          segment(
+            label: S.of(context).user_timeFormat_24h,
+            selected: !use30,
+            onTap: () => timeFormatController.setUse30HourFormat(false),
+          ),
+          segment(
+            label: S.of(context).user_timeFormat_30h,
+            selected: use30,
+            onTap: () => timeFormatController.setUse30HourFormat(true),
           ),
         ],
       ),
@@ -781,29 +1272,64 @@ class _PageState extends State<UserInfo> {
       child: Column(
         children: [
           _buildModernListTile(
-            icon: Icons.privacy_tip,
-            title: S.of(context).user_privateAgreement,
-            onTap: () => launchURL('https://www.google.com'),
+            icon: Icons.description_outlined,
+            iconColor: const Color(0xFF6366F1), // indigo-500
+            title: S.of(context).user_userTerms,
+            onTap: () => context.pushNamed(
+              'agreement',
+              pathParameters: {'code': 'USER_TERMS'},
+            ),
           ),
           _buildDivider(),
           _buildModernListTile(
-            icon: Icons.system_update,
+            icon: Icons.privacy_tip_outlined,
+            iconColor: const Color(0xFF6366F1), // indigo-500
+            title: S.of(context).user_privateAgreement,
+            onTap: () => context.pushNamed(
+              'agreement',
+              pathParameters: {'code': 'PRIVACY_POLICY'},
+            ),
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.extension_outlined,
+            iconColor: const Color(0xFF6366F1), // indigo-500
+            title: S.of(context).user_thirdPartySdk,
+            onTap: () => context.pushNamed(
+              'agreement',
+              pathParameters: {'code': 'THIRD_PARTY_SDK'},
+            ),
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.system_update_rounded,
+            iconColor: const Color(0xFF06B6D4), // cyan-500
             title: S.of(context).user_checkUpdate,
             trailing: _buildUpdateCheckTrailing(),
             onTap: _checkUpdate,
           ),
           _buildDivider(),
           _buildModernListTile(
-            icon: Icons.info_outline,
+            icon: Icons.info_outline_rounded,
+            iconColor: const Color(0xFF64748B), // slate-500
             title: S.of(context).user_about,
             onTap: () => context.pushNamed('about'),
           ),
           _buildDivider(),
           _buildModernListTile(
-            icon: Icons.logout,
+            icon: Icons.no_accounts_outlined,
+            iconColor: const Color(0xFFEF4444), // red-500
+            title: _deleteAccountText('title'),
+            textColor: const Color(0xFFB91C1C), // red-700
+            onTap: _handleDeleteAccount,
+          ),
+          _buildDivider(),
+          _buildModernListTile(
+            icon: Icons.logout_rounded,
+            iconColor: const Color(0xFFEF4444), // red-500
             title: S.of(context).user_logout,
-            textColor: Colors.red,
-            onTap: () {},
+            textColor: const Color(0xFFEF4444),
+            onTap: _handleLogout,
           ),
         ],
       ),
@@ -816,7 +1342,14 @@ class _PageState extends State<UserInfo> {
     dynamic trailing,
     required VoidCallback onTap,
     Color? textColor,
+    Color? iconColor,
+    Color? iconBgColor,
   }) {
+    // iconColor 优先用入参，其次跟 textColor（用于危险动作），最后用默认深灰
+    final resolvedIconColor =
+        iconColor ?? textColor ?? const Color(0xFF374151);
+    // iconBgColor 不传时自动用 iconColor 的 12% 透明度做柔和底色
+    final resolvedIconBg = iconBgColor ?? resolvedIconColor.withValues(alpha: 0.12);
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -827,15 +1360,17 @@ class _PageState extends State<UserInfo> {
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.all(12.w),
+                width: 64.sp,
+                height: 64.sp,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12.r),
+                  color: resolvedIconBg,
+                  borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Icon(
                   icon,
-                  color: textColor ?? Colors.grey.shade600,
-                  size: 24.sp,
+                  color: resolvedIconColor,
+                  size: 32.sp,
                 ),
               ),
               SizedBox(width: 16.w),
@@ -843,28 +1378,28 @@ class _PageState extends State<UserInfo> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: 24.sp,
-                    fontWeight: FontWeight.w500,
-                    color: textColor ?? Colors.grey.shade800,
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.w600,
+                    color: textColor ?? const Color(0xFF111827),
                   ),
                 ),
               ),
               if (trailing != null) ...[
-                trailing is String 
+                trailing is String
                   ? Text(
                       trailing,
                       style: TextStyle(
                         fontSize: 22.sp,
-                        color: Colors.grey.shade600,
+                        color: const Color(0xFF6B7280),
                       ),
                     )
                   : trailing as Widget,
-                SizedBox(width: 8.w),
+                SizedBox(width: 10.w),
               ],
               Icon(
-                Icons.arrow_forward_ios,
-                size: 16.sp,
-                color: Colors.grey.shade400,
+                Icons.arrow_forward_ios_rounded,
+                size: 18.sp,
+                color: const Color(0xFFC0C4CC),
               ),
             ],
           ),
@@ -882,43 +1417,145 @@ class _PageState extends State<UserInfo> {
     );
   }
 
-  Widget _buildListTile({
-    IconData? icon,
-    required dynamic title,
-    dynamic trailing,
-    required GestureTapCallback onTap,
-    bool showArrow = true, // ✅ 控制是否显示箭头
-  }) {
+  /// 注册时间格式化：日期 + 时分秒
+  /// - zh / ja: 2024年05月24日 13:15:53
+  /// - en: May 24, 2024 13:15:53
+  ///   (DateFormat 不带 locale 参数时默认 fallback 到 en_US；如 MMM 解析失败再退到纯数字)
+  String _formatRegisterDate(String raw) {
+    final dt = DateTime.tryParse(raw);
+    if (dt == null) return raw;
+    final code = Localizations.localeOf(context).languageCode;
+    if (code == 'en') {
+      try {
+        return DateFormat('MMM d, yyyy HH:mm:ss').format(dt);
+      } catch (_) {
+        return DateFormat('MM/dd/yyyy HH:mm:ss').format(dt);
+      }
+    }
+    return DateFormat('yyyy年MM月dd日 HH:mm:ss').format(dt);
+  }
+
+  /// 头像：白色细描边 + 柔和光晕，让头像在蓝底上更突出
+  Widget _buildAvatar() {
     return Container(
+      padding: EdgeInsets.all(3.w),
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: Colors.grey.shade300, width: 1.0)),
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          colors: [
+            Colors.white.withValues(alpha: 0.95),
+            Colors.white.withValues(alpha: 0.6),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.15),
+            blurRadius: 16,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
-      child: ListTile(
-        leading: icon != null
-            ? Icon(icon, color: Colors.grey.shade500)
-            : const SizedBox(width: 24), // ✅ 占位保持对齐
-        title: title is String
-            ? Text(title, style: TextStyle(fontSize: 24.sp))
-            : title as Widget,
-        trailing: trailing != null
-            ? trailing is String
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(trailing, style: TextStyle(fontSize: 22.sp)),
-                      if (showArrow) ...[
-                        SizedBox(width: 8.w),
-                        const Icon(Icons.arrow_forward_ios, size: 16),
-                      ],
-                    ],
-                  )
-                : trailing as Widget
-            : (showArrow
-                ? const Icon(Icons.arrow_forward_ios, size: 16)
-                : null),
-        onTap: onTap,
+      child: CircleAvatar(
+        radius: 52.w,
+        backgroundColor: Colors.grey.shade200,
+        backgroundImage: data.cover != null
+            ? NetworkImage('${Config.imageBaseUrl}${data.cover}')
+            : null,
+        child: data.cover == null
+            ? Icon(Icons.person, size: 56.sp, color: Colors.grey.shade500)
+            : null,
       ),
     );
   }
 
+  /// 通用 header chip 外壳：半透明白底 + 白描边 + leading + 文字
+  Widget _buildHeaderChip({required Widget leading, required String label}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 7.h),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.18),
+        borderRadius: BorderRadius.circular(999.r),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.32), width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          leading,
+          SizedBox(width: 8.w),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+              letterSpacing: 0.2,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 一个 provider 的小 chip：左 icon + 右文字（复用 _buildHeaderChip 外壳）
+  Widget _buildProviderChip(String provider) {
+    final meta = _providerMeta(provider);
+    final leading = meta.assetPath != null
+        ? SvgPicture.asset(
+            meta.assetPath!,
+            width: 22.sp,
+            height: 22.sp,
+            colorFilter: meta.tintWhite
+                ? const ColorFilter.mode(Colors.white, BlendMode.srcIn)
+                : null,
+          )
+        : Icon(Icons.link, size: 20.sp, color: Colors.white);
+    return _buildHeaderChip(leading: leading, label: meta.label);
+  }
+
+  _ProviderMeta _providerMeta(String provider) {
+    switch (provider.toLowerCase()) {
+      case 'google':
+        // Google 多色 logo 保持原色（tintWhite=false），背景半透明白做衬底。
+        return const _ProviderMeta(
+          label: 'Google',
+          assetPath: 'assets/icons/social/google.svg',
+          tintWhite: false,
+        );
+      case 'apple':
+        // Apple logo 是纯黑形状，强制染白才能在蓝底上看清。
+        return const _ProviderMeta(
+          label: 'Apple',
+          assetPath: 'assets/icons/social/apple.svg',
+          tintWhite: true,
+        );
+      case 'x':
+      case 'twitter':
+        return const _ProviderMeta(
+          label: 'X',
+          assetPath: 'assets/icons/social/x.svg',
+          tintWhite: true,
+        );
+      default:
+        return _ProviderMeta(label: provider, assetPath: null, tintWhite: true);
+    }
+  }
+
+}
+
+/// 第三方登录来源 chip 的展示元数据。
+class _ProviderMeta {
+  final String label;
+  final String? assetPath;
+
+  /// 是否把 SVG 染白（Apple/X 的单色 logo 在蓝色 header 上需要染白才看得清；
+  /// Google 是彩色 logo，保持原色）。
+  final bool tintWhite;
+
+  const _ProviderMeta({
+    required this.label,
+    required this.assetPath,
+    required this.tintWhite,
+  });
 }
