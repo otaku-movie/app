@@ -11,6 +11,7 @@ import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NowShowing extends StatefulWidget {
 
@@ -24,18 +25,23 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true; // 保持页面的状态
 
+  /// 持久化 key：视图模式（false=列表，true=网格）
+  static const String _viewModePrefsKey = 'now_showing_view_grid';
+
   EasyRefreshController easyRefreshController = EasyRefreshController();
   List<MovieNowShowingResponse> data = [];
   int currentPage = 1;
   bool loading = false;
   bool error = false;
   bool loadFinished  = false;
- // 视图模式：false为列表，true为网格
+  /// 视图模式：false=列表，true=网格
+  bool _isGridView = false;
 
   /// 分级为 G 时不显示
   bool _shouldShowRating(String? levelName) {
-    if (levelName == null || levelName.isEmpty) return false;
-    return levelName.toUpperCase() != 'G';
+    final level = levelName?.trim();
+    if (level == null || level.isEmpty) return false;
+    return level.toUpperCase().replaceAll('-', '').replaceAll('+', '') != 'G';
   }
 
   /// 获取分级对应的特殊颜色
@@ -52,6 +58,46 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
       default:
         return const Color(0xFF1989FA); // 默认蓝色
     }
+  }
+
+  /// 把监督列表拼成展示用字符串：多人用 `、` 顿号连接，全空返回 null
+  String? _buildDirectorText(List<Cast>? directors) {
+    if (directors == null || directors.isEmpty) return null;
+    final names = directors
+        .map((d) => d.name?.trim() ?? '')
+        .where((name) => name.isNotEmpty)
+        .toList();
+    if (names.isEmpty) return null;
+    return names.join('、');
+  }
+
+  /// 监督一行：「監督：A、B」纯文本展示，单行截断
+  Widget _buildDirectorRow(String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '${S.of(context).movieList_currentlyShowing_director}：',
+          style: TextStyle(
+            fontSize: 22.sp,
+            color: const Color(0xFF969799),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 22.sp,
+              color: const Color(0xFF323233),
+              fontWeight: FontWeight.w500,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildLevelTag(String levelName) {
@@ -90,80 +136,114 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
     }
   }
 
-  void getData({int page = 1}) {
-    // 开始加载时设置loading状态
-    if (page == 1) {
+  Future<void> getData({int page = 1, bool refresh = false}) async {
+    if (page > 1 && loadFinished) {
+      easyRefreshController.finishLoad(IndicatorResult.noMore, true);
+      return;
+    }
+
+    final isFirstLoad = page == 1 && !refresh && data.isEmpty;
+    if (isFirstLoad && mounted) {
+      setState(() {
+        loading = true;
+        error = false;
+      });
+    }
+
+    try {
+      final res = await ApiRequest().request(
+        path: '/app/movie/nowShowing',
+        method: 'GET',
+        queryParameters: {
+          "page": page,
+          "pageSize": 10,
+        },
+        fromJsonT: (json) {
+          return ApiPaginationResponse<MovieNowShowingResponse>.fromJson(
+            json,
+            (data) => MovieNowShowingResponse.fromJson(data as Map<String, dynamic>),
+          );
+        },
+      );
+
+      final list = res.data?.list ?? [];
+      final pageSize = res.data?.pageSize ?? 10;
+      final total = res.data?.total ?? 0;
+
       if (mounted) {
         setState(() {
-          loading = true;
+          if (page == 1) {
+            data = list;
+          } else if (list.isNotEmpty) {
+            final existingIds = data.map((item) => item.id).whereType<int>().toSet();
+            data.addAll(list.where((item) {
+              final id = item.id;
+              return id == null || existingIds.add(id);
+            }));
+          }
+
+          currentPage = page;
+          loadFinished = list.isEmpty ||
+              (total > 0 && data.length >= total) ||
+              list.length < pageSize;
+          loading = false;
           error = false;
         });
       }
-    }
-    
-    ApiRequest().request(
-      path: '/app/movie/nowShowing',
-      method: 'GET',
-      queryParameters: {
-        "page": page,
-        "pageSize": 10,
-      },
-      fromJsonT: (json) {
-        return ApiPaginationResponse<MovieNowShowingResponse>.fromJson(
-          json,
-          (data) => MovieNowShowingResponse.fromJson(data as Map<String, dynamic>),
-        );
-      },
-    ).then((res) {
-      if (res.data?.list != null) {
-        List<MovieNowShowingResponse> list = res.data!.list!;
-        
-        if (mounted) {
-          setState(() {
-            if (list.isNotEmpty && !loadFinished && page > 1) {
-              data.addAll(list); // 追加数据（非第一页）
-            }
-            if (page == 1) {
-              data = list; // 第一页直接替换
-            }
-            currentPage = page;
-            loadFinished = list.isEmpty; // 更新加载完成标志
-            loading = false;
-            error = false;
-          });
-        }
 
+      if (refresh) {
+        easyRefreshController.finishRefresh(IndicatorResult.success, true);
+      } else if (page > 1) {
         easyRefreshController.finishLoad(
-          list.isEmpty ? IndicatorResult.noMore : IndicatorResult.success,
-          true
+          loadFinished ? IndicatorResult.noMore : IndicatorResult.success,
+          true,
         );
-      } else {
-        // 数据为空
-        if (mounted) {
-          setState(() {
-            if (page == 1) {
-              data = [];
-            }
-            loading = false;
-            error = false;
-          });
-        }
       }
-    }).catchError((err) {
+    } catch (_) {
       if (mounted) {
         setState(() {
           loading = false;
-          error = true;
+          if (page == 1 && data.isEmpty) {
+            error = true;
+          }
         });
       }
-      easyRefreshController.finishLoad(IndicatorResult.fail, true);
-    });
+
+      if (refresh) {
+        easyRefreshController.finishRefresh(IndicatorResult.fail, true);
+      } else if (page > 1) {
+        easyRefreshController.finishLoad(IndicatorResult.fail, true);
+      }
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    _loadViewMode();
     getData();
+  }
+
+  Future<void> _loadViewMode() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final saved = prefs.getBool(_viewModePrefsKey);
+      if (saved != null && mounted) {
+        setState(() {
+          _isGridView = saved;
+        });
+      }
+    } catch (_) {}
+  }
+
+  Future<void> _toggleViewMode() async {
+    setState(() {
+      _isGridView = !_isGridView;
+    });
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_viewModePrefsKey, _isGridView);
+    } catch (_) {}
   }
 
 
@@ -171,25 +251,116 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context); 
 
-    return EasyRefresh(
-        header: customHeader(context),
-        footer: customFooter(context),
-        onRefresh: () {
-          getData();
-        },
-        onLoad: () {
-          getData(page: currentPage + 1);
-        },
-        child: AppErrorWidget(
-          loading: loading,
-          error: error,
-          empty: !loading && !error && data.isEmpty,
-          emptyWidget: _buildEmptyState(),
-          onRetry: () {
-            getData();
-          },
-          child: _buildListView(),
+    return Column(
+      children: [
+        _buildViewModeToolbar(),
+        Expanded(
+          child: EasyRefresh(
+            header: customHeader(context),
+            footer: customFooter(context),
+            onRefresh: () {
+              getData(refresh: true);
+            },
+            onLoad: () {
+              getData(page: currentPage + 1);
+            },
+            child: AppErrorWidget(
+              loading: loading,
+              error: error,
+              empty: !loading && !error && data.isEmpty,
+              emptyWidget: _buildEmptyState(),
+              onRetry: () {
+                getData();
+              },
+              child: _isGridView ? _buildGridView() : _buildListView(),
+            ),
+          ),
         ),
+      ],
+    );
+  }
+
+  /// 顶部视图模式切换栏
+  Widget _buildViewModeToolbar() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24.w, 12.h, 16.w, 4.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _buildViewModeSwitcher(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildViewModeSwitcher() {
+    return Container(
+      padding: EdgeInsets.all(4.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildViewModeButton(
+            icon: Icons.view_list_rounded,
+            tooltip: S.of(context).movieList_view_list,
+            isSelected: !_isGridView,
+            onTap: () {
+              if (_isGridView) _toggleViewMode();
+            },
+          ),
+          _buildViewModeButton(
+            icon: Icons.grid_view_rounded,
+            tooltip: S.of(context).movieList_view_grid,
+            isSelected: _isGridView,
+            onTap: () {
+              if (!_isGridView) _toggleViewMode();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildViewModeButton({
+    required IconData icon,
+    required String tooltip,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16.r),
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? const Color(0xFF1989FA)
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Icon(
+              icon,
+              size: 28.sp,
+              color: isSelected ? Colors.white : const Color(0xFF969799),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -202,6 +373,354 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         MovieNowShowingResponse item = data[index];
         return _buildMovieItem(context, item);
       },
+    );
+  }
+
+  Widget _buildGridView() {
+    return GridView.builder(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        mainAxisSpacing: 14.h,
+        crossAxisSpacing: 12.w,
+        childAspectRatio: 0.48,
+      ),
+      itemCount: data.length,
+      itemBuilder: (context, index) {
+        return _buildGridItem(context, data[index]);
+      },
+    );
+  }
+
+  Widget _buildGridItem(BuildContext context, MovieNowShowingResponse item) {
+    final isPresale = _isPresale(item.startDate);
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // 海报区
+          GestureDetector(
+            onTap: () {
+              context.pushNamed('movieDetail', pathParameters: {
+                'id': '${item.id}',
+              });
+            },
+            child: AspectRatio(
+              aspectRatio: 3 / 4,
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16.r),
+                    ),
+                    child: Container(
+                      color: Colors.grey.shade200,
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: CustomExtendedImage(
+                        item.cover ?? '',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  if (item.hasPresaleTicket == true || item.presaleId != null)
+                    Positioned(
+                      top: 6.h,
+                      left: 6.w,
+                      child: GestureDetector(
+                        onTap: (item.presaleId != null)
+                            ? () {
+                                context.pushNamed(
+                                  'presaleDetail',
+                                  pathParameters: {'id': '${item.presaleId}'},
+                                );
+                              }
+                            : null,
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.w,
+                            vertical: 3.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFF6B35),
+                            borderRadius: BorderRadius.circular(6.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFFFF6B35)
+                                    .withValues(alpha: 0.3),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            S.of(context).comingSoon_presaleTicketBadge,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (item.hasBenefits == true)
+                    Positioned(
+                      top: 6.h,
+                      right: 6.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          context.pushNamed(
+                            'movieBenefits',
+                            pathParameters: {'id': '${item.id}'},
+                            queryParameters: {
+                              'movieName': item.name,
+                              if (item.cover != null &&
+                                  item.cover!.trim().isNotEmpty)
+                                'movieCoverUrl': item.cover!.trim(),
+                              if (item.isReRelease == true &&
+                                  item.reReleaseId != null)
+                                'reReleaseId': '${item.reReleaseId}',
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 6.w,
+                            vertical: 3.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.deepPurple,
+                            borderRadius: BorderRadius.circular(6.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.deepPurple
+                                    .withValues(alpha: 0.3),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            (item.isReRelease == true)
+                                ? S
+                                    .of(context)
+                                    .benefit_hasBenefitsLabel_reRelease
+                                : S.of(context).benefit_hasBenefitsLabel,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (item.helloMovie != null) ...[
+                    Positioned(
+                      bottom: 6.h,
+                      left: 6.w,
+                      child: HelloMovie(
+                        guideData: item.helloMovie,
+                        type: HelloMovieGuide.audio,
+                        width: 36.w,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 6.h,
+                      right: 6.w,
+                      child: HelloMovie(
+                        guideData: item.helloMovie,
+                        type: HelloMovieGuide.sub,
+                        width: 36.w,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+          // 信息区
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.pushNamed('movieDetail', pathParameters: {
+                        'id': '${item.id}',
+                      });
+                    },
+                    child: Text(
+                      item.name ?? '',
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF323233),
+                        height: 1.2,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(height: 4.h),
+                  if (_shouldShowRating(item.levelName))
+                    _buildGridLevelTag(item.levelName!)
+                  else if (isPresale && item.startDate != null)
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 6.w,
+                        vertical: 2.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF6B35).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(4.r),
+                        border: Border.all(
+                          color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.schedule_outlined,
+                            size: 14.sp,
+                            color: const Color(0xFFFF6B35),
+                          ),
+                          SizedBox(width: 3.w),
+                          Flexible(
+                            child: Text(
+                              DateFormatUtil.formatDate(
+                                  item.startDate, context),
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: const Color(0xFFFF6B35),
+                                fontWeight: FontWeight.w500,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  const Spacer(),
+                  _buildGridActionButton(context, item),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 网格视图专用：紧凑评级标签（不含"分级："前缀，节省宽度）
+  Widget _buildGridLevelTag(String levelName) {
+    final color = _getRatingColor(levelName);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(4.r),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Text(
+        levelName,
+        style: TextStyle(
+          fontSize: 16.sp,
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGridActionButton(
+      BuildContext context, MovieNowShowingResponse item) {
+    final isPresale = _isPresale(item.startDate);
+    final buttonColors = isPresale
+        ? [const Color(0xFFFF6B35), const Color(0xFFFF8A50)]
+        : [const Color(0xFF1989FA), const Color(0xFF069EF0)];
+    final shadowColor =
+        isPresale ? const Color(0xFFFF6B35) : const Color(0xFF1989FA);
+
+    return Container(
+      width: double.infinity,
+      height: 46.h,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: buttonColors,
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(8.r),
+        boxShadow: [
+          BoxShadow(
+            color: shadowColor.withValues(alpha: 0.3),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8.r),
+          onTap: () {
+            context.pushNamed(
+              'showTimeList',
+              pathParameters: {'id': '${item.id}'},
+              queryParameters: {
+                'movieName': item.name,
+                if (item.isReRelease == true && item.reReleaseId != null)
+                  'reReleaseId': '${item.reReleaseId}',
+              },
+            );
+          },
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.movie_outlined,
+                  color: Colors.white,
+                  size: 18.sp,
+                ),
+                SizedBox(width: 4.w),
+                Text(
+                  isPresale
+                      ? S.of(context).comingSoon_presale
+                      : S.of(context).movieList_buy,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -456,6 +975,12 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         if (_shouldShowRating(item.levelName))
           _buildLevelTag(item.levelName!),
         SizedBox(height: 16.h),
+
+        // 監督（导演）信息：列表视图独占一行，最多 1 行截断
+        if (_buildDirectorText(item.director) != null) ...[
+          _buildDirectorRow(_buildDirectorText(item.director)!),
+          SizedBox(height: 12.h),
+        ],
         
         // 上映日期（预售时显示）
         if (_isPresale(item.startDate) && item.startDate != null)

@@ -564,6 +564,12 @@ List<Widget> generateComment() {
     }
   }
 
+  bool _shouldShowRating(String? levelName) {
+    final level = levelName?.trim();
+    if (level == null || level.isEmpty) return false;
+    return level.toUpperCase().replaceAll('-', '').replaceAll('+', '') != 'G';
+  }
+
   Widget _buildInfoRow(String label, String value, {Widget? customValue}) {
     return Padding(
       padding: EdgeInsets.only(top: 8.h),
@@ -957,7 +963,7 @@ List<Widget> generateComment() {
                                   Row(
                                     children: [
                                       // 分级信息
-                                      if (data.levelName != null)
+                                      if (_shouldShowRating(data.levelName))
                                         Container(
                                           margin: EdgeInsets.only(right: 8.w),
                                           padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
@@ -1366,7 +1372,7 @@ List<Widget> generateComment() {
                             ),
                           ),
                           // 分级
-                          if (data.levelName != null)
+                          if (_shouldShowRating(data.levelName))
                             _buildInfoRow(
                               S.of(context).movieDetail_detail_level,
                               '${data.levelName}${data.levelDescription != null && data.levelDescription!.isNotEmpty ? '（${data.levelDescription}）' : ''}',

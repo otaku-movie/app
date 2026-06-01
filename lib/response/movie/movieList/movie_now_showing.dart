@@ -8,7 +8,10 @@ part 'movie_now_showing.g.dart';
 class MovieNowShowingResponse extends MovieResponse {
   
   final List<Cast>? cast;
-  
+
+  /// 監督（监督）。后端通过 position.name = '監督' 过滤后返回。
+  final List<Cast>? director;
+
   @override
   final List<HelloMovieResponse>? helloMovie;
 
@@ -29,6 +32,7 @@ class MovieNowShowingResponse extends MovieResponse {
     super.name,
     super.cover,
     this.cast,
+    this.director,
     this.helloMovie,
     super.levelName,
     super.startDate,

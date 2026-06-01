@@ -2370,6 +2370,16 @@ class S {
     );
   }
 
+  /// `Director`
+  String get movieList_currentlyShowing_director {
+    return Intl.message(
+      'Director',
+      name: 'movieList_currentlyShowing_director',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Date TBD`
   String get movieList_comingSoon_noDate {
     return Intl.message(
@@ -2405,6 +2415,26 @@ class S {
     return Intl.message(
       'Re-release',
       name: 'movieList_tag_reRelease',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `List view`
+  String get movieList_view_list {
+    return Intl.message(
+      'List view',
+      name: 'movieList_view_list',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Grid view`
+  String get movieList_view_grid {
+    return Intl.message(
+      'Grid view',
+      name: 'movieList_view_grid',
       desc: '',
       args: [],
     );

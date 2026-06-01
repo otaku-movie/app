@@ -763,6 +763,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get movieList_currentlyShowing_level => 'Level';
 
   @override
+  String get movieList_currentlyShowing_director => 'Director';
+
+  @override
   String get movieList_comingSoon_noDate => 'Date TBD';
 
   @override
@@ -773,6 +776,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get movieList_tag_reRelease => 'Re-release';
+
+  @override
+  String get movieList_view_list => 'List view';
+
+  @override
+  String get movieList_view_grid => 'Grid view';
 
   @override
   String get movieDetail_button_want => 'Want to Watch';

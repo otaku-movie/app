@@ -1492,6 +1492,12 @@ abstract class AppLocalizations {
   /// **'Level'**
   String get movieList_currentlyShowing_level;
 
+  /// No description provided for @movieList_currentlyShowing_director.
+  ///
+  /// In en, this message translates to:
+  /// **'Director'**
+  String get movieList_currentlyShowing_director;
+
   /// No description provided for @movieList_comingSoon_noDate.
   ///
   /// In en, this message translates to:
@@ -1515,6 +1521,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Re-release'**
   String get movieList_tag_reRelease;
+
+  /// No description provided for @movieList_view_list.
+  ///
+  /// In en, this message translates to:
+  /// **'List view'**
+  String get movieList_view_list;
+
+  /// No description provided for @movieList_view_grid.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid view'**
+  String get movieList_view_grid;
 
   /// No description provided for @movieDetail_button_want.
   ///

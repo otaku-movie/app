@@ -689,6 +689,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieList_buy": MessageLookupByLibrary.simpleMessage("チケット購入"),
         "movieList_comingSoon_noDate":
             MessageLookupByLibrary.simpleMessage("日程未定"),
+        "movieList_currentlyShowing_director":
+            MessageLookupByLibrary.simpleMessage("監督"),
         "movieList_currentlyShowing_level":
             MessageLookupByLibrary.simpleMessage("映倫"),
         "movieList_placeholder":
@@ -698,6 +700,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("現在上映中"),
         "movieList_tag_reRelease": MessageLookupByLibrary.simpleMessage("再上映"),
+        "movieList_view_grid":
+            MessageLookupByLibrary.simpleMessage("グリッド表示"),
+        "movieList_view_list":
+            MessageLookupByLibrary.simpleMessage("リスト表示"),
         "movieShowList_dropdown_area":
             MessageLookupByLibrary.simpleMessage("地域"),
         "movieShowList_dropdown_dimensionType":

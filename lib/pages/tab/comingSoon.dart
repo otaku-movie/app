@@ -33,50 +33,89 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
   List<MovieResponse> movie = [];
   int currentPage = 1;
 
-  void getData({int page = 1}) {
-    ApiRequest().request(
-      path: '/app/movie/comingSoon',
-      method: 'GET',
-      queryParameters: {
-        "page": page,
-        "pageSize": 20,
-      },
-      fromJsonT: (json) {
-        return ApiPaginationResponse<MovieResponse>.fromJson(
-          json,
-          (data) => MovieResponse.fromJson(data as Map<String, dynamic>),
-        );
-      },
-    ).then((res) {
-      if (res.data?.list != null) {
-        List<MovieResponse> list = res.data!.list!;
+  Future<void> getData({int page = 1, bool refresh = false}) async {
+    if (page > 1 && loadFinished) {
+      easyRefreshController.finishLoad(IndicatorResult.noMore, true);
+      return;
+    }
 
-         setState(() {
-          if (list.isNotEmpty && !loadFinished) {
-            movie.addAll(list); // 追加数据
-          }
+    final isFirstLoad = page == 1 && !refresh && movie.isEmpty;
+    if (isFirstLoad && mounted) {
+      setState(() {
+        loading = true;
+        error = false;
+      });
+    }
+
+    try {
+      final res = await ApiRequest().request(
+        path: '/app/movie/comingSoon',
+        method: 'GET',
+        queryParameters: {
+          "page": page,
+          "pageSize": 20,
+        },
+        fromJsonT: (json) {
+          return ApiPaginationResponse<MovieResponse>.fromJson(
+            json,
+            (data) => MovieResponse.fromJson(data as Map<String, dynamic>),
+          );
+        },
+      );
+
+      final list = res.data?.list ?? [];
+      final pageSize = res.data?.pageSize ?? 20;
+      final total = res.data?.total ?? 0;
+
+      if (mounted) {
+        setState(() {
           if (page == 1) {
             movie = list;
+          } else if (list.isNotEmpty) {
+            final existingIds = movie.map((item) => item.id).whereType<int>().toSet();
+            movie.addAll(list.where((item) {
+              final id = item.id;
+              return id == null || existingIds.add(id);
+            }));
           }
+
           currentPage = page;
-          loadFinished = list.isEmpty; // 更新加载完成标志
+          loadFinished = list.isEmpty ||
+              (total > 0 && movie.length >= total) ||
+              list.length < pageSize;
+          data = dataToGroupBy(movie);
+          loading = false;
+          error = false;
         });
       }
 
-      Map<String, List<MovieResponse>> groupMovie = dataToGroupBy(movie);
+      if (refresh) {
+        easyRefreshController.finishRefresh(IndicatorResult.success, true);
+      } else if (page > 1) {
+        easyRefreshController.finishLoad(
+          loadFinished ? IndicatorResult.noMore : IndicatorResult.success,
+          true,
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          loading = false;
+          if (page == 1 && movie.isEmpty) {
+            error = true;
+          }
+        });
+      }
 
-      setState(() {
-        movie = movie;
-        data = groupMovie;
-      });
-    }).whenComplete(() {
-      setState(() {
-        loading = false;
-      });
-    });
+      if (refresh) {
+        easyRefreshController.finishRefresh(IndicatorResult.fail, true);
+      } else if (page > 1) {
+        easyRefreshController.finishLoad(IndicatorResult.fail, true);
+      }
+    }
   }
 
-  dataToGroupBy (List<MovieResponse> list) {
+  Map<String, List<MovieResponse>> dataToGroupBy(List<MovieResponse> list) {
     Map<String, List<MovieResponse>> result = {};
 
     for (var item in list) {
@@ -115,11 +154,12 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
   }
 
   bool _shouldShowRating(String? levelName) {
-    if (levelName == null || levelName.isEmpty) return false;
+    final level = levelName?.trim();
+    if (level == null || level.isEmpty) return false;
     
     // 定义日本分级等级顺序：G < PG12 < R15+ < R18+
     final ratingLevels = ['G', 'PG12', 'R15', 'R18'];
-    final currentLevel = levelName.toUpperCase();
+    final currentLevel = level.toUpperCase().replaceAll('-', '').replaceAll('+', '');
     
     // 如果不是标准分级，显示所有非G的分级
     if (!ratingLevels.contains(currentLevel)) {
@@ -151,9 +191,6 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
    @override
   void initState() {
     super.initState();
-    setState(() {
-      loading = true;
-    });
     getData();
   }
 
@@ -170,7 +207,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
         header: customHeader(context),
         footer: customFooter(context),
         onRefresh: () {
-          getData();
+          getData(refresh: true);
         },
         onLoad: () {
           getData(page: currentPage + 1);
@@ -244,7 +281,11 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                       crossAxisCount: 3,
                       crossAxisSpacing: 24.w,
                       mainAxisSpacing: 24.h,
-                      childAspectRatio: 0.55,
+                      // 标题从 1 行扩到 2 行后，标题区高度多出 ~28sp。原来
+                      // 0.55 的比例只够装单行标题 + 单行 tag，2 行标题会让
+                      // RenderFlex bottom overflow。把比例调小到 0.48 让卡片
+                      // 整体更高，留出 2 行标题 + tag 行的空间。
+                      childAspectRatio: 0.48,
                     ),
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {
@@ -374,7 +415,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                           height: 1.2,
                                         ),
                                         overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
+                                        maxLines: 2,
                                       ),
                                       SizedBox(height: 8.h),
                                       Wrap(

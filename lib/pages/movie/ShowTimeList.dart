@@ -53,6 +53,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   int tabLength = 0;
   bool loading = false;
   bool error = false;
+  int currentPage = 1;
+  bool loadFinished = false;
+  static const int _pageSize = 10;
   Map<String, dynamic> filterParams = {};
   Placemark? location;
   Position? position;
@@ -297,10 +300,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
   }
 
   /// 构建请求参数
-  Map<String, dynamic> _buildRequestData() {
+  Map<String, dynamic> _buildRequestData({int page = 1}) {
     final requestData = <String, dynamic>{
       "movieId": int.parse(widget.id!),
-      "page": 1,
+      "page": page,
+      "pageSize": _pageSize,
     };
 
     final rrId = int.tryParse((widget.reReleaseId ?? '').trim());
@@ -375,119 +379,187 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
     return requestData;
   }
 
-  Future<void> getData({bool refresh = false}) async {
-    // 记录调用接口前的tab日期（如果有的话），用于接口返回后恢复tab
+  Future<void> getData({int page = 1, bool refresh = false}) async {
+    // 加载更多时若已无更多数据，直接结束
+    if (page > 1 && loadFinished) {
+      easyRefreshController.finishLoad(IndicatorResult.noMore, true);
+      return;
+    }
+
+    // 记录调用接口前的tab日期，用于接口返回后恢复tab
     String? previousTabDate;
-    if (_tabController != null && 
-        _tabController!.index >= 0 && 
+    if (_tabController != null &&
+        _tabController!.index >= 0 &&
         _tabController!.index < data.length &&
         data[_tabController!.index].date != null) {
       previousTabDate = data[_tabController!.index].date;
     }
-    
-    if (!refresh) {
-      if (!mounted) return;
+
+    // 首次加载 / 筛选切换会显示整页 loading；下拉刷新与加载更多由 EasyRefresh 的头/尾指示器提示
+    final showFullScreenLoading = page == 1 && !refresh;
+    if (showFullScreenLoading && mounted) {
       setState(() {
         loading = true;
         error = false;
       });
     }
 
-    final requestData = _buildRequestData();
+    final requestData = _buildRequestData(page: page);
 
-    ApiRequest().request(
-      path: '/app/movie/showTime',
-      method: 'POST',
-      data: requestData,
-      fromJsonT: (json) {
-        if (json is List<dynamic>) {
-          return json.map((item) => ShowTimeResponse.fromJson(item)).toList();
+    try {
+      final res = await ApiRequest().request(
+        path: '/app/movie/showTime',
+        method: 'POST',
+        data: requestData,
+        fromJsonT: (json) {
+          if (json is List<dynamic>) {
+            return json.map((item) => ShowTimeResponse.fromJson(item)).toList();
+          }
+        },
+      );
+
+      final list = res.data ?? [];
+
+      // 计算距离并按距离排序（影响排序，必须在合并前完成）
+      if (position != null && list.isNotEmpty) {
+        _computeDistancesForList(list);
+      }
+
+      if (!mounted) return;
+
+      // 后端按"影院"分页（每页 _pageSize 家影院），但接口返回的是「按日期分组」
+      // 的数组。判断"是否还有下一页"必须看本次返回的 **去重 cinema id 数**，
+      // 而不是 list.length（list.length 是日期数，最多 7 天，几乎永远 < pageSize，
+      // 会被误判成 noMore，下一页永远拉不到）。
+      final cinemaIdSet = <int>{};
+      for (final entry in list) {
+        for (final c in (entry.data ?? [])) {
+          final id = c.cinemaId;
+          if (id != null) cinemaIdSet.add(id);
         }
-      },
-    ).then((res) {
-      if (res.data != null && res.data!.isNotEmpty) {
-        List<ShowTimeResponse> list = res.data!;
-        
-        // 计算距离并排序
-        if (position != null) {
-          _computeDistancesForList(list);
-          print('✅ 距离计算完成, position: ${position!.latitude}, ${position!.longitude}');
-        } else {
-          print('⚠️ position 为 null，无法计算距离');
-        }
-        
-        if (!mounted) return;
-        
-        // 查找新数据中对应日期的index
-        int targetIndex = 0;
-        if (previousTabDate != null) {
-          targetIndex = list.indexWhere((item) => item.date == previousTabDate);
-          // 如果找不到相同的日期，使用第一个tab（index 0）
-          if (targetIndex < 0 || targetIndex >= list.length) targetIndex = 0;
-        }
-        
+      }
+      final cinemaCount = cinemaIdSet.length;
+
+      if (page == 1) {
+        // 首次加载 / 下拉刷新 / 筛选切换：替换数据
         setState(() {
           data = list;
-          _tabController?.dispose();
-          _tabController = null;
           tabLength = data.length;
+          currentPage = 1;
+          loadFinished = cinemaCount < _pageSize;
           loading = false;
           error = false;
         });
 
-        // 在数据加载后初始化 TabController（确保页面还在 mounted）
-        if (mounted && tabLength > 0) {
-          _tabController?.dispose();
-          _tabController = TabController(
-            length: tabLength, 
-            vsync: this,
-            initialIndex: targetIndex,
-          );
-          // 添加tab切换监听，更新时间范围筛选器的日期
-          _tabController!.addListener(_onTabChanged);
-        }
-        
-        // 通知 EasyRefresh 刷新完成
+        _rebuildTabController(previousTabDate);
+
         if (refresh) {
           easyRefreshController.finishRefresh(IndicatorResult.success, true);
         }
       } else {
-        // 数据为空，清空列表
-        if (!mounted) return;
-        
+        // 加载更多：合并到现有数据，并按日期 + cinemaId 去重
+        final mergedCount = _mergePagedData(list);
+        // 到底条件：本页返回的影院数 < pageSize；或者 mergedCount==0（极少见的
+        // 兜底，避免分页边界时无限循环拉同一页）。
+        final reachedEnd = cinemaCount < _pageSize || mergedCount == 0;
+
         setState(() {
-          data = [];
-          _tabController?.dispose();
-          _tabController = null;
-          tabLength = 0;
-          loading = false;
+          tabLength = data.length;
+          currentPage = page;
+          loadFinished = reachedEnd;
           error = false;
         });
-        
-        // 通知 EasyRefresh 刷新完成
-        if (refresh) {
-          easyRefreshController.finishRefresh(IndicatorResult.success, true);
+
+        // 若日期 tab 数量发生变化，重建 TabController 以保持选中项
+        if (_tabController == null || _tabController!.length != tabLength) {
+          _rebuildTabController(previousTabDate);
         }
+
+        easyRefreshController.finishLoad(
+          reachedEnd ? IndicatorResult.noMore : IndicatorResult.success,
+          true,
+        );
       }
-    }).catchError((err) {
+    } catch (err) {
       print('获取数据失败: $err');
-      // API失败时设置错误状态
       if (!mounted) return;
-      
-      setState(() {
-        data = [];
-        _tabController?.dispose();
-        _tabController = null;
-        tabLength = 0;
-        loading = false;
-        error = true;
-      });
-      
-      // 通知 EasyRefresh 刷新失败
-      if (refresh) {
-        easyRefreshController.finishRefresh(IndicatorResult.fail, true);
+
+      if (page == 1) {
+        // 首次加载 / 下拉刷新失败：仅在没有缓存数据时显示错误页
+        setState(() {
+          loading = false;
+          if (data.isEmpty) {
+            error = true;
+          }
+        });
+        if (refresh) {
+          easyRefreshController.finishRefresh(IndicatorResult.fail, true);
+        }
+      } else {
+        // 加载更多失败：保留已加载的内容，仅提示底部失败
+        easyRefreshController.finishLoad(IndicatorResult.fail, true);
       }
-    });
+    }
+  }
+
+  /// 把新加载的分页数据合并进 [data]：
+  /// - 已存在的日期，按 `cinemaId` 去重后追加新的影院
+  /// - 不存在的日期，整段 push 到末尾
+  ///
+  /// 返回本次「真正新增的影院条目数」，用于判定是否还有更多数据。
+  int _mergePagedData(List<ShowTimeResponse> incoming) {
+    int added = 0;
+    for (final entry in incoming) {
+      final existingIndex =
+          data.indexWhere((item) => item.date != null && item.date == entry.date);
+      if (existingIndex >= 0) {
+        final existing = data[existingIndex];
+        final existingIds = (existing.data ?? [])
+            .map((c) => c.cinemaId)
+            .whereType<int>()
+            .toSet();
+        final toAdd = (entry.data ?? [])
+            .where((c) {
+              final id = c.cinemaId;
+              return id == null || existingIds.add(id);
+            })
+            .toList();
+        if (toAdd.isNotEmpty) {
+          (existing.data ?? <Cinema>[]).addAll(toAdd);
+          added += toAdd.length;
+        }
+      } else {
+        data.add(entry);
+        added += (entry.data?.length ?? 0);
+      }
+    }
+    return added;
+  }
+
+  /// 根据当前 [data] 重建 TabController，并尽量保持原日期 tab 选中。
+  void _rebuildTabController(String? previousTabDate) {
+    if (!mounted) return;
+
+    _tabController?.removeListener(_onTabChanged);
+    _tabController?.dispose();
+    _tabController = null;
+
+    if (data.isEmpty) {
+      return;
+    }
+
+    int targetIndex = 0;
+    if (previousTabDate != null) {
+      final idx = data.indexWhere((item) => item.date == previousTabDate);
+      if (idx >= 0) targetIndex = idx;
+    }
+
+    _tabController = TabController(
+      length: data.length,
+      vsync: this,
+      initialIndex: targetIndex,
+    );
+    _tabController!.addListener(_onTabChanged);
   }
 
   // 计算距离并排序
@@ -890,6 +962,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin  {
                       footer: customFooter(context),
                   onRefresh: () async {
                     await getData(refresh: true);
+                  },
+                  onLoad: () async {
+                    await getData(page: currentPage + 1);
                   },
                       childBuilder: (context, physics) {
                     if (data.isEmpty || _tabController == null || !mounted) {

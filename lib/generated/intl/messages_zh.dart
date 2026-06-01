@@ -655,6 +655,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieList_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "movieList_comingSoon_noDate":
             MessageLookupByLibrary.simpleMessage("日期待定"),
+        "movieList_currentlyShowing_director":
+            MessageLookupByLibrary.simpleMessage("导演"),
         "movieList_currentlyShowing_level":
             MessageLookupByLibrary.simpleMessage("分级"),
         "movieList_placeholder": MessageLookupByLibrary.simpleMessage("搜索全部电影"),
@@ -663,6 +665,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieList_tabBar_currentlyShowing":
             MessageLookupByLibrary.simpleMessage("上映中"),
         "movieList_tag_reRelease": MessageLookupByLibrary.simpleMessage("重映"),
+        "movieList_view_grid": MessageLookupByLibrary.simpleMessage("网格视图"),
+        "movieList_view_list": MessageLookupByLibrary.simpleMessage("列表视图"),
         "movieShowList_dropdown_area":
             MessageLookupByLibrary.simpleMessage("地区"),
         "movieShowList_dropdown_dimensionType":

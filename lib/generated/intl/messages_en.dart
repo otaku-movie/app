@@ -736,6 +736,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieList_buy": MessageLookupByLibrary.simpleMessage("Buy Ticket"),
         "movieList_comingSoon_noDate":
             MessageLookupByLibrary.simpleMessage("Date TBD"),
+        "movieList_currentlyShowing_director":
+            MessageLookupByLibrary.simpleMessage("Director"),
         "movieList_currentlyShowing_level":
             MessageLookupByLibrary.simpleMessage("Level"),
         "movieList_placeholder":
@@ -746,6 +748,10 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Currently Showing"),
         "movieList_tag_reRelease":
             MessageLookupByLibrary.simpleMessage("Re-release"),
+        "movieList_view_grid":
+            MessageLookupByLibrary.simpleMessage("Grid view"),
+        "movieList_view_list":
+            MessageLookupByLibrary.simpleMessage("List view"),
         "movieShowList_dropdown_area":
             MessageLookupByLibrary.simpleMessage("Area"),
         "movieShowList_dropdown_dimensionType":

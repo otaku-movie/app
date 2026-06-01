@@ -720,6 +720,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieList_currentlyShowing_level => '分级';
 
   @override
+  String get movieList_currentlyShowing_director => '导演';
+
+  @override
   String get movieList_comingSoon_noDate => '日期待定';
 
   @override
@@ -730,6 +733,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get movieList_tag_reRelease => '重映';
+
+  @override
+  String get movieList_view_list => '列表视图';
+
+  @override
+  String get movieList_view_grid => '网格视图';
 
   @override
   String get movieDetail_button_want => '想看';

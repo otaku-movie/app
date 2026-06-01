@@ -50,6 +50,12 @@ class _PageState extends State<Search> {
     }
   }
 
+  bool _shouldShowRating(String? levelName) {
+    final level = levelName?.trim();
+    if (level == null || level.isEmpty) return false;
+    return level.toUpperCase().replaceAll('-', '').replaceAll('+', '') != 'G';
+  }
+
   @override
   void initState() {
     super.initState();
@@ -416,9 +422,13 @@ class _PageState extends State<Search> {
                   cursorHeight: 32.h,
                   cursorRadius: const Radius.circular(2.0),
                 onChange: (val) {
-                  setState(() {
-                    searchController.text = val;
-                  });
+                  // 注意：不要在这里写 `searchController.text = val`。
+                  // TextField 已经绑定了同一个 controller，重新赋值会清空 IME 的
+                  // composing region，导致日语等输入法在按下字母时被打断，
+                  // 只能输入出 `mおnおnお` 这种半成品。
+                  // 这里只需要 setState 让 suffixIcon (搜索 ↔ 清空) 跟随
+                  // isEmpty 重新渲染。
+                  setState(() {});
                 },
                 onSubmit: (val) {
                   if (sharedPreferences != null && val != '') {
@@ -434,7 +444,6 @@ class _PageState extends State<Search> {
 
                     setState(() {
                       searchHistoryList = top20;
-                      searchController.text = val;
                       loading = true;
                     });
                     search();
@@ -666,26 +675,26 @@ class _PageState extends State<Search> {
             ),
           ),
           
-          SizedBox(height: 12.h),
-          
-          // 分级标签 - 固定在底部
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Text(
-              '${S.of(context).search_level}：${item.levelName}', 
-              style: TextStyle(
-                fontSize: 22.sp, 
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.w500,
+          if (_shouldShowRating(item.levelName)) ...[
+            SizedBox(height: 12.h),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12.r),
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              child: Text(
+                '${S.of(context).search_level}：${item.levelName}',
+                style: TextStyle(
+                  fontSize: 22.sp,
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

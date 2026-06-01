@@ -733,6 +733,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieList_currentlyShowing_level => '映倫';
 
   @override
+  String get movieList_currentlyShowing_director => '監督';
+
+  @override
   String get movieList_comingSoon_noDate => '日程未定';
 
   @override
@@ -743,6 +746,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get movieList_tag_reRelease => '再上映';
+
+  @override
+  String get movieList_view_list => 'リスト表示';
+
+  @override
+  String get movieList_view_grid => 'グリッド表示';
 
   @override
   String get movieDetail_button_want => '見たい';

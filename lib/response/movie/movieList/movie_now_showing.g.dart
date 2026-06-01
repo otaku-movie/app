@@ -15,6 +15,9 @@ MovieNowShowingResponse _$MovieNowShowingResponseFromJson(
       cast: (json['cast'] as List<dynamic>?)
           ?.map((e) => Cast.fromJson(e as Map<String, dynamic>))
           .toList(),
+      director: (json['director'] as List<dynamic>?)
+          ?.map((e) => Cast.fromJson(e as Map<String, dynamic>))
+          .toList(),
       helloMovie: (json['helloMovie'] as List<dynamic>?)
           ?.map((e) => HelloMovieResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -41,6 +44,7 @@ Map<String, dynamic> _$MovieNowShowingResponseToJson(
       'hasPresaleTicket': instance.hasPresaleTicket,
       'hasBonus': instance.hasBonus,
       'cast': instance.cast?.map((e) => e.toJson()).toList(),
+      'director': instance.director?.map((e) => e.toJson()).toList(),
       'helloMovie': instance.helloMovie?.map((e) => e.toJson()).toList(),
       'hasBenefits': instance.hasBenefits,
       'isReRelease': instance.isReRelease,
