@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -838,7 +835,8 @@ class _RegisterState extends State<Register> {
               return;
             }
             
-            String pwd = md5.convert(utf8.encode(passwordController.text)).toString();
+            // 直接提交明文密码，由后端 BCrypt 加盐哈希存储（传输依赖 HTTPS 保护）
+            String pwd = passwordController.text;
 
             setState(() {
               loading = true;
