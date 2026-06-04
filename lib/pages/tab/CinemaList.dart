@@ -14,6 +14,7 @@ import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:otaku_movie/utils/location_util.dart';
+import 'package:otaku_movie/service/favorite_cinema_service.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/error.dart';
@@ -37,6 +38,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   String? selectedArea;
   Map<String, dynamic> filterParams = {};
   TextEditingController searchController = TextEditingController();
+  final FocusNode searchFocusNode = FocusNode();
   Placemark? location;
   Position? position;
   String? currentAddressFull;
@@ -142,9 +144,15 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   void dispose() {
     scrollController.removeListener(_onScroll);
     searchController.dispose();
+    searchFocusNode.dispose();
     scrollController.dispose();
     easyRefreshController.dispose();
     super.dispose();
+  }
+
+  void _dismissKeyboard() {
+    searchFocusNode.unfocus();
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   Future<void> getLocation() async {
@@ -390,6 +398,10 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
       }
     }
     list.sort((a, b) {
+      // 收藏的影院优先置顶，其次再按距离升序
+      final fa = a.favorite == true ? 0 : 1;
+      final fb = b.favorite == true ? 0 : 1;
+      if (fa != fb) return fa - fb;
       final da = a.distance;
       final db = b.distance;
       if (da == null && db == null) return 0;
@@ -397,6 +409,25 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
       if (db == null) return -1;
       return da.compareTo(db);
     });
+  }
+
+  /// 收藏 / 取消收藏某影院。未登录则引导去登录页。
+  Future<void> _toggleFavorite(CinemaListResponse cinema) async {
+    final cinemaId = cinema.id;
+    if (cinemaId == null) return;
+    if (!await FavoriteCinemaService.instance.isLoggedIn()) {
+      if (mounted) context.pushNamed('login');
+      return;
+    }
+    final prev = cinema.favorite == true;
+    setState(() => cinema.favorite = !prev);
+    final result = await FavoriteCinemaService.instance.toggle(cinemaId);
+    if (!mounted) return;
+    if (result == null) {
+      setState(() => cinema.favorite = prev);
+    } else {
+      setState(() => cinema.favorite = result);
+    }
   }
 
   String _formatDistance(BuildContext context, double meters) => LocationUtil.formatDistanceLocalized(context, meters);
@@ -709,6 +740,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   Widget _buildCinemaCard(CinemaListResponse cinema) {
     return GestureDetector(
       onTap: () {
+        _dismissKeyboard();
         // 跳转到影院详情页
         context.pushNamed('cinemaDetail', queryParameters: {'id': cinema.id.toString()});
       },
@@ -749,6 +781,24 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                           ),
                         ),
                       ),
+                      // 收藏星标：收藏的影院会在列表中置顶
+                      if (cinema.id != null)
+                        GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => _toggleFavorite(cinema),
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 8.w),
+                            child: Icon(
+                              cinema.favorite == true
+                                  ? Icons.star_rounded
+                                  : Icons.star_border_rounded,
+                              size: 44.sp,
+                              color: cinema.favorite == true
+                                  ? const Color(0xFFFFB300)
+                                  : Colors.grey.shade400,
+                            ),
+                          ),
+                        ),
                       // Container(
                       //   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                       //   decoration: BoxDecoration(
@@ -977,6 +1027,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                               final movie = cinema.nowShowingMovies![index];
                               return GestureDetector(
                                 onTap: () {
+                                  _dismissKeyboard();
                                   context.pushNamed('showTimeDetail',
                                     pathParameters: {
                                       'id': '${movie.id}'
@@ -1356,6 +1407,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                         ),
                         child: TextField(
                           controller: searchController,
+                          focusNode: searchFocusNode,
                           maxLines: 1,
                           textAlignVertical: TextAlignVertical.center,
                           cursorColor: const Color(0xFF1989FA),

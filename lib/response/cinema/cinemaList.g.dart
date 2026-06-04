@@ -53,6 +53,7 @@ CinemaListResponse _$CinemaListResponseFromJson(Map<String, dynamic> json) =>
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
       postalCode: json['postalCode'] as String?,
+      favorite: json['favorite'] as bool?,
     );
 
 Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
@@ -74,6 +75,7 @@ Map<String, dynamic> _$CinemaListResponseToJson(CinemaListResponse instance) =>
       'postalCode': instance.postalCode,
       'nowShowingMovies':
           instance.nowShowingMovies?.map((e) => e.toJson()).toList(),
+      'favorite': instance.favorite,
       'distance': instance.distance,
     };
 

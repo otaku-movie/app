@@ -58,6 +58,9 @@ class CinemaListResponse {
     final String? postalCode;
     
     final List<NowShowingMovie>? nowShowingMovies;
+
+    /// 当前用户是否已收藏该影院（可本地 toggle）
+    bool? favorite;
     
     double? distance;
 
@@ -79,6 +82,7 @@ class CinemaListResponse {
         this.latitude,
         this.longitude,
         this.postalCode,
+        this.favorite,
     });
 
     factory CinemaListResponse.fromJson(Map<String, dynamic> json) => _$CinemaListResponseFromJson(json);

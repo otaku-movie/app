@@ -583,17 +583,22 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
         border: Border.all(color: Colors.grey.shade100, width: 1),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 左侧：名称
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 26.sp,
-              color: const Color(0xFF323233),
-              fontWeight: FontWeight.w500,
+          Expanded(
+            child: Text(
+              name,
+              style: TextStyle(
+                fontSize: 26.sp,
+                color: const Color(0xFF323233),
+                fontWeight: FontWeight.w500,
+                height: 1.3,
+              ),
+              softWrap: true,
             ),
           ),
+          SizedBox(width: 12.w),
           // 右侧：价格
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -635,16 +640,21 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 26.sp,
-                  color: const Color(0xFF323233),
-                  fontWeight: FontWeight.w500,
+              Expanded(
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 26.sp,
+                    color: const Color(0xFF323233),
+                    fontWeight: FontWeight.w500,
+                    height: 1.3,
+                  ),
+                  softWrap: true,
                 ),
               ),
+              SizedBox(width: 12.w),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
