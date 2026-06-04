@@ -6,7 +6,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
-import 'package:otaku_movie/service/agreement_service.dart';
+import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/utils/index.dart';
 
 class AgreementPage extends StatefulWidget {
@@ -51,20 +51,17 @@ class _AgreementPageState extends State<AgreementPage> {
           title = data['title'] as String? ?? '';
           content = data['content'] as String? ?? '';
           version = data['version'] as String? ?? '';
-          effectiveDate = (data['effectiveDate'] as String?) ?? '';
-          lastUpdated =
-              (data['updatedAt'] ?? data['lastUpdated']) as String? ?? '';
+          // 后端 Agreement 实体经 Jackson 序列化后字段为 effectiveAt / updateTime
+          // (Lombok @Data + @JsonFormat)；historical 的 effectiveDate / updatedAt
+          // 字段名只在 dart fallback 里出现过，从 DB 拉到的真协议永远是 At/Time 后缀。
+          effectiveDate = (data['effectiveAt'] as String?) ??
+              (data['effectiveDate'] as String?) ??
+              '';
+          lastUpdated = (data['updateTime'] as String?) ??
+              (data['updatedAt'] as String?) ??
+              (data['lastUpdated'] as String?) ??
+              '';
         });
-      } else {
-        final fallback =
-            AgreementService.instance.fallbackForCode(widget.code, lang);
-        if (fallback != null) {
-          setState(() {
-            title = fallback.title;
-            content = fallback.content;
-            version = fallback.version;
-          });
-        }
       }
     } finally {
       if (mounted) {
@@ -86,6 +83,12 @@ class _AgreementPageState extends State<AgreementPage> {
     }
   }
 
+  /// 把协议正文里的占位符替换成实际值。
+  ///
+  /// `{{APP_NAME}}` / `{{EFFECTIVE_DATE}}` / `{{LAST_UPDATED}}` 由 App 端
+  /// 动态填充；其余运营信息（公司、客服、邮箱、保留期等）目前先用合理的
+  /// 默认值兜底，正式上线前请通过后台 / SQL 把它们替换为真实值，避免协议
+  /// 正文出现 `{{XXX}}` 这种模板符号外漏。
   String _resolvePlaceholders(String src) {
     final today = DateTime.now();
     String pad(int v) => v.toString().padLeft(2, '0');
@@ -94,10 +97,38 @@ class _AgreementPageState extends State<AgreementPage> {
         ? _formatDate(effectiveDate)
         : (version.isNotEmpty ? 'v$version' : todayStr);
     final upd = lastUpdated.isNotEmpty ? _formatDate(lastUpdated) : eff;
-    return src
-        .replaceAll('{{APP_NAME}}', 'Otaku Movie')
-        .replaceAll('{{EFFECTIVE_DATE}}', eff)
-        .replaceAll('{{LAST_UPDATED}}', upd);
+
+    final replacements = <String, String>{
+      'APP_NAME': 'Otaku Movie',
+      'EFFECTIVE_DATE': eff,
+      'LAST_UPDATED': upd,
+      'COMPANY_NAME': 'Otaku Movie 運営チーム',
+      'COMPANY_ADDRESS': '日本国東京都（運営情報の確定後に更新）',
+      'JURISDICTION_COURT': '東京地方裁判所',
+      'SUPPORT_EMAIL': 'support@otaku-movie.com',
+      'SUPPORT_PHONE': '03-0000-0000',
+      'SUPPORT_HOURS': '平日 10:00 - 18:00 (JST)',
+      'DPO_EMAIL': 'privacy@otaku-movie.com',
+      'DPO_RESPONSE_DAYS': '15',
+      'REFUND_HOURS': '1',
+      'ACCOUNT_RETENTION_DAYS': '30',
+      'LOG_RETENTION_DAYS': '180',
+      'SUPPORT_RETENTION_DAYS': '365',
+      'MIN_AGE': '13',
+      'CLOUD_PROVIDERS': 'AWS（東京リージョン）',
+      'COMMS_PROVIDERS': 'SendGrid / Twilio',
+      'OVERSEAS_LOCATIONS': '日本国外（米国・欧州を含む）',
+      'STORAGE_LOCATIONS': '日本（東京リージョン）',
+      'API_DOMAIN': 'api.otaku-movie.com',
+    };
+
+    var out = src;
+    replacements.forEach((key, value) {
+      out = out.replaceAll('{{$key}}', value);
+    });
+    // 兜底：剩余未配置的 `{{XXX}}` 也清掉，避免显示大括号字面量。
+    out = out.replaceAll(RegExp(r'\{\{[A-Z0-9_]+\}\}'), '—');
+    return out;
   }
 
   MarkdownStyleSheet _markdownStyle() {
@@ -337,7 +368,20 @@ class _AgreementPageState extends State<AgreementPage> {
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : content.isEmpty
-              ? const Center(child: Text('暂无内容'))
+              ? Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 48.w),
+                    child: Text(
+                      S.of(context).agreement_emptyContent,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 26.sp,
+                        color: Colors.grey.shade600,
+                        height: 1.6,
+                      ),
+                    ),
+                  ),
+                )
               : SelectionArea(
                   child: ListView.builder(
                     padding: EdgeInsets.symmetric(
