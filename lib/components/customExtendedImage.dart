@@ -25,7 +25,6 @@ class CustomExtendedImage extends StatelessWidget {
     if (src.isEmpty) {
       return errorWidget ?? SizedBox(width: width, height: height, child: const Icon(Icons.image_not_supported, color: Colors.grey));
     }
-    // 如果src是完整url，直接使用，否则拼接base url
     final String imageUrl = src.startsWith('http') ? src : '${Config.imageBaseUrl}$src';
 
     return ExtendedImage.network(
@@ -33,7 +32,7 @@ class CustomExtendedImage extends StatelessWidget {
       fit: fit,
       width: width,
       height: height,
-      cache: true, // 缓存图片，提升性能
+      cache: true,
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:

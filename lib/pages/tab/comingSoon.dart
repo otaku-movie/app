@@ -28,6 +28,8 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
   bool loading = false;
   bool error = false;
   bool loadFinished  = false;
+  /// 分页（page>1）加载进行中：用于在列表底部内联展示 loading。
+  bool loadingMore = false;
   Map<String, List<MovieResponse>> data = {};
   
   List<MovieResponse> movie = [];
@@ -44,6 +46,14 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
       setState(() {
         loading = true;
         error = false;
+      });
+    }
+
+    // 分页加载（非首屏、非下拉刷新）：标记 loadingMore，底部展示 loading。
+    final isLoadMore = page > 1 && !refresh;
+    if (isLoadMore && mounted) {
+      setState(() {
+        loadingMore = true;
       });
     }
 
@@ -85,6 +95,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
               list.length < pageSize;
           data = dataToGroupBy(movie);
           loading = false;
+          loadingMore = false;
           error = false;
         });
       }
@@ -101,6 +112,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
       if (mounted) {
         setState(() {
           loading = false;
+          loadingMore = false;
           if (page == 1 && movie.isEmpty) {
             error = true;
           }
@@ -205,7 +217,9 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
       ),
       child: EasyRefresh(
         header: customHeader(context),
-        footer: customFooter(context),
+        // 即将上映按月份分组，每条卡片偏高，用 500.h 让用户在还能看到
+        // 一张多一点的数据时就开始预拉下一页。
+        footer: customFooter(context, infiniteOffset: 500.h),
         onRefresh: () {
           getData(refresh: true);
         },
@@ -216,7 +230,8 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
           loading: loading,
           error: error,
           child: CustomScrollView(
-            slivers: data.keys.toList().map((section) {
+            slivers: [
+              ...data.keys.toList().map((section) {
               return SliverStickyHeader(
                 header: Container(
                   height: 60.h,
@@ -535,7 +550,27 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                   ),
                 ),
               );
-            }).toList(),
+            }),
+              // 分页加载进行中且仍有下一页时，底部内联 loading，避免预加载
+              // 触发后「要等一会才出现下一页、期间没有可见 loading」。
+              if (loadingMore && !loadFinished)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24.h),
+                    child: Center(
+                      child: SizedBox(
+                        width: 40.w,
+                        height: 40.w,
+                        child: const CircularProgressIndicator(
+                          strokeWidth: 3,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Color(0xFF1989FA)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ),

@@ -34,6 +34,8 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   bool loading = false;
   bool error = false;
   bool loadFinished  = false;
+  /// 分页（page>1）加载进行中：用于在列表/网格底部内联展示 loading。
+  bool loadingMore = false;
   /// 视图模式：false=列表，true=网格
   bool _isGridView = false;
 
@@ -150,6 +152,14 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
       });
     }
 
+    // 分页加载（非首屏、非下拉刷新）：标记 loadingMore，底部展示 loading。
+    final isLoadMore = page > 1 && !refresh;
+    if (isLoadMore && mounted) {
+      setState(() {
+        loadingMore = true;
+      });
+    }
+
     try {
       final res = await ApiRequest().request(
         path: '/app/movie/nowShowing',
@@ -187,6 +197,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
               (total > 0 && data.length >= total) ||
               list.length < pageSize;
           loading = false;
+          loadingMore = false;
           error = false;
         });
       }
@@ -203,6 +214,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
       if (mounted) {
         setState(() {
           loading = false;
+          loadingMore = false;
           if (page == 1 && data.isEmpty) {
             error = true;
           }
@@ -257,7 +269,9 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         Expanded(
           child: EasyRefresh(
             header: customHeader(context),
-            footer: customFooter(context),
+            // 预加载阈值约 1~1.5 张电影卡片：列表/网格视图下用户还能看到下一张时
+            // 就提前触发下一页加载，避免出现「滚到底才看到 loading」。
+            footer: customFooter(context, infiniteOffset: 400.h),
             onRefresh: () {
               getData(refresh: true);
             },
@@ -272,7 +286,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
               onRetry: () {
                 getData();
               },
-              child: _isGridView ? _buildGridView() : _buildListView(),
+              child: _buildMovieScrollView(),
             ),
           ),
         ),
@@ -365,30 +379,63 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   }
 
 
-  Widget _buildListView() {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        MovieNowShowingResponse item = data[index];
-        return _buildMovieItem(context, item);
-      },
+  /// 列表 / 网格统一用 CustomScrollView 承载，底部追加一个内联 loading：
+  /// 分页加载进行中（loadingMore）且仍有下一页时展示，解决「预加载触发后要等一会
+  /// 才出现下一页，期间没有可见 loading」的问题。
+  Widget _buildMovieScrollView() {
+    final showBottomLoader = loadingMore && !loadFinished;
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+          padding: _isGridView
+              ? EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h)
+              : EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+          sliver: _isGridView ? _buildSliverGrid() : _buildSliverList(),
+        ),
+        if (showBottomLoader)
+          SliverToBoxAdapter(child: _buildBottomLoader()),
+      ],
     );
   }
 
-  Widget _buildGridView() {
-    return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+  Widget _buildSliverList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => _buildMovieItem(context, data[index]),
+        childCount: data.length,
+      ),
+    );
+  }
+
+  Widget _buildSliverGrid() {
+    return SliverGrid(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         mainAxisSpacing: 14.h,
         crossAxisSpacing: 12.w,
         childAspectRatio: 0.48,
       ),
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        return _buildGridItem(context, data[index]);
-      },
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => _buildGridItem(context, data[index]),
+        childCount: data.length,
+      ),
+    );
+  }
+
+  /// 底部内联 loading 指示器
+  Widget _buildBottomLoader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 24.h),
+      child: Center(
+        child: SizedBox(
+          width: 40.w,
+          height: 40.w,
+          child: const CircularProgressIndicator(
+            strokeWidth: 3,
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1989FA)),
+          ),
+        ),
+      ),
     );
   }
 

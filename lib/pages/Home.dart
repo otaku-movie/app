@@ -152,6 +152,7 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
   }
 
   void _changeTab(int index) {
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       currentIndex = index;
     });
@@ -159,6 +160,7 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
   }
 
   void _onPageChanged(int index) {
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       currentIndex = index;
     });
