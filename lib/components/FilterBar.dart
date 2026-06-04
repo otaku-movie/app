@@ -159,6 +159,9 @@ class FilterBar extends StatefulWidget {
   final List<FilterOption>? drawerFilters;
   /// 基准日期，用于时间范围筛选（默认为当前日期）
   final DateTime? baseDate;
+  /// 顶部主筛选项是否横向滚动展示（默认 false，使用 Expanded 均分宽度；
+  /// 项目数多、文字易被挤压时可设为 true）
+  final bool scrollable;
 
   const FilterBar({
     super.key,
@@ -168,6 +171,7 @@ class FilterBar extends StatefulWidget {
     this.style,
     this.drawerFilters,
     this.baseDate,
+    this.scrollable = false,
   });
 
   @override
@@ -240,60 +244,32 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
       child: Row(
         children: [
           // 主筛选栏的筛选项（排除 drawer 中的筛选项）
-          ...List.generate(widget.filters.length, (index) {
-            final filter = widget.filters[index];
-            // 如果这个筛选项在 drawer 中，跳过
-            if (drawerFilterKeys.contains(filter.key)) {
-              return const SizedBox.shrink();
-            }
-            final display = _getDisplayText(filter);
-            final isActive = _activeFilterIndex == index;
-            final hasSelection = display.isNotEmpty;
-
-            return Expanded(
-              child: GestureDetector(
-                key: _filterKeys[index],
-                onTap: () {
-                  if (_overlayEntry != null) {
-                    if (_activeFilterIndex == index) {
-                      _hideDropdown();
-                    } else {
-                      if (mounted) {
-                        setState(() {
-                          _activeFilterIndex = index;
-                          // 根据是否多选处理初始值
-                          final currentValue = selected[filter.key];
-                          if (filter.isMultiSelect) {
-                            _tempSelected = List.from(currentValue ?? []);
-                          } else {
-                            // 单选模式：从单个值转换为数组格式
-                            if (currentValue != null && currentValue is! List) {
-                              _tempSelected = [currentValue.toString()];
-                            } else if (currentValue is List && currentValue.isNotEmpty) {
-                              _tempSelected = [currentValue.first.toString()];
-                            } else {
-                              _tempSelected = [];
-                            }
-                          }
-                          for (int i = 0; i < _arrowControllers.length; i++) {
-                            if (i == index) {
-                              _arrowControllers[i].forward();
-                            } else {
-                              _arrowControllers[i].reverse();
-                            }
-                          }
-                        });
-                      }
-                      _overlayRebuild?.call(() {});
+          if (widget.scrollable)
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(widget.filters.length, (index) {
+                    final filter = widget.filters[index];
+                    if (drawerFilterKeys.contains(filter.key)) {
+                      return const SizedBox.shrink();
                     }
-                  } else {
-                    _showDropdown(filter, index);
-                  }
-                },
-                child: _buildFilterButton(filter, index, isActive, hasSelection, display),
+                    return _buildFilterEntry(filter, index);
+                  }),
+                ),
               ),
-            );
-          }),
+            )
+          else
+            ...List.generate(widget.filters.length, (index) {
+              final filter = widget.filters[index];
+              // 如果这个筛选项在 drawer 中，跳过
+              if (drawerFilterKeys.contains(filter.key)) {
+                return const SizedBox.shrink();
+              }
+              return Expanded(child: _buildFilterEntry(filter, index));
+            }),
           // Drawer 按钮（如果有抽屉筛选项）
           if (drawerFilters.isNotEmpty)
             _buildDrawerButton(),
@@ -732,6 +708,11 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                       ],
                     ),
                     onTap: () {
+                      // 注意：闭包中的 hasLevel2/hasLevel3 是当前 build 时
+                      // 基于旧 selected1/2 计算出的值，不能用来判断"刚点的这个 item 是否有下级"。
+                      // 直接读 item.children 拿到最新的层级信息。
+                      final hasChildren = item.children != null &&
+                          item.children!.isNotEmpty;
                       _overlayRebuild?.call(() {
                         selected1 = item.id;
                         selected2 = null;
@@ -741,8 +722,15 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                           _confirmSelection(filter);
                           return;
                         }
-                        _nestedTabController?.animateTo( hasLevel2 ? 1 : 0 );
                       });
+                      // 切 tab 必须在 _overlayRebuild 之后另起一个微任务，
+                      // 等待重建完成、TabBarView 收到新的 selected1，否则视图会停在原来的页签。
+                      if (hasChildren) {
+                        Future.microtask(() {
+                          if (!mounted) return;
+                          _nestedTabController?.animateTo(1);
+                        });
+                      }
                     },
                   );
                 }).toList(),
@@ -778,11 +766,19 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                             ],
                           ),
                           onTap: () {
+                            // 同 level1 修复：用 item.children 判断"刚点的这个二级是否还有三级"
+                            final hasChildren = item.children != null &&
+                                item.children!.isNotEmpty;
                             _overlayRebuild?.call(() {
                               selected2 = item.id;
                               selected3 = null;
-                              _nestedTabController?.animateTo(hasLevel3 ? 2 : 1);
                             });
+                            if (hasChildren) {
+                              Future.microtask(() {
+                                if (!mounted) return;
+                                _nestedTabController?.animateTo(2);
+                              });
+                            }
                           },
                         );
                       }).toList(),
@@ -1378,6 +1374,53 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  /// 单个筛选项按钮（含点击逻辑），由 build 中的横滑或 Expanded 模式共用
+  Widget _buildFilterEntry(FilterOption filter, int index) {
+    final display = _getDisplayText(filter);
+    final isActive = _activeFilterIndex == index;
+    final hasSelection = display.isNotEmpty;
+
+    return GestureDetector(
+      key: _filterKeys[index],
+      onTap: () {
+        if (_overlayEntry != null) {
+          if (_activeFilterIndex == index) {
+            _hideDropdown();
+          } else {
+            if (mounted) {
+              setState(() {
+                _activeFilterIndex = index;
+                final currentValue = selected[filter.key];
+                if (filter.isMultiSelect) {
+                  _tempSelected = List.from(currentValue ?? []);
+                } else {
+                  if (currentValue != null && currentValue is! List) {
+                    _tempSelected = [currentValue.toString()];
+                  } else if (currentValue is List && currentValue.isNotEmpty) {
+                    _tempSelected = [currentValue.first.toString()];
+                  } else {
+                    _tempSelected = [];
+                  }
+                }
+                for (int i = 0; i < _arrowControllers.length; i++) {
+                  if (i == index) {
+                    _arrowControllers[i].forward();
+                  } else {
+                    _arrowControllers[i].reverse();
+                  }
+                }
+              });
+            }
+            _overlayRebuild?.call(() {});
+          }
+        } else {
+          _showDropdown(filter, index);
+        }
+      },
+      child: _buildFilterButton(filter, index, isActive, hasSelection, display),
     );
   }
 

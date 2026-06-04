@@ -23,6 +23,25 @@ class LocationUtil {
     }
   }
 
+  /// 取系统缓存的最后一次定位（不主动激活 GPS / 不弹权限）。
+  /// 几乎是立即返回的——用于「先把缓存位置填到请求里，
+  /// 避免首屏先无定位拉一次、定位回来再拉一次」的场景。
+  /// 没有缓存或没有权限时返回 null。
+  static Future<Position?> getLastKnownPosition() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) return null;
+      final permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return null;
+      }
+      return await Geolocator.getLastKnownPosition();
+    } catch (_) {
+      return null;
+    }
+  }
+
   static Future<Placemark?> reverseGeocode(Position position) async {
     try {
       final placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);

@@ -208,6 +208,7 @@ final GoRouter routerConfig = GoRouter(
               movieId: state.uri.queryParameters['movieId'],
               cinemaId: state.uri.queryParameters['cinemaId'],
               reReleaseId: state.uri.queryParameters['reReleaseId'],
+              date: state.uri.queryParameters['date'],
             );
           },
         ),

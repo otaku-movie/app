@@ -22,89 +22,82 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(count) => "There are ${count} more showtimes...";
 
-  static String m1(n) => "${n} theaters with stock";
+  static String m1(name) => "${name} subtitles";
 
-  static String m2(km) => "${km} km";
+  static String m2(names) => "※ Original audio with ${names} subtitles";
 
-  static String m3(n) => "${n} users reported sold out";
+  static String m3(count) => "${count} showtimes";
 
-  static String m4(time) => "Next: ${time}";
+  static String m4(cinemaCount, showTimeCount) =>
+      "${cinemaCount} cinemas · ${showTimeCount} showtimes";
 
-  static String m5(n) => "Quota ${n}";
+  static String m5(n) => "${n} theaters with stock";
 
-  static String m6(n) => "${n} upcoming screening(s)";
+  static String m6(km) => "${km} km";
 
-  static String m7(seatCount) => "${seatCount} seats";
+  static String m7(n) => "${n} users reported sold out";
 
-  static String m8(count) => "Found ${count} related cinemas";
+  static String m8(time) => "Next: ${time}";
 
-  static String m9(count) => "Confirm selection of ${count} seats";
+  static String m9(n) => "Quota ${n}";
 
-  static String m10(count) => "Selected ${count} seats";
+  static String m10(n) => "${n} upcoming screening(s)";
 
-  static String m11(reply) => "Reply to ${reply}";
+  static String m11(seatCount) => "${seatCount} seats";
 
-  static String m12(total) => "Total ${total} replies";
+  static String m12(count) => "Found ${count} related cinemas";
 
-  static String m13(count) => "${count} seats";
+  static String m13(count) => "Confirm selection of ${count} seats";
 
-  static String m14(reply) => "Reply to ${reply}";
+  static String m14(count) => "Selected ${count} seats";
 
-  static String m15(language) => "Translate to ${language}";
+  static String m15(reply) => "Reply to ${reply}";
 
-  static String m16(hours, minutes) => "${hours}h ${minutes}m";
+  static String m16(total) => "Total ${total} replies";
 
-  static String m17(total) => "Total ${total} replies";
+  static String m17(count) => "${count} seats";
 
-  static String m18(names) =>
+  static String m18(reply) => "Reply to ${reply}";
+
+  static String m19(language) => "Translate to ${language}";
+
+  static String m20(hours, minutes) => "${hours}h ${minutes}m";
+
+  static String m21(total) => "Total ${total} replies";
+
+  static String m22(names) =>
       "Some seats are unavailable, please reselect: ${names}";
 
-  static String m19(hours, minutes) =>
+  static String m23(hours, minutes) =>
       "${hours} hours ${minutes} minutes until showtime";
 
-  static String m20(minutes, seconds) =>
+  static String m24(minutes, seconds) =>
       "${minutes} minutes ${seconds} seconds until showtime";
 
-  static String m21(seconds) => "${seconds} seconds until showtime";
+  static String m25(seconds) => "${seconds} seconds until showtime";
 
-  static String m22(ticketCount) => "${ticketCount} Movie Tickets";
+  static String m26(ticketCount) => "${ticketCount} Movie Tickets";
 
-  static String m23(date) => "Exp: ${date}";
+  static String m27(date) => "Exp: ${date}";
 
-  static String m24(count) => "${count} images";
+  static String m28(count) => "${count} images";
 
-  static String m25(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
+  static String m29(maxSeat) => "A maximum of ${maxSeat} seats can be selected";
 
-  static String m26(movieName) => "Share movie ticket: ${movieName}";
+  static String m30(movieName) => "Share movie ticket: ${movieName}";
 
-  static String m27(days) => "${days} days left";
+  static String m31(days) => "${days} days left";
 
-  static String m28(hours) => "${hours} hours left";
+  static String m32(hours) => "${hours} hours left";
 
-  static String m29(minutes) => "${minutes} minutes left";
+  static String m33(minutes) => "${minutes} minutes left";
 
-  static String m30(version) => "What\'s new in v${version}";
+  static String m34(version) => "What\'s new in v${version}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "about_components_filterBar_confirm":
             MessageLookupByLibrary.simpleMessage("Confirm"),
-        "agreement_consent_agree":
-            MessageLookupByLibrary.simpleMessage("Agree & Continue"),
-        "agreement_consent_currentVersion":
-            MessageLookupByLibrary.simpleMessage("Current version"),
-        "agreement_consent_disagree":
-            MessageLookupByLibrary.simpleMessage("Not Now"),
-        "agreement_consent_disagreeWarning": MessageLookupByLibrary.simpleMessage(
-            "Without accepting the latest agreements, some features may not be available."),
-        "agreement_consent_readAndAgree": MessageLookupByLibrary.simpleMessage(
-            "I have read and agree to all of the above agreements."),
-        "agreement_consent_subtitle": MessageLookupByLibrary.simpleMessage(
-            "We have updated the following agreements. Please review and accept to continue using the app."),
-        "agreement_consent_title":
-            MessageLookupByLibrary.simpleMessage("Agreement Update"),
-        "agreement_consent_viewDetail":
-            MessageLookupByLibrary.simpleMessage("View"),
         "about_components_filterBar_pleaseSelect":
             MessageLookupByLibrary.simpleMessage("Please select"),
         "about_components_filterBar_reset":
@@ -123,12 +116,27 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No data yet"),
         "about_components_showTimeList_noShowTimeInfo":
             MessageLookupByLibrary.simpleMessage("No showtime information"),
+        "about_components_showTimeList_notPurchasableHint":
+            MessageLookupByLibrary.simpleMessage(
+                "Tickets for this showtime aren\'t open yet on the cinema\'s site"),
         "about_components_showTimeList_seatStatus_available":
             MessageLookupByLibrary.simpleMessage("Available"),
+        "about_components_showTimeList_seatStatus_closed":
+            MessageLookupByLibrary.simpleMessage("Closed"),
         "about_components_showTimeList_seatStatus_limited":
             MessageLookupByLibrary.simpleMessage("Limited"),
+        "about_components_showTimeList_seatStatus_preSale":
+            MessageLookupByLibrary.simpleMessage("Pre-sale"),
+        "about_components_showTimeList_seatStatus_saleEnded":
+            MessageLookupByLibrary.simpleMessage("Sale ended"),
         "about_components_showTimeList_seatStatus_soldOut":
             MessageLookupByLibrary.simpleMessage("Sold Out"),
+        "about_components_showTimeList_seatStatus_unknown":
+            MessageLookupByLibrary.simpleMessage("Unknown"),
+        "about_components_showTimeList_subtitleChipShort":
+            MessageLookupByLibrary.simpleMessage("Sub"),
+        "about_components_showTimeList_subtitleChipWith": m1,
+        "about_components_showTimeList_subtitleHint": m2,
         "about_components_showTimeList_timeRange":
             MessageLookupByLibrary.simpleMessage("Show Time"),
         "about_components_showTimeList_unnamed":
@@ -163,8 +171,11 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Verification Code"),
         "about_login_welcomeText":
             MessageLookupByLibrary.simpleMessage("Welcome Back"),
+        "about_movieShowList_cinemaSessionCount": m3,
         "about_movieShowList_dropdown_area":
             MessageLookupByLibrary.simpleMessage("Area"),
+        "about_movieShowList_dropdown_brand":
+            MessageLookupByLibrary.simpleMessage("Brand"),
         "about_movieShowList_dropdown_dimensionType":
             MessageLookupByLibrary.simpleMessage("Dimension"),
         "about_movieShowList_dropdown_screenSpec":
@@ -175,6 +186,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Tag"),
         "about_movieShowList_dropdown_version":
             MessageLookupByLibrary.simpleMessage("Version"),
+        "about_movieShowList_summary": m4,
         "about_privacy_policy":
             MessageLookupByLibrary.simpleMessage("View Privacy Policy"),
         "about_register_haveAccount":
@@ -197,17 +209,35 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Invalid verification code format"),
         "about_title": MessageLookupByLibrary.simpleMessage("About"),
         "about_version": MessageLookupByLibrary.simpleMessage("Version"),
+        "agreement_consent_agree":
+            MessageLookupByLibrary.simpleMessage("Agree & Continue"),
+        "agreement_consent_currentVersion":
+            MessageLookupByLibrary.simpleMessage("Current version"),
+        "agreement_consent_disagree":
+            MessageLookupByLibrary.simpleMessage("Not Now"),
+        "agreement_consent_disagreeWarning": MessageLookupByLibrary.simpleMessage(
+            "Without accepting the latest agreements, some features may not be available."),
+        "agreement_consent_readAndAgree": MessageLookupByLibrary.simpleMessage(
+            "I have read and agree to all of the above agreements."),
+        "agreement_consent_subtitle": MessageLookupByLibrary.simpleMessage(
+            "We have updated the following agreements. Please review and accept to continue using the app."),
+        "agreement_consent_title":
+            MessageLookupByLibrary.simpleMessage("Agreement Update"),
+        "agreement_consent_viewDetail":
+            MessageLookupByLibrary.simpleMessage("View"),
+        "agreement_emptyContent": MessageLookupByLibrary.simpleMessage(
+            "No content available yet. Please try again later or contact support."),
         "benefit_availability_action_buy":
             MessageLookupByLibrary.simpleMessage("Buy tickets"),
         "benefit_availability_action_feedback":
             MessageLookupByLibrary.simpleMessage("Report sold out"),
         "benefit_availability_action_feedback_done":
             MessageLookupByLibrary.simpleMessage("Reported"),
-        "benefit_availability_count_label": m1,
-        "benefit_availability_distance_km": m2,
+        "benefit_availability_count_label": m5,
+        "benefit_availability_distance_km": m6,
         "benefit_availability_empty": MessageLookupByLibrary.simpleMessage(
             "No theaters with this benefit"),
-        "benefit_availability_feedback_n": m3,
+        "benefit_availability_feedback_n": m7,
         "benefit_availability_feedback_submit_failed":
             MessageLookupByLibrary.simpleMessage(
                 "Could not submit. Please try again."),
@@ -219,7 +249,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Search theater name"),
         "benefit_availability_filter_sort":
             MessageLookupByLibrary.simpleMessage("Sort"),
-        "benefit_availability_nearest_showtime": m4,
+        "benefit_availability_nearest_showtime": m8,
         "benefit_availability_pageTitle":
             MessageLookupByLibrary.simpleMessage("Theaters with stock"),
         "benefit_availability_phase_ended_banner":
@@ -227,8 +257,8 @@ class MessageLookup extends MessageLookupByLibrary {
                 "This benefit phase has ended (for reference only)"),
         "benefit_availability_remaining_not_reported":
             MessageLookupByLibrary.simpleMessage("Not reported"),
-        "benefit_availability_remaining_quota_label": m5,
-        "benefit_availability_showtime_n": m6,
+        "benefit_availability_remaining_quota_label": m9,
+        "benefit_availability_showtime_n": m10,
         "benefit_availability_showtime_none":
             MessageLookupByLibrary.simpleMessage("No upcoming screenings"),
         "benefit_availability_sort_default":
@@ -313,7 +343,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("WebSite"),
         "cinemaDetail_maxSelectSeat": MessageLookupByLibrary.simpleMessage(
             "Maximum number of available seats"),
-        "cinemaDetail_seatCount": m7,
+        "cinemaDetail_seatCount": m11,
         "cinemaDetail_showing": MessageLookupByLibrary.simpleMessage("Showing"),
         "cinemaDetail_specialSpecPrice":
             MessageLookupByLibrary.simpleMessage("Special Screening Price"),
@@ -353,16 +383,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Clear"),
         "cinemaList_search_hint": MessageLookupByLibrary.simpleMessage(
             "Search cinema name or address"),
-        "cinemaList_search_results_found": m8,
+        "cinemaList_search_results_found": m12,
         "cinemaList_search_results_notFound":
             MessageLookupByLibrary.simpleMessage(
                 "No related cinemas found, please try other keywords"),
-        "cinemaList_selectSeat_confirmSelection": m9,
+        "cinemaList_selectSeat_confirmSelection": m13,
         "cinemaList_selectSeat_dateFormat":
             MessageLookupByLibrary.simpleMessage("MMM dd, yyyy"),
         "cinemaList_selectSeat_pleaseSelectSeats":
             MessageLookupByLibrary.simpleMessage("Please select seats"),
-        "cinemaList_selectSeat_seatsSelected": m10,
+        "cinemaList_selectSeat_seatsSelected": m14,
         "cinemaList_selectSeat_selectedSeats":
             MessageLookupByLibrary.simpleMessage("Selected Seats"),
         "cinemaList_title":
@@ -382,12 +412,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Reply"),
         "commentDetail_comment_hint":
             MessageLookupByLibrary.simpleMessage("Write your reply..."),
-        "commentDetail_comment_placeholder": m11,
+        "commentDetail_comment_placeholder": m15,
         "commentDetail_replyComment":
             MessageLookupByLibrary.simpleMessage("Comment Reply"),
         "commentDetail_title":
             MessageLookupByLibrary.simpleMessage("Comment Detail"),
-        "commentDetail_totalReplyMessage": m12,
+        "commentDetail_totalReplyMessage": m16,
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("Flip"),
         "common_components_cropper_actions_redo":
@@ -522,7 +552,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "confirmOrder_pay": MessageLookupByLibrary.simpleMessage("Buy"),
         "confirmOrder_payFailed": MessageLookupByLibrary.simpleMessage(
             "Payment failed, please try again"),
-        "confirmOrder_seatCount": m13,
+        "confirmOrder_seatCount": m17,
         "confirmOrder_selectPayMethod":
             MessageLookupByLibrary.simpleMessage("Select Payment Method"),
         "confirmOrder_selectedSeats":
@@ -541,16 +571,16 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Set as Default"),
         "creditCard_badge_default":
             MessageLookupByLibrary.simpleMessage("Default"),
-        "creditCard_deleteConfirm_content": MessageLookupByLibrary.simpleMessage(
-            "This card will be removed permanently. Continue?"),
+        "creditCard_currentDefaultHint":
+            MessageLookupByLibrary.simpleMessage("This is your default card"),
+        "creditCard_deleteConfirm_content":
+            MessageLookupByLibrary.simpleMessage(
+                "This card will be removed permanently. Continue?"),
         "creditCard_deleteConfirm_title":
             MessageLookupByLibrary.simpleMessage("Delete Card"),
-        "creditCard_currentDefaultHint": MessageLookupByLibrary.simpleMessage(
-            "This is your default card"),
-        "creditCard_deleteHint_selectFirst": MessageLookupByLibrary.simpleMessage(
-            "Please select a card to delete first"),
-        "creditCard_setDefaultSubtitle": MessageLookupByLibrary.simpleMessage(
-            "Use this card first when paying"),
+        "creditCard_deleteHint_selectFirst":
+            MessageLookupByLibrary.simpleMessage(
+                "Please select a card to delete first"),
         "creditCard_edit_cancel":
             MessageLookupByLibrary.simpleMessage("Cancel"),
         "creditCard_edit_expiryDate":
@@ -562,6 +592,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Edit Card"),
         "creditCard_operationFailed": MessageLookupByLibrary.simpleMessage(
             "Operation failed, please try again later"),
+        "creditCard_setDefaultSubtitle": MessageLookupByLibrary.simpleMessage(
+            "Use this card first when paying"),
         "enum_seatType_coupleSeat":
             MessageLookupByLibrary.simpleMessage("Couple Seat"),
         "enum_seatType_disabled":
@@ -611,6 +643,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "home_home": MessageLookupByLibrary.simpleMessage("home"),
         "home_me": MessageLookupByLibrary.simpleMessage("my page"),
         "home_ticket": MessageLookupByLibrary.simpleMessage("My Ticket"),
+        "login_appleLogin":
+            MessageLookupByLibrary.simpleMessage("Sign in with Apple"),
+        "login_appleLoginFailed": MessageLookupByLibrary.simpleMessage(
+            "Apple sign-in failed, please try again"),
         "login_backToLogin":
             MessageLookupByLibrary.simpleMessage("Back to Login"),
         "login_emailAddress":
@@ -632,15 +668,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Forgot Password"),
         "login_googleLogin":
             MessageLookupByLibrary.simpleMessage("Sign in with Google"),
-        "login_appleLogin":
-            MessageLookupByLibrary.simpleMessage("Sign in with Apple"),
-        "login_xLogin": MessageLookupByLibrary.simpleMessage("Sign in with X"),
         "login_googleLoginFailed": MessageLookupByLibrary.simpleMessage(
             "Google sign-in failed, please try again"),
-        "login_appleLoginFailed": MessageLookupByLibrary.simpleMessage(
-            "Apple sign-in failed, please try again"),
-        "login_xLoginFailed": MessageLookupByLibrary.simpleMessage(
-            "X sign-in failed, please try again"),
         "login_loginButton": MessageLookupByLibrary.simpleMessage("Login"),
         "login_newPassword":
             MessageLookupByLibrary.simpleMessage("New Password"),
@@ -674,6 +703,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Verification code has been sent to your email"),
         "login_welcomeText": MessageLookupByLibrary.simpleMessage(
             "Welcome back, please log in to your account"),
+        "login_xLogin": MessageLookupByLibrary.simpleMessage("Sign in with X"),
+        "login_xLoginFailed": MessageLookupByLibrary.simpleMessage(
+            "X sign-in failed, please try again"),
         "movieDetail_button_buy":
             MessageLookupByLibrary.simpleMessage("Buy Ticket"),
         "movieDetail_button_saw":
@@ -684,8 +716,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Delete"),
         "movieDetail_comment_reply":
             MessageLookupByLibrary.simpleMessage("Reply"),
-        "movieDetail_comment_replyTo": m14,
-        "movieDetail_comment_translate": m15,
+        "movieDetail_comment_replyTo": m18,
+        "movieDetail_comment_translate": m19,
         "movieDetail_detail_basicMessage":
             MessageLookupByLibrary.simpleMessage("Basic Info"),
         "movieDetail_detail_character":
@@ -694,7 +726,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Comment"),
         "movieDetail_detail_duration_hours":
             MessageLookupByLibrary.simpleMessage("hours"),
-        "movieDetail_detail_duration_hoursMinutes": m16,
+        "movieDetail_detail_duration_hoursMinutes": m20,
         "movieDetail_detail_duration_minutes":
             MessageLookupByLibrary.simpleMessage("minutes"),
         "movieDetail_detail_duration_unknown":
@@ -716,7 +748,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_detail_tags": MessageLookupByLibrary.simpleMessage("Tags"),
         "movieDetail_detail_time":
             MessageLookupByLibrary.simpleMessage("Duration"),
-        "movieDetail_detail_totalReplyMessage": m17,
+        "movieDetail_detail_totalReplyMessage": m21,
         "movieDetail_presaleHasBonus":
             MessageLookupByLibrary.simpleMessage("With Bonus"),
         "movieDetail_reReleaseHistory_disabled":
@@ -843,7 +875,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieTicketType_total": MessageLookupByLibrary.simpleMessage("Total"),
         "movieTicketType_totalPrice":
             MessageLookupByLibrary.simpleMessage("Total Price"),
-        "movieTicketType_unavailableSeatsWithNames": m18,
+        "movieTicketType_unavailableSeatsWithNames": m22,
         "movieTicketType_unknownTicketType":
             MessageLookupByLibrary.simpleMessage("Unknown ticket type"),
         "orderDetail_benefit_feedback_benefit_label":
@@ -857,9 +889,9 @@ class MessageLookup extends MessageLookupByLibrary {
                 "Submit: Sold out at this cinema"),
         "orderDetail_benefit_feedback_title":
             MessageLookupByLibrary.simpleMessage("Benefit Feedback"),
-        "orderDetail_countdown_hoursMinutes": m19,
-        "orderDetail_countdown_minutesSeconds": m20,
-        "orderDetail_countdown_seconds": m21,
+        "orderDetail_countdown_hoursMinutes": m23,
+        "orderDetail_countdown_minutesSeconds": m24,
+        "orderDetail_countdown_seconds": m25,
         "orderDetail_countdown_started":
             MessageLookupByLibrary.simpleMessage("Started"),
         "orderDetail_countdown_title":
@@ -882,7 +914,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Seat Information"),
         "orderDetail_ticketCode":
             MessageLookupByLibrary.simpleMessage("Ticket Collection Code"),
-        "orderDetail_ticketCount": m22,
+        "orderDetail_ticketCount": m26,
         "orderDetail_title":
             MessageLookupByLibrary.simpleMessage("Order Detail"),
         "orderList_comment": MessageLookupByLibrary.simpleMessage("Comment"),
@@ -960,7 +992,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Add New Credit Card"),
         "payment_selectCreditCard_confirmPayment":
             MessageLookupByLibrary.simpleMessage("Confirm Payment"),
-        "payment_selectCreditCard_expiryDate": m23,
+        "payment_selectCreditCard_expiryDate": m27,
         "payment_selectCreditCard_loadFailed":
             MessageLookupByLibrary.simpleMessage(
                 "Failed to load credit card list"),
@@ -990,7 +1022,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "presaleDetail_applyMovie":
             MessageLookupByLibrary.simpleMessage("Applicable Movie"),
         "presaleDetail_bonus": MessageLookupByLibrary.simpleMessage("Bonus"),
-        "presaleDetail_bonusCount": m24,
+        "presaleDetail_bonusCount": m28,
         "presaleDetail_bonusDescription":
             MessageLookupByLibrary.simpleMessage("Bonus details"),
         "presaleDetail_gallery":
@@ -1085,13 +1117,15 @@ class MessageLookup extends MessageLookupByLibrary {
             "Selected seats have been canceled"),
         "selectSeat_confirmSelectSeat":
             MessageLookupByLibrary.simpleMessage("Confirm Seat Selection"),
-        "selectSeat_maxSelectSeatWarn": m25,
+        "selectSeat_maxSelectSeatWarn": m29,
         "selectSeat_notSelectSeatWarn":
             MessageLookupByLibrary.simpleMessage("Please select a seat"),
         "showTimeDetail_address":
             MessageLookupByLibrary.simpleMessage("Address"),
         "showTimeDetail_buy":
             MessageLookupByLibrary.simpleMessage("Select Seat"),
+        "showTimeDetail_noOnlineTicket": MessageLookupByLibrary.simpleMessage(
+            "Online booking unavailable for this show. Please purchase at the theater or visit the cinema website."),
         "showTimeDetail_seatStatus_available":
             MessageLookupByLibrary.simpleMessage("Seats Available"),
         "showTimeDetail_seatStatus_soldOut":
@@ -1116,7 +1150,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_noDataTip":
             MessageLookupByLibrary.simpleMessage("Buy tickets now!"),
         "ticket_seatCount": MessageLookupByLibrary.simpleMessage("Seat Count"),
-        "ticket_shareTicket": m26,
+        "ticket_shareTicket": m30,
         "ticket_showTime": MessageLookupByLibrary.simpleMessage("Show Time"),
         "ticket_status_cancelled":
             MessageLookupByLibrary.simpleMessage("Cancelled"),
@@ -1131,9 +1165,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "ticket_tickets": MessageLookupByLibrary.simpleMessage(" tickets"),
         "ticket_time_formatError":
             MessageLookupByLibrary.simpleMessage("Time format error"),
-        "ticket_time_remaining_days": m27,
-        "ticket_time_remaining_hours": m28,
-        "ticket_time_remaining_minutes": m29,
+        "ticket_time_remaining_days": m31,
+        "ticket_time_remaining_hours": m32,
+        "ticket_time_remaining_minutes": m33,
         "ticket_time_remaining_soon":
             MessageLookupByLibrary.simpleMessage("Starting soon"),
         "ticket_time_unknown":
@@ -1175,8 +1209,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "user_checkUpdate":
             MessageLookupByLibrary.simpleMessage("Check Update"),
-        "user_creditCard":
-            MessageLookupByLibrary.simpleMessage("Manage Cards"),
+        "user_creditCard": MessageLookupByLibrary.simpleMessage("Manage Cards"),
         "user_currentVersion":
             MessageLookupByLibrary.simpleMessage("Current Version"),
         "user_data_characterCount":
@@ -1194,17 +1227,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_forceUpdateHint": MessageLookupByLibrary.simpleMessage(
             "Your current version is no longer supported. Please update to continue."),
         "user_language": MessageLookupByLibrary.simpleMessage("Language"),
-        "user_timeFormat": MessageLookupByLibrary.simpleMessage("Time Format"),
-        "user_timeFormat_24h":
-            MessageLookupByLibrary.simpleMessage("24-hour"),
-        "user_timeFormat_30h":
-            MessageLookupByLibrary.simpleMessage("30-hour"),
-        "user_timeFormat_subtitle_24h": MessageLookupByLibrary.simpleMessage(
-            "Standard 24-hour (00:00 ~ 23:59)"),
-        "user_timeFormat_subtitle_30h": MessageLookupByLibrary.simpleMessage(
-            "30-hour: next day 0~5 shown as 24~29"),
         "user_latestVersion":
             MessageLookupByLibrary.simpleMessage("Latest Version"),
+        "user_loginSourceMultiple":
+            MessageLookupByLibrary.simpleMessage("Linked"),
+        "user_loginSourceSingle":
+            MessageLookupByLibrary.simpleMessage("Signed in via"),
         "user_logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "user_logoutConfirmMessage": MessageLookupByLibrary.simpleMessage(
             "Are you sure you want to log out?"),
@@ -1213,15 +1241,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_ok": MessageLookupByLibrary.simpleMessage("OK"),
         "user_privateAgreement":
             MessageLookupByLibrary.simpleMessage("Privacy Policy"),
-        "user_thirdPartySdk":
-            MessageLookupByLibrary.simpleMessage("Third-party SDK List"),
-        "user_userTerms": MessageLookupByLibrary.simpleMessage("User Terms"),
         "user_registerTime":
             MessageLookupByLibrary.simpleMessage("Registration Time"),
-        "user_loginSourceSingle":
-            MessageLookupByLibrary.simpleMessage("Signed in via"),
-        "user_loginSourceMultiple":
-            MessageLookupByLibrary.simpleMessage("Linked"),
+        "user_thirdPartySdk":
+            MessageLookupByLibrary.simpleMessage("Third-party SDK List"),
+        "user_timeFormat": MessageLookupByLibrary.simpleMessage("Time Format"),
+        "user_timeFormat_24h": MessageLookupByLibrary.simpleMessage("24-hour"),
+        "user_timeFormat_30h": MessageLookupByLibrary.simpleMessage("30-hour"),
+        "user_timeFormat_subtitle_24h": MessageLookupByLibrary.simpleMessage(
+            "Standard 24-hour (00:00 ~ 23:59)"),
+        "user_timeFormat_subtitle_30h": MessageLookupByLibrary.simpleMessage(
+            "30-hour: next day 0~5 shown as 24~29"),
         "user_title": MessageLookupByLibrary.simpleMessage("My Profile"),
         "user_update": MessageLookupByLibrary.simpleMessage("Update"),
         "user_updateAvailable": MessageLookupByLibrary.simpleMessage(
@@ -1246,8 +1276,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "App has been successfully updated to the latest version!"),
         "user_updateToLatestHint": MessageLookupByLibrary.simpleMessage(
             "Update to the latest version"),
-        "user_updateWhatsNewInVersion": m30,
+        "user_updateWhatsNewInVersion": m34,
         "user_updating": MessageLookupByLibrary.simpleMessage("Updating"),
+        "user_userTerms": MessageLookupByLibrary.simpleMessage("User Terms"),
         "writeComment_contentTitle":
             MessageLookupByLibrary.simpleMessage("Share your movie experience"),
         "writeComment_hint":

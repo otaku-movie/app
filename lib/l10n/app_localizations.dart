@@ -220,6 +220,12 @@ abstract class AppLocalizations {
   /// **'Select Seat'**
   String get showTimeDetail_buy;
 
+  /// No description provided for @showTimeDetail_noOnlineTicket.
+  ///
+  /// In en, this message translates to:
+  /// **'Online booking unavailable for this show. Please purchase at the theater or visit the cinema website.'**
+  String get showTimeDetail_noOnlineTicket;
+
   /// No description provided for @showTimeDetail_time.
   ///
   /// In en, this message translates to:
@@ -976,6 +982,48 @@ abstract class AppLocalizations {
   /// **'Available'**
   String get about_components_showTimeList_seatStatus_available;
 
+  /// No description provided for @about_components_showTimeList_seatStatus_preSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre-sale'**
+  String get about_components_showTimeList_seatStatus_preSale;
+
+  /// No description provided for @about_components_showTimeList_seatStatus_saleEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale ended'**
+  String get about_components_showTimeList_seatStatus_saleEnded;
+
+  /// No description provided for @about_components_showTimeList_seatStatus_closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get about_components_showTimeList_seatStatus_closed;
+
+  /// No description provided for @about_components_showTimeList_seatStatus_unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get about_components_showTimeList_seatStatus_unknown;
+
+  /// No description provided for @about_components_showTimeList_notPurchasableHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tickets for this showtime aren\'t open yet on the cinema\'s site'**
+  String get about_components_showTimeList_notPurchasableHint;
+
+  /// No description provided for @about_movieShowList_summary.
+  ///
+  /// In en, this message translates to:
+  /// **'{cinemaCount} cinemas · {showTimeCount} showtimes'**
+  String about_movieShowList_summary(Object cinemaCount, Object showTimeCount);
+
+  /// No description provided for @about_movieShowList_cinemaSessionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} showtimes'**
+  String about_movieShowList_cinemaSessionCount(Object count);
+
   /// No description provided for @about_components_showTimeList_benefitBadge.
   ///
   /// In en, this message translates to:
@@ -1138,6 +1186,24 @@ abstract class AppLocalizations {
   /// **'Subtitle'**
   String get about_movieShowList_dropdown_subtitle;
 
+  /// No description provided for @about_components_showTimeList_subtitleChipShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sub'**
+  String get about_components_showTimeList_subtitleChipShort;
+
+  /// No description provided for @about_components_showTimeList_subtitleChipWith.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} subtitles'**
+  String about_components_showTimeList_subtitleChipWith(String name);
+
+  /// No description provided for @about_components_showTimeList_subtitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'※ Original audio with {names} subtitles'**
+  String about_components_showTimeList_subtitleHint(String names);
+
   /// No description provided for @about_movieShowList_dropdown_tag.
   ///
   /// In en, this message translates to:
@@ -1149,6 +1215,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version'**
   String get about_movieShowList_dropdown_version;
+
+  /// No description provided for @about_movieShowList_dropdown_brand.
+  ///
+  /// In en, this message translates to:
+  /// **'Brand'**
+  String get about_movieShowList_dropdown_brand;
 
   /// No description provided for @enum_seatType_coupleSeat.
   ///
@@ -2391,6 +2463,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View'**
   String get agreement_consent_viewDetail;
+
+  /// No description provided for @agreement_emptyContent.
+  ///
+  /// In en, this message translates to:
+  /// **'No content available yet. Please try again later or contact support.'**
+  String get agreement_emptyContent;
 
   /// No description provided for @user_checkUpdate.
   ///

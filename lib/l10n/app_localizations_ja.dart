@@ -69,6 +69,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get showTimeDetail_buy => '座席選択';
 
   @override
+  String get showTimeDetail_noOnlineTicket =>
+      'この上映回はオンライン購入リンクがありません。劇場または公式サイトでご購入ください';
+
+  @override
   String get showTimeDetail_time => '分';
 
   @override
@@ -474,6 +478,32 @@ class AppLocalizationsJa extends AppLocalizations {
   String get about_components_showTimeList_seatStatus_available => '余裕あり';
 
   @override
+  String get about_components_showTimeList_seatStatus_preSale => '販売前';
+
+  @override
+  String get about_components_showTimeList_seatStatus_saleEnded => '販売終了';
+
+  @override
+  String get about_components_showTimeList_seatStatus_closed => '販売対象外';
+
+  @override
+  String get about_components_showTimeList_seatStatus_unknown => '状態不明';
+
+  @override
+  String get about_components_showTimeList_notPurchasableHint =>
+      '劇場サイトでまだチケットの販売が開始されていません';
+
+  @override
+  String about_movieShowList_summary(Object cinemaCount, Object showTimeCount) {
+    return '$cinemaCount館・$showTimeCount回';
+  }
+
+  @override
+  String about_movieShowList_cinemaSessionCount(Object count) {
+    return '$count回';
+  }
+
+  @override
   String get about_components_showTimeList_benefitBadge => '特典';
 
   @override
@@ -555,10 +585,26 @@ class AppLocalizationsJa extends AppLocalizations {
   String get about_movieShowList_dropdown_subtitle => '字幕';
 
   @override
+  String get about_components_showTimeList_subtitleChipShort => '字';
+
+  @override
+  String about_components_showTimeList_subtitleChipWith(String name) {
+    return '$name字幕';
+  }
+
+  @override
+  String about_components_showTimeList_subtitleHint(String names) {
+    return '※ 原音声に「$names」の字幕が付く上映回です';
+  }
+
+  @override
   String get about_movieShowList_dropdown_tag => 'タグ';
 
   @override
   String get about_movieShowList_dropdown_version => 'バージョン';
+
+  @override
+  String get about_movieShowList_dropdown_brand => 'ブランド';
 
   @override
   String get enum_seatType_coupleSeat => 'カップルシート';
@@ -1207,6 +1253,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get agreement_consent_viewDetail => '確認';
+
+  @override
+  String get agreement_emptyContent => 'コンテンツはまだ準備中です。後ほどもう一度お試しください。';
 
   @override
   String get user_checkUpdate => 'アップデート確認';

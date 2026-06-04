@@ -250,6 +250,16 @@ class S {
     );
   }
 
+  /// `Online booking unavailable for this show. Please purchase at the theater or visit the cinema website.`
+  String get showTimeDetail_noOnlineTicket {
+    return Intl.message(
+      'Online booking unavailable for this show. Please purchase at the theater or visit the cinema website.',
+      name: 'showTimeDetail_noOnlineTicket',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `minutes`
   String get showTimeDetail_time {
     return Intl.message(
@@ -1510,6 +1520,76 @@ class S {
     );
   }
 
+  /// `Pre-sale`
+  String get about_components_showTimeList_seatStatus_preSale {
+    return Intl.message(
+      'Pre-sale',
+      name: 'about_components_showTimeList_seatStatus_preSale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sale ended`
+  String get about_components_showTimeList_seatStatus_saleEnded {
+    return Intl.message(
+      'Sale ended',
+      name: 'about_components_showTimeList_seatStatus_saleEnded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Closed`
+  String get about_components_showTimeList_seatStatus_closed {
+    return Intl.message(
+      'Closed',
+      name: 'about_components_showTimeList_seatStatus_closed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown`
+  String get about_components_showTimeList_seatStatus_unknown {
+    return Intl.message(
+      'Unknown',
+      name: 'about_components_showTimeList_seatStatus_unknown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tickets for this showtime aren't open yet on the cinema's site`
+  String get about_components_showTimeList_notPurchasableHint {
+    return Intl.message(
+      'Tickets for this showtime aren\'t open yet on the cinema\'s site',
+      name: 'about_components_showTimeList_notPurchasableHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{cinemaCount} cinemas · {showTimeCount} showtimes`
+  String about_movieShowList_summary(Object cinemaCount, Object showTimeCount) {
+    return Intl.message(
+      '$cinemaCount cinemas · $showTimeCount showtimes',
+      name: 'about_movieShowList_summary',
+      desc: '',
+      args: [cinemaCount, showTimeCount],
+    );
+  }
+
+  /// `{count} showtimes`
+  String about_movieShowList_cinemaSessionCount(Object count) {
+    return Intl.message(
+      '$count showtimes',
+      name: 'about_movieShowList_cinemaSessionCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
   /// `Benefits`
   String get about_components_showTimeList_benefitBadge {
     return Intl.message(
@@ -1780,6 +1860,36 @@ class S {
     );
   }
 
+  /// `Sub`
+  String get about_components_showTimeList_subtitleChipShort {
+    return Intl.message(
+      'Sub',
+      name: 'about_components_showTimeList_subtitleChipShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{name} subtitles`
+  String about_components_showTimeList_subtitleChipWith(String name) {
+    return Intl.message(
+      '$name subtitles',
+      name: 'about_components_showTimeList_subtitleChipWith',
+      desc: '',
+      args: [name],
+    );
+  }
+
+  /// `※ Original audio with {names} subtitles`
+  String about_components_showTimeList_subtitleHint(String names) {
+    return Intl.message(
+      '※ Original audio with $names subtitles',
+      name: 'about_components_showTimeList_subtitleHint',
+      desc: '',
+      args: [names],
+    );
+  }
+
   /// `Tag`
   String get about_movieShowList_dropdown_tag {
     return Intl.message(
@@ -1795,6 +1905,16 @@ class S {
     return Intl.message(
       'Version',
       name: 'about_movieShowList_dropdown_version',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Brand`
+  String get about_movieShowList_dropdown_brand {
+    return Intl.message(
+      'Brand',
+      name: 'about_movieShowList_dropdown_brand',
       desc: '',
       args: [],
     );
@@ -3760,156 +3880,6 @@ class S {
     );
   }
 
-  /// `Set as Default`
-  String get creditCard_action_setDefault {
-    return Intl.message(
-      'Set as Default',
-      name: 'creditCard_action_setDefault',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Edit`
-  String get creditCard_action_edit {
-    return Intl.message(
-      'Edit',
-      name: 'creditCard_action_edit',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete`
-  String get creditCard_action_delete {
-    return Intl.message(
-      'Delete',
-      name: 'creditCard_action_delete',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Default`
-  String get creditCard_badge_default {
-    return Intl.message(
-      'Default',
-      name: 'creditCard_badge_default',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Delete Card`
-  String get creditCard_deleteConfirm_title {
-    return Intl.message(
-      'Delete Card',
-      name: 'creditCard_deleteConfirm_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This card will be removed permanently. Continue?`
-  String get creditCard_deleteConfirm_content {
-    return Intl.message(
-      'This card will be removed permanently. Continue?',
-      name: 'creditCard_deleteConfirm_content',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Please select a card to delete first`
-  String get creditCard_deleteHint_selectFirst {
-    return Intl.message(
-      'Please select a card to delete first',
-      name: 'creditCard_deleteHint_selectFirst',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Use this card first when paying`
-  String get creditCard_setDefaultSubtitle {
-    return Intl.message(
-      'Use this card first when paying',
-      name: 'creditCard_setDefaultSubtitle',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `This is your default card`
-  String get creditCard_currentDefaultHint {
-    return Intl.message(
-      'This is your default card',
-      name: 'creditCard_currentDefaultHint',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Edit Card`
-  String get creditCard_edit_title {
-    return Intl.message(
-      'Edit Card',
-      name: 'creditCard_edit_title',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Cardholder Name`
-  String get creditCard_edit_holderName {
-    return Intl.message(
-      'Cardholder Name',
-      name: 'creditCard_edit_holderName',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Expiry (MM/YY)`
-  String get creditCard_edit_expiryDate {
-    return Intl.message(
-      'Expiry (MM/YY)',
-      name: 'creditCard_edit_expiryDate',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Save`
-  String get creditCard_edit_save {
-    return Intl.message(
-      'Save',
-      name: 'creditCard_edit_save',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Cancel`
-  String get creditCard_edit_cancel {
-    return Intl.message(
-      'Cancel',
-      name: 'creditCard_edit_cancel',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Operation failed, please try again later`
-  String get creditCard_operationFailed {
-    return Intl.message(
-      'Operation failed, please try again later',
-      name: 'creditCard_operationFailed',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `User Terms`
   String get user_userTerms {
     return Intl.message(
@@ -4015,6 +3985,16 @@ class S {
     return Intl.message(
       'View',
       name: 'agreement_consent_viewDetail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No content available yet. Please try again later or contact support.`
+  String get agreement_emptyContent {
+    return Intl.message(
+      'No content available yet. Please try again later or contact support.',
+      name: 'agreement_emptyContent',
       desc: '',
       args: [],
     );
@@ -5075,6 +5055,156 @@ class S {
     return Intl.message(
       'Temporary credit card selected',
       name: 'payment_selectCreditCard_tempCardSelected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set as Default`
+  String get creditCard_action_setDefault {
+    return Intl.message(
+      'Set as Default',
+      name: 'creditCard_action_setDefault',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get creditCard_action_edit {
+    return Intl.message(
+      'Edit',
+      name: 'creditCard_action_edit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get creditCard_action_delete {
+    return Intl.message(
+      'Delete',
+      name: 'creditCard_action_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default`
+  String get creditCard_badge_default {
+    return Intl.message(
+      'Default',
+      name: 'creditCard_badge_default',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete Card`
+  String get creditCard_deleteConfirm_title {
+    return Intl.message(
+      'Delete Card',
+      name: 'creditCard_deleteConfirm_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This card will be removed permanently. Continue?`
+  String get creditCard_deleteConfirm_content {
+    return Intl.message(
+      'This card will be removed permanently. Continue?',
+      name: 'creditCard_deleteConfirm_content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit Card`
+  String get creditCard_edit_title {
+    return Intl.message(
+      'Edit Card',
+      name: 'creditCard_edit_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cardholder Name`
+  String get creditCard_edit_holderName {
+    return Intl.message(
+      'Cardholder Name',
+      name: 'creditCard_edit_holderName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Expiry (MM/YY)`
+  String get creditCard_edit_expiryDate {
+    return Intl.message(
+      'Expiry (MM/YY)',
+      name: 'creditCard_edit_expiryDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get creditCard_edit_save {
+    return Intl.message(
+      'Save',
+      name: 'creditCard_edit_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get creditCard_edit_cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'creditCard_edit_cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Operation failed, please try again later`
+  String get creditCard_operationFailed {
+    return Intl.message(
+      'Operation failed, please try again later',
+      name: 'creditCard_operationFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a card to delete first`
+  String get creditCard_deleteHint_selectFirst {
+    return Intl.message(
+      'Please select a card to delete first',
+      name: 'creditCard_deleteHint_selectFirst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use this card first when paying`
+  String get creditCard_setDefaultSubtitle {
+    return Intl.message(
+      'Use this card first when paying',
+      name: 'creditCard_setDefaultSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This is your default card`
+  String get creditCard_currentDefaultHint {
+    return Intl.message(
+      'This is your default card',
+      name: 'creditCard_currentDefaultHint',
       desc: '',
       args: [],
     );

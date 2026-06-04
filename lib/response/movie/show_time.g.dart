@@ -29,6 +29,7 @@ Cinema _$CinemaFromJson(Map<String, dynamic> json) => Cinema(
           .toList(),
       cinemaLatitude: (json['cinemaLatitude'] as num?)?.toDouble(),
       cinemaLongitude: (json['cinemaLongitude'] as num?)?.toDouble(),
+      favorite: json['favorite'] as bool?,
       distance: (json['distance'] as num?)?.toDouble(),
     );
 
@@ -39,6 +40,7 @@ Map<String, dynamic> _$CinemaToJson(Cinema instance) => <String, dynamic>{
       'showTimes': instance.showTimes?.map((e) => e.toJson()).toList(),
       'cinemaLatitude': instance.cinemaLatitude,
       'cinemaLongitude': instance.cinemaLongitude,
+      'favorite': instance.favorite,
       'distance': instance.distance,
     };
 
@@ -70,6 +72,11 @@ ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
       benefitFeedbackSoldOut: json['benefitFeedbackSoldOut'] as bool?,
       reReleaseId: (json['reReleaseId'] as num?)?.toInt(),
       reReleaseVersionInfo: json['reReleaseVersionInfo'] as String?,
+      reservationUrl: json['reservationUrl'] as String?,
+      saleStatus: json['saleStatus'] as String?,
+      subtitleNames: (json['subtitleNames'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
@@ -94,4 +101,7 @@ Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
       'benefitFeedbackSoldOut': instance.benefitFeedbackSoldOut,
       'reReleaseId': instance.reReleaseId,
       'reReleaseVersionInfo': instance.reReleaseVersionInfo,
+      'reservationUrl': instance.reservationUrl,
+      'saleStatus': instance.saleStatus,
+      'subtitleNames': instance.subtitleNames,
     };

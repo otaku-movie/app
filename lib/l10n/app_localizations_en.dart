@@ -72,6 +72,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get showTimeDetail_buy => 'Select Seat';
 
   @override
+  String get showTimeDetail_noOnlineTicket =>
+      'Online booking unavailable for this show. Please purchase at the theater or visit the cinema website.';
+
+  @override
   String get showTimeDetail_time => 'minutes';
 
   @override
@@ -490,6 +494,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_components_showTimeList_seatStatus_available => 'Available';
 
   @override
+  String get about_components_showTimeList_seatStatus_preSale => 'Pre-sale';
+
+  @override
+  String get about_components_showTimeList_seatStatus_saleEnded => 'Sale ended';
+
+  @override
+  String get about_components_showTimeList_seatStatus_closed => 'Closed';
+
+  @override
+  String get about_components_showTimeList_seatStatus_unknown => 'Unknown';
+
+  @override
+  String get about_components_showTimeList_notPurchasableHint =>
+      'Tickets for this showtime aren\'t open yet on the cinema\'s site';
+
+  @override
+  String about_movieShowList_summary(Object cinemaCount, Object showTimeCount) {
+    return '$cinemaCount cinemas · $showTimeCount showtimes';
+  }
+
+  @override
+  String about_movieShowList_cinemaSessionCount(Object count) {
+    return '$count showtimes';
+  }
+
+  @override
   String get about_components_showTimeList_benefitBadge => 'Benefits';
 
   @override
@@ -576,10 +606,26 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_movieShowList_dropdown_subtitle => 'Subtitle';
 
   @override
+  String get about_components_showTimeList_subtitleChipShort => 'Sub';
+
+  @override
+  String about_components_showTimeList_subtitleChipWith(String name) {
+    return '$name subtitles';
+  }
+
+  @override
+  String about_components_showTimeList_subtitleHint(String names) {
+    return '※ Original audio with $names subtitles';
+  }
+
+  @override
   String get about_movieShowList_dropdown_tag => 'Tag';
 
   @override
   String get about_movieShowList_dropdown_version => 'Version';
+
+  @override
+  String get about_movieShowList_dropdown_brand => 'Brand';
 
   @override
   String get enum_seatType_coupleSeat => 'Couple Seat';
@@ -1250,6 +1296,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get agreement_consent_viewDetail => 'View';
+
+  @override
+  String get agreement_emptyContent =>
+      'No content available yet. Please try again later or contact support.';
 
   @override
   String get user_checkUpdate => 'Check Update';

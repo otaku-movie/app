@@ -69,6 +69,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showTimeDetail_buy => '选座';
 
   @override
+  String get showTimeDetail_noOnlineTicket => '该场次暂无线上购票链接，请到影院现场或官网购票';
+
+  @override
   String get showTimeDetail_time => '分';
 
   @override
@@ -461,6 +464,32 @@ class AppLocalizationsZh extends AppLocalizations {
   String get about_components_showTimeList_seatStatus_available => '充足';
 
   @override
+  String get about_components_showTimeList_seatStatus_preSale => '预售';
+
+  @override
+  String get about_components_showTimeList_seatStatus_saleEnded => '已结束';
+
+  @override
+  String get about_components_showTimeList_seatStatus_closed => '停售';
+
+  @override
+  String get about_components_showTimeList_seatStatus_unknown => '未知';
+
+  @override
+  String get about_components_showTimeList_notPurchasableHint =>
+      '影院官网尚未开放此场次购票，请稍后再试';
+
+  @override
+  String about_movieShowList_summary(Object cinemaCount, Object showTimeCount) {
+    return '$cinemaCount 家影院 · $showTimeCount 场';
+  }
+
+  @override
+  String about_movieShowList_cinemaSessionCount(Object count) {
+    return '共 $count 场';
+  }
+
+  @override
   String get about_components_showTimeList_benefitBadge => '特典';
 
   @override
@@ -542,10 +571,26 @@ class AppLocalizationsZh extends AppLocalizations {
   String get about_movieShowList_dropdown_subtitle => '字幕';
 
   @override
+  String get about_components_showTimeList_subtitleChipShort => '字';
+
+  @override
+  String about_components_showTimeList_subtitleChipWith(String name) {
+    return '$name字幕';
+  }
+
+  @override
+  String about_components_showTimeList_subtitleHint(String names) {
+    return '※ 原声 + $names 字幕的场次';
+  }
+
+  @override
   String get about_movieShowList_dropdown_tag => '标签';
 
   @override
   String get about_movieShowList_dropdown_version => '版本';
+
+  @override
+  String get about_movieShowList_dropdown_brand => '品牌';
 
   @override
   String get enum_seatType_coupleSeat => '情侣座';
@@ -1189,6 +1234,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get agreement_consent_viewDetail => '查看';
+
+  @override
+  String get agreement_emptyContent => '暂无内容，请稍后再试或联系客服。';
 
   @override
   String get user_checkUpdate => '检查更新';

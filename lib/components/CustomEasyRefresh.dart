@@ -27,8 +27,19 @@ ClassicHeader customHeader (BuildContext context) {
   );
 }
 
-ClassicFooter customFooter (BuildContext context) {
+/// 通用列表底部组件。
+///
+/// [infiniteOffset] 控制「快到底部时」自动触发 `onLoad` 的距离（像素）。
+/// `ClassicFooter` 默认值 70，过于贴近底部 —— 用户感受像是「到了底部才加载」。
+/// 在长列表里把它调大（例如 `400.h`，约 1～1.5 个卡片高度），可以在用户
+/// 还能看到几条数据时就开始预拉下一页，过渡更顺滑。传 `null` 会退化为
+/// 经典「上拉加载更多」交互（必须滑过底部再继续上拉）。
+ClassicFooter customFooter(
+  BuildContext context, {
+  double? infiniteOffset = 70,
+}) {
   return ClassicFooter(
+    infiniteOffset: infiniteOffset,
     textStyle: TextStyle(
       color: const Color(0xFF1989FA),    // 蓝色主题色
       fontSize: 24.sp,        // 调整字体大小
