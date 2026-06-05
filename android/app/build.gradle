@@ -38,8 +38,10 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.otaku_movie"
+        // 上架包名（Play Store 认这个）。namespace 仍是 com.example.otaku_movie，
+        // 仅作内部 R 类/MainActivity 解析用，与 applicationId 相互独立、无需一致，
+        // 因此不必搬动 Kotlin 源码即可换上架包名。
+        applicationId = "com.otakumovie.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = flutter.minSdkVersion

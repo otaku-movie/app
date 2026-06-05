@@ -47,7 +47,12 @@ class EnvironmentConfig {
         );
       case EnvironmentType.prod:
         return const EnvironmentConfig(
-          apiUrl: '',
+          // 生产接口域名。必须是 https（iOS ATS / Android 默认均禁止明文 HTTP）。
+          // 可用 --dart-define=API_URL=... 覆盖；未传时用下面的默认生产域名。
+          apiUrl: String.fromEnvironment(
+            'API_URL',
+            defaultValue: 'https://api.otaku-movie.com/api',
+          ),
           imageBaseUrl: String.fromEnvironment(
             'IMAGE_BASE_URL',
             defaultValue: 'https://images.otaku-movie.com',
@@ -153,7 +158,7 @@ class Config {
   /// Android：与 `android/app/build.gradle` 的 `applicationId` 一致；发布前可用 `--dart-define=GOOGLE_PLAY_APPLICATION_ID=...` 覆盖。
   static const String googlePlayApplicationId = String.fromEnvironment(
     'GOOGLE_PLAY_APPLICATION_ID',
-    defaultValue: 'com.example.otaku_movie',
+    defaultValue: 'com.otakumovie.app',
   );
 
   /// iOS：App Store Connect 中的数字 App ID（非 Bundle ID）。未配置时「立即更新」回退使用接口返回的 `downloadUrl`。

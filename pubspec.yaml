@@ -105,6 +105,8 @@ dev_dependencies:
   flutter_flavorizr: ^2.2.3
   # 冷启动 native splash → flutter splash 无缝衔接（消除黑屏）
   flutter_native_splash: ^2.4.2
+  # 一键生成 Android(含自适应图标)/iOS 全套 App 图标
+  flutter_launcher_icons: ^0.14.1
 
 
   flutter_test:
@@ -123,6 +125,21 @@ flutter_intl:
   localizations:
     - lib/l10n/intl_*.arb
 
+# App 图标配置：替换 assets/icon/ 下的占位图后执行
+#   flutter pub get
+#   dart run flutter_launcher_icons
+# 即可生成 Android(含自适应图标) 与 iOS 全套尺寸，覆盖当前的 Flutter 默认图标。
+flutter_launcher_icons:
+  # 主图标源图：建议最终换成 1024x1024 原图；当前使用 assets/image/logo.png。
+  # iOS 不允许透明通道，remove_alpha_ios 会自动铺底处理。
+  image_path: "assets/image/logo.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  # Android 8.0+ 自适应图标：前景建议是留有安全边距的透明 PNG，背景给纯色或单独图
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/image/logo.png"
+
 flutter:
   generate: true
   uses-material-design: true
@@ -131,6 +148,7 @@ flutter:
     - assets/icons/
     - assets/icons/pay/
     - assets/icons/social/
+    - assets/icon/
   fonts:
     - family: iconfont
       fonts:
