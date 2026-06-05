@@ -21,7 +21,15 @@ class ComingSoon extends StatefulWidget {
 }
 
 class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  EasyRefreshController easyRefreshController = EasyRefreshController();
+  // 必须开启 controlFinishRefresh/controlFinishLoad，并把该 controller 传给下方的
+  // EasyRefresh，否则 getData 里手动调用的 finishRefresh/finishLoad 全是空操作
+  // （controller 未绑定 widget，_state 为 null），且 EasyRefresh 会退回到「等待
+  // onLoad 返回值」模式——但 onLoad 返回的是 void，导致加载状态机与翻页竞态错乱，
+  // 表现为「滑到底没反应、没 loading」。
+  final EasyRefreshController easyRefreshController = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
 
   @override
   bool get wantKeepAlive => true; // 保持页面的状态
@@ -216,6 +224,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
         color: const Color(0xFFF7F8FA),
       ),
       child: EasyRefresh(
+        controller: easyRefreshController,
         header: customHeader(context),
         // 即将上映按月份分组，每条卡片偏高，用 500.h 让用户在还能看到
         // 一张多一点的数据时就开始预拉下一页。

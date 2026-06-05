@@ -28,7 +28,12 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   /// 持久化 key：视图模式（false=列表，true=网格）
   static const String _viewModePrefsKey = 'now_showing_view_grid';
 
-  EasyRefreshController easyRefreshController = EasyRefreshController();
+  // 与 getData 里的 finishRefresh/finishLoad 配套：受控模式下由请求完成时
+  // 显式结束刷新/加载状态，避免 onLoad 返回 void 时 EasyRefresh 提前结束任务。
+  final EasyRefreshController easyRefreshController = EasyRefreshController(
+    controlFinishRefresh: true,
+    controlFinishLoad: true,
+  );
   List<MovieNowShowingResponse> data = [];
   int currentPage = 1;
   bool loading = false;
@@ -268,6 +273,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
         _buildViewModeToolbar(),
         Expanded(
           child: EasyRefresh(
+            controller: easyRefreshController,
             header: customHeader(context),
             // 预加载阈值约 1~1.5 张电影卡片：列表/网格视图下用户还能看到下一张时
             // 就提前触发下一页加载，避免出现「滚到底才看到 loading」。
