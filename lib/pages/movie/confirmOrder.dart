@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
@@ -162,6 +164,9 @@ class _PageState extends State<ConfirmOrder> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logFunnel(Ev.confirmOrderView, {
+      P.orderNumber: widget.orderNumber,
+    });
     getPaymentMethodData();
     getData();
 
@@ -1291,6 +1296,10 @@ class _PageState extends State<ConfirmOrder> {
                           if (mounted) setState(() => payLoading = false);
                           return;
                         }
+                        Analytics.instance.logFunnel(Ev.payStart, {
+                          P.orderNumber: orderNumber,
+                          P.type: defaultPay,
+                        });
                         final res = await ApiRequest().request<dynamic>(
                           path: '/movieOrder/pay',
                           method: 'POST',

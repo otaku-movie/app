@@ -4,6 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
@@ -1074,6 +1076,15 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                             // toho 当前为 0%（源站无可直链场次 URL）。缺失时仅提示用户去现场或官网。
                                             GestureDetector(
                                               onTap: () {
+                                                final reserveUrl = children.reservationUrl?.trim() ?? '';
+                                                final String clickResult = !isPurchasable
+                                                    ? 'not_purchasable'
+                                                    : (reserveUrl.isNotEmpty ? 'open_url' : 'no_url');
+                                                Analytics.instance.logFunnel(Ev.showtimeClick, {
+                                                  P.showtimeId: children.id,
+                                                  P.saleStatus: children.saleStatus,
+                                                  P.type: clickResult,
+                                                });
                                                 // 不可购买（pre_sale / sale_ended / closed / unknown）：
                                                 // 不外跳，提示用户当前状态，避免遇到 ERR-2002 之类的官网错误页
                                                 if (!isPurchasable) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -19,6 +21,14 @@ class PayError extends StatefulWidget {
 class _PageState extends State<PayError> {
   bool loading = false;
   bool error = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Analytics.instance.logFunnel(Ev.payFail, {
+      P.reason: widget.reason,
+    });
+  }
 
   /// 返回选座页面（与 confirmOrder 一致：popUntil 到 selectSeat）
   void _goBackToSelectSeat() {

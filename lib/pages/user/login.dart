@@ -12,6 +12,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/config/auth_config.dart';
@@ -142,6 +144,7 @@ class _LoginPageState extends State<Login> {
     // 直接提交明文密码，由后端 BCrypt 加盐哈希存储（传输依赖 HTTPS 保护）
     String pwd = passwordController.text;
 
+    Analytics.instance.logEvent(Ev.loginStart, {P.type: 'account'});
     _showLoadingDialog(context);
     AuthStorage.instance.getOrCreateDeviceId().then((deviceId) {
     ApiRequest().request(
@@ -166,13 +169,16 @@ class _LoginPageState extends State<Login> {
         // 存储用户信息（可以将 Map 转换为 JSON 字符串存储）
         prefs.setString('userInfo', res.data.toString());
 
+        Analytics.instance.setUserId('${res.data?.id}');
+        Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'account'});
         context.pushNamed('home');
       }
     
     }).catchError((err) {
-      // setState(() {
-      //   error = true;
-      // });
+      Analytics.instance.logEvent(Ev.loginFail, {
+        P.type: 'account',
+        P.reason: err.toString(),
+      });
     }).whenComplete(() {
       _hideLoadingDialog(context);
       // setState(() {
@@ -184,6 +190,7 @@ class _LoginPageState extends State<Login> {
 
   void handleGoogleLogin() async {
     try {
+      Analytics.instance.logEvent(Ev.loginStart, {P.type: 'google'});
       _showLoadingDialog(context);
       
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -222,9 +229,15 @@ class _LoginPageState extends State<Login> {
           // 存储用户信息
           prefs.setString('userInfo', res.data.toString());
 
+          Analytics.instance.setUserId('${res.data?.id}');
+          Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'google'});
           context.pushNamed('home');
         }
       }).catchError((err) {
+        Analytics.instance.logEvent(Ev.loginFail, {
+          P.type: 'google',
+          P.reason: err.toString(),
+        });
         ToastService.showError(S.of(context).login_googleLoginFailed);
       }).whenComplete(() {
         _hideLoadingDialog(context);
@@ -232,6 +245,10 @@ class _LoginPageState extends State<Login> {
       
     } catch (error, stackTrace) {
       _hideLoadingDialog(context);
+      Analytics.instance.logEvent(Ev.loginFail, {
+        P.type: 'google',
+        P.reason: error.toString(),
+      });
       ToastService.showError(S.of(context).login_googleLoginFailed);
       log.e('Google login error', error: error, stackTrace: stackTrace);
     }
@@ -253,6 +270,7 @@ class _LoginPageState extends State<Login> {
   Future<void> handleAppleLogin() async {
     if (!Platform.isIOS) return;
     try {
+      Analytics.instance.logEvent(Ev.loginStart, {P.type: 'apple'});
       _showLoadingDialog(context);
 
       // Apple 防重放：客户端生成 rawNonce，把 sha256(rawNonce) 传给 Apple，
@@ -297,15 +315,25 @@ class _LoginPageState extends State<Login> {
           );
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString('userInfo', res.data.toString());
+          Analytics.instance.setUserId('${res.data?.id}');
+          Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'apple'});
           context.pushNamed('home');
         }
       }).catchError((err) {
+        Analytics.instance.logEvent(Ev.loginFail, {
+          P.type: 'apple',
+          P.reason: err.toString(),
+        });
         ToastService.showError(S.of(context).login_appleLoginFailed);
       }).whenComplete(() {
         _hideLoadingDialog(context);
       });
     } catch (error, stackTrace) {
       _hideLoadingDialog(context);
+      Analytics.instance.logEvent(Ev.loginFail, {
+        P.type: 'apple',
+        P.reason: error.toString(),
+      });
       ToastService.showError(S.of(context).login_appleLoginFailed);
       log.e('Apple login error', error: error, stackTrace: stackTrace);
     }
@@ -325,6 +353,7 @@ class _LoginPageState extends State<Login> {
       return;
     }
     try {
+      Analytics.instance.logEvent(Ev.loginStart, {P.type: 'x'});
       _showLoadingDialog(context);
 
       const appAuth = FlutterAppAuth();
@@ -370,10 +399,16 @@ class _LoginPageState extends State<Login> {
           );
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString('userInfo', res.data.toString());
+          Analytics.instance.setUserId('${res.data?.id}');
+          Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'x'});
           if (!mounted) return;
           context.pushNamed('home');
         }
       }).catchError((err) {
+        Analytics.instance.logEvent(Ev.loginFail, {
+          P.type: 'x',
+          P.reason: err.toString(),
+        });
         ToastService.showError(S.of(context).login_xLoginFailed);
       }).whenComplete(() {
         _hideLoadingDialog(context);
@@ -386,6 +421,10 @@ class _LoginPageState extends State<Login> {
       if (msg.contains('cancel')) {
         return;
       }
+      Analytics.instance.logEvent(Ev.loginFail, {
+        P.type: 'x',
+        P.reason: error.toString(),
+      });
       ToastService.showError(S.of(context).login_xLoginFailed);
       log.e('X login error', error: error, stackTrace: stackTrace);
     }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "807320750051",
+    "project_id": "cineko-8b899",
+    "storage_bucket": "cineko-8b899.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807320750051:android:acb83886249baddf2842d6",
+        "android_client_info": {
+          "package_name": "com.otakumovie.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRTqgdyOz8_dIZmsJJfLDu-EdikCR9BBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807320750051:android:5d4727e6651c62422842d6",
+        "android_client_info": {
+          "package_name": "com.otakumovie.app.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRTqgdyOz8_dIZmsJJfLDu-EdikCR9BBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

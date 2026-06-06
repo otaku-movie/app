@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/controller/SeatSelectionController.dart';
 import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
@@ -200,6 +202,10 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logFunnel(Ev.selectSeatEnter, {
+      P.showtimeId: widget.id,
+      P.theaterHallId: widget.theaterHallId,
+    });
     transformationController = TransformationController();
     getData();
     getSeatData();
@@ -1352,6 +1358,11 @@ class _SeatSelectionPageState extends State<SelectSeatPage> {
                         "seatName": item.seatName
                       };
                     }).toList();
+
+                    Analytics.instance.logFunnel(Ev.seatConfirm, {
+                      P.showtimeId: '${_showTimeData.id}',
+                      P.seatCount: seatPositions.length,
+                    });
 
                     ApiRequest().request(
                       path: '/movie_show_time/select_seat/save',

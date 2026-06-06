@@ -98,28 +98,60 @@ class _AgreementPageState extends State<AgreementPage> {
         : (version.isNotEmpty ? 'v$version' : todayStr);
     final upd = lastUpdated.isNotEmpty ? _formatDate(lastUpdated) : eff;
 
+    String lang = 'ja';
+    if (Get.isRegistered<LanguageController>()) {
+      lang = Get.find<LanguageController>().locale.value.languageCode;
+    }
+
+    final localized = switch (lang) {
+      'zh' => (
+          companyName: 'シネコ 运营团队',
+          companyAddress: '日本国东京都（运营信息确定后更新）',
+          supportHours: '工作日 10:00 - 18:00 (JST)',
+          cloudProviders: 'AWS（东京区域）',
+          overseasLocations: '日本境外（包括美国、欧洲）',
+          storageLocations: '日本（东京区域）',
+        ),
+      'en' => (
+          companyName: 'Cineko Operations Team',
+          companyAddress: 'Tokyo, Japan (to be updated after confirmation)',
+          supportHours: 'Weekdays 10:00 - 18:00 (JST)',
+          cloudProviders: 'AWS (Tokyo Region)',
+          overseasLocations: 'outside Japan (including the US and Europe)',
+          storageLocations: 'Japan (Tokyo Region)',
+        ),
+      _ => (
+          companyName: 'シネコ 運営チーム',
+          companyAddress: '日本国東京都（運営情報の確定後に更新）',
+          supportHours: '平日 10:00 - 18:00 (JST)',
+          cloudProviders: 'AWS（東京リージョン）',
+          overseasLocations: '日本国外（米国・欧州を含む）',
+          storageLocations: '日本（東京リージョン）',
+        ),
+    };
+
     final replacements = <String, String>{
-      'APP_NAME': 'Otaku Movie',
+      'APP_NAME': 'シネコ',
       'EFFECTIVE_DATE': eff,
       'LAST_UPDATED': upd,
-      'COMPANY_NAME': 'Otaku Movie 運営チーム',
-      'COMPANY_ADDRESS': '日本国東京都（運営情報の確定後に更新）',
+      'COMPANY_NAME': localized.companyName,
+      'COMPANY_ADDRESS': localized.companyAddress,
       'JURISDICTION_COURT': '東京地方裁判所',
-      'SUPPORT_EMAIL': 'support@otaku-movie.com',
+      'SUPPORT_EMAIL': 'diy4869@gmail.com',
       'SUPPORT_PHONE': '03-0000-0000',
-      'SUPPORT_HOURS': '平日 10:00 - 18:00 (JST)',
-      'DPO_EMAIL': 'privacy@otaku-movie.com',
+      'SUPPORT_HOURS': localized.supportHours,
+      'DPO_EMAIL': 'diy4869@gmail.com',
       'DPO_RESPONSE_DAYS': '15',
       'REFUND_HOURS': '1',
       'ACCOUNT_RETENTION_DAYS': '30',
       'LOG_RETENTION_DAYS': '180',
       'SUPPORT_RETENTION_DAYS': '365',
       'MIN_AGE': '13',
-      'CLOUD_PROVIDERS': 'AWS（東京リージョン）',
+      'CLOUD_PROVIDERS': localized.cloudProviders,
       'COMMS_PROVIDERS': 'SendGrid / Twilio',
-      'OVERSEAS_LOCATIONS': '日本国外（米国・欧州を含む）',
-      'STORAGE_LOCATIONS': '日本（東京リージョン）',
-      'API_DOMAIN': 'api.otaku-movie.com',
+      'OVERSEAS_LOCATIONS': localized.overseasLocations,
+      'STORAGE_LOCATIONS': localized.storageLocations,
+      'API_DOMAIN': 'api.cineko.app',
     };
 
     var out = src;
@@ -135,14 +167,10 @@ class _AgreementPageState extends State<AgreementPage> {
     return MarkdownStyleSheet(
       p: TextStyle(
           fontSize: 28.sp, height: 1.7, color: const Color(0xFF323233)),
-      h1: TextStyle(
-          fontSize: 40.sp, fontWeight: FontWeight.bold, height: 1.3),
-      h2: TextStyle(
-          fontSize: 36.sp, fontWeight: FontWeight.bold, height: 1.3),
-      h3: TextStyle(
-          fontSize: 32.sp, fontWeight: FontWeight.bold, height: 1.3),
-      h4: TextStyle(
-          fontSize: 30.sp, fontWeight: FontWeight.w600, height: 1.3),
+      h1: TextStyle(fontSize: 40.sp, fontWeight: FontWeight.bold, height: 1.3),
+      h2: TextStyle(fontSize: 36.sp, fontWeight: FontWeight.bold, height: 1.3),
+      h3: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold, height: 1.3),
+      h4: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w600, height: 1.3),
       h1Padding: EdgeInsets.only(top: 8.h, bottom: 14.h),
       h2Padding: EdgeInsets.only(top: 28.h, bottom: 14.h),
       h3Padding: EdgeInsets.only(top: 22.h, bottom: 10.h),
@@ -175,8 +203,7 @@ class _AgreementPageState extends State<AgreementPage> {
     final lines = md.split('\n');
     final segments = <_DocSegment>[];
     final buffer = StringBuffer();
-    final separator =
-        RegExp(r'^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$');
+    final separator = RegExp(r'^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$');
     int i = 0;
     while (i < lines.length) {
       final isTableStart = lines[i].trimLeft().startsWith('|') &&
@@ -209,10 +236,7 @@ class _AgreementPageState extends State<AgreementPage> {
     var s = line.trim();
     if (s.startsWith('|')) s = s.substring(1);
     if (s.endsWith('|')) s = s.substring(0, s.length - 1);
-    return s
-        .split('|')
-        .map((e) => e.trim().replaceAll(r'\|', '|'))
-        .toList();
+    return s.split('|').map((e) => e.trim().replaceAll(r'\|', '|')).toList();
   }
 
   Widget _buildTable(List<String> tableLines) {
@@ -237,18 +261,18 @@ class _AgreementPageState extends State<AgreementPage> {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final availableWidth = constraints.maxWidth;
-              final preferredColumnWidth =
-                  colCount <= 3 ? availableWidth / colCount : 170.w;
-              final columnWidth = preferredColumnWidth.clamp(120.w, 190.w);
-              final tableWidth = (columnWidth * colCount)
-                  .clamp(availableWidth, double.infinity);
+              final widths = _tableColumnWidths(colCount);
+              final tableWidth =
+                  widths.fold<double>(0, (sum, width) => sum + width);
               final table = Table(
-                defaultColumnWidth: FixedColumnWidth(columnWidth),
+                columnWidths: {
+                  for (var i = 0; i < colCount; i++)
+                    i: FixedColumnWidth(widths[i]),
+                },
                 border: const TableBorder(
                   horizontalInside:
                       BorderSide(color: innerBorderColor, width: 1),
-                  verticalInside:
-                      BorderSide(color: innerBorderColor, width: 1),
+                  verticalInside: BorderSide(color: innerBorderColor, width: 1),
                 ),
                 children: [
                   TableRow(
@@ -283,7 +307,9 @@ class _AgreementPageState extends State<AgreementPage> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
                     minWidth: availableWidth,
-                    maxWidth: tableWidth,
+                    maxWidth: tableWidth < availableWidth
+                        ? availableWidth
+                        : tableWidth,
                   ),
                   child: table,
                 ),
@@ -293,6 +319,28 @@ class _AgreementPageState extends State<AgreementPage> {
         ),
       ),
     );
+  }
+
+  List<double> _tableColumnWidths(int colCount) {
+    if (colCount <= 0) return const [];
+    if (colCount <= 3) return List.filled(colCount, 220.w);
+
+    // SDK 一览是 6 列，手机竖屏下需要横向滚动而不是把内容挤碎。
+    final preferred = <double>[
+      220.w, // SDK / 服务
+      190.w, // 提供方
+      260.w, // 用途
+      360.w, // 收集 / 使用的信息
+      260.w, // 触发时机
+      300.w, // 隐私政策
+    ];
+    if (colCount <= preferred.length) {
+      return preferred.take(colCount).toList();
+    }
+    return [
+      ...preferred,
+      ...List.filled(colCount - preferred.length, 240.w),
+    ];
   }
 
   Widget _tableCellBody(String raw, {required bool isHeader}) {
@@ -321,8 +369,7 @@ class _AgreementPageState extends State<AgreementPage> {
           fontSize: 22.sp,
           height: 2.1,
           fontWeight: isHeader ? FontWeight.w600 : FontWeight.normal,
-          color:
-              isHeader ? const Color(0xFF323233) : const Color(0xFF4A4A4A),
+          color: isHeader ? const Color(0xFF323233) : const Color(0xFF4A4A4A),
         ),
         a: TextStyle(
           fontSize: 22.sp,
@@ -397,6 +444,10 @@ class _AgreementPageState extends State<AgreementPage> {
                       return MarkdownBody(
                         data: seg.text,
                         styleSheet: style,
+                        // 协议正文里 1.1 / 1.2 这类子条款各占一行，但标准 Markdown
+                        // 把单个换行当空格合并成一段。开启 softLineBreak 让单换行
+                        // 也渲染成换行，无需在正文到处插空行。
+                        softLineBreak: true,
                         builders: {
                           'code': _InlineCodeBuilder(
                             fontSize: 24.sp,

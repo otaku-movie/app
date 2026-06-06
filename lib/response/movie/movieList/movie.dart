@@ -18,6 +18,7 @@ class MovieResponse {
   final double? rate;
   final int? totalRatings;
   final bool? rated;
+  final double? userRate;
   final int? cinemaCount;
   final int? theaterCount;
   final int? commentCount;
@@ -58,6 +59,7 @@ class MovieResponse {
     this.time,
     this.rate,
     this.rated = false,
+    this.userRate,
     this.totalRatings,
     this.cinemaCount,
     this.theaterCount,

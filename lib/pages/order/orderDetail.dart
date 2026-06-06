@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
@@ -102,6 +104,9 @@ class _PageState extends State<OrderDetail> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.orderDetailView, {
+      P.orderNumber: widget.orderNumber,
+    });
     getData();
     generatorQRCode();
   }

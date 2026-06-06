@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
@@ -308,6 +310,10 @@ class _PageState extends State<UserInfo> {
     // 避免出现「退了登录还能用旧 token」或「Google 自动续上同一账号」的问题。
     await AuthLogoutService.instance.logout();
 
+    Analytics.instance.logEvent(Ev.logout);
+    // 清除 user_id，后续事件不再归属该用户，避免数据串号。
+    Analytics.instance.setUserId(null);
+
     if (!mounted) return;
     context.goNamed('login');
   }
@@ -456,6 +462,7 @@ class _PageState extends State<UserInfo> {
       );
       // 后端注销后再走一遍统一登出链路：清三方 signOut 缓存 + 本地 token。
       await AuthLogoutService.instance.logout();
+      Analytics.instance.setUserId(null);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(_deleteAccountText('success'))),

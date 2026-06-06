@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/HelloMovie.dart';
@@ -237,6 +239,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.nowShowingView);
     _loadViewMode();
     getData();
   }

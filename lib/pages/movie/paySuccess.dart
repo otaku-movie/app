@@ -10,6 +10,8 @@ import 'package:otaku_movie/response/order/order_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:otaku_movie/api/index.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -89,6 +91,9 @@ class _PageState extends State<PaySuccess> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logFunnel(Ev.paySuccess, {
+      P.orderNumber: widget.orderNumber,
+    });
     getData();
     generatorQRCode();
   }

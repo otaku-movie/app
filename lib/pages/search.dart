@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
@@ -89,7 +91,15 @@ class _PageState extends State<Search> {
 
       if (res.data?.list != null) {
         List<MovieResponse> list = res.data!.list!;
-        
+
+        // 仅首页上报一次搜索；result_count=0 即「搜不到」的关键指标。
+        if (page == 1) {
+          Analytics.instance.logEvent(Ev.search, {
+            P.keyword: searchController.text,
+            P.resultCount: list.length,
+          });
+        }
+
         if (list.isEmpty) {
           // ignore: use_build_context_synchronously
           ToastService.showInfo(S.of(context).search_noData);
@@ -505,6 +515,10 @@ class _PageState extends State<Search> {
         children: [
           GestureDetector(
             onTap: () {
+              Analytics.instance.logEvent(Ev.searchResultClick, {
+                P.keyword: searchController.text,
+                P.movieId: '${item.id}',
+              });
               context.pushNamed('movieDetail',
                 pathParameters: {
                 "id": '${item.id}'
@@ -656,6 +670,10 @@ class _PageState extends State<Search> {
           Flexible(
             child: GestureDetector(
               onTap: () {
+                Analytics.instance.logEvent(Ev.searchResultClick, {
+                  P.keyword: searchController.text,
+                  P.movieId: '${item.id}',
+                });
                 context.pushNamed('movieDetail',
                   pathParameters: {
                   "id": '${item.id}'

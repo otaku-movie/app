@@ -12,6 +12,8 @@ import 'package:otaku_movie/response/movie/user_select_seat_data_response.dart';
 import 'package:otaku_movie/utils/toast.dart';
 import 'package:otaku_movie/utils/seat_cancel_manager.dart';
 import 'package:get/get.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/controller/SeatSelectionController.dart';
 import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
@@ -155,6 +157,10 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logFunnel(Ev.selectTicketView, {
+      P.showtimeId: widget.movieShowTimeId,
+      P.cinemaId: widget.cinemaId,
+    });
     // 确保不在抑制期，并用状态管理的总时长初始化本页倒计时显示
     seatSelectionController.suppressOps.value = false;
 
@@ -1323,6 +1329,13 @@ class _SelectMovieTicketPageState extends State<SelectMovieTicketType> {
                                             requestData['mubitikeUseCount'] =
                                                 _mubitikeUseCount;
                                           }
+                                          Analytics.instance.logFunnel(
+                                              Ev.ticketConfirm, {
+                                            P.showtimeId:
+                                                widget.movieShowTimeId,
+                                            P.ticketCount: seatPayload.length,
+                                          });
+
                                           ApiRequest()
                                               .request(
                                             path: '/movieOrder/create',

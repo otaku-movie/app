@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/components/AgreementConsentDialog.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/pages/tab/MovieList.dart';
@@ -24,9 +26,12 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
   late PageController _pageController;
   late List<Widget> _pages;
   
+  static const List<String> _tabNames = ['movie', 'ticket', 'cinema', 'me'];
+
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.homeView);
     currentIndex = widget.initialTab ?? 0;
     _pageController = PageController(initialPage: currentIndex);
     
@@ -161,6 +166,10 @@ class _HomePageState extends State<Home> with TickerProviderStateMixin {
 
   void _onPageChanged(int index) {
     FocusManager.instance.primaryFocus?.unfocus();
+    // 点按与滑动都会经过这里，统一在此上报，避免重复计数。
+    Analytics.instance.logEvent(Ev.tabSwitch, {
+      P.tab: (index >= 0 && index < _tabNames.length) ? _tabNames[index] : '$index',
+    });
     setState(() {
       currentIndex = index;
     });

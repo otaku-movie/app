@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// - [tapAction]：点击启动图的动作（`movie:{id}` / `url:{https://...}` / 空表示不响应）
 class SplashConfig {
   final String? imageUrl;
+  final String? logoUrl;
   final String? titleEn;
   final String? titleZh;
   final String? titleJa;
@@ -28,6 +29,7 @@ class SplashConfig {
 
   const SplashConfig({
     this.imageUrl,
+    this.logoUrl,
     this.titleEn,
     this.titleZh,
     this.titleJa,
@@ -41,9 +43,10 @@ class SplashConfig {
 
   static const SplashConfig fallback = SplashConfig(
     imageUrl: null,
-    titleEn: 'Otaku Movie',
-    titleZh: 'Otaku Movie',
-    titleJa: 'Otaku Movie',
+    logoUrl: null,
+    titleEn: 'シネコ',
+    titleZh: 'シネコ',
+    titleJa: 'シネコ',
     subtitleEn: 'Anime movies, in one tap',
     subtitleZh: '动漫电影，一键直达',
     subtitleJa: 'アニメ映画をワンタップで',
@@ -61,6 +64,7 @@ class SplashConfig {
 
     return SplashConfig(
       imageUrl: json['imageUrl'] as String?,
+      logoUrl: json['logoUrl'] as String?,
       titleEn: json['titleEn'] as String?,
       titleZh: json['titleZh'] as String?,
       titleJa: json['titleJa'] as String?,
@@ -75,6 +79,7 @@ class SplashConfig {
 
   Map<String, dynamic> toJson() => {
         'imageUrl': imageUrl,
+        'logoUrl': logoUrl,
         'titleEn': titleEn,
         'titleZh': titleZh,
         'titleJa': titleJa,

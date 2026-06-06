@@ -9,16 +9,18 @@
 #   dart run flutter_native_splash:create
 # 即可生成/更新 iOS 与 Android 的资源。
 flutter_native_splash:
-  # 与 lib/pages/splash_screen.dart 的 Scaffold backgroundColor 保持一致
+  # 与 lib/pages/splash_screen.dart 的 Scaffold backgroundColor 保持一致。
+  # 注意：原生 splash 只用纯品牌底色，不再放任何动漫/第三方图片以规避版权风险。
+  # 引擎起来后会立刻渲染 splash_screen.dart 的品牌渐变 + Logo，无缝衔接。
+  # 如需放置自有 Logo，请用确权的品牌图替换并取消下面 image 注释。
   color: "#0E1B2C"
 
-  # 中心 Logo / 主视觉。建议使用 1080x1080 居中透明 PNG。
-  image: assets/image/run.png
+  # image: assets/image/brand_logo.png
 
   # Android 12+ 强制使用系统 SplashScreen API，需要单独配置
   android_12:
     color: "#0E1B2C"
-    image: assets/image/run.png
+    # image: assets/image/brand_logo.png
 
   # 全屏 splash，避免顶部刘海留白
   fullscreen: true

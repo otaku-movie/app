@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
@@ -183,6 +185,11 @@ class _BenefitCinemaAvailabilityState extends State<BenefitCinemaAvailability> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.benefitCinemaView, {
+      P.movieId: widget.movieId,
+      P.benefitId: widget.benefitId,
+      P.reReleaseId: widget.reReleaseId,
+    });
     _searchController.addListener(() => setState(() {}));
     _scrollController.addListener(_onScroll);
     _loadAreaTree();

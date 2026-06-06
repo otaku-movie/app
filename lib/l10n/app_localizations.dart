@@ -895,8 +895,26 @@ abstract class AppLocalizations {
   /// No description provided for @about_copyright.
   ///
   /// In en, this message translates to:
-  /// **'© 2025 Otaku Movie All Rights Reserved'**
+  /// **'© 2025-2026 シネコ All Rights Reserved'**
   String get about_copyright;
+
+  /// No description provided for @about_dataDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.'**
+  String get about_dataDisclaimer;
+
+  /// No description provided for @about_dataSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Movie information, showtimes and cinema data shown in this app are sourced from cinemas\' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail.'**
+  String get about_dataSource;
+
+  /// No description provided for @about_nonOfficial.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is not the official app of any cinema, distributor, production company or ticketing platform, and unless expressly stated otherwise has no official partnership or authorization with them.'**
+  String get about_nonOfficial;
 
   /// No description provided for @about_components_sendVerifyCode_success.
   ///
@@ -1659,6 +1677,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete'**
   String get movieDetail_comment_delete;
+
+  /// No description provided for @movieDetail_comment_empty.
+  ///
+  /// In en, this message translates to:
+  /// **'No comments yet. Be the first to comment'**
+  String get movieDetail_comment_empty;
 
   /// No description provided for @movieDetail_writeComment.
   ///

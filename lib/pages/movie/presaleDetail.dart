@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
@@ -36,6 +38,9 @@ class _PresaleDetailState extends State<PresaleDetail> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.presaleDetailView, {
+      P.presaleId: widget.id,
+    });
     _load();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.addListener(() {

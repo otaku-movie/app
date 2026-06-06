@@ -1,5 +1,9 @@
 plugins {
     id "com.android.application"
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    // END: FlutterFire Configuration
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
@@ -102,29 +106,29 @@ android {
             /**
                 作用：为资源文件中的 string 动态设置值。
                 用途：
-                    在 dev 环境中，应用名称显示为 Otaku Movie Dev。
-                    在 staging 环境中，应用名称显示为 Otaku Movie Staging。
-                    在 prod 环境中，应用名称显示为 Otaku Movie。
+                    在 dev 环境中，应用名称显示为 シネコ Dev。
+                    在 qa 环境中，应用名称显示为 シネコ QA。
+                    在 prod 环境中，应用名称显示为 シネコ。
                     工作原理：resValue 会将这些值写入到生成的资源文件中，类似于手动在 res/values/strings.xml 文件中添加 <string> 标签。
              */
-            resValue "string", "app_name", "Otaku Movie Dev"
+            resValue "string", "app_name", "シネコ Dev"
         }
         // ProductFlavor 名称不能以 test 开头。这是因为 Gradle 对 test 作为前缀有特殊用途（如用于测试任务）。为了避免冲突，需要修改 test flavor 的名称。
         qa { // 替代 test
             dimension "default"
             applicationIdSuffix ".qa"
             versionNameSuffix "-qa"
-            resValue "string", "app_name", "Otaku Movie TEST"
+            resValue "string", "app_name", "シネコ QA"
         }
         prepord {
             dimension "default"
             applicationIdSuffix ".prepord"
             versionNameSuffix "-prepord"
-            resValue "string", "app_name", "Otaku Movie prepord"
+            resValue "string", "app_name", "シネコ Preprod"
         }
         prod {
             dimension "default"
-            resValue "string", "app_name", "Otaku Movie"
+            resValue "string", "app_name", "シネコ"
         }
     }
 

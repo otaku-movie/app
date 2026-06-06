@@ -445,7 +445,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about_privacy_policy => 'View Privacy Policy';
 
   @override
-  String get about_copyright => '© 2025 Otaku Movie All Rights Reserved';
+  String get about_copyright => '© 2025-2026 シネコ All Rights Reserved';
+
+  @override
+  String get about_dataDisclaimer =>
+      'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.';
+
+  @override
+  String get about_dataSource =>
+      'Movie information, showtimes and cinema data shown in this app are sourced from cinemas\' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail.';
+
+  @override
+  String get about_nonOfficial =>
+      'This app is not the official app of any cinema, distributor, production company or ticketing platform, and unless expressly stated otherwise has no official partnership or authorization with them.';
 
   @override
   String get about_components_sendVerifyCode_success =>
@@ -859,6 +871,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get movieDetail_comment_delete => 'Delete';
+
+  @override
+  String get movieDetail_comment_empty =>
+      'No comments yet. Be the first to comment';
 
   @override
   String get movieDetail_writeComment => 'Write Comment';

@@ -3,6 +3,8 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
@@ -211,6 +213,7 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
    @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.comingSoonView);
     getData();
   }
 

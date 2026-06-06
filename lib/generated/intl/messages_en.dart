@@ -142,7 +142,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_components_showTimeList_unnamed":
             MessageLookupByLibrary.simpleMessage("Unnamed"),
         "about_copyright": MessageLookupByLibrary.simpleMessage(
-            "© 2025 Otaku Movie All Rights Reserved"),
+            "© 2025-2026 シネコ All Rights Reserved"),
+        "about_dataDisclaimer": MessageLookupByLibrary.simpleMessage(
+            "Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com."),
+        "about_dataSource": MessageLookupByLibrary.simpleMessage(
+            "Movie information, showtimes and cinema data shown in this app are sourced from cinemas' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail."),
+        "about_nonOfficial": MessageLookupByLibrary.simpleMessage(
+            "This app is not the official app of any cinema, distributor, production company or ticketing platform, and unless expressly stated otherwise has no official partnership or authorization with them."),
         "about_description": MessageLookupByLibrary.simpleMessage(
             "Committed to providing convenient ticket purchasing experience for movie enthusiasts."),
         "about_login_email_text": MessageLookupByLibrary.simpleMessage("Email"),
@@ -714,6 +720,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Want to Watch"),
         "movieDetail_comment_delete":
             MessageLookupByLibrary.simpleMessage("Delete"),
+        "movieDetail_comment_empty": MessageLookupByLibrary.simpleMessage(
+            "No comments yet. Be the first to comment"),
         "movieDetail_comment_reply":
             MessageLookupByLibrary.simpleMessage("Reply"),
         "movieDetail_comment_replyTo": m18,

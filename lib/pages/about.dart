@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/utils/index.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({super.key});
@@ -27,6 +28,52 @@ class _AboutPageState extends State<AboutPage> {
     });
   }
 
+  Widget _buildDataDisclaimer(BuildContext context) {
+    const email = 'diy4869@gmail.com';
+    final text = S.of(context).about_dataDisclaimer;
+    final emailIndex = text.indexOf(email);
+    final baseStyle = TextStyle(
+      fontSize: 26.sp,
+      color: Colors.grey.shade700,
+      height: 1.7,
+    );
+
+    if (emailIndex < 0) {
+      return Text(
+        text,
+        style: baseStyle,
+        textAlign: TextAlign.left,
+      );
+    }
+
+    return RichText(
+      textAlign: TextAlign.left,
+      text: TextSpan(
+        style: baseStyle,
+        children: [
+          TextSpan(text: text.substring(0, emailIndex)),
+          WidgetSpan(
+            alignment: PlaceholderAlignment.baseline,
+            baseline: TextBaseline.alphabetic,
+            child: GestureDetector(
+              onTap: () => launchURL('mailto:$email'),
+              child: Text(
+                email,
+                style: baseStyle.copyWith(
+                  color: const Color(0xFF1989FA),
+                  decoration: TextDecoration.underline,
+                  decorationColor: const Color(0xFF1989FA).withValues(alpha: 0.35),
+                  decorationThickness: 1.0,
+                ),
+              ),
+            ),
+          ),
+          TextSpan(text: text.substring(emailIndex + email.length)),
+        ],
+      ),
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +83,10 @@ class _AboutPageState extends State<AboutPage> {
         title: S.of(context).about_title,
         backgroundColor: const Color(0xFF1989FA),
       ),
-      body: SingleChildScrollView(
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
         child: Column(
           children: [
             // 头部区域
@@ -84,36 +134,49 @@ class _AboutPageState extends State<AboutPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // 应用图标
+                        // 应用图标（品牌 logo）
                         Container(
-                          width: 100.w,
-                          height: 100.w,
+                          width: 110.w,
+                          height: 110.w,
+                          padding: EdgeInsets.all(12.w),
                           decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(25.r),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(28.r),
                             border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.3),
+                              color: Colors.white.withValues(alpha: 0.6),
                               width: 2,
                             ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.12),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                          child: Icon(
-                            Icons.movie_rounded,
-                            size: 50.sp,
-                            color: Colors.white,
+                          clipBehavior: Clip.antiAlias,
+                          child: Image.asset(
+                            'assets/image/logo.png',
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stack) => Icon(
+                              Icons.movie_rounded,
+                              size: 56.sp,
+                              color: const Color(0xFF1989FA),
+                            ),
                           ),
                         ),
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 18.h),
                         // 应用名称
                         Text(
-                          'Otaku Movie',
+                          'シネコ',
                           style: TextStyle(
-                            fontSize: 32.sp,
+                            fontSize: 44.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
-                            letterSpacing: 1.2,
+                            letterSpacing: 1.5,
                           ),
                         ),
-                        SizedBox(height: 8.h),
+                        SizedBox(height: 10.h),
                         // 版本信息
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 6.h),
@@ -124,7 +187,7 @@ class _AboutPageState extends State<AboutPage> {
                           child: Text(
                             '${S.of(context).about_version}: $version',
                             style: TextStyle(
-                              fontSize: 18.sp,
+                              fontSize: 22.sp,
                               color: Colors.white,
                               fontWeight: FontWeight.w500,
                             ),
@@ -144,8 +207,20 @@ class _AboutPageState extends State<AboutPage> {
                 children: [
                   SizedBox(height: 20.h),
 
-                  
-                  // 版权信息
+                  // 第三方内容版权声明：电影名称/海报/剧照等版权归原权利人所有，
+                  // 本应用不主张版权，仅作信息展示与购票用途。
+                  Container(
+                    padding: EdgeInsets.all(20.w),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(15.r),
+                    ),
+                    child: _buildDataDisclaimer(context),
+                  ),
+
+                  SizedBox(height: 16.h),
+
+                  // 数据来源
                   Container(
                     padding: EdgeInsets.all(20.w),
                     decoration: BoxDecoration(
@@ -153,22 +228,59 @@ class _AboutPageState extends State<AboutPage> {
                       borderRadius: BorderRadius.circular(15.r),
                     ),
                     child: Text(
-                      S.of(context).about_copyright,
+                      S.of(context).about_dataSource,
                       style: TextStyle(
-                        fontSize: 20.sp,
-                        color: Colors.grey.shade600,
-                        height: 1.4,
+                        fontSize: 26.sp,
+                        color: Colors.grey.shade700,
+                        height: 1.7,
                       ),
-                      textAlign: TextAlign.center,
+                      textAlign: TextAlign.left,
                     ),
                   ),
-                  
-                  SizedBox(height: 20.h),
+
+                  SizedBox(height: 16.h),
+
+                  // 非官方声明
+                  Container(
+                    padding: EdgeInsets.all(20.w),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade50,
+                      borderRadius: BorderRadius.circular(15.r),
+                    ),
+                    child: Text(
+                      S.of(context).about_nonOfficial,
+                      style: TextStyle(
+                        fontSize: 26.sp,
+                        color: Colors.grey.shade700,
+                        height: 1.7,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+
+                  SizedBox(height: 12.h),
                 ],
               ),
             ),
           ],
         ),
+            ),
+          ),
+          // 版权信息（固定在页面最底部）
+          Padding(
+            padding: EdgeInsets.fromLTRB(24.w, 12.h, 24.w, 24.h),
+            child: Text(
+              S.of(context).about_copyright,
+              style: TextStyle(
+                fontSize: 22.sp,
+                color: Colors.grey.shade500,
+                height: 1.4,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }

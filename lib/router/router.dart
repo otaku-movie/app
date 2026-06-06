@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
 import 'package:otaku_movie/pages/Home.dart';
 import 'package:otaku_movie/pages/about.dart';
 import 'package:otaku_movie/pages/agreement/agreement_page.dart';
@@ -35,6 +36,9 @@ import 'package:otaku_movie/response/payment/credit_card_response.dart';
 
 final GoRouter routerConfig = GoRouter(
   initialLocation: '/splash',
+  // 路由级埋点：自动上报每个页面的 screen_view（routeName/路径）。
+  // 未配置 Firebase 时为无副作用的普通 observer。
+  observers: <NavigatorObserver>[Analytics.instance.observer],
   routes:  <RouteBase>[
         GoRoute(
           path: '/splash',
@@ -74,6 +78,7 @@ final GoRouter routerConfig = GoRouter(
               id: state.uri.queryParameters['id'],
               movieName: state.uri.queryParameters['movieName'],
               rated: state.uri.queryParameters['rated'] == 'true',
+              userRate: double.tryParse(state.uri.queryParameters['userRate'] ?? ''),
             );
           },
         ),

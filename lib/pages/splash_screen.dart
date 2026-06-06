@@ -68,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     setState(() => _config = cached);
 
     // 2. 启动「最长展示」兜底定时器：哪怕后台拉不到，也保证不会卡住。
-    _maxTimer = Timer(Duration(milliseconds: cached.maxDurationMs), _goNext);
+    _maxTimer = Timer(Duration(milliseconds: _maxMs(cached)), _goNext);
 
     // 3. 并行：拉版本号 + 后台刷新 splash 配置
     unawaited(_loadVersion());
@@ -77,7 +77,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     unawaited(_refreshConfigInBackground());
 
     // 5. 最短展示时长达到后就允许跳走（如果后台请求已结束就立刻走）
-    await Future.delayed(Duration(milliseconds: cached.minDurationMs));
+    await Future.delayed(Duration(milliseconds: _minMs(cached)));
     if (!mounted) return;
     _goNext();
   }
@@ -89,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     setState(() => _config = remote);
     // 后台拉到了新配置就重置 maxTimer，让用户能多看一眼（但不会超过 max）
     final elapsed = DateTime.now().difference(_shownAt).inMilliseconds;
-    final remaining = remote.maxDurationMs - elapsed;
+    final remaining = _maxMs(remote) - elapsed;
     if (remaining > 0) {
       _maxTimer?.cancel();
       _maxTimer = Timer(Duration(milliseconds: remaining), _goNext);
@@ -135,6 +135,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     setState(() => _statusText = text);
   }
 
+  /// 开发环境下给一个更长的展示下限，方便逐帧检查启动页效果；
+  /// 其它环境严格按后台配置，避免拖慢真实用户进入主页。
+  bool get _isDev => Config.currentEnvironment == EnvironmentType.dev;
+
+  int _minMs(SplashConfig c) =>
+      _isDev ? (c.minDurationMs < 3000 ? 3000 : c.minDurationMs) : c.minDurationMs;
+
+  int _maxMs(SplashConfig c) =>
+      _isDev ? (c.maxDurationMs < 5000 ? 5000 : c.maxDurationMs) : c.maxDurationMs;
+
   void _goNext() {
     if (_navigated || !mounted) return;
     _navigated = true;
@@ -175,7 +185,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                     SizedBox(height: 24.h),
                     Text(
                       _config.resolveTitle(lang).isEmpty
-                          ? 'Otaku Movie'
+                          ? 'シネコ'
                           : _config.resolveTitle(lang),
                       style: TextStyle(
                         fontSize: 44.sp,
@@ -187,17 +197,6 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                         ],
                       ),
                     ),
-                    if (_config.resolveSubtitle(lang).isNotEmpty) ...[
-                      SizedBox(height: 10.h),
-                      Text(
-                        _config.resolveSubtitle(lang),
-                        style: TextStyle(
-                          fontSize: 22.sp,
-                          color: Colors.white.withValues(alpha: 0.78),
-                          letterSpacing: 0.4,
-                        ),
-                      ),
-                    ],
                     SizedBox(height: 36.h),
                     _buildProgressLine(),
                   ],
@@ -235,20 +234,40 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Widget _buildBackground() {
     final url = _config.imageUrl;
     if (url != null && url.startsWith('http')) {
+      // 运营在后台配置了（有版权授权的）主视觉时才走网络图；
+      // 加载中用品牌渐变占位，避免黑屏，也不依赖任何 bundled 图片。
       return ExtendedImage.network(
         url,
         fit: BoxFit.cover,
         cache: true,
         loadStateChanged: (state) {
           if (state.extendedImageLoadState != LoadState.completed) {
-            // 远程图加载中先用 bundled 图占位，避免黑屏
-            return Image.asset('assets/image/run.png', fit: BoxFit.cover);
+            return _buildBrandBackground();
           }
           return null;
         },
       );
     }
-    return Image.asset('assets/image/run.png', fit: BoxFit.cover);
+    // 默认不再使用任何动漫/第三方图片，改用品牌渐变，规避版权风险。
+    return _buildBrandBackground();
+  }
+
+  /// 品牌渐变背景：纯色 + 渐变，无第三方图片，避免版权问题。
+  Widget _buildBrandBackground() {
+    return const DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF13294B),
+            Color(0xFF0E1B2C),
+            Color(0xFF1B1030),
+          ],
+          stops: [0.0, 0.55, 1.0],
+        ),
+      ),
+    );
   }
 
   /// 整体压暗 + 底部渐变，提升文字可读性。
@@ -283,11 +302,48 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         ],
       ),
-      child: Icon(
-        Icons.movie_creation_rounded,
-        size: 78.sp,
-        color: Colors.white,
+      clipBehavior: Clip.antiAlias,
+      child: _buildLogoContent(),
+    );
+  }
+
+  /// Logo 优先级：后台配置的 [logoUrl]（远程，可不发版替换）
+  /// > bundled 品牌 logo（assets/image/logo.png）> 图标兜底。
+  Widget _buildLogoContent() {
+    final logoUrl = _config.logoUrl;
+    if (logoUrl != null && logoUrl.startsWith('http')) {
+      return ExtendedImage.network(
+        logoUrl,
+        fit: BoxFit.cover,
+        cache: true,
+        loadStateChanged: (state) {
+          if (state.extendedImageLoadState != LoadState.completed) {
+            return _buildBundledLogo();
+          }
+          return null;
+        },
+      );
+    }
+    return _buildBundledLogo();
+  }
+
+  /// App 品牌 logo（戴 3D 眼镜的猫）。留少量内边距，避免贴满圆形描边。
+  Widget _buildBundledLogo() {
+    return Padding(
+      padding: EdgeInsets.all(18.w),
+      child: Image.asset(
+        'assets/image/logo.png',
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stack) => _buildLogoIcon(),
       ),
+    );
+  }
+
+  Widget _buildLogoIcon() {
+    return Icon(
+      Icons.movie_creation_rounded,
+      size: 78.sp,
+      color: Colors.white,
     );
   }
 

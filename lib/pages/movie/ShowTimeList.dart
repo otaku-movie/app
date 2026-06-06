@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
@@ -90,6 +92,12 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    // 购票漏斗入口：新开一条 flow，后续选座/票种/下单/支付都带同一 flow_id。
+    Analytics.instance.startPurchaseFlow();
+    Analytics.instance.logFunnel(Ev.showtimeListView, {
+      P.movieId: widget.id,
+      P.reReleaseId: widget.reReleaseId,
+    });
     dictController = Get.find<DictController>();
     timeFormatController = Get.find<TimeFormatController>();
     _timeFormatWorker = ever<bool>(
@@ -1518,6 +1526,10 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
                           final children = item.data![index];
                           return GestureDetector(
                             onTap: () {
+                              Analytics.instance.logFunnel(Ev.showtimeDetailView, {
+                                P.movieId: widget.id,
+                                P.cinemaId: children.cinemaId,
+                              });
                               // 把当前选中的日期带过去，详情页据此把日期 tab 切到对应位置；
                               // 避免用户在 ShowTimeList 选了 6/04，进入详情后又跳回第 1 个 tab。
                               final currentDate = item.date;
@@ -1798,6 +1810,12 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
     final result = await FavoriteCinemaService.instance.toggle(cinemaId);
     if (!mounted) return;
     setState(() => cinema.favorite = result ?? prev);
+    if (result != null) {
+      Analytics.instance.logEvent(Ev.cinemaFavoriteToggle, {
+        P.cinemaId: cinemaId,
+        P.type: result ? 'on' : 'off',
+      });
+    }
   }
 
   // 构建场次信息
@@ -1979,6 +1997,17 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
 
     return GestureDetector(
       onTap: () {
+        // 场次点击：result 记录这次点击的去向，便于分析「点了多少 / 多少不可购 / 多少跳官网」。
+        final url = showTime.reservationUrl;
+        final String clickResult = !isPurchasable
+            ? 'not_purchasable'
+            : (url != null && url.isNotEmpty ? 'open_url' : 'no_url');
+        Analytics.instance.logFunnel(Ev.showtimeClick, {
+          P.showtimeId: showTime.id,
+          P.movieId: widget.id,
+          P.saleStatus: saleStatus,
+          P.type: clickResult,
+        });
         // 官网未开放购票（pre_sale / sale_ended / closed / unknown）—— 不跳转，
         // 直接 toast 提示用户，避免跳到官网看到 ERR-2002 之类的错误页。
         if (!isPurchasable) {
@@ -1992,7 +2021,6 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
           );
           return;
         }
-        final url = showTime.reservationUrl;
         if (url != null && url.isNotEmpty) {
           launchURL(url);
         } else {

@@ -136,8 +136,14 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("开场时间"),
         "about_components_showTimeList_unnamed":
             MessageLookupByLibrary.simpleMessage("未命名"),
-        "about_copyright":
-            MessageLookupByLibrary.simpleMessage("© 2025 Otaku Movie 版权所有"),
+        "about_copyright": MessageLookupByLibrary.simpleMessage(
+            "© 2025-2026 シネコ 版权所有"),
+        "about_dataDisclaimer": MessageLookupByLibrary.simpleMessage(
+            "本应用展示的电影名称、海报、剧照、预告片等相关内容，其版权均归原电影制作公司、发行方或相应权利人所有，本应用仅用于信息展示与购票服务，不主张对上述内容的任何版权。如涉及版权问题，请通过 diy4869@gmail.com 联系我们及时处理。"),
+        "about_dataSource": MessageLookupByLibrary.simpleMessage(
+            "本应用展示的电影信息、排片及影院数据来源于各影院官方网站及公开信息，仅供查询与参考。排片、价格、余票等可能随时变化，最终以影院或实际购票渠道为准。"),
+        "about_nonOfficial": MessageLookupByLibrary.simpleMessage(
+            "本应用并非任何影院、发行方、制片方或票务平台的官方应用，除页面明确标注外，与上述主体不存在官方合作或授权关系。"),
         "about_description":
             MessageLookupByLibrary.simpleMessage("致力于为电影爱好者提供便捷的购票体验。"),
         "about_login_email_text": MessageLookupByLibrary.simpleMessage("邮箱"),
@@ -634,6 +640,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_button_want": MessageLookupByLibrary.simpleMessage("想看"),
         "movieDetail_comment_delete":
             MessageLookupByLibrary.simpleMessage("删除"),
+        "movieDetail_comment_empty":
+            MessageLookupByLibrary.simpleMessage("暂无评论，快来发表第一条评论"),
         "movieDetail_comment_reply": MessageLookupByLibrary.simpleMessage("回复"),
         "movieDetail_comment_replyTo": m18,
         "movieDetail_comment_translate": m19,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/controller/DictController.dart';
 import 'package:otaku_movie/myApp.dart';
@@ -19,6 +21,13 @@ void switchEnvironment(EnvironmentType newEnv) {
 }
 
 void main() async {
+  // 插件 / 平台通道在 runApp 前调用，需先确保绑定初始化。
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 初始化埋点（Firebase 未配置时自动降级为 no-op，不影响启动）。
+  await Analytics.instance.init();
+  Analytics.instance.logEvent(Ev.appOpen);
+
   // 根据 dart-define 的 ENV 参数设置环境，默认为生产环境
   EnvironmentType env = getEnvironment();
   switchEnvironment(getEnvironment());

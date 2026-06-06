@@ -431,7 +431,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get about_privacy_policy => 'プライバシーポリシーを表示';
 
   @override
-  String get about_copyright => '© 2025 Otaku Movie 全著作権所有';
+  String get about_copyright => '© 2025-2026 シネコ 全著作権所有';
+
+  @override
+  String get about_dataDisclaimer =>
+      '本アプリに表示される映画のタイトル、ポスター、スチル、予告編などのコンテンツの著作権は、各映画製作会社・配給会社または権利者に帰属します。本アプリは情報提供およびチケット購入サービスのみを目的としており、これらのコンテンツに対する著作権を主張するものではありません。著作権に関するお問い合わせは diy4869@gmail.com までご連絡ください。';
+
+  @override
+  String get about_dataSource =>
+      '本アプリに表示される映画情報・上映スケジュール・劇場データは、各劇場の公式サイトおよび公開情報に基づくものであり、閲覧・参考目的で提供されます。上映スケジュール・価格・残席等は随時変動する可能性があり、最終的には劇場または実際の購入チャネルの表示が優先されます。';
+
+  @override
+  String get about_nonOfficial =>
+      '本アプリは、いかなる劇場・配給会社・製作会社・チケット販売プラットフォームの公式アプリでもなく、画面上で明示する場合を除き、これらの主体との公式な提携・許諾関係はありません。';
 
   @override
   String get about_components_sendVerifyCode_success => '認証コードが送信されました';
@@ -829,6 +841,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get movieDetail_comment_delete => '削除';
+
+  @override
+  String get movieDetail_comment_empty => 'まだコメントがありません。最初のコメントを投稿しましょう';
 
   @override
   String get movieDetail_writeComment => 'コメントを書く';

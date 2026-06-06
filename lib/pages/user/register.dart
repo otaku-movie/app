@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/sendVerifyCode.dart';
 import 'package:otaku_movie/generated/l10n.dart';
@@ -841,6 +843,7 @@ class _RegisterState extends State<Register> {
             setState(() {
               loading = true;
             });
+            Analytics.instance.logEvent(Ev.registerStart);
             final deviceId = await AuthStorage.instance.getOrCreateDeviceId();
             ApiRequest().request(
               path: '/user/register',
@@ -867,9 +870,15 @@ class _RegisterState extends State<Register> {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 // 存储用户信息（可以将 Map 转换为 JSON 字符串存储）
                 prefs.setString('userInfo', res.data.toString());
+                Analytics.instance.setUserId('${res.data?.id}');
+                Analytics.instance.logEvent(Ev.registerSuccess);
                 // ignore: use_build_context_synchronously
                 context.pushNamed('home');
               }
+            }).catchError((err) {
+              Analytics.instance.logEvent(Ev.registerFail, {
+                P.reason: err.toString(),
+              });
             }).whenComplete(() {
               setState(() {
                 loading = false;

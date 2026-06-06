@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 
@@ -38,6 +40,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Future<void> _resetPassword() async {
     if (_formKey.currentState!.validate()) {
+      Analytics.instance.logEvent(Ev.forgotPasswordSubmit);
       setState(() {
         _isLoading = true;
       });

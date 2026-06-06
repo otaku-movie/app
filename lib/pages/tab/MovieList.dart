@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 
 import '../../components/CustomAppBar.dart';
 import '../../generated/l10n.dart';
@@ -20,6 +22,7 @@ class _MovieListState extends State<MovieList> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.movieListView);
     _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(_onTabChanged);
   }

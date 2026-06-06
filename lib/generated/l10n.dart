@@ -1370,11 +1370,41 @@ class S {
     );
   }
 
-  /// `© 2025 Otaku Movie All Rights Reserved`
+  /// `© 2025-2026 Otaku Movie All Rights Reserved`
   String get about_copyright {
     return Intl.message(
-      '© 2025 Otaku Movie All Rights Reserved',
+      '© 2025-2026 シネコ All Rights Reserved',
       name: 'about_copyright',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.`
+  String get about_dataDisclaimer {
+    return Intl.message(
+      'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.',
+      name: 'about_dataDisclaimer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Movie information, showtimes and cinema data shown in this app are sourced from cinemas' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail.`
+  String get about_dataSource {
+    return Intl.message(
+      'Movie information, showtimes and cinema data shown in this app are sourced from cinemas\' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail.',
+      name: 'about_dataSource',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This app is not the official app of any cinema, distributor, production company or ticketing platform, and unless expressly stated otherwise has no official partnership or authorization with them.`
+  String get about_nonOfficial {
+    return Intl.message(
+      'This app is not the official app of any cinema, distributor, production company or ticketing platform, and unless expressly stated otherwise has no official partnership or authorization with them.',
+      name: 'about_nonOfficial',
       desc: '',
       args: [],
     );
@@ -2645,6 +2675,16 @@ class S {
     return Intl.message(
       'Delete',
       name: 'movieDetail_comment_delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No comments yet. Be the first to comment`
+  String get movieDetail_comment_empty {
+    return Intl.message(
+      'No comments yet. Be the first to comment',
+      name: 'movieDetail_comment_empty',
       desc: '',
       args: [],
     );

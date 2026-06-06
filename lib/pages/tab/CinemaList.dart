@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/FilterBar.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
@@ -59,6 +61,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.cinemaListView);
     getData();
     getAreaTree();
     getCinemaSpec();
@@ -427,6 +430,10 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
       setState(() => cinema.favorite = prev);
     } else {
       setState(() => cinema.favorite = result);
+      Analytics.instance.logEvent(Ev.cinemaFavoriteToggle, {
+        P.cinemaId: cinemaId,
+        P.type: result ? 'on' : 'off',
+      });
     }
   }
 

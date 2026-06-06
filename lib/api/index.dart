@@ -2,6 +2,8 @@ import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/l10n/app_localizations.dart';
@@ -85,6 +87,44 @@ class ApiRequest {
       ),
     );
 
+    // 埋点拦截器：统一记录接口耗时与失败（api_error）。
+    // 放在业务拦截器之后、日志拦截器之前；用 options.extra 暂存起始时间算 latency。
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) {
+          options.extra['_ts'] = DateTime.now().millisecondsSinceEpoch;
+          return handler.next(options);
+        },
+        onResponse: (response, handler) {
+          // 业务码非 200（RestBean 约定）也算一次失败，便于排查后端异常。
+          final data = response.data;
+          if (data is Map && data['code'] != null && data['code'] != 200) {
+            Analytics.instance.logEvent(Ev.apiError, {
+              P.path: response.requestOptions.path,
+              P.method: response.requestOptions.method,
+              P.httpCode: response.statusCode,
+              P.bizCode: data['code'],
+              P.latencyMs: _latencyOf(response.requestOptions),
+            });
+          }
+          return handler.next(response);
+        },
+        onError: (error, handler) {
+          Analytics.instance.logEvent(Ev.apiError, {
+            P.path: error.requestOptions.path,
+            P.method: error.requestOptions.method,
+            P.httpCode: error.response?.statusCode ?? -1,
+            P.bizCode: (error.response?.data is Map)
+                ? (error.response!.data as Map)['code']
+                : null,
+            P.reason: error.type.name,
+            P.latencyMs: _latencyOf(error.requestOptions),
+          });
+          return handler.next(error);
+        },
+      ),
+    );
+
     // 调试模式：添加请求和响应日志拦截器
     _dio.interceptors.add(LogInterceptor(
       responseBody: true,
@@ -108,6 +148,13 @@ class ApiRequest {
   /// 用于存储和获取 token 等本地数据
   Future<void> _initializeSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
+  }
+
+  /// 根据 onRequest 暂存的起始时间算接口耗时（毫秒）；缺失则返回 -1。
+  int _latencyOf(RequestOptions options) {
+    final ts = options.extra['_ts'];
+    if (ts is int) return DateTime.now().millisecondsSinceEpoch - ts;
+    return -1;
   }
 
   Future<Response<dynamic>?> _tryRefreshAndReplay(DioException error) async {
