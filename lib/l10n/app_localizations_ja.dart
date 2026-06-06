@@ -288,6 +288,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get common_network_error_default => 'ネットワークリクエストが失敗しました。後でもう一度お試しください';
 
   @override
+  String get common_openMapFailed => '地図を開けません。地図アプリがインストールされているか確認してください';
+
+  @override
+  String get common_callTelFailed => '電話を発信できません。電話番号またはデバイスの発信機能をご確認ください';
+
+  @override
   String get common_unit_jpy => '円';
 
   @override

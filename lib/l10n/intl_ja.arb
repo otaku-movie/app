@@ -100,6 +100,8 @@
   "common_network_error_receiveTimeout": "レスポンスがタイムアウトしました。後でもう一度お試しください",
   "common_network_error_connectionError": "ネットワーク接続エラーです。ネットワーク設定を確認してください",
   "common_network_error_default": "ネットワークリクエストが失敗しました。後でもう一度お試しください",
+  "common_openMapFailed": "地図を開けません。地図アプリがインストールされているか確認してください",
+  "common_callTelFailed": "電話を発信できません。電話番号またはデバイスの発信機能をご確認ください",
   "common_unit_jpy": "円",
   "common_unit_meter": "m",
   "common_unit_kilometer": "km",

@@ -32,6 +32,9 @@ class CinemaDetailResponse {
     final int? prefectureId;
     final int? cityId;
 
+    final double? latitude;
+    final double? longitude;
+
     CinemaDetailResponse({
         this.id,
         this.name,
@@ -48,6 +51,8 @@ class CinemaDetailResponse {
         this.regionId,
         this.prefectureId,
         this.cityId,
+        this.latitude,
+        this.longitude,
     });
 
     factory CinemaDetailResponse.fromJson(Map<String, dynamic> json) => _$CinemaDetailResponseFromJson(json);

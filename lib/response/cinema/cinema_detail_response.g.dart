@@ -26,6 +26,8 @@ CinemaDetailResponse _$CinemaDetailResponseFromJson(
       regionId: (json['regionId'] as num?)?.toInt(),
       prefectureId: (json['prefectureId'] as num?)?.toInt(),
       cityId: (json['cityId'] as num?)?.toInt(),
+      latitude: (json['latitude'] as num?)?.toDouble(),
+      longitude: (json['longitude'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$CinemaDetailResponseToJson(
@@ -46,6 +48,8 @@ Map<String, dynamic> _$CinemaDetailResponseToJson(
       'regionId': instance.regionId,
       'prefectureId': instance.prefectureId,
       'cityId': instance.cityId,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };
 
 Spec _$SpecFromJson(Map<String, dynamic> json) => Spec(

@@ -616,6 +616,18 @@ abstract class AppLocalizations {
   /// **'Network request failed, please try again later'**
   String get common_network_error_default;
 
+  /// No description provided for @common_openMapFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open maps. Please make sure a maps app is installed.'**
+  String get common_openMapFailed;
+
+  /// No description provided for @common_callTelFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to make the call. Please check the phone number or your device\'s dialer.'**
+  String get common_callTelFailed;
+
   /// No description provided for @common_unit_jpy.
   ///
   /// In en, this message translates to:

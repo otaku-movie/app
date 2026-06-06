@@ -100,6 +100,8 @@
   "common_network_error_receiveTimeout": "Response timeout, please try again later",
   "common_network_error_connectionError": "Network connection error, please check network settings",
   "common_network_error_default": "Network request failed, please try again later",
+  "common_openMapFailed": "Unable to open maps. Please make sure a maps app is installed.",
+  "common_callTelFailed": "Unable to make the call. Please check the phone number or your device's dialer.",
   "common_unit_jpy": "JPY",
   "common_unit_meter": "m",
   "common_unit_kilometer": "km",

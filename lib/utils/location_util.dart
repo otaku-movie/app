@@ -52,6 +52,55 @@ class LocationUtil {
     }
   }
 
+  /// 反向地理编码取「行政区划」结构化信息，用于和后端地区树做匹配。
+  ///
+  /// 与 [reverseGeocode] 的区别：
+  ///   - 优先用 Nominatim 的结构化 `address` 字段（HTTP，稳定），
+  ///     `placemarkFromCoordinates` 在不少机型/无 Google 服务时会失败返回 null，
+  ///     导致「附近地区」匹配不到。
+  ///   - 固定 `accept-language=ja`：后端地区树是日文地名，统一用日文反编码
+  ///     才能稳定匹配（否则简中/英文地名与日文树跨字形对不上）。
+  /// Nominatim 取不到时回退到本地 [reverseGeocode]。
+  static Future<Placemark?> reverseGeocodeAdmin(Position position) async {
+    try {
+      final resp = await Dio(BaseOptions(headers: {
+        'User-Agent': 'otaku_movie_app/1.0'
+      })).get('https://nominatim.openstreetmap.org/reverse', queryParameters: {
+        'lat': position.latitude,
+        'lon': position.longitude,
+        'format': 'jsonv2',
+        'accept-language': 'ja',
+        'addressdetails': 1,
+      });
+      if (resp.statusCode == 200 && resp.data is Map) {
+        final addr = (resp.data as Map)['address'];
+        if (addr is Map) {
+          String? pick(List<String> keys) {
+            for (final k in keys) {
+              final v = addr[k];
+              if (v is String && v.trim().isNotEmpty) return v.trim();
+            }
+            return null;
+          }
+
+          final admin = pick(['state', 'province', 'region']);
+          final locality =
+              pick(['city', 'county', 'town', 'municipality', 'village']);
+          final sub =
+              pick(['city_district', 'ward', 'suburb', 'neighbourhood']);
+          if (admin != null || locality != null || sub != null) {
+            return Placemark(
+              administrativeArea: admin,
+              locality: locality,
+              subLocality: sub,
+            );
+          }
+        }
+      }
+    } catch (_) {}
+    return reverseGeocode(position);
+  }
+
   static double? distanceBetweenMeters(Position from, double? toLat, double? toLng) {
     if (toLat == null || toLng == null) return null;
     try {

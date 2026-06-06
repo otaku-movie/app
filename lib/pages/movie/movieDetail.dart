@@ -1405,7 +1405,6 @@ List<Widget> generateComment() {
                               fontSize: 36.sp,
                               fontWeight: FontWeight.bold
                             )),
-                            Icon(Icons.arrow_forward_ios, size: 36.sp)
                           ],
                         )
                         ),

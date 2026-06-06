@@ -20,6 +20,8 @@ export 'iconfont.dart';
 export 'index.dart' show 
   callTel,
   callMap,
+  openMap,
+  openMapByAddress,
   launchURL,
   showLoadingDialog,
   hideLoadingDialog,

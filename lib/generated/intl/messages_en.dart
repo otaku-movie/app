@@ -146,9 +146,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_dataDisclaimer": MessageLookupByLibrary.simpleMessage(
             "Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com."),
         "about_dataSource": MessageLookupByLibrary.simpleMessage(
-            "Movie information, showtimes and cinema data shown in this app are sourced from cinemas' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail."),
-        "about_nonOfficial": MessageLookupByLibrary.simpleMessage(
-            "This app is not the official app of any cinema, distributor, production company or ticketing platform, and unless expressly stated otherwise has no official partnership or authorization with them."),
+            "Movie information, showtimes and cinema data shown in this app are sourced from cinemas\' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail."),
         "about_description": MessageLookupByLibrary.simpleMessage(
             "Committed to providing convenient ticket purchasing experience for movie enthusiasts."),
         "about_login_email_text": MessageLookupByLibrary.simpleMessage("Email"),
@@ -193,6 +191,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_movieShowList_dropdown_version":
             MessageLookupByLibrary.simpleMessage("Version"),
         "about_movieShowList_summary": m4,
+        "about_nonOfficial": MessageLookupByLibrary.simpleMessage(
+            "This app is not the official app of any cinema, distributor, production company or ticketing platform, and unless expressly stated otherwise has no official partnership or authorization with them."),
         "about_privacy_policy":
             MessageLookupByLibrary.simpleMessage("View Privacy Policy"),
         "about_register_haveAccount":
@@ -424,6 +424,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "commentDetail_title":
             MessageLookupByLibrary.simpleMessage("Comment Detail"),
         "commentDetail_totalReplyMessage": m16,
+        "common_callTelFailed": MessageLookupByLibrary.simpleMessage(
+            "Unable to make the call. Please check the phone number or your device\'s dialer."),
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("Flip"),
         "common_components_cropper_actions_redo":
@@ -517,6 +519,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_network_error_sendTimeout":
             MessageLookupByLibrary.simpleMessage(
                 "Request timeout, please try again later"),
+        "common_openMapFailed": MessageLookupByLibrary.simpleMessage(
+            "Unable to open maps. Please make sure a maps app is installed."),
         "common_retry": MessageLookupByLibrary.simpleMessage("Retry"),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("JPY"),
         "common_unit_kilometer": MessageLookupByLibrary.simpleMessage("km"),

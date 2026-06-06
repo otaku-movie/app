@@ -661,18 +661,18 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                     ? S.of(context).cinemaList_empty_noSearchResults
                     : S.of(context).cinemaList_empty_noData,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 30.sp,
                     color: Colors.grey.shade600,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 10.h),
                 Text(
                   isSearching 
                     ? S.of(context).cinemaList_empty_noSearchResultsTip
                     : S.of(context).cinemaList_empty_noDataTip,
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 24.sp,
                     color: Colors.grey.shade500,
                   ),
                 ),
@@ -1441,7 +1441,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                             prefixIcon: Icon(
                               Icons.search_rounded,
                               color: const Color(0xFF646566),
-                              size: 26.sp,
+                              size: 38.sp,
                             ),
                             suffixIcon: searchController.text.isNotEmpty
                               ? GestureDetector(
@@ -1453,7 +1453,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
                                   child: Icon(
                                     Icons.clear_rounded,
                                     color: const Color(0xFF969799),
-                                    size: 22.sp,
+                                    size: 38.sp,
                                   ),
                                 )
                               : null,
@@ -1555,35 +1555,6 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
               ],
             ),
           ),
-          
-          // 搜索时的清除按钮 - 仅在搜索时显示
-          if (isSearching)
-            Container(
-              margin: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: _clearSearch,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1989FA),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Text(
-                        S.of(context).cinemaList_search_clear,
-                        style: TextStyle(
-                          fontSize: 22.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           
           // 影院列表
           Expanded(

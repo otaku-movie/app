@@ -295,6 +295,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Network request failed, please try again later';
 
   @override
+  String get common_openMapFailed =>
+      'Unable to open maps. Please make sure a maps app is installed.';
+
+  @override
+  String get common_callTelFailed =>
+      'Unable to make the call. Please check the phone number or your device\'s dialer.';
+
+  @override
   String get common_unit_jpy => 'JPY';
 
   @override

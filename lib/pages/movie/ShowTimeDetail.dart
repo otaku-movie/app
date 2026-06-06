@@ -568,66 +568,92 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // 地址信息
+                                // 地址信息（点击打开谷歌地图）
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(8.w),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.15),
-                                          borderRadius: BorderRadius.circular(8.r),
-                                        ),
-                                        child: Icon(
-                                          Icons.location_on_outlined,
-                                          color: Colors.white,
-                                          size: 22.sp,
-                                        ),
-                                      ),
-                                      SizedBox(width: 12.w),
-                                      Expanded(
-                                        child: Text(
-                                          data.cinemaFullAddress ?? '',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24.sp,
-                                            fontWeight: FontWeight.w500,
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      openMap(
+                                        latitude: data.cinemaLatitude,
+                                        longitude: data.cinemaLongitude,
+                                        address: data.cinemaFullAddress,
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(8.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(8.r),
                                           ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                          child: Icon(
+                                            Icons.location_on_outlined,
+                                            color: Colors.white,
+                                            size: 22.sp,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(width: 12.w),
+                                        Expanded(
+                                          child: Text(
+                                            data.cinemaFullAddress ?? '',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                // 电话信息
+                                // 电话信息（点击拨号）
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.all(8.w),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withValues(alpha: 0.15),
-                                          borderRadius: BorderRadius.circular(8.r),
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      callTel(data.cinemaTel ?? '');
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.all(8.w),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withValues(alpha: 0.15),
+                                            borderRadius: BorderRadius.circular(8.r),
+                                          ),
+                                          child: Icon(
+                                            Icons.phone_outlined,
+                                            color: Colors.white,
+                                            size: 22.sp,
+                                          ),
                                         ),
-                                        child: Icon(
-                                          Icons.phone_outlined,
+                                        SizedBox(width: 12.w),
+                                        Expanded(
+                                          child: Text(
+                                            data.cinemaTel ?? '',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24.sp,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Icon(
+                                          Icons.call_outlined,
                                           color: Colors.white,
                                           size: 22.sp,
                                         ),
-                                      ),
-                                      SizedBox(width: 12.w),
-                                      Text(
-                                        data.cinemaTel ?? '',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 24.sp,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: 50.h),

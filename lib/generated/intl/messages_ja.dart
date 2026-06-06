@@ -136,14 +136,12 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("上映開始時間"),
         "about_components_showTimeList_unnamed":
             MessageLookupByLibrary.simpleMessage("名前なし"),
-        "about_copyright": MessageLookupByLibrary.simpleMessage(
-            "© 2025-2026 シネコ 全著作権所有"),
+        "about_copyright":
+            MessageLookupByLibrary.simpleMessage("© 2025-2026 シネコ 全著作権所有"),
         "about_dataDisclaimer": MessageLookupByLibrary.simpleMessage(
             "本アプリに表示される映画のタイトル、ポスター、スチル、予告編などのコンテンツの著作権は、各映画製作会社・配給会社または権利者に帰属します。本アプリは情報提供およびチケット購入サービスのみを目的としており、これらのコンテンツに対する著作権を主張するものではありません。著作権に関するお問い合わせは diy4869@gmail.com までご連絡ください。"),
         "about_dataSource": MessageLookupByLibrary.simpleMessage(
             "本アプリに表示される映画情報・上映スケジュール・劇場データは、各劇場の公式サイトおよび公開情報に基づくものであり、閲覧・参考目的で提供されます。上映スケジュール・価格・残席等は随時変動する可能性があり、最終的には劇場または実際の購入チャネルの表示が優先されます。"),
-        "about_nonOfficial": MessageLookupByLibrary.simpleMessage(
-            "本アプリは、いかなる劇場・配給会社・製作会社・チケット販売プラットフォームの公式アプリでもなく、画面上で明示する場合を除き、これらの主体との公式な提携・許諾関係はありません。"),
         "about_description": MessageLookupByLibrary.simpleMessage(
             "映画愛好家に便利なチケット購入体験を提供することに専念しています。"),
         "about_login_email_text":
@@ -186,6 +184,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_movieShowList_dropdown_version":
             MessageLookupByLibrary.simpleMessage("バージョン"),
         "about_movieShowList_summary": m4,
+        "about_nonOfficial": MessageLookupByLibrary.simpleMessage(
+            "本アプリは、いかなる劇場・配給会社・製作会社・チケット販売プラットフォームの公式アプリでもなく、画面上で明示する場合を除き、これらの主体との公式な提携・許諾関係はありません。"),
         "about_privacy_policy":
             MessageLookupByLibrary.simpleMessage("プライバシーポリシーを表示"),
         "about_register_haveAccount":
@@ -399,6 +399,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("コメント返信"),
         "commentDetail_title": MessageLookupByLibrary.simpleMessage("コメント詳細"),
         "commentDetail_totalReplyMessage": m16,
+        "common_callTelFailed": MessageLookupByLibrary.simpleMessage(
+            "電話を発信できません。電話番号またはデバイスの発信機能をご確認ください"),
         "common_components_cropper_actions_flip":
             MessageLookupByLibrary.simpleMessage("反転"),
         "common_components_cropper_actions_redo":
@@ -492,6 +494,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "common_network_error_sendTimeout":
             MessageLookupByLibrary.simpleMessage(
                 "リクエストがタイムアウトしました。後でもう一度お試しください"),
+        "common_openMapFailed": MessageLookupByLibrary.simpleMessage(
+            "地図を開けません。地図アプリがインストールされているか確認してください"),
         "common_retry": MessageLookupByLibrary.simpleMessage("再読み込み"),
         "common_unit_jpy": MessageLookupByLibrary.simpleMessage("円"),
         "common_unit_kilometer": MessageLookupByLibrary.simpleMessage("km"),

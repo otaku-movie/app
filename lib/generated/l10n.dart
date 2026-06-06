@@ -910,6 +910,26 @@ class S {
     );
   }
 
+  /// `Unable to open maps. Please make sure a maps app is installed.`
+  String get common_openMapFailed {
+    return Intl.message(
+      'Unable to open maps. Please make sure a maps app is installed.',
+      name: 'common_openMapFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to make the call. Please check the phone number or your device's dialer.`
+  String get common_callTelFailed {
+    return Intl.message(
+      'Unable to make the call. Please check the phone number or your device\'s dialer.',
+      name: 'common_callTelFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `JPY`
   String get common_unit_jpy {
     return Intl.message(
@@ -1370,7 +1390,7 @@ class S {
     );
   }
 
-  /// `© 2025-2026 Otaku Movie All Rights Reserved`
+  /// `© 2025-2026 シネコ All Rights Reserved`
   String get about_copyright {
     return Intl.message(
       '© 2025-2026 シネコ All Rights Reserved',

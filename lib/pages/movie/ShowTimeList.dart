@@ -364,7 +364,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         // 获取不到位置，不设置 loading = false，让后续逻辑处理
         return;
       }
-      final place = await LocationUtil.reverseGeocode(current);
+      // 用结构化（Nominatim/日文）反编码拿行政区划，保证「地区」能匹配到后端地区树；
+      // placemarkFromCoordinates 在部分机型会失败返回 null，导致地区选不中。
+      final place = await LocationUtil.reverseGeocodeAdmin(current);
       final full =
           await LocationUtil.reverseGeocodeTextLocalized(context, current);
       if (!mounted) return;
@@ -456,18 +458,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
       return;
     }
 
-    AreaResponse? cityMatch;
-    for (final c in prefectureMatch.children ?? <AreaResponse>[]) {
-      if (_areaMatches(c, p.locality) || _areaMatches(c, p.subLocality)) {
-        cityMatch = c;
-        break;
-      }
-    }
-
+    // 自动选区只到 2 级（地区 + 都道府県）即可，不再下钻到市区町村，
+    // 避免定位到具体区后把范围收得太窄、漏掉同都府县其他区的场次。
     final ids = <String>[
       '${regionMatch.id}',
       '${prefectureMatch.id}',
-      if (cityMatch != null) '${cityMatch.id}',
     ];
     _autoAreaApplied = true;
     setState(() {
@@ -595,7 +590,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
     return requestData;
   }
 
-  Future<void> getData({int page = 1, bool refresh = false}) async {
+  Future<void> getData(
+      {int page = 1, bool refresh = false, bool silent = false}) async {
     // 加载更多时若已无更多数据，直接结束
     if (page > 1 && loadFinished) {
       easyRefreshController.finishLoad(IndicatorResult.noMore, true);
@@ -611,8 +607,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
       previousTabDate = data[_tabController!.index].date;
     }
 
-    // 首次加载 / 筛选切换会显示整页 loading；下拉刷新与加载更多由 EasyRefresh 的头/尾指示器提示
-    final showFullScreenLoading = page == 1 && !refresh;
+    // 首次加载 / 筛选切换会显示整页 loading；下拉刷新与加载更多由 EasyRefresh 的头/尾指示器提示。
+    // silent=true（如切换日期 tab 时）保留当前列表静默刷新，避免整页转圈造成的闪烁。
+    final showFullScreenLoading = page == 1 && !refresh && !silent;
     if (showFullScreenLoading && mounted) {
       setState(() {
         loading = true;
@@ -987,8 +984,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         // 解析失败，忽略时间范围更新，但依然要重新加载数据
         print('更新时间范围失败: $e');
       }
-      // 无论是否有时间范围筛选，tab切换时都重新加载数据
-      getData();
+      // 无论是否有时间范围筛选，tab切换时都重新加载数据。
+      // 用 silent 静默刷新：保留当前列表，不整页转圈，避免切换日期时闪一下。
+      getData(silent: true);
     }
   }
 
@@ -1326,6 +1324,10 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
                 controller: _tabController!,
                 tabs: generateTab(),
                 isScrollable: true,
+                // 去掉点击日期 tab 时的水波纹与高亮覆盖层
+                splashFactory: NoSplash.splashFactory,
+                overlayColor:
+                    WidgetStateProperty.all<Color>(Colors.transparent),
                 labelPadding:
                     EdgeInsets.symmetric(horizontal: 30.w, vertical: 0.h),
                 labelColor: Colors.white,
@@ -1754,27 +1756,39 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
                                     ],
                                   ),
                                   SizedBox(height: 12.h),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.place_outlined,
-                                        size: 24.sp,
-                                        color: Colors.red,
-                                      ),
-                                      SizedBox(width: 6.w),
-                                      Expanded(
-                                        child: Text(
-                                          children.cinemaAddress ?? '',
-                                          style: TextStyle(
-                                            fontSize: 24.sp,
-                                            color: Colors.grey.shade600,
-                                            height: 1.4,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
+                                  // 点击地址打开谷歌地图（用地址搜索，不做地理编码）。
+                                  // 内层 GestureDetector 会吃掉点击，不会冒泡到卡片的进详情。
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      openMap(
+                                        latitude: children.cinemaLatitude,
+                                        longitude: children.cinemaLongitude,
+                                        address: children.cinemaAddress,
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.place_outlined,
+                                          size: 24.sp,
+                                          color: Colors.red,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(width: 6.w),
+                                        Expanded(
+                                          child: Text(
+                                            children.cinemaAddress ?? '',
+                                            style: TextStyle(
+                                              fontSize: 24.sp,
+                                              color: Colors.grey.shade600,
+                                              height: 1.4,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   SizedBox(height: 12.h),
                                   // 场次信息（包含选座状态）

@@ -12,6 +12,10 @@ class CinemaMovieShowTimeDetailResponse {
 
   final String? cinemaTel;
 
+  final double? cinemaLatitude;
+
+  final double? cinemaLongitude;
+
   final List<CinemaMovieShowTimeDetailResponseDatum>? data;
 
   CinemaMovieShowTimeDetailResponse({
@@ -19,6 +23,8 @@ class CinemaMovieShowTimeDetailResponse {
     this.cinemaName,
     this.cinemaFullAddress,
     this.cinemaTel,
+    this.cinemaLatitude,
+    this.cinemaLongitude,
     this.data,
   });
 

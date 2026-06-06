@@ -14,7 +14,6 @@ import 'package:otaku_movie/response/cinema/movie_ticket_type_response.dart';
 import 'package:otaku_movie/response/cinema/theater_detail_response.dart';
 import 'package:otaku_movie/utils/index.dart';
 import '../../generated/l10n.dart';
-import 'package:geocoding/geocoding.dart';
 
 
 class CinemaDetail extends StatefulWidget {
@@ -137,24 +136,15 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
     });
   }
 
-  // 打开地图导航
-  Future<void> _openMap(String address) async {
-    if (address.isEmpty) return;
-    
-    try {
-      // 使用地理编码将地址转换为经纬度
-      List<Location> locations = await locationFromAddress(address);
-      
-      if (locations.isNotEmpty) {
-        double latitude = locations.first.latitude;
-        double longitude = locations.first.longitude;
-        await callMap(latitude, longitude);
-      }
-    } catch (e) {
-      print('Error geocoding address: $e');
-      // 如果地理编码失败，可以考虑直接使用地址打开地图搜索
-      // 或者显示错误提示
-    }
+  // 打开地图导航：直接用地址搜索打开谷歌地图。
+  // 优先用后端经纬度精准定位，缺失时回退地址搜索；都用外部应用唤起，
+  // 避免旧的 geocode 在部分机型/无 Google 服务环境抛异常导致点击无反应。
+  Future<void> _openMap({
+    double? latitude,
+    double? longitude,
+    String? address,
+  }) async {
+    await openMap(latitude: latitude, longitude: longitude, address: address);
   }
 
   @override
@@ -205,7 +195,11 @@ class _PageState extends State<CinemaDetail> with SingleTickerProviderStateMixin
                       iconColor: const Color(0xFF1989FA),
                       content: data.fullAddress ?? '',
                       onTap: () async {
-                        await _openMap(data.fullAddress ?? '');
+                        await _openMap(
+                          latitude: data.latitude,
+                          longitude: data.longitude,
+                          address: data.fullAddress,
+                        );
                       },
                     ),
                     

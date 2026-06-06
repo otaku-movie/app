@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/generated/l10n.dart';
+import 'package:otaku_movie/utils/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 String formatNumberToTime(int totalMinutes) {
@@ -54,14 +55,28 @@ String getDay(String date, BuildContext context) {
   return weekList[datetime.weekday - 1];
 }
 
-callTel(String tel) async {
-  final Uri telUrl = Uri(scheme: 'tel', path: tel);
-
-  if (await canLaunchUrl(telUrl)) {
-    await launchUrl(telUrl);
-  } else {
-    // '无法打开拨号界面';
+/// 拨打电话：不用 canLaunchUrl 预判（部分机型会误报 false），
+/// 直接尝试唤起拨号界面，失败时给用户提示而不是静默无反应。
+Future<void> callTel(String tel) async {
+  final trimmed = tel.trim();
+  if (trimmed.isEmpty) {
+    ToastService.showToast(
+      S.current.common_callTelFailed,
+      type: ToastType.warning,
+    );
+    return;
   }
+  final Uri telUrl = Uri(scheme: 'tel', path: trimmed);
+  try {
+    final ok = await launchUrl(telUrl);
+    if (ok) return;
+  } catch (_) {
+    // 落到下面统一提示
+  }
+  ToastService.showToast(
+    S.current.common_callTelFailed,
+    type: ToastType.warning,
+  );
 }
 
 callMap(double latitude, double longitude) async {
@@ -86,6 +101,71 @@ launchURL(String url) async {
     //   SnackBar(content: Text('无法打开链接: $url')),
     // );
   }
+}
+
+/// 用「地址文本」直接打开谷歌地图（不做地理编码）。
+///
+/// 旧的 callMap 需要先把地址 geocode 成经纬度，但 `locationFromAddress`
+/// 在不少机型/无 Google 服务环境会抛异常或返回空，导致点击无反应。
+/// 这里改成把地址当作搜索词丢给 Google Maps，配合 AndroidManifest 里
+/// 已声明的 https `<queries>`，用外部应用方式唤起，稳定可用。
+/// 不用 canLaunchUrl 预判（部分机型会误报 false），直接 launch 并兜底。
+Future<void> openMapByAddress(String address) async {
+  final trimmed = address.trim();
+  if (trimmed.isEmpty) return;
+  await _launchMapUrl(
+    'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(trimmed)}',
+  );
+}
+
+/// 统一的「打开地图」入口：优先用后端返回的经纬度（更精准），
+/// 经纬度缺失时回退到地址搜索。两者都没有则静默忽略。
+Future<void> openMap({
+  double? latitude,
+  double? longitude,
+  String? address,
+}) async {
+  // 地址优先：地址里通常含店名/楼层，谷歌地图搜索结果更贴近用户预期；
+  // 地址缺失时再回退到经纬度坐标定位。
+  if (address != null && address.trim().isNotEmpty) {
+    await openMapByAddress(address);
+    return;
+  }
+  if (latitude != null &&
+      longitude != null &&
+      !(latitude == 0 && longitude == 0)) {
+    await _launchMapUrl(
+      'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude',
+    );
+    return;
+  }
+  // 既没有地址也没有经纬度，无可定位信息，直接提示。
+  _showOpenMapFailedToast();
+}
+
+/// 唤起地图链接：外部应用优先，失败兜底平台默认方式，都失败时给用户提示。
+Future<void> _launchMapUrl(String url) async {
+  final Uri uri = Uri.parse(url);
+  try {
+    final ok = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (ok) return;
+  } catch (_) {
+    // 外部应用方式失败，继续尝试平台默认方式
+  }
+  try {
+    final ok = await launchUrl(uri);
+    if (ok) return;
+  } catch (_) {
+    // 兜底也失败，落到下面统一提示
+  }
+  _showOpenMapFailedToast();
+}
+
+void _showOpenMapFailedToast() {
+  ToastService.showToast(
+    S.current.common_openMapFailed,
+    type: ToastType.warning,
+  );
 }
 
 void showLoadingDialog(BuildContext context) {

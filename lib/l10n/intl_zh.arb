@@ -100,6 +100,8 @@
   "common_network_error_receiveTimeout": "接收响应超时，请稍后重试",
   "common_network_error_connectionError": "网络连接错误，请检查网络设置",
   "common_network_error_default": "网络请求失败，请稍后重试",
+  "common_openMapFailed": "无法打开地图，请确认已安装地图应用",
+  "common_callTelFailed": "无法拨打电话，请检查电话号码或设备拨号功能",
   "common_unit_jpy": "日元",
   "common_unit_meter": "米",
   "common_unit_kilometer": "公里",

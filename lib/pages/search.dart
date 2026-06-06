@@ -465,32 +465,37 @@ class _PageState extends State<Search> {
           ],
         ),
       ),
-      body: data.isEmpty ? SingleChildScrollView(
-        child: searchHistoryWidget
-      ) : EasyRefresh(
-        controller: easyRefreshController,
-        header: customHeader(context),
-        footer: customFooter(context),
-        onRefresh: () {
-          search();
-        },
-        onLoad: () {
-          search(page: currentPage + 1);
-        },
-        child: AppErrorWidget(
-          loading: loading,
-          error: data.isEmpty,
-          child: ListView.builder(
-            shrinkWrap: true, // 根据内容自动调整高度
-            // physics: const NeverScrollableScrollPhysics(),
-            itemCount: data.length,
-            itemBuilder: (context, index) {
-              MovieResponse item = data[index];
-              return _buildMovieItem(context, item, index);
-            },
-          ),
-        ),
-      ),
+      body: loading
+          // 首页搜索进行中：无论是否已有数据，都展示整页 loading，
+          // 避免第一次搜索时界面卡在历史记录、看不到任何反馈。
+          ? AppErrorWidget(
+              loading: true,
+              child: const SizedBox.shrink(),
+            )
+          : data.isEmpty
+              ? SingleChildScrollView(
+                  child: searchHistoryWidget,
+                )
+              : EasyRefresh(
+                  controller: easyRefreshController,
+                  header: customHeader(context),
+                  footer: customFooter(context),
+                  onRefresh: () {
+                    search();
+                  },
+                  onLoad: () {
+                    search(page: currentPage + 1);
+                  },
+                  child: ListView.builder(
+                    shrinkWrap: true, // 根据内容自动调整高度
+                    // physics: const NeverScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      MovieResponse item = data[index];
+                      return _buildMovieItem(context, item, index);
+                    },
+                  ),
+                ),
     );
   }
 

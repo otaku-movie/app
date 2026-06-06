@@ -279,6 +279,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get common_network_error_default => '网络请求失败，请稍后重试';
 
   @override
+  String get common_openMapFailed => '无法打开地图，请确认已安装地图应用';
+
+  @override
+  String get common_callTelFailed => '无法拨打电话，请检查电话号码或设备拨号功能';
+
+  @override
   String get common_unit_jpy => '日元';
 
   @override

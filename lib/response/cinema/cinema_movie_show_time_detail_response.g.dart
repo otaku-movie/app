@@ -13,6 +13,8 @@ CinemaMovieShowTimeDetailResponse _$CinemaMovieShowTimeDetailResponseFromJson(
       cinemaName: json['cinemaName'] as String?,
       cinemaFullAddress: json['cinemaFullAddress'] as String?,
       cinemaTel: json['cinemaTel'] as String?,
+      cinemaLatitude: (json['cinemaLatitude'] as num?)?.toDouble(),
+      cinemaLongitude: (json['cinemaLongitude'] as num?)?.toDouble(),
       data: (json['data'] as List<dynamic>?)
           ?.map((e) => CinemaMovieShowTimeDetailResponseDatum.fromJson(
               e as Map<String, dynamic>))
@@ -26,6 +28,8 @@ Map<String, dynamic> _$CinemaMovieShowTimeDetailResponseToJson(
       'cinemaName': instance.cinemaName,
       'cinemaFullAddress': instance.cinemaFullAddress,
       'cinemaTel': instance.cinemaTel,
+      'cinemaLatitude': instance.cinemaLatitude,
+      'cinemaLongitude': instance.cinemaLongitude,
       'data': instance.data?.map((e) => e.toJson()).toList(),
     };
 
