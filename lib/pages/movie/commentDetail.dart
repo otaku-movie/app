@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/CustomAppBar.dart';
 import 'package:otaku_movie/components/CustomEasyRefresh.dart';
@@ -103,6 +105,10 @@ class _CommentDetailPageState extends State<CommentDetail> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.commentDetailView, {
+      P.movieId: widget.movieId,
+      P.commentId: widget.id,
+    });
     getData();
     getReplyData();
     final locale = Get.find<LanguageController>().locale.value;
@@ -544,6 +550,10 @@ class _CommentDetailPageState extends State<CommentDetail> {
                         );
                       },
                     ).then((res) async {
+                      Analytics.instance.logEvent(Ev.commentSubmit, {
+                        P.movieId: widget.movieId,
+                        P.type: 'reply',
+                      });
                       setState(() {
                         commentInputController.text = '';
                         showReply = false;

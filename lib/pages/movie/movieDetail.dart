@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:otaku_movie/analytics/analytics.dart';
+import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
 import 'package:otaku_movie/components/HelloMovie.dart';
 import 'package:otaku_movie/components/customExtendedImage.dart';
@@ -221,6 +223,7 @@ class _PageState extends State<MovieDetail> {
   @override
   void initState() {
     super.initState();
+    Analytics.instance.logEvent(Ev.movieDetailView, {P.movieId: widget.id});
     getData();
     getVersionList(); // 先获取版本列表
     getReReleaseHistory();
@@ -729,6 +732,10 @@ List<Widget> generateComment() {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
+                            Analytics.instance.logEvent(Ev.movieDetailAction, {
+                              P.movieId: widget.id,
+                              P.type: 'presale',
+                            });
                             context.pushNamed(
                               'presaleDetail',
                               pathParameters: {'id': '${data.presaleId}'},
@@ -773,6 +780,10 @@ List<Widget> generateComment() {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
+                            Analytics.instance.logEvent(Ev.movieDetailAction, {
+                              P.movieId: widget.id,
+                              P.type: 'buy_ticket',
+                            });
                             context.pushNamed(
                               'showTimeList',
                               pathParameters: {"id": '${widget.id}'},
@@ -1115,6 +1126,10 @@ List<Widget> generateComment() {
                   builder: (btnContext) => IconButton(
                     onPressed: () {
                       if (widget.id == null || widget.id!.isEmpty) return;
+                      Analytics.instance.logEvent(Ev.movieDetailAction, {
+                        P.movieId: widget.id,
+                        P.type: 'share',
+                      });
                       ShareService.instance.shareMovie(
                         movieId: widget.id!,
                         movieName: data.name ?? '',
@@ -1748,7 +1763,7 @@ List<Widget> generateComment() {
                           ),
                         ),
                       ],
-                      ...commentListData.isEmpty ? [] : [
+                      ...[
                         Container(
                           margin: EdgeInsets.only(top: 30.h, bottom: 30.h),
                           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
@@ -1785,12 +1800,17 @@ List<Widget> generateComment() {
                                 ],
                               ),
                               GestureDetector(
-                                onTap: () {
-                                  context.pushNamed('writeComment', queryParameters: {
+                                onTap: () async {
+                                  final result = await context.pushNamed('writeComment', queryParameters: {
                                     'id': widget.id,
                                     'movieName': data.name,
-                                    'rated': '${data.rated}'
+                                    'rated': '${data.rated}',
+                                    'userRate': data.userRate != null ? '${data.userRate}' : '',
                                   });
+                                  if (result == true && mounted) {
+                                    getData();
+                                    getCommentData();
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -1841,7 +1861,32 @@ List<Widget> generateComment() {
                         //     ),
                         //   ),
                         // ),
-                        ...generateComment()
+                        if (commentListData.isEmpty)
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 60.h),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.chat_bubble_outline,
+                                  size: 64.sp,
+                                  color: Colors.grey.shade300,
+                                ),
+                                SizedBox(height: 16.h),
+                                Text(
+                                  S.of(context).movieDetail_comment_empty,
+                                  style: TextStyle(
+                                    fontSize: 26.sp,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        else
+                          ...generateComment()
                       ]
                     ]
                   ),
