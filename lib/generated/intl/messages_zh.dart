@@ -924,9 +924,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "presaleDetail_bonusCount": m28,
         "presaleDetail_bonusDescription":
             MessageLookupByLibrary.simpleMessage("特典说明"),
-        "presaleDetail_gallery": MessageLookupByLibrary.simpleMessage("图集"),
         "presaleDetail_buyOnOfficialSite":
             MessageLookupByLibrary.simpleMessage("前往官网购买"),
+        "presaleDetail_gallery": MessageLookupByLibrary.simpleMessage("图集"),
         "presaleDetail_noLimit": MessageLookupByLibrary.simpleMessage("不限"),
         "presaleDetail_perUserLimit":
             MessageLookupByLibrary.simpleMessage("每人限购"),
@@ -1091,6 +1091,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("当前版本过低，请先更新后继续使用"),
         "user_language": MessageLookupByLibrary.simpleMessage("语言"),
         "user_latestVersion": MessageLookupByLibrary.simpleMessage("最新版本"),
+        "user_loginNow": MessageLookupByLibrary.simpleMessage("登录 / 注册"),
+        "user_loginPrompt":
+            MessageLookupByLibrary.simpleMessage("登录后可查看订单、管理账户及更多功能"),
         "user_loginSourceMultiple": MessageLookupByLibrary.simpleMessage("已绑定"),
         "user_loginSourceSingle": MessageLookupByLibrary.simpleMessage("通过"),
         "user_logout": MessageLookupByLibrary.simpleMessage("退出登录"),
@@ -1098,6 +1101,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("确认要退出登录吗？"),
         "user_noUpdateAvailable":
             MessageLookupByLibrary.simpleMessage("当前已是最新版本"),
+        "user_notLoggedIn": MessageLookupByLibrary.simpleMessage("未登录"),
         "user_ok": MessageLookupByLibrary.simpleMessage("确定"),
         "user_privateAgreement": MessageLookupByLibrary.simpleMessage("隐私协议"),
         "user_registerTime": MessageLookupByLibrary.simpleMessage("注册时间"),

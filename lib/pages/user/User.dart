@@ -14,6 +14,7 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/app_version_check_response.dart';
 import 'package:otaku_movie/response/user/user_detail_response.dart';
 import 'package:otaku_movie/service/auth_logout_service.dart';
+import 'package:otaku_movie/service/auth_storage.dart';
 import 'package:otaku_movie/service/version_check_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -32,6 +33,10 @@ class _PageState extends State<UserInfo> {
   
   String langName = '';
   String token = '';
+  /// 是否已登录（本地有 token）。未登录时「我的」页展示引导登录界面，
+  /// 并隐藏订单、信用卡、编辑资料、退出登录等需要账号的入口。
+  bool _loggedIn = false;
+  late final VoidCallback _authChangedListener;
   String currentVersion = '';
   bool isCheckingUpdate = false;
   /// 进入页面时静默检查；有更新时用于在「检查更新」右侧展示新版本信息。
@@ -234,7 +239,7 @@ class _PageState extends State<UserInfo> {
                 Text(
                   S.of(context).user_logout,
                   style: TextStyle(
-                    fontSize: 28.sp,
+                    fontSize: 34.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey.shade800,
                   ),
@@ -243,8 +248,9 @@ class _PageState extends State<UserInfo> {
                 Text(
                   S.of(context).user_logoutConfirmMessage,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 24.sp,
                     color: Colors.grey.shade600,
+                    height: 1.5,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -266,7 +272,7 @@ class _PageState extends State<UserInfo> {
                         child: Text(
                           S.of(context).user_cancel,
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize: 26.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -289,7 +295,7 @@ class _PageState extends State<UserInfo> {
                         child: Text(
                           S.of(context).user_ok,
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize: 26.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -381,7 +387,7 @@ class _PageState extends State<UserInfo> {
                 Text(
                   _deleteAccountText('title'),
                   style: TextStyle(
-                    fontSize: 28.sp,
+                    fontSize: 34.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey.shade800,
                   ),
@@ -390,7 +396,7 @@ class _PageState extends State<UserInfo> {
                 Text(
                   _deleteAccountText('message'),
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 24.sp,
                     color: Colors.grey.shade600,
                     height: 1.5,
                   ),
@@ -414,7 +420,7 @@ class _PageState extends State<UserInfo> {
                         child: Text(
                           S.of(context).user_cancel,
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize: 26.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -437,7 +443,7 @@ class _PageState extends State<UserInfo> {
                         child: Text(
                           _deleteAccountText('confirm'),
                           style: TextStyle(
-                            fontSize: 18.sp,
+                            fontSize: 26.sp,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -591,6 +597,16 @@ class _PageState extends State<UserInfo> {
   }
 
   Future<void> getData() async {
+    // 无本地 token 时不请求用户详情，直接进入未登录态（避免 401 跳转 + 空白资料）。
+    final accessToken = await AuthStorage.instance.accessToken;
+    if (accessToken == null || accessToken.isEmpty) {
+      if (!mounted) return;
+      setState(() {
+        _loggedIn = false;
+        data = UserDetailResponse();
+      });
+      return;
+    }
     try {
       final res = await ApiRequest().request<UserDetailResponse>(
         path: '/user/detail',
@@ -602,6 +618,7 @@ class _PageState extends State<UserInfo> {
       if (!mounted) return;
       if (res.data != null) {
         setState(() {
+          _loggedIn = true;
           data = res.data!;
         });
       }
@@ -609,13 +626,29 @@ class _PageState extends State<UserInfo> {
       if (mounted) setState(() {});
     }
   }
+
+  /// 跳转登录页；返回本页时重新拉取登录态（登录成功通常会 goNamed 回首页并重建本页）。
+  Future<void> _goLogin() async {
+    await context.pushNamed('login');
+    if (mounted) getData();
+  }
   @override
   void initState() {
     super.initState();
+    _authChangedListener = () {
+      if (mounted) getData();
+    };
+    AuthStorage.instance.authVersion.addListener(_authChangedListener);
     getData();
     updateLangName();
     _getCurrentVersion();
     _silentVersionCheck();
+  }
+
+  @override
+  void dispose() {
+    AuthStorage.instance.authVersion.removeListener(_authChangedListener);
+    super.dispose();
   }
 
   @override
@@ -692,7 +725,10 @@ class _PageState extends State<UserInfo> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                _buildAvatar(),
+                                GestureDetector(
+                                  onTap: _loggedIn ? null : _goLogin,
+                                  child: _buildAvatar(),
+                                ),
                                 SizedBox(width: 20.w),
                                 Expanded(
                                   child: Column(
@@ -700,7 +736,9 @@ class _PageState extends State<UserInfo> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        data.name ?? S.of(context).user_title,
+                                        _loggedIn
+                                            ? (data.name ?? S.of(context).user_title)
+                                            : S.of(context).user_notLoggedIn,
                                         style: TextStyle(
                                           fontSize: 36.sp,
                                           fontWeight: FontWeight.bold,
@@ -711,6 +749,19 @@ class _PageState extends State<UserInfo> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
+                                      if (!_loggedIn) ...[
+                                        SizedBox(height: 6.h),
+                                        Text(
+                                          S.of(context).user_loginPrompt,
+                                          style: TextStyle(
+                                            fontSize: 22.sp,
+                                            color: Colors.white.withValues(alpha: 0.85),
+                                            height: 1.25,
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
                                       if ((data.email ?? '').isNotEmpty) ...[
                                         SizedBox(height: 6.h),
                                         Row(
@@ -778,8 +829,8 @@ class _PageState extends State<UserInfo> {
               padding: EdgeInsets.all(20.w),
               child: Column(
                 children: [
-                  // 统计卡片
-                  _buildStatsCard(),
+                  // 统计卡片（已登录）/ 登录引导卡片（未登录）
+                  _loggedIn ? _buildStatsCard() : _buildLoginPromptCard(),
                   
                   SizedBox(height: 20.h),
                   
@@ -812,6 +863,88 @@ class _PageState extends State<UserInfo> {
         end: Alignment.bottomRight,
       ),
       onTap: () => context.pushNamed('orderList'),
+    );
+  }
+
+  /// 未登录引导卡片：替代订单统计卡，点击跳登录页。
+  Widget _buildLoginPromptCard() {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: _goLogin,
+        borderRadius: BorderRadius.circular(24.r),
+        child: Ink(
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF1989FA), Color(0xFF069EF0)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(24.r),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF1989FA).withValues(alpha: 0.35),
+                blurRadius: 22,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(22.w, 24.h, 22.w, 24.h),
+            child: Row(
+              children: [
+                Container(
+                  width: 84.sp,
+                  height: 84.sp,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.22),
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Icon(
+                    Icons.login_rounded,
+                    color: Colors.white,
+                    size: 44.sp,
+                  ),
+                ),
+                SizedBox(width: 18.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        S.of(context).user_loginNow,
+                        style: TextStyle(
+                          fontSize: 32.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 6.h),
+                      Text(
+                        S.of(context).user_loginPrompt,
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          color: Colors.white.withValues(alpha: 0.9),
+                          height: 1.25,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  color: Colors.white.withValues(alpha: 0.9),
+                  size: 28.sp,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -969,24 +1102,27 @@ class _PageState extends State<UserInfo> {
       ),
       child: Column(
         children: [
-          _buildModernListTile(
-            icon: Icons.credit_card_rounded,
-            iconColor: const Color(0xFF3B82F6), // blue-500
-            title: S.of(context).user_creditCard,
-            onTap: () => context.pushNamed('selectCreditCard'),
-          ),
-          _buildDivider(),
-          _buildModernListTile(
-            icon: Icons.person_outline_rounded,
-            iconColor: const Color(0xFF8B5CF6), // violet-500
-            title: S.of(context).user_editProfile,
-            onTap: () {
-              context.pushNamed('userProfile', queryParameters: {
-                'id': data.id.toString(),
-              });
-            },
-          ),
-          _buildDivider(),
+          // 信用卡管理 / 编辑个人信息需登录，未登录时隐藏。
+          if (_loggedIn) ...[
+            _buildModernListTile(
+              icon: Icons.credit_card_rounded,
+              iconColor: const Color(0xFF3B82F6), // blue-500
+              title: S.of(context).user_creditCard,
+              onTap: () => context.pushNamed('selectCreditCard'),
+            ),
+            _buildDivider(),
+            _buildModernListTile(
+              icon: Icons.person_outline_rounded,
+              iconColor: const Color(0xFF8B5CF6), // violet-500
+              title: S.of(context).user_editProfile,
+              onTap: () {
+                context.pushNamed('userProfile', queryParameters: {
+                  'id': data.id.toString(),
+                });
+              },
+            ),
+            _buildDivider(),
+          ],
           _buildModernListTile(
             icon: Icons.translate_rounded,
             iconColor: const Color(0xFF10B981), // emerald-500
@@ -1325,22 +1461,27 @@ class _PageState extends State<UserInfo> {
             title: S.of(context).user_about,
             onTap: () => context.pushNamed('about'),
           ),
-          _buildDivider(),
-          _buildModernListTile(
-            icon: Icons.no_accounts_outlined,
-            iconColor: const Color(0xFFEF4444), // red-500
-            title: _deleteAccountText('title'),
-            textColor: const Color(0xFFB91C1C), // red-700
-            onTap: _handleDeleteAccount,
-          ),
-          _buildDivider(),
-          _buildModernListTile(
-            icon: Icons.logout_rounded,
-            iconColor: const Color(0xFFEF4444), // red-500
-            title: S.of(context).user_logout,
-            textColor: const Color(0xFFEF4444),
-            onTap: _handleLogout,
-          ),
+          // 注销账号 / 退出登录需登录，未登录时隐藏。
+          if (_loggedIn) ...[
+            _buildDivider(),
+            _buildModernListTile(
+              icon: Icons.no_accounts_outlined,
+              iconColor: const Color(0xFFEF4444), // red-500
+              title: _deleteAccountText('title'),
+              textColor: const Color(0xFFB91C1C), // red-700
+              titleFontSize: 32.sp,
+              onTap: _handleDeleteAccount,
+            ),
+            _buildDivider(),
+            _buildModernListTile(
+              icon: Icons.logout_rounded,
+              iconColor: const Color(0xFFEF4444), // red-500
+              title: S.of(context).user_logout,
+              textColor: const Color(0xFFEF4444),
+              titleFontSize: 32.sp,
+              onTap: _handleLogout,
+            ),
+          ],
         ],
       ),
     );
@@ -1354,6 +1495,7 @@ class _PageState extends State<UserInfo> {
     Color? textColor,
     Color? iconColor,
     Color? iconBgColor,
+    double? titleFontSize,
   }) {
     // iconColor 优先用入参，其次跟 textColor（用于危险动作），最后用默认深灰
     final resolvedIconColor =
@@ -1388,7 +1530,7 @@ class _PageState extends State<UserInfo> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    fontSize: 26.sp,
+                    fontSize: titleFontSize ?? 26.sp,
                     fontWeight: FontWeight.w600,
                     color: textColor ?? const Color(0xFF111827),
                   ),

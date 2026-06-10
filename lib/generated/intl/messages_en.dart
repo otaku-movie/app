@@ -1037,10 +1037,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "presaleDetail_bonusCount": m28,
         "presaleDetail_bonusDescription":
             MessageLookupByLibrary.simpleMessage("Bonus details"),
-        "presaleDetail_gallery":
-            MessageLookupByLibrary.simpleMessage("Gallery"),
         "presaleDetail_buyOnOfficialSite":
             MessageLookupByLibrary.simpleMessage("Buy on Official Site"),
+        "presaleDetail_gallery":
+            MessageLookupByLibrary.simpleMessage("Gallery"),
         "presaleDetail_noLimit":
             MessageLookupByLibrary.simpleMessage("No limit"),
         "presaleDetail_perUserLimit":
@@ -1243,6 +1243,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "user_language": MessageLookupByLibrary.simpleMessage("Language"),
         "user_latestVersion":
             MessageLookupByLibrary.simpleMessage("Latest Version"),
+        "user_loginNow":
+            MessageLookupByLibrary.simpleMessage("Sign In / Sign Up"),
+        "user_loginPrompt": MessageLookupByLibrary.simpleMessage(
+            "Sign in to view orders, manage your account and more"),
         "user_loginSourceMultiple":
             MessageLookupByLibrary.simpleMessage("Linked"),
         "user_loginSourceSingle":
@@ -1252,6 +1256,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Are you sure you want to log out?"),
         "user_noUpdateAvailable": MessageLookupByLibrary.simpleMessage(
             "You already have the latest version"),
+        "user_notLoggedIn":
+            MessageLookupByLibrary.simpleMessage("Not signed in"),
         "user_ok": MessageLookupByLibrary.simpleMessage("OK"),
         "user_privateAgreement":
             MessageLookupByLibrary.simpleMessage("Privacy Policy"),

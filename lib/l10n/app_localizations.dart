@@ -2338,6 +2338,24 @@ abstract class AppLocalizations {
   /// **'My Profile'**
   String get user_title;
 
+  /// No description provided for @user_notLoggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Not signed in'**
+  String get user_notLoggedIn;
+
+  /// No description provided for @user_loginPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to view orders, manage your account and more'**
+  String get user_loginPrompt;
+
+  /// No description provided for @user_loginNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In / Sign Up'**
+  String get user_loginNow;
+
   /// No description provided for @user_data_orderCount.
   ///
   /// In en, this message translates to:

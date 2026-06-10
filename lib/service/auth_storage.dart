@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -11,6 +12,7 @@ class AuthStorage {
   static const _accessTokenKey = 'accessToken';
   static const _refreshTokenKey = 'refreshToken';
   static const _deviceIdKey = 'deviceId';
+  final ValueNotifier<int> authVersion = ValueNotifier<int>(0);
 
   Future<String?> get accessToken async {
     final token = await _secureStorage.read(key: _accessTokenKey);
@@ -33,14 +35,18 @@ class AuthStorage {
     required String? accessToken,
     required String? refreshToken,
   }) async {
+    var changed = false;
     if (accessToken != null && accessToken.isNotEmpty) {
       await _secureStorage.write(key: _accessTokenKey, value: accessToken);
+      changed = true;
     }
     if (refreshToken != null && refreshToken.isNotEmpty) {
       await _secureStorage.write(key: _refreshTokenKey, value: refreshToken);
+      changed = true;
     }
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
+    if (changed) _notifyAuthChanged();
   }
 
   Future<void> clearTokens() async {
@@ -49,5 +55,10 @@ class AuthStorage {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
     await prefs.remove('userInfo');
+    _notifyAuthChanged();
+  }
+
+  void _notifyAuthChanged() {
+    authVersion.value++;
   }
 }

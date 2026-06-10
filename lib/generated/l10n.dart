@@ -2640,10 +2640,10 @@ class S {
     );
   }
 
-  /// `Presale Ticket`
+  /// `Presale`
   String get movieDetail_viewPresaleTicket {
     return Intl.message(
-      'Presale Ticket',
+      'Presale',
       name: 'movieDetail_viewPresaleTicket',
       desc: '',
       args: [],
@@ -3775,6 +3775,36 @@ class S {
     return Intl.message(
       'My Profile',
       name: 'user_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not signed in`
+  String get user_notLoggedIn {
+    return Intl.message(
+      'Not signed in',
+      name: 'user_notLoggedIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in to view orders, manage your account and more`
+  String get user_loginPrompt {
+    return Intl.message(
+      'Sign in to view orders, manage your account and more',
+      name: 'user_loginPrompt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign In / Sign Up`
+  String get user_loginNow {
+    return Intl.message(
+      'Sign In / Sign Up',
+      name: 'user_loginNow',
       desc: '',
       args: [],
     );
@@ -6470,10 +6500,10 @@ class S {
     );
   }
 
-  /// `Presale Ticket`
+  /// `ムビチケ`
   String get comingSoon_presaleTicketBadge {
     return Intl.message(
-      'Presale Ticket',
+      'ムビチケ',
       name: 'comingSoon_presaleTicketBadge',
       desc: '',
       args: [],

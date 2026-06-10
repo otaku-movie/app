@@ -961,9 +961,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "presaleDetail_bonusCount": m28,
         "presaleDetail_bonusDescription":
             MessageLookupByLibrary.simpleMessage("特典の説明"),
-        "presaleDetail_gallery": MessageLookupByLibrary.simpleMessage("ギャラリー"),
         "presaleDetail_buyOnOfficialSite":
             MessageLookupByLibrary.simpleMessage("公式サイトで購入"),
+        "presaleDetail_gallery": MessageLookupByLibrary.simpleMessage("ギャラリー"),
         "presaleDetail_noLimit": MessageLookupByLibrary.simpleMessage("制限なし"),
         "presaleDetail_perUserLimit":
             MessageLookupByLibrary.simpleMessage("お一人様"),
@@ -1133,6 +1133,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "現在のバージョンはサポート対象外です。更新後にご利用ください。"),
         "user_language": MessageLookupByLibrary.simpleMessage("言語"),
         "user_latestVersion": MessageLookupByLibrary.simpleMessage("最新バージョン"),
+        "user_loginNow": MessageLookupByLibrary.simpleMessage("ログイン / 新規登録"),
+        "user_loginPrompt": MessageLookupByLibrary.simpleMessage(
+            "ログインすると注文確認やアカウント管理などが利用できます"),
         "user_loginSourceMultiple":
             MessageLookupByLibrary.simpleMessage("連携済み"),
         "user_loginSourceSingle": MessageLookupByLibrary.simpleMessage("ログイン元"),
@@ -1141,6 +1144,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("本当にログアウトしますか？"),
         "user_noUpdateAvailable":
             MessageLookupByLibrary.simpleMessage("すでに最新バージョンです"),
+        "user_notLoggedIn": MessageLookupByLibrary.simpleMessage("未ログイン"),
         "user_ok": MessageLookupByLibrary.simpleMessage("OK"),
         "user_privateAgreement":
             MessageLookupByLibrary.simpleMessage("プライバシーポリシー"),

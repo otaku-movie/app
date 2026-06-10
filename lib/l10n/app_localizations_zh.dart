@@ -1176,6 +1176,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get user_title => '我的';
 
   @override
+  String get user_notLoggedIn => '未登录';
+
+  @override
+  String get user_loginPrompt => '登录后可查看订单、管理账户及更多功能';
+
+  @override
+  String get user_loginNow => '登录 / 注册';
+
+  @override
   String get user_data_orderCount => '订单数';
 
   @override

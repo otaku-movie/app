@@ -1237,6 +1237,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get user_title => 'My Profile';
 
   @override
+  String get user_notLoggedIn => 'Not signed in';
+
+  @override
+  String get user_loginPrompt =>
+      'Sign in to view orders, manage your account and more';
+
+  @override
+  String get user_loginNow => 'Sign In / Sign Up';
+
+  @override
   String get user_data_orderCount => 'Order Count';
 
   @override

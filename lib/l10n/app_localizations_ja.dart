@@ -1193,6 +1193,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get user_title => 'マイページ';
 
   @override
+  String get user_notLoggedIn => '未ログイン';
+
+  @override
+  String get user_loginPrompt => 'ログインすると注文確認やアカウント管理などが利用できます';
+
+  @override
+  String get user_loginNow => 'ログイン / 新規登録';
+
+  @override
   String get user_data_orderCount => '注文数';
 
   @override
