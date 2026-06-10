@@ -16,6 +16,7 @@ class PresaleDetailResponse {
   final num? perUserLimit;
   final String? pickupNotes;
   final String? movieName;
+  final String? sourceUrl;
 
   PresaleDetailResponse({
     this.cover,
@@ -30,6 +31,7 @@ class PresaleDetailResponse {
     this.perUserLimit,
     this.pickupNotes,
     this.movieName,
+    this.sourceUrl,
   });
 
   factory PresaleDetailResponse.fromJson(Map<String, dynamic> json) =>

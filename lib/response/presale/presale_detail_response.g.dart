@@ -24,6 +24,7 @@ PresaleDetailResponse _$PresaleDetailResponseFromJson(
       perUserLimit: json['perUserLimit'] as num?,
       pickupNotes: json['pickupNotes'] as String?,
       movieName: json['movieName'] as String?,
+      sourceUrl: json['sourceUrl'] as String?,
     );
 
 Map<String, dynamic> _$PresaleDetailResponseToJson(
@@ -42,6 +43,7 @@ Map<String, dynamic> _$PresaleDetailResponseToJson(
       'perUserLimit': instance.perUserLimit,
       'pickupNotes': instance.pickupNotes,
       'movieName': instance.movieName,
+      'sourceUrl': instance.sourceUrl,
     };
 
 PresaleSpecification _$PresaleSpecificationFromJson(

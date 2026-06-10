@@ -1657,7 +1657,7 @@ abstract class AppLocalizations {
   /// No description provided for @movieDetail_viewPresaleTicket.
   ///
   /// In en, this message translates to:
-  /// **'Presale Ticket'**
+  /// **'Presale'**
   String get movieDetail_viewPresaleTicket;
 
   /// No description provided for @movieDetail_presaleHasBonus.
@@ -3550,6 +3550,12 @@ abstract class AppLocalizations {
   /// **'Gallery'**
   String get presaleDetail_gallery;
 
+  /// No description provided for @presaleDetail_buyOnOfficialSite.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy on Official Site'**
+  String get presaleDetail_buyOnOfficialSite;
+
   /// No description provided for @presaleDetail_price.
   ///
   /// In en, this message translates to:
@@ -3949,7 +3955,7 @@ abstract class AppLocalizations {
   /// No description provided for @comingSoon_presaleTicketBadge.
   ///
   /// In en, this message translates to:
-  /// **'Presale Ticket'**
+  /// **'ムビチケ'**
   String get comingSoon_presaleTicketBadge;
 
   /// No description provided for @comingSoon_releaseDate.

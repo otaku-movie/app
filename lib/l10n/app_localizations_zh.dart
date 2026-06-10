@@ -813,7 +813,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get movieDetail_button_buy => '购票';
 
   @override
-  String get movieDetail_viewPresaleTicket => '预售票';
+  String get movieDetail_viewPresaleTicket => '预售券';
 
   @override
   String get movieDetail_presaleHasBonus => '含特典';
@@ -1801,6 +1801,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get presaleDetail_gallery => '图集';
 
   @override
+  String get presaleDetail_buyOnOfficialSite => '前往官网购买';
+
+  @override
   String get presaleDetail_price => '价格';
 
   @override
@@ -2014,7 +2017,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get comingSoon_presale => '预售';
 
   @override
-  String get comingSoon_presaleTicketBadge => '预售票';
+  String get comingSoon_presaleTicketBadge => 'ムビチケ';
 
   @override
   String get comingSoon_releaseDate => '上映';

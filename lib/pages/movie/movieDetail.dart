@@ -744,11 +744,15 @@ List<Widget> generateComment() {
                           child: Container(
                             height: 80.h,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFF6B35),
+                              gradient: const LinearGradient(
+                                colors: [Color(0xFFFF5252), Color(0xFFE53935)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
                               borderRadius: BorderRadius.circular(25.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                                  color: const Color(0xFFE53935).withValues(alpha: 0.3),
                                   blurRadius: 12,
                                   offset: const Offset(0, 4),
                                 ),
@@ -758,7 +762,19 @@ List<Widget> generateComment() {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.confirmation_number_outlined, color: Colors.white, size: 28.sp),
+                                  Container(
+                                    padding: EdgeInsets.all(4.w),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(6.r),
+                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/icons/movie-ticket-presale.svg',
+                                      width: 26.sp,
+                                      height: 26.sp,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
                                   SizedBox(width: 12.w),
                                   Text(
                                     S.of(context).movieDetail_viewPresaleTicket,
@@ -1412,6 +1428,7 @@ List<Widget> generateComment() {
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(vertical: 8.h),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: staffListData.map((item) {
                               return Container(
                                 width: 180.w,
@@ -1438,6 +1455,8 @@ List<Widget> generateComment() {
                                       child: CustomExtendedImage(
                                         item.avatar ?? '',
                                         fit: BoxFit.cover,
+                                        width: 180.w,
+                                        height: 240.h,
                                       ),
                                     ),
                                     SizedBox(height: 12.h),
@@ -1452,11 +1471,14 @@ List<Widget> generateComment() {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    // 职位信息
-                                    if (item.position != null && item.position!.isNotEmpty) ...[
-                                      SizedBox(height: 6.h),
-                                      Text(
-                                        item.position!.map((children) => children.name ?? '').join('、'),
+                                    // 职位信息（固定两行高度，避免有无副标题时卡片高度不一导致横向错位）
+                                    SizedBox(height: 6.h),
+                                    SizedBox(
+                                      height: 62.h,
+                                      child: Text(
+                                        (item.position != null && item.position!.isNotEmpty)
+                                            ? item.position!.map((children) => children.name ?? '').join('、')
+                                            : '',
                                         style: TextStyle(
                                           fontSize: 24.sp,
                                           color: Colors.grey.shade600,
@@ -1465,7 +1487,7 @@ List<Widget> generateComment() {
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                    ],
+                                    ),
                                   ],
                                 ),
                               );
@@ -1614,6 +1636,7 @@ List<Widget> generateComment() {
                                   scrollDirection: Axis.horizontal,
                                   padding: EdgeInsets.symmetric(vertical: 8.h),
                                   child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: versionCharacters.map((item) {
                                       return Container(
                                         width: 180.w,
@@ -1640,6 +1663,8 @@ List<Widget> generateComment() {
                                               child: CustomExtendedImage(
                                                 item.cover ?? '',
                                                 fit: BoxFit.cover,
+                                                width: 180.w,
+                                                height: 240.h,
                                               ),
                                             ),
                                             SizedBox(height: 12.h),
@@ -1654,11 +1679,14 @@ List<Widget> generateComment() {
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                             ),
-                                            // 配音演员
-                                            if (item.staff != null && item.staff!.isNotEmpty) ...[
-                                              SizedBox(height: 6.h),
-                                              Text(
-                                                item.staff!.map((children) => children.name ?? '').join('、'),
+                                            // 配音演员（固定两行高度，避免有无配音时卡片高度不一导致横向错位）
+                                            SizedBox(height: 6.h),
+                                            SizedBox(
+                                              height: 62.h,
+                                              child: Text(
+                                                (item.staff != null && item.staff!.isNotEmpty)
+                                                    ? item.staff!.map((children) => children.name ?? '').join('、')
+                                                    : '',
                                                 style: TextStyle(
                                                   fontSize: 24.sp,
                                                   color: Colors.grey.shade600,
@@ -1667,7 +1695,7 @@ List<Widget> generateComment() {
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                            ],
+                                            ),
                                           ],
                                         ),
                                       );
@@ -1701,6 +1729,7 @@ List<Widget> generateComment() {
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(vertical: 8.h),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: characterData.map((item) {
                               return Container(
                                 width: 180.w,
@@ -1727,6 +1756,8 @@ List<Widget> generateComment() {
                                       child: CustomExtendedImage(
                                         item.cover ?? '',
                                         fit: BoxFit.cover,
+                                        width: 180.w,
+                                        height: 240.h,
                                       ),
                                     ),
                                     SizedBox(height: 12.h),
@@ -1741,11 +1772,14 @@ List<Widget> generateComment() {
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    // 配音演员
-                                    if (item.staff != null && item.staff!.isNotEmpty) ...[
-                                      SizedBox(height: 6.h),
-                                      Text(
-                                        item.staff!.map((children) => children.name ?? '').join('、'),
+                                    // 配音演员（固定两行高度，避免有无配音时卡片高度不一导致横向错位）
+                                    SizedBox(height: 6.h),
+                                    SizedBox(
+                                      height: 62.h,
+                                      child: Text(
+                                        (item.staff != null && item.staff!.isNotEmpty)
+                                            ? item.staff!.map((children) => children.name ?? '').join('、')
+                                            : '',
                                         style: TextStyle(
                                           fontSize: 24.sp,
                                           color: Colors.grey.shade600,
@@ -1754,7 +1788,7 @@ List<Widget> generateComment() {
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                    ],
+                                    ),
                                   ],
                                 ),
                               );

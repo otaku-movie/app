@@ -407,7 +407,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("No movies currently showing"),
         "comingSoon_presale": MessageLookupByLibrary.simpleMessage("Presale"),
         "comingSoon_presaleTicketBadge":
-            MessageLookupByLibrary.simpleMessage("Presale Ticket"),
+            MessageLookupByLibrary.simpleMessage("ムビチケ"),
         "comingSoon_pullToRefresh":
             MessageLookupByLibrary.simpleMessage("Pull to refresh"),
         "comingSoon_releaseDate":
@@ -774,7 +774,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_reReleaseHistory_title":
             MessageLookupByLibrary.simpleMessage("Re-release history"),
         "movieDetail_viewPresaleTicket":
-            MessageLookupByLibrary.simpleMessage("Presale Ticket"),
+            MessageLookupByLibrary.simpleMessage("Presale"),
         "movieDetail_writeComment":
             MessageLookupByLibrary.simpleMessage("Write Comment"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("Buy Ticket"),
@@ -1039,6 +1039,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Bonus details"),
         "presaleDetail_gallery":
             MessageLookupByLibrary.simpleMessage("Gallery"),
+        "presaleDetail_buyOnOfficialSite":
+            MessageLookupByLibrary.simpleMessage("Buy on Official Site"),
         "presaleDetail_noLimit":
             MessageLookupByLibrary.simpleMessage("No limit"),
         "presaleDetail_perUserLimit":

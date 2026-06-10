@@ -827,7 +827,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get movieDetail_button_buy => 'チケット購入';
 
   @override
-  String get movieDetail_viewPresaleTicket => '前売り券';
+  String get movieDetail_viewPresaleTicket => '前売券';
 
   @override
   String get movieDetail_presaleHasBonus => '特典付き';
@@ -1822,6 +1822,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get presaleDetail_gallery => 'ギャラリー';
 
   @override
+  String get presaleDetail_buyOnOfficialSite => '公式サイトで購入';
+
+  @override
   String get presaleDetail_price => '価格';
 
   @override
@@ -2036,7 +2039,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get comingSoon_presale => '前売り';
 
   @override
-  String get comingSoon_presaleTicketBadge => '前売り券';
+  String get comingSoon_presaleTicketBadge => 'ムビチケ';
 
   @override
   String get comingSoon_releaseDate => '公開';

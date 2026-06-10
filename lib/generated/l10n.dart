@@ -5800,6 +5800,16 @@ class S {
     );
   }
 
+  /// `Buy on Official Site`
+  String get presaleDetail_buyOnOfficialSite {
+    return Intl.message(
+      'Buy on Official Site',
+      name: 'presaleDetail_buyOnOfficialSite',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Price`
   String get presaleDetail_price {
     return Intl.message(

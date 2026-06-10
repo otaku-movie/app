@@ -384,7 +384,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("現在上映中の映画はありません"),
         "comingSoon_presale": MessageLookupByLibrary.simpleMessage("前売り"),
         "comingSoon_presaleTicketBadge":
-            MessageLookupByLibrary.simpleMessage("前売り券"),
+            MessageLookupByLibrary.simpleMessage("ムビチケ"),
         "comingSoon_pullToRefresh":
             MessageLookupByLibrary.simpleMessage("下にスワイプして更新"),
         "comingSoon_releaseDate": MessageLookupByLibrary.simpleMessage("公開"),
@@ -723,7 +723,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_reReleaseHistory_title":
             MessageLookupByLibrary.simpleMessage("再上映履歴"),
         "movieDetail_viewPresaleTicket":
-            MessageLookupByLibrary.simpleMessage("前売り券"),
+            MessageLookupByLibrary.simpleMessage("前売券"),
         "movieDetail_writeComment":
             MessageLookupByLibrary.simpleMessage("コメントを書く"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("チケット購入"),
@@ -962,6 +962,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "presaleDetail_bonusDescription":
             MessageLookupByLibrary.simpleMessage("特典の説明"),
         "presaleDetail_gallery": MessageLookupByLibrary.simpleMessage("ギャラリー"),
+        "presaleDetail_buyOnOfficialSite":
+            MessageLookupByLibrary.simpleMessage("公式サイトで購入"),
         "presaleDetail_noLimit": MessageLookupByLibrary.simpleMessage("制限なし"),
         "presaleDetail_perUserLimit":
             MessageLookupByLibrary.simpleMessage("お一人様"),

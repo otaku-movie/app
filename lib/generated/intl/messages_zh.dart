@@ -374,7 +374,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("暂无正在上映的电影"),
         "comingSoon_presale": MessageLookupByLibrary.simpleMessage("预售"),
         "comingSoon_presaleTicketBadge":
-            MessageLookupByLibrary.simpleMessage("预售票"),
+            MessageLookupByLibrary.simpleMessage("ムビチケ"),
         "comingSoon_pullToRefresh":
             MessageLookupByLibrary.simpleMessage("下拉刷新"),
         "comingSoon_releaseDate": MessageLookupByLibrary.simpleMessage("上映"),
@@ -690,7 +690,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieDetail_reReleaseHistory_title":
             MessageLookupByLibrary.simpleMessage("重映历史"),
         "movieDetail_viewPresaleTicket":
-            MessageLookupByLibrary.simpleMessage("预售票"),
+            MessageLookupByLibrary.simpleMessage("预售券"),
         "movieDetail_writeComment": MessageLookupByLibrary.simpleMessage("写评论"),
         "movieList_buy": MessageLookupByLibrary.simpleMessage("购票"),
         "movieList_comingSoon_noDate":
@@ -925,6 +925,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "presaleDetail_bonusDescription":
             MessageLookupByLibrary.simpleMessage("特典说明"),
         "presaleDetail_gallery": MessageLookupByLibrary.simpleMessage("图集"),
+        "presaleDetail_buyOnOfficialSite":
+            MessageLookupByLibrary.simpleMessage("前往官网购买"),
         "presaleDetail_noLimit": MessageLookupByLibrary.simpleMessage("不限"),
         "presaleDetail_perUserLimit":
             MessageLookupByLibrary.simpleMessage("每人限购"),

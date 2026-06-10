@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:go_router/go_router.dart';
@@ -378,30 +379,49 @@ class _PageState extends State<ComingSoon> with AutomaticKeepAliveClientMixin, S
                                                     }
                                                   : null,
                                               behavior: HitTestBehavior.opaque,
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xFFFF6B35),
-                                                  borderRadius: BorderRadius.circular(8.r),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
-                                                      blurRadius: 4,
-                                                      offset: const Offset(0, 2),
+                                              child: _hasPresaleTicket(item)
+                                                  ? Container(
+                                                      padding: EdgeInsets.all(4.w),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.circular(8.r),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.black.withValues(alpha: 0.15),
+                                                            blurRadius: 4,
+                                                            offset: const Offset(0, 2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: SvgPicture.asset(
+                                                        'assets/icons/movie-ticket-presale.svg',
+                                                        width: 24.w,
+                                                        height: 24.w,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
+                                                      decoration: BoxDecoration(
+                                                        color: const Color(0xFFFF6B35),
+                                                        borderRadius: BorderRadius.circular(8.r),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                                                            blurRadius: 4,
+                                                            offset: const Offset(0, 2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Text(
+                                                        S.of(context).comingSoon_presale,
+                                                        style: TextStyle(
+                                                          fontSize: 16.sp,
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.w700,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ],
-                                                ),
-                                                child: Text(
-                                                  _hasPresaleTicket(item)
-                                                      ? S.of(context).comingSoon_presaleTicketBadge
-                                                      : S.of(context).comingSoon_presale,
-                                                  style: TextStyle(
-                                                    fontSize: 16.sp,
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                              ),
                                             ),
                                           ),
                                         // 渐变遮罩

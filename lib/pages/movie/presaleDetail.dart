@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:otaku_movie/analytics/analytics.dart';
 import 'package:otaku_movie/analytics/events.dart';
 import 'package:otaku_movie/api/index.dart';
@@ -109,10 +110,35 @@ class _PresaleDetailState extends State<PresaleDetail> {
 
   static const double _bottomBarHeight = 72;
 
+  bool _hasSourceUrl() => (_data?.sourceUrl?.trim().isNotEmpty ?? false);
+
+  /// 打开源站（MOVIE WALKER STORE）商品详情页：外部浏览器优先，兜底平台默认方式。
+  Future<void> _openSourceUrl() async {
+    final raw = _data?.sourceUrl?.trim();
+    if (raw == null || raw.isEmpty) return;
+    Analytics.instance.logEvent(Ev.presaleDetailView, {
+      P.presaleId: widget.id,
+      P.type: 'buy_official',
+    });
+    final uri = Uri.tryParse(raw);
+    if (uri == null) return;
+    try {
+      if (await launchUrl(uri, mode: LaunchMode.externalApplication)) return;
+    } catch (_) {
+      // 外部应用方式失败，继续尝试平台默认方式
+    }
+    try {
+      await launchUrl(uri);
+    } catch (_) {
+      // 兜底也失败，静默忽略
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.paddingOf(context).top;
     final bottomPadding = MediaQuery.paddingOf(context).bottom;
+    final hasBuy = _hasSourceUrl();
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
@@ -148,15 +174,16 @@ class _PresaleDetailState extends State<PresaleDetail> {
                     SliverToBoxAdapter(
                       child: _data != null ? _buildContent(context) : const SizedBox.shrink(),
                     ),
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: _bottomBarHeight + bottomPadding + 16.h),
-                    ),
+                    if (hasBuy)
+                      SliverToBoxAdapter(
+                        child: SizedBox(height: _bottomBarHeight + bottomPadding + 16.h),
+                      ),
                   ],
                 ),
               ),
             ),
-            // 底部栏
-            // if (_data != null) _buildBottomBar(context, bottomPadding),
+            // 底部栏：源站购买入口（仅 ムビチケ 爬虫导入、有官网链接时显示）
+            if (hasBuy) _buildBottomBar(context, bottomPadding),
           ],
         ),
       ),
@@ -177,6 +204,72 @@ class _PresaleDetailState extends State<PresaleDetail> {
     final cover = d.cover;
     if (cover != null && cover.isNotEmpty) return [cover];
     return [];
+  }
+
+  /// 底部「前往官网购买」栏：跳 MOVIE WALKER STORE 商品详情页。
+  Widget _buildBottomBar(BuildContext context, double bottomPadding) {
+    final s = S.of(context);
+    return Container(
+      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h + bottomPadding),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 10,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: GestureDetector(
+        onTap: _openSourceUrl,
+        child: Container(
+          height: _bottomBarHeight.h,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFF6B35),
+            borderRadius: BorderRadius.circular(25.r),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(4.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/movie-ticket-presale.svg',
+                    width: 30.sp,
+                    height: 30.sp,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Text(
+                  s.presaleDetail_buyOnOfficialSite,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Icon(Icons.open_in_new, color: Colors.white, size: 30.sp),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildAppBar(BuildContext context) {
