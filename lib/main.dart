@@ -7,8 +7,8 @@ import 'package:otaku_movie/controller/DictController.dart';
 import 'package:otaku_movie/myApp.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/utils/index.dart';
-import 'controller/LanguageController.dart';
-import 'controller/TimeFormatController.dart';
+import 'package:otaku_movie/controller/LanguageController.dart';
+import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:jiffy/jiffy.dart';
 
 // import "package:flutter_flavorizr/flutter_flavorizr.dart";

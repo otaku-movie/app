@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/config/config.dart';
 import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/log/index.dart';
+import 'package:otaku_movie/service/now_showing_cache.dart';
 import 'package:otaku_movie/service/splash_config_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -75,6 +76,9 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     // 4. 后台静默拉取最新配置（不阻塞 minDuration）
     unawaited(_refreshConfigInBackground());
+
+    // 4b. 利用启动页空档预取「上映中」首屏，进首页可直接命中渲染（不阻塞跳转）。
+    unawaited(NowShowingCache.instance.prefetch());
 
     // 5. 最短展示时长达到后就允许跳走（如果后台请求已结束就立刻走）
     await Future.delayed(Duration(milliseconds: _minMs(cached)));

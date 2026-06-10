@@ -20,10 +20,26 @@ class CustomExtendedImage extends StatelessWidget {
     this.errorWidget,
   });
 
+  /// 统一的占位/失败底图：给一个比卡片/背景略深的灰底 + 居中图标，
+  /// 避免图片缺失时只剩一个浅灰图标和背景糊在一起、看不清。
+  Widget _buildPlaceholder(IconData icon) {
+    return Container(
+      width: width,
+      height: height,
+      color: const Color(0xFFE8E8EC),
+      alignment: Alignment.center,
+      child: Icon(
+        icon,
+        color: const Color(0xFFB0B3BA),
+        size: 40,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (src.isEmpty) {
-      return errorWidget ?? SizedBox(width: width, height: height, child: const Icon(Icons.image_not_supported, color: Colors.grey));
+      return errorWidget ?? _buildPlaceholder(Icons.image_not_supported_outlined);
     }
     final String imageUrl = src.startsWith('http') ? src : '${Config.imageBaseUrl}$src';
 
@@ -36,9 +52,9 @@ class CustomExtendedImage extends StatelessWidget {
       loadStateChanged: (state) {
         switch (state.extendedImageLoadState) {
           case LoadState.loading:
-            return loadingWidget ?? const Center(child: CircularProgressIndicator());
+            return loadingWidget ?? _buildPlaceholder(Icons.image_outlined);
           case LoadState.failed:
-            return errorWidget ?? const Icon(Icons.broken_image, color: Colors.grey);
+            return errorWidget ?? _buildPlaceholder(Icons.broken_image_outlined);
           case LoadState.completed:
             return null; // 正常显示图片
         }

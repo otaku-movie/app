@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:otaku_movie/analytics/analytics.dart';
 import 'package:otaku_movie/analytics/events.dart';
@@ -10,6 +11,7 @@ import 'package:otaku_movie/components/customExtendedImage.dart';
 import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/movie/movieList/movie_now_showing.dart';
+import 'package:otaku_movie/service/now_showing_cache.dart';
 import 'package:otaku_movie/components/error.dart';
 import 'package:go_router/go_router.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
@@ -241,6 +243,27 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
     super.initState();
     Analytics.instance.logEvent(Ev.nowShowingView);
     _loadViewMode();
+    _initialLoad();
+  }
+
+  /// 首屏加载：优先命中 splash 阶段预取的缓存（0 loading 直接渲染），
+  /// 命中后再后台静默刷新一次；未命中则走正常网络请求。
+  void _initialLoad() {
+    final cached = NowShowingCache.instance.consume();
+    if (cached != null && cached.list.isNotEmpty) {
+      setState(() {
+        data = cached.list;
+        currentPage = 1;
+        loadFinished = (cached.total > 0 && data.length >= cached.total) ||
+            cached.list.length < cached.pageSize;
+        loading = false;
+        error = false;
+      });
+      // data 已非空 → getData(page:1) 不会显示首屏 loading、也不碰下拉/上拉指示器，
+      // 天然是一次「后台静默刷新」，请求回来后用最新第一页覆盖缓存数据。
+      getData();
+      return;
+    }
     getData();
   }
 
@@ -493,7 +516,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                   if (item.hasPresaleTicket == true || item.presaleId != null)
                     Positioned(
                       top: 6.h,
-                      left: 6.w,
+                      right: 6.w,
                       child: GestureDetector(
                         onTap: (item.presaleId != null)
                             ? () {
@@ -505,29 +528,23 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                             : null,
                         behavior: HitTestBehavior.opaque,
                         child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 6.w,
-                            vertical: 3.h,
-                          ),
+                          padding: EdgeInsets.all(4.w),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF6B35),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(6.r),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFFFF6B35)
-                                    .withValues(alpha: 0.3),
+                                color: Colors.black.withValues(alpha: 0.15),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),
                             ],
                           ),
-                          child: Text(
-                            S.of(context).comingSoon_presaleTicketBadge,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          child: SvgPicture.asset(
+                            'assets/icons/movie-ticket-presale.svg',
+                            width: 22.w,
+                            height: 22.w,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
@@ -535,7 +552,15 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                   if (item.hasBenefits == true)
                     Positioned(
                       top: 6.h,
-                      right: 6.w,
+                      // 有前売券徽章时让到左上，避免与右上角的 ムビチケ logo 重叠。
+                      left: (item.hasPresaleTicket == true ||
+                              item.presaleId != null)
+                          ? 6.w
+                          : null,
+                      right: (item.hasPresaleTicket == true ||
+                              item.presaleId != null)
+                          ? null
+                          : 6.w,
                       child: GestureDetector(
                         onTap: () {
                           context.pushNamed(
@@ -759,16 +784,16 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                 Icon(
                   Icons.movie_outlined,
                   color: Colors.white,
-                  size: 18.sp,
+                  size: 24.sp,
                 ),
-                SizedBox(width: 4.w),
+                SizedBox(width: 6.w),
                 Text(
                   isPresale
                       ? S.of(context).comingSoon_presale
                       : S.of(context).movieList_buy,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20.sp,
+                    fontSize: 28.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -838,7 +863,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                   if (item.hasPresaleTicket == true || item.presaleId != null)
                     Positioned(
                       top: 8.h,
-                      left: 8.w,
+                      right: 8.w,
                       child: GestureDetector(
                         onTap: (item.presaleId != null)
                             ? () {
@@ -850,25 +875,23 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                             : null,
                         behavior: HitTestBehavior.opaque,
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                          padding: EdgeInsets.all(5.w),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF6B35),
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(8.r),
                             boxShadow: [
                               BoxShadow(
-                                color: const Color(0xFFFF6B35).withValues(alpha: 0.3),
+                                color: Colors.black.withValues(alpha: 0.15),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               ),
                             ],
                           ),
-                          child: Text(
-                            S.of(context).comingSoon_presaleTicketBadge,
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          child: SvgPicture.asset(
+                            'assets/icons/movie-ticket-presale.svg',
+                            width: 26.w,
+                            height: 26.w,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       )
@@ -877,7 +900,15 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                   if (item.hasBenefits == true)
                     Positioned(
                       top: 8.h,
-                      right: 8.w,
+                      // 有前売券徽章时让到左上，避免与右上角的 ムビチケ logo 重叠。
+                      left: (item.hasPresaleTicket == true ||
+                              item.presaleId != null)
+                          ? 8.w
+                          : null,
+                      right: (item.hasPresaleTicket == true ||
+                              item.presaleId != null)
+                          ? null
+                          : 8.w,
                       child: GestureDetector(
                         onTap: () {
                           context.pushNamed(
