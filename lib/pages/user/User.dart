@@ -638,7 +638,10 @@ class _PageState extends State<UserInfo> {
             expandedHeight: 260.h,
             floating: false,
             pinned: true,
+            // 底部 Tab「我的」是根页面，不应出现返回键；避免登录后 push 栈残留时显示黑色返回箭头。
+            automaticallyImplyLeading: false,
             backgroundColor: const Color(0xFF1E40AF),
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: const BoxDecoration(
@@ -1467,12 +1470,49 @@ class _PageState extends State<UserInfo> {
       child: CircleAvatar(
         radius: 52.w,
         backgroundColor: Colors.grey.shade200,
-        backgroundImage: data.cover != null
-            ? NetworkImage('${Config.imageBaseUrl}${data.cover}')
+        backgroundImage: _avatarUrl() != null
+            ? NetworkImage(_avatarUrl()!)
             : null,
-        child: data.cover == null
-            ? Icon(Icons.person, size: 56.sp, color: Colors.grey.shade500)
-            : null,
+        // 无头像（如 X 登录未设头像）时用「用户名首字母 + 渐变圆」兜底，比灰色图标更好看。
+        child: _avatarUrl() == null ? _buildAvatarFallback() : null,
+      ),
+    );
+  }
+
+  /// 解析头像地址：第三方登录（X / Google）返回绝对 URL，直接用；
+  /// 自托管头像是相对路径，需拼接 [Config.imageBaseUrl]。空则返回 null。
+  String? _avatarUrl() {
+    final cover = data.cover;
+    if (cover == null || cover.isEmpty) return null;
+    if (cover.startsWith('http://') || cover.startsWith('https://')) {
+      return cover;
+    }
+    return '${Config.imageBaseUrl}$cover';
+  }
+
+  /// 默认头像：取用户名（或邮箱）首字母，配渐变圆底。
+  Widget _buildAvatarFallback() {
+    final source = (data.name?.trim().isNotEmpty ?? false)
+        ? data.name!.trim()
+        : (data.email?.trim() ?? '');
+    final initial = source.isNotEmpty ? source.characters.first.toUpperCase() : '?';
+    return Container(
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: LinearGradient(
+          colors: [Color(0xFF1989FA), Color(0xFF63B3FF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        initial,
+        style: TextStyle(
+          fontSize: 52.sp,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
       ),
     );
   }

@@ -67,9 +67,10 @@ class AuthConfig {
     defaultValue: 'otakumovie://x-login-callback',
   );
 
-  /// X OAuth 2.0 授权与 token endpoint，统一放这里以便将来换 self-hosted 镜像时一处改完。
+  /// X OAuth 2.0 授权与 token endpoint。
+  /// 授权页优先走 x.com 域名（twitter.com 会跳转，部分机型 Custom Tab 里容易丢 OAuth state）。
   static const String xAuthorizationEndpoint =
-      'https://twitter.com/i/oauth2/authorize';
+      'https://x.com/i/oauth2/authorize';
   static const String xTokenEndpoint = 'https://api.twitter.com/2/oauth2/token';
 
   /// 申请的 scope。`offline.access` 用于换取 refresh_token，可在 token 过期后续期；

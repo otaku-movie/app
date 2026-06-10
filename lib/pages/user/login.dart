@@ -171,7 +171,7 @@ class _LoginPageState extends State<Login> {
 
         Analytics.instance.setUserId('${res.data?.id}');
         Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'account'});
-        context.pushNamed('home');
+        context.goNamed('home');
       }
     
     }).catchError((err) {
@@ -231,7 +231,7 @@ class _LoginPageState extends State<Login> {
 
           Analytics.instance.setUserId('${res.data?.id}');
           Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'google'});
-          context.pushNamed('home');
+          context.goNamed('home');
         }
       }).catchError((err) {
         Analytics.instance.logEvent(Ev.loginFail, {
@@ -317,7 +317,7 @@ class _LoginPageState extends State<Login> {
           prefs.setString('userInfo', res.data.toString());
           Analytics.instance.setUserId('${res.data?.id}');
           Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'apple'});
-          context.pushNamed('home');
+          context.goNamed('home');
         }
       }).catchError((err) {
         Analytics.instance.logEvent(Ev.loginFail, {
@@ -368,8 +368,10 @@ class _LoginPageState extends State<Login> {
             tokenEndpoint: AuthConfig.xTokenEndpoint,
           ),
           scopes: AuthConfig.xScopes,
-          // X 要求 PKCE，flutter_appauth 默认就会附带 code_challenge，这里显式声明仅为可读性。
-          // promptValues 不传：让用户自然选择已登录的 X 账号。
+          // 强制展示授权确认页，避免「已授权过」时静默跳过导致用户以为卡死。
+          // 注意：flutter_appauth 7.x 中 prompt 必须用 promptValues 专用字段，
+          // 放进 additionalParameters 会抛 authorize_and_exchange_code_failed。
+          promptValues: const ['consent'],
         ),
       );
 
@@ -402,7 +404,7 @@ class _LoginPageState extends State<Login> {
           Analytics.instance.setUserId('${res.data?.id}');
           Analytics.instance.logEvent(Ev.loginSuccess, {P.type: 'x'});
           if (!mounted) return;
-          context.pushNamed('home');
+          context.goNamed('home');
         }
       }).catchError((err) {
         Analytics.instance.logEvent(Ev.loginFail, {
@@ -473,20 +475,21 @@ class _LoginPageState extends State<Login> {
         title: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(6.w),
+              padding: EdgeInsets.all(4.w),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(8.r),
               ),
-              child: Icon(
-                Icons.movie,
-                color: Colors.white,
-                size: 20.sp,
+              child: Image.asset(
+                'assets/image/logo.png',
+                width: 40.w,
+                height: 40.w,
+                fit: BoxFit.contain,
               ),
             ),
             SizedBox(width: 12.w),
             Text(
-              S.of(context).login_loginButton, 
+              'シネコ',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 32.sp,
@@ -592,14 +595,15 @@ class _LoginPageState extends State<Login> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.movie,
-                            color: const Color(0xFF1989FA),
-                            size: 32.sp,
+                          Image.asset(
+                            'assets/image/logo.png',
+                            width: 64.w,
+                            height: 64.w,
+                            fit: BoxFit.contain,
                           ),
                           SizedBox(width: 12.w),
                           Text(
-                            'Otaku Movie',
+                            'シネコ',
                             style: TextStyle(
                               fontSize: 28.sp,
                               fontWeight: FontWeight.w700,

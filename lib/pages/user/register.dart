@@ -221,14 +221,15 @@ class _RegisterState extends State<Register> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.movie,
-                            color: const Color(0xFF1989FA),
-                            size: 32.sp,
+                          Image.asset(
+                            'assets/image/logo.png',
+                            width: 64.w,
+                            height: 64.w,
+                            fit: BoxFit.contain,
                           ),
                           SizedBox(width: 12.w),
                           Text(
-                            'Otaku Movie',
+                            'シネコ',
                             style: TextStyle(
                               fontSize: 28.sp,
                               fontWeight: FontWeight.w700,
@@ -873,7 +874,7 @@ class _RegisterState extends State<Register> {
                 Analytics.instance.setUserId('${res.data?.id}');
                 Analytics.instance.logEvent(Ev.registerSuccess);
                 // ignore: use_build_context_synchronously
-                context.pushNamed('home');
+                context.goNamed('home');
               }
             }).catchError((err) {
               Analytics.instance.logEvent(Ev.registerFail, {
