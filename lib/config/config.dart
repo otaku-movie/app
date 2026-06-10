@@ -26,7 +26,7 @@ class EnvironmentConfig {
           apiUrl: 'http://$ip:8080/api',
           imageBaseUrl: const String.fromEnvironment(
             'IMAGE_BASE_URL',
-            defaultValue: 'https://images.otaku-movie.com',
+            defaultValue: 'https://static.otaku-movie.com',
           ),
           appTitle: 'Dev Otaku Movie',
         );
@@ -35,7 +35,7 @@ class EnvironmentConfig {
           apiUrl: 'http://test-api.otaku-movie.com/api',
           imageBaseUrl: String.fromEnvironment(
             'IMAGE_BASE_URL',
-            defaultValue: 'https://images.otaku-movie.com',
+            defaultValue: 'https://static.otaku-movie.com',
           ),
           appTitle: 'Test Otaku Movie',
         );
@@ -55,7 +55,7 @@ class EnvironmentConfig {
           ),
           imageBaseUrl: String.fromEnvironment(
             'IMAGE_BASE_URL',
-            defaultValue: 'https://images.otaku-movie.com',
+            defaultValue: 'https://static.otaku-movie.com',
           ),
           appTitle: 'Prod Otaku Movie',
         );

@@ -190,20 +190,35 @@ class _PresaleDetailState extends State<PresaleDetail> {
     );
   }
 
-  /// 顶部轮播图：优先用当前选中规格的图片，否则用全局 gallery/cover
+  /// 顶部轮播图：gallery/cover 通常已完整镜像；规格图偶有缺失，故 gallery 优先。
   List<String> _topImageUrls() {
     final d = _data!;
+    final urls = <String>[];
+    final seen = <String>{};
+    void add(String? u) {
+      if (u != null && u.isNotEmpty && seen.add(u)) urls.add(u);
+    }
+
+    for (final u in d.gallery ?? []) add(u);
+    add(d.cover);
     final specs = d.specifications ?? [];
     if (specs.isNotEmpty) {
       final spec = specs[_selectedSpecIndex.clamp(0, specs.length - 1)];
-      final images = spec.images;
-      if (images != null && images.isNotEmpty) return images;
+      for (final u in spec.images ?? []) add(u);
     }
-    final gallery = d.gallery;
-    if (gallery != null && gallery.isNotEmpty) return gallery;
+    return urls;
+  }
+
+  /// 规格卡片缩略图：规格图缺失时回退到封面或 gallery 首图。
+  String? _specThumbUrl(List<String> specImages) {
+    if (specImages.isNotEmpty) return specImages.first;
+    final d = _data;
+    if (d == null) return null;
     final cover = d.cover;
-    if (cover != null && cover.isNotEmpty) return [cover];
-    return [];
+    if (cover != null && cover.isNotEmpty) return cover;
+    final gallery = d.gallery;
+    if (gallery != null && gallery.isNotEmpty) return gallery.first;
+    return null;
   }
 
   /// 底部「前往官网购买」栏：跳 MOVIE WALKER STORE 商品详情页。
@@ -404,7 +419,7 @@ class _PresaleDetailState extends State<PresaleDetail> {
                   final spec = specs[i];
                   final name = spec.name ?? '';
                   final images = spec.images ?? [];
-                  final firstImg = images.isNotEmpty ? images[0] : null;
+                  final firstImg = _specThumbUrl(images);
                   final selected = i == _selectedSpecIndex;
                   final ticketTypeCode = spec.ticketType;
                   return Padding(
