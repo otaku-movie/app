@@ -28,7 +28,7 @@ class AuthConfig {
   static const String googleWebClientId = String.fromEnvironment(
     'GOOGLE_WEB_CLIENT_ID',
     defaultValue:
-        '848743710183-olc0gj881jpn02gkc9n5bbqiot8slh7k.apps.googleusercontent.com',
+        '807320750051-d8nkip913h8tgor8dnim1f3khlk9rsnf.apps.googleusercontent.com',
   );
 
   // ===================== Apple =====================

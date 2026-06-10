@@ -82,6 +82,22 @@
 				<string>otakumovie</string>
 			</array>
 		</dict>
+		<!--
+			Google 登录回调 URL Scheme（REVERSED_CLIENT_ID）。
+			google_sign_in 在 iOS 上需要把它声明在这里，系统才会把授权回调派发回 App。
+			值 = GoogleService-Info.plist 里 REVERSED_CLIENT_ID，
+			即 iOS OAuth client id（com.otakumovie.app，cineko-8b899）反写。
+		-->
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>google-login-callback</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.807320750051-rphc8n4ubihlqjr5cvircbhp959jtfk7</string>
+			</array>
+		</dict>
 	</array>
 </dict>
 </plist>

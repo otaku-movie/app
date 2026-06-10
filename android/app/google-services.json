@@ -7,31 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:807320750051:android:acb83886249baddf2842d6",
-        "android_client_info": {
-          "package_name": "com.otakumovie.app"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCRTqgdyOz8_dIZmsJJfLDu-EdikCR9BBA"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:807320750051:android:5d4727e6651c62422842d6",
         "android_client_info": {
           "package_name": "com.otakumovie.app.dev"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "807320750051-clkpjgh0i179cos0vmti3pdqh1clgb5e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.otakumovie.app.dev",
+            "certificate_hash": "1ae12f78ac14c84f3e0bd493323596aaa564a248"
+          }
+        },
+        {
+          "client_id": "807320750051-d8nkip913h8tgor8dnim1f3khlk9rsnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCRTqgdyOz8_dIZmsJJfLDu-EdikCR9BBA"
@@ -39,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807320750051-d8nkip913h8tgor8dnim1f3khlk9rsnf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "807320750051-rphc8n4ubihlqjr5cvircbhp959jtfk7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.otakumovie.app"
+              }
+            }
+          ]
         }
       }
     }
