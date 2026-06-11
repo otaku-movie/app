@@ -25,11 +25,13 @@ class ShowTimeDetail extends StatefulWidget {
   final String? cinemaId;
   final String? movieId;
   final String? reReleaseId;
+
   /// 来源页（ShowTimeList）当前选中的日期 'YYYY-MM-DD'。
   /// 数据回来后会自动把日期 tab 切到这一天；找不到匹配则回落到第一个 tab。
   final String? date;
 
-  const ShowTimeDetail({super.key, this.cinemaId, this.movieId, this.reReleaseId, this.date});
+  const ShowTimeDetail(
+      {super.key, this.cinemaId, this.movieId, this.reReleaseId, this.date});
 
   @override
   State<ShowTimeDetail> createState() => _PageState();
@@ -37,7 +39,8 @@ class ShowTimeDetail extends StatefulWidget {
 
 class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   TabController? _tabController;
-  CarouselSliderController carouselSliderController = CarouselSliderController();
+  CarouselSliderController carouselSliderController =
+      CarouselSliderController();
 
   int currentMovieIndex = 0;
   List<Widget> tabWidget = [];
@@ -73,13 +76,13 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   // 格式化电影时长（分钟 -> 小时分钟）
   String _formatDuration(int? minutes) {
     if (minutes == null || minutes == 0) return '';
-    
+
     if (minutes < 60) {
       return '${minutes}${S.of(context).showTimeDetail_time}';
     } else {
       int hours = minutes ~/ 60;
       int remainingMinutes = minutes % 60;
-      
+
       if (remainingMinutes == 0) {
         return '${hours}小时';
       } else {
@@ -93,11 +96,11 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     int seatStatus = showTime.seatStatus ?? 0;
     int availableSeats = showTime.availableSeats ?? 0;
     int totalSeats = showTime.totalSeats ?? 0;
-    
+
     String statusText;
     Color statusColor;
     IconData statusIcon;
-    
+
     switch (seatStatus) {
       case 0: // 充足
         statusText = S.of(context).showTimeDetail_seatStatus_available;
@@ -153,9 +156,8 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return (
           isPurchasable: true,
           showBadge: true,
-          text: S
-              .of(context)
-              .about_components_showTimeList_seatStatus_available,
+          text:
+              S.of(context).about_components_showTimeList_seatStatus_available,
           color: Colors.green,
           icon: Icons.event_seat,
         );
@@ -163,8 +165,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return (
           isPurchasable: true,
           showBadge: true,
-          text:
-              S.of(context).about_components_showTimeList_seatStatus_limited,
+          text: S.of(context).about_components_showTimeList_seatStatus_limited,
           color: Colors.orange,
           icon: Icons.event_seat,
         );
@@ -172,8 +173,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return (
           isPurchasable: true,
           showBadge: true,
-          text:
-              S.of(context).about_components_showTimeList_seatStatus_soldOut,
+          text: S.of(context).about_components_showTimeList_seatStatus_soldOut,
           color: Colors.red,
           icon: Icons.event_seat,
         );
@@ -181,8 +181,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return (
           isPurchasable: false,
           showBadge: true,
-          text:
-              S.of(context).about_components_showTimeList_seatStatus_preSale,
+          text: S.of(context).about_components_showTimeList_seatStatus_preSale,
           color: const Color(0xFF1989FA),
           icon: Icons.schedule_outlined,
         );
@@ -190,9 +189,8 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return (
           isPurchasable: false,
           showBadge: true,
-          text: S
-              .of(context)
-              .about_components_showTimeList_seatStatus_saleEnded,
+          text:
+              S.of(context).about_components_showTimeList_seatStatus_saleEnded,
           color: Colors.grey,
           icon: Icons.do_not_disturb_alt_outlined,
         );
@@ -200,8 +198,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return (
           isPurchasable: false,
           showBadge: true,
-          text:
-              S.of(context).about_components_showTimeList_seatStatus_closed,
+          text: S.of(context).about_components_showTimeList_seatStatus_closed,
           color: Colors.grey,
           icon: Icons.block_outlined,
         );
@@ -210,8 +207,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         return (
           isPurchasable: false,
           showBadge: true,
-          text:
-              S.of(context).about_components_showTimeList_seatStatus_unknown,
+          text: S.of(context).about_components_showTimeList_seatStatus_unknown,
           color: Colors.grey,
           icon: Icons.help_outline_rounded,
         );
@@ -219,10 +215,12 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   }
 
   getData(int movieId) {
-    final reReleaseId = widget.reReleaseId != null && widget.reReleaseId!.isNotEmpty
-        ? int.tryParse(widget.reReleaseId!)
-        : null;
-    ApiRequest().request(
+    final reReleaseId =
+        widget.reReleaseId != null && widget.reReleaseId!.isNotEmpty
+            ? int.tryParse(widget.reReleaseId!)
+            : null;
+    ApiRequest()
+        .request(
       path: '/app/cinema/movie/showTime',
       method: 'POST',
       data: {
@@ -233,18 +231,18 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
       fromJsonT: (json) {
         return CinemaMovieShowTimeDetailResponse.fromJson(json);
       },
-    ).then((res) {
-          if (res.data != null) {
-            if (_tabController != null) {
-            _tabController!.dispose();
+    )
+        .then((res) {
+      if (res.data != null) {
+        if (_tabController != null) {
+          _tabController!.dispose();
         }
         // _tabController.dispose();
         // 根据 widget.date 在数据中查找对应日期索引，否则默认 0。
         // 避免用户在 ShowTimeList 选了 6/04，进入详情后又跳回第 1 个 tab。
         int initialTabIndex = 0;
         if (widget.date != null && widget.date!.isNotEmpty) {
-          final idx = res.data!.data!
-              .indexWhere((g) => g.date == widget.date);
+          final idx = res.data!.data!.indexWhere((g) => g.date == widget.date);
           if (idx >= 0) initialTabIndex = idx;
         }
         setState(() {
@@ -258,17 +256,13 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
           );
           _initialLoading = false;
         });
-
-        
       } else {
         setState(() {
           data = CinemaMovieShowTimeDetailResponse();
           tabWidget = [];
-             _tabController =
-            TabController(length: 0, vsync: this);
+          _tabController = TabController(length: 0, vsync: this);
           _initialLoading = false;
         });
-      
       }
     }).catchError((_) {
       // 接口失败也要解锁 loading，否则页面卡在转圈里。
@@ -281,12 +275,11 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
   }
 
   getCinemaMovieShowingData() {
-    ApiRequest().request<List<CinemaMovieShowingResponse>>(
+    ApiRequest()
+        .request<List<CinemaMovieShowingResponse>>(
       path: '/cinema/movieShowing',
       method: 'GET',
-      queryParameters: {
-        "id": int.parse(widget.cinemaId!)
-      },
+      queryParameters: {"id": int.parse(widget.cinemaId!)},
       fromJsonT: (json) {
         if (json is List) {
           return json.map((item) {
@@ -295,12 +288,13 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         }
         return [];
       },
-    ).then((res) {
+    )
+        .then((res) {
       if (res.data != null) {
         setState(() {
           cinemaMovieShowingList = res.data ?? [];
-          final idx = cinemaMovieShowingList.indexWhere(
-              (item) => item.id == int.parse(widget.movieId!));
+          final idx = cinemaMovieShowingList
+              .indexWhere((item) => item.id == int.parse(widget.movieId!));
           // indexWhere 未找到时为 -1，避免 cinemaMovieShowingList[-1]
           currentMovieIndex = idx >= 0 ? idx : 0;
         });
@@ -308,19 +302,17 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     });
   }
 
-
   @override
   void initState() {
     super.initState();
-    
+
     if (widget.movieId != null) {
       getData(int.parse(widget.movieId!));
     }
-    
+
     getCinemaMovieShowingData();
     // _tabController = TabController(length: 0, vsync: this);
   }
-
 
   @override
   void dispose() {
@@ -347,11 +339,28 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         List<String> dateParts = item.date!.split("-");
         String formattedDate = "${dateParts[1]}/${dateParts[2]}";
 
+        // 日文「金曜日」去掉「曜日」只留单字（金/土/日…）；其他语言无此后缀，replaceAll 为空操作。
+        final String weekLabel =
+            weekList[date.weekday - 1].replaceAll('曜日', '');
+
         return Tab(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(weekList[date.weekday - 1]), // 星期
-              Text(formattedDate), // 日期格式为 "月/日"
+              Text(
+                weekLabel, // 星期
+                style: TextStyle(fontSize: 28.sp, height: 1.1),
+              ),
+              SizedBox(height: 2.h),
+              Text(
+                formattedDate, // 日期格式为 "月/日"
+                style: TextStyle(
+                  fontSize: 28.sp,
+                  height: 1.1,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ],
           ),
         );
@@ -386,102 +395,91 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
     //   );
     // }
 
-    List<Widget> renderCarouselSlider () {
+    List<Widget> renderCarouselSlider() {
       if (cinemaMovieShowingList.isEmpty) return [];
-      final safeIndex = currentMovieIndex.clamp(
-          0, cinemaMovieShowingList.length - 1);
-      CinemaMovieShowingResponse movie =
-          cinemaMovieShowingList[safeIndex];
+      final safeIndex =
+          currentMovieIndex.clamp(0, cinemaMovieShowingList.length - 1);
+      CinemaMovieShowingResponse movie = cinemaMovieShowingList[safeIndex];
 
       return [
-         CarouselSlider(
+        CarouselSlider(
           carouselController: carouselSliderController,
           options: CarouselOptions(
-            // height: 305.h,
-            initialPage: safeIndex,
-            viewportFraction: 0.40,
-            enlargeCenterPage: true,
-            enlargeFactor: 0.20,
-            onPageChanged: (index, carouselPageChangedReason)  {
-              setState(() {
-                currentMovieIndex = index;
-              });
-              // _tabController.dispose();
-              getData(cinemaMovieShowingList[index].id!);
-            }
-          ),
+              // height: 305.h,
+              initialPage: safeIndex,
+              viewportFraction: 0.40,
+              enlargeCenterPage: true,
+              enlargeFactor: 0.20,
+              onPageChanged: (index, carouselPageChangedReason) {
+                setState(() {
+                  currentMovieIndex = index;
+                });
+                // _tabController.dispose();
+                getData(cinemaMovieShowingList[index].id!);
+              }),
           items: List.generate(cinemaMovieShowingList.length, (index) {
-          final item = cinemaMovieShowingList[index];
+            final item = cinemaMovieShowingList[index];
 
-          return Builder(
-            builder: (BuildContext context) {
-              return GestureDetector(
-                onTap: () {
-                   setState(() {
-                    currentMovieIndex = index;
-                  });
-                  getData(item.id!);
-                  carouselSliderController.animateToPage(index);
-                },
-                child: Container(
-                  width: 300.w,
-                  // height: 180.h,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(8.0),
-                    child: CustomExtendedImage(
-                      item.poster ?? '',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                )
-              );
-            },
-          );
-        }),
-      ),
-      Container(
-        width: double.infinity,
-        margin: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
-        child: Center(
-            child: Space(
-                direction: 'column',
-                // mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment:
-                    CrossAxisAlignment.center,
-                children: [
-              Text(cinemaMovieShowingList[safeIndex].name ?? '',
-                  style: TextStyle(
-                      fontSize: 36.sp,
-                      color: Colors.white
-                  ),
-                  overflow: TextOverflow.ellipsis,
+            return Builder(
+              builder: (BuildContext context) {
+                return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentMovieIndex = index;
+                      });
+                      getData(item.id!);
+                      carouselSliderController.animateToPage(index);
+                    },
+                    child: Container(
+                      width: 300.w,
+                      // height: 180.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: CustomExtendedImage(
+                          item.poster ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ));
+              },
+            );
+          }),
+        ),
+        Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
+          child: Center(
+              child: Space(
+            direction: 'column',
+            // mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                cinemaMovieShowingList[safeIndex].name ?? '',
+                style: TextStyle(fontSize: 36.sp, color: Colors.white),
+                overflow: TextOverflow.ellipsis,
               ),
               RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  fontSize: 24.sp,
-                        color: Colors.white60
-                ),
+                  text: TextSpan(
+                style: TextStyle(fontSize: 24.sp, color: Colors.white60),
                 children: [
                   TextSpan(
                     text: movie.levelName ?? '',
                   ),
-                  movie.time == null 
-                  ? const TextSpan(text: '') 
-                  : TextSpan(
-                    text: '  ${_formatDuration(movie.time)}',
-                  ),
+                  movie.time == null
+                      ? const TextSpan(text: '')
+                      : TextSpan(
+                          text: '  ${_formatDuration(movie.time)}',
+                        ),
                 ],
-              )
-            )
-          ],
-        )),
-      )
+              ))
+            ],
+          )),
+        )
       ];
     }
 
@@ -570,7 +568,8 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                               children: [
                                 // 地址信息（点击打开谷歌地图）
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w, vertical: 4.h),
                                   child: GestureDetector(
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () {
@@ -585,8 +584,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                         Container(
                                           padding: EdgeInsets.all(8.w),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withValues(alpha: 0.15),
-                                            borderRadius: BorderRadius.circular(8.r),
+                                            color: Colors.white
+                                                .withValues(alpha: 0.15),
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
                                           ),
                                           child: Icon(
                                             Icons.location_on_outlined,
@@ -613,7 +614,8 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                 ),
                                 // 电话信息（点击拨号）
                                 Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w, vertical: 4.h),
                                   child: GestureDetector(
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () {
@@ -624,8 +626,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                         Container(
                                           padding: EdgeInsets.all(8.w),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withValues(alpha: 0.15),
-                                            borderRadius: BorderRadius.circular(8.r),
+                                            color: Colors.white
+                                                .withValues(alpha: 0.15),
+                                            borderRadius:
+                                                BorderRadius.circular(8.r),
                                           ),
                                           child: Icon(
                                             Icons.phone_outlined,
@@ -665,24 +669,27 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                       ),
                     ),
                     bottom: PreferredSize(
-                      preferredSize: Size.fromHeight(
-                          60.h), // Set the height of the TabBar
+                      preferredSize:
+                          Size.fromHeight(84.h), // Set the height of the TabBar
                       child: Container(
                         // height: 75.h,
-                        padding: EdgeInsets.only(top: 20.h),
+                        padding: EdgeInsets.only(top: 10.h),
                         // padding: EdgeInsets.symmetric(vertical: 20.h),
                         color: Colors.transparent, // Set the background color
-                        child: tabWidget.isNotEmpty ? TabBar(
-                          controller: _tabController,
-                          tabs: tabWidget,
-                          isScrollable: true,
-                          labelPadding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 0.h),
-                          labelColor: Colors.white, // Selected label color
-                          unselectedLabelColor:
-                              Colors.white70, // Unselected label color
-                          indicatorColor: Colors.white, // Indicator color
-                        ) : Container(),
+                        child: tabWidget.isNotEmpty
+                            ? TabBar(
+                                controller: _tabController,
+                                tabs: tabWidget,
+                                isScrollable: true,
+                                labelPadding: EdgeInsets.symmetric(
+                                    horizontal: 20.w, vertical: 0.h),
+                                labelColor:
+                                    Colors.white, // Selected label color
+                                unselectedLabelColor:
+                                    Colors.white70, // Unselected label color
+                                indicatorColor: Colors.white, // Indicator color
+                              )
+                            : Container(),
                       ),
                     )),
               ),
@@ -691,300 +698,177 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
           // 等待 data 与 _tabController 都就绪后再渲染 TabBarView，
           // 否则 TabBarView 在 length 为 0 / controller 为 null 时会在 build 期间
           // 触发 markNeedsBuild，报 "setState() or markNeedsBuild() called during build"。
-          body: (data.data == null ||
-                  data.data!.isEmpty ||
-                  _tabController == null ||
-                  _tabController!.length != (data.data?.length ?? 0))
-              ? const SizedBox.shrink()
-              : TabBarView(
-                controller: _tabController,
-                // ignore: prefer_is_empty
-                children: (data.data ?? []).map((item) {
-                  // 过滤已禁用的场次（open == false）
-                  final showTimes = (item.data ?? [])
-                      .where((s) => s.open != false)
-                      .toList();
-                  return Builder(
-                    builder: (BuildContext context) {
-                      return CustomScrollView(
-                        key: PageStorageKey<String>(item.date!), // 使用日期作为唯一标识
-                        slivers: <Widget>[
-                          SliverOverlapInjector(
-                            handle:
-                                NestedScrollView.sliverOverlapAbsorberHandleFor(
-                                    context),
-                          ),
-                          SliverPadding(
-                            padding: const EdgeInsets.all(0.0),
-                            sliver: SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                childCount: showTimes.length,
-                                (BuildContext context, int index) {
-                                  TheaterHallShowTime children =
-                                      showTimes[index];
-                                  final saleInfo =
-                                      _resolveSaleStatusInfo(children);
-                                  final bool isPurchasable =
-                                      saleInfo.isPurchasable;
+          body:
+              (data.data == null ||
+                      data.data!.isEmpty ||
+                      _tabController == null ||
+                      _tabController!.length != (data.data?.length ?? 0))
+                  ? const SizedBox.shrink()
+                  : TabBarView(
+                      controller: _tabController,
+                      // ignore: prefer_is_empty
+                      children: (data.data ?? []).map((item) {
+                        // 过滤已禁用的场次（open == false）
+                        final showTimes = (item.data ?? [])
+                            .where((s) => s.open != false)
+                            .toList();
+                        return Builder(
+                          builder: (BuildContext context) {
+                            return CustomScrollView(
+                              key: PageStorageKey<String>(
+                                  item.date!), // 使用日期作为唯一标识
+                              slivers: <Widget>[
+                                SliverOverlapInjector(
+                                  handle: NestedScrollView
+                                      .sliverOverlapAbsorberHandleFor(context),
+                                ),
+                                SliverPadding(
+                                  padding: const EdgeInsets.all(0.0),
+                                  sliver: SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      childCount: showTimes.length,
+                                      (BuildContext context, int index) {
+                                        TheaterHallShowTime children =
+                                            showTimes[index];
+                                        final saleInfo =
+                                            _resolveSaleStatusInfo(children);
+                                        final bool isPurchasable =
+                                            saleInfo.isPurchasable;
 
-                                  return Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                                    padding: EdgeInsets.all(20.w),
-                                    decoration: BoxDecoration(
-                                      // 不可购买场次用浅灰底 + 灰边框，与可购买的白底投影形成明显对比
-                                      color: isPurchasable
-                                          ? Colors.white
-                                          : const Color(0xFFF5F6F8),
-                                      borderRadius: BorderRadius.circular(16.r),
-                                      border: isPurchasable
-                                          ? null
-                                          : Border.all(
-                                              color: const Color(0xFFE3E5EA),
-                                              width: 1,
-                                            ),
-                                      boxShadow: isPurchasable
-                                          ? [
-                                              BoxShadow(
-                                                color: Colors.black
-                                                    .withValues(alpha: 0.05),
-                                                blurRadius: 8,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ]
-                                          : null,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        // 时间和影厅信息行
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // 左侧：时间信息
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                        return Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 16.w, vertical: 8.h),
+                                          padding: EdgeInsets.all(20.w),
+                                          decoration: BoxDecoration(
+                                            // 不可购买场次用浅灰底 + 灰边框，与可购买的白底投影形成明显对比
+                                            color: isPurchasable
+                                                ? Colors.white
+                                                : const Color(0xFFF5F6F8),
+                                            borderRadius:
+                                                BorderRadius.circular(16.r),
+                                            border: isPurchasable
+                                                ? null
+                                                : Border.all(
+                                                    color:
+                                                        const Color(0xFFE3E5EA),
+                                                    width: 1,
+                                                  ),
+                                            boxShadow: isPurchasable
+                                                ? [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withValues(
+                                                              alpha: 0.05),
+                                                      blurRadius: 8,
+                                                      offset:
+                                                          const Offset(0, 2),
+                                                    ),
+                                                  ]
+                                                : null,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              // 时间和影厅信息行
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
                                                 children: [
-                                                  // 时间展示（响应全局 24h/30h 切换）
-                                                  Obx(() => Row(
-                                                    children: [
-                                                      Text(
-                                                        _formatShowTime(
-                                                          children.startTime,
-                                                          dateStr: item.date,
-                                                        ),
-                                                        style: TextStyle(
-                                                          fontSize: 44.sp,
-                                                          fontWeight: FontWeight.bold,
-                                                          color: isPurchasable
-                                                              ? const Color(
-                                                                  0xFF323233)
-                                                              : const Color(
-                                                                  0xFFB0B5BD),
-                                                          height: 1,
-                                                          decoration: isPurchasable
-                                                              ? TextDecoration
-                                                                  .none
-                                                              : TextDecoration
-                                                                  .lineThrough,
-                                                          decorationColor:
-                                                              const Color(
-                                                                  0xFFB0B5BD),
-                                                          decorationThickness:
-                                                              1.5,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.symmetric(horizontal: 12.w),
-                                                        child: Container(
-                                                          width: 20.w,
-                                                          height: 2.h,
-                                                          color: Colors.grey.shade300,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        _formatShowTime(
-                                                          children.endTime,
-                                                          dateStr: item.date,
-                                                          referenceStartTime: children.startTime,
-                                                        ),
-                                                        style: TextStyle(
-                                                          fontSize: 28.sp,
-                                                          color: Colors.grey.shade500,
-                                                          fontWeight: FontWeight.w500,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  )),
-                                                  SizedBox(height: 16.h),
-                                                  // 影厅和规格信息
-                                                  Wrap(
-                                                    spacing: 8.w,
-                                                    runSpacing: 8.h,
-                                                    crossAxisAlignment: WrapCrossAlignment.center,
-                                                    children: [
-                                                      // 影厅
-                                                      Container(
-                                                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                                        decoration: BoxDecoration(
-                                                            color: const Color(0xFF1989FA).withValues(alpha: 0.1),
-                                                            borderRadius: BorderRadius.circular(8.r),
-                                                            border: Border.all(
-                                                              color: const Color(0xFF1989FA).withValues(alpha: 0.3),
-                                                            width: 1,
-                                                          ),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Icon(
-                                                              Icons.meeting_room_rounded,
-                                                              size: 22.sp,
-                                                              color: const Color(0xFF1989FA),
-                                                            ),
-                                                            SizedBox(width: 6.w),
-                                                            Text(
-                                                              children.theaterHallName ?? '',
-                                                              style: TextStyle(
-                                                                fontSize: 24.sp,
-                                                                color: const Color(0xFF1989FA),
-                                                                fontWeight: FontWeight.w600,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      // 规格：specName 由后端用「、」拼接多个 cinema_spec.name（IMAX / Dolby / MX4D / TCX 等）。
-                                                      // 2D / 3D 已在 V21 迁移中从字典移除，spec_ids 不会再包含它们，
-                                                      // 因此这里直接 split 渲染即可，不再做客户端过滤。
-                                                      ...(() {
-                                                        final raw = children.specName;
-                                                        if (raw == null || raw.isEmpty) return <Widget>[];
-                                                        final items = raw
-                                                            .split('、')
-                                                            .map((e) => e.trim())
-                                                            .where((e) => e.isNotEmpty)
-                                                            .toList();
-                                                        return items.map<Widget>((name) {
-                                                          return Container(
-                                                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                                            decoration: BoxDecoration(
-                                                              gradient: LinearGradient(
-                                                                colors: [
-                                                                  const Color(0xFFFFD700).withValues(alpha: 0.2),
-                                                                  const Color(0xFFFFA500).withValues(alpha: 0.2),
-                                                                ],
-                                                              ),
-                                                              borderRadius: BorderRadius.circular(8.r),
-                                                              border: Border.all(
-                                                                color: const Color(0xFFFFA500).withValues(alpha: 0.5),
-                                                                width: 1,
-                                                              ),
-                                                            ),
-                                                            child: Row(
-                                                              mainAxisSize: MainAxisSize.min,
+                                                  // 左侧：时间信息
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        // 时间展示（响应全局 24h/30h 切换）
+                                                        Obx(() => Row(
                                                               children: [
-                                                                Icon(
-                                                                  Icons.high_quality_rounded,
-                                                                  size: 22.sp,
-                                                                  color: const Color(0xFFFFA500),
-                                                                ),
-                                                                SizedBox(width: 6.w),
                                                                 Text(
-                                                                  name,
-                                                                  style: TextStyle(
-                                                                    fontSize: 22.sp,
-                                                                    color: const Color(0xFFFFA500),
-                                                                    fontWeight: FontWeight.w600,
+                                                                  _formatShowTime(
+                                                                    children
+                                                                        .startTime,
+                                                                    dateStr: item
+                                                                        .date,
                                                                   ),
-                                                                  maxLines: 1,
-                                                                  overflow: TextOverflow.ellipsis,
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        44.sp,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: isPurchasable
+                                                                        ? const Color(
+                                                                            0xFF323233)
+                                                                        : const Color(
+                                                                            0xFFB0B5BD),
+                                                                    height: 1,
+                                                                    decoration: isPurchasable
+                                                                        ? TextDecoration
+                                                                            .none
+                                                                        : TextDecoration
+                                                                            .lineThrough,
+                                                                    decorationColor:
+                                                                        const Color(
+                                                                            0xFFB0B5BD),
+                                                                    decorationThickness:
+                                                                        1.5,
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              12.w),
+                                                                  child:
+                                                                      Container(
+                                                                    width: 20.w,
+                                                                    height: 2.h,
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade300,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  _formatShowTime(
+                                                                    children
+                                                                        .endTime,
+                                                                    dateStr: item
+                                                                        .date,
+                                                                    referenceStartTime:
+                                                                        children
+                                                                            .startTime,
+                                                                  ),
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        28.sp,
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade500,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                  ),
                                                                 ),
                                                               ],
-                                                            ),
-                                                          );
-                                                        }).toList();
-                                                      })(),
-                                                      // 放映类型：2D / 3D（dimensionType 字典）。列表页已有，这里详情页补齐。
-                                                      if (children.dimensionType != null)
-                                                        Container(
-                                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                                          decoration: BoxDecoration(
-                                                            color: const Color(0xFF7232DD).withValues(alpha: 0.12),
-                                                            borderRadius: BorderRadius.circular(8.r),
-                                                            border: Border.all(
-                                                              color: const Color(0xFF7232DD).withValues(alpha: 0.3),
-                                                              width: 1,
-                                                            ),
-                                                          ),
-                                                          child: Row(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              Icon(
-                                                                Icons.visibility_rounded,
-                                                                size: 22.sp,
-                                                                color: const Color(0xFF7232DD),
-                                                              ),
-                                                              SizedBox(width: 6.w),
-                                                              Flexible(
-                                                                child: Dict(
-                                                                  code: children.dimensionType,
-                                                                  name: 'dimensionType',
-                                                                  style: TextStyle(
-                                                                    fontSize: 22.sp,
-                                                                    color: const Color(0xFF7232DD),
-                                                                    fontWeight: FontWeight.w600,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      // 原版 / 配音版：dubbingVersion 字典（1=オリジナル版, 2=吹き替え版）。
-                                                      // 源数据没有 dub 标记时 versionCode 为空，不强行猜。
-                                                      if (children.versionCode != null)
-                                                        Container(
-                                                          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.orange.withValues(alpha: 0.12),
-                                                            borderRadius: BorderRadius.circular(8.r),
-                                                            border: Border.all(
-                                                              color: Colors.orange.withValues(alpha: 0.3),
-                                                              width: 1,
-                                                            ),
-                                                          ),
-                                                          child: Row(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              Icon(
-                                                                Icons.language_rounded,
-                                                                size: 22.sp,
-                                                                color: Colors.orange,
-                                                              ),
-                                                              SizedBox(width: 6.w),
-                                                              Flexible(
-                                                                child: Dict(
-                                                                  code: children.versionCode,
-                                                                  name: 'dubbingVersion',
-                                                                  style: TextStyle(
-                                                                    fontSize: 22.sp,
-                                                                    color: Colors.orange,
-                                                                    fontWeight: FontWeight.w600,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      // 座位/售票状态：
-                                                      //   - 优先：爬虫透传的 saleStatus（覆盖 TOHO/T-JOY 这类无自家 seat 表的场次）；
-                                                      //   - 回落：自家选座流程的 seatStatus（0/1/2）。
-                                                      Builder(
-                                                        builder: (context) {
-                                                          if (saleInfo
-                                                              .showBadge) {
-                                                            return Container(
+                                                            )),
+                                                        SizedBox(height: 16.h),
+                                                        // 影厅和规格信息
+                                                        Wrap(
+                                                          spacing: 8.w,
+                                                          runSpacing: 8.h,
+                                                          crossAxisAlignment:
+                                                              WrapCrossAlignment
+                                                                  .center,
+                                                          children: [
+                                                            // 影厅
+                                                            Container(
                                                               padding: EdgeInsets
                                                                   .symmetric(
                                                                       horizontal:
@@ -993,8 +877,8 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                                           6.h),
                                                               decoration:
                                                                   BoxDecoration(
-                                                                color: saleInfo
-                                                                    .color
+                                                                color: const Color(
+                                                                        0xFF1989FA)
                                                                     .withValues(
                                                                         alpha:
                                                                             0.1),
@@ -1002,10 +886,10 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                                     BorderRadius
                                                                         .circular(
                                                                             8.r),
-                                                                border: Border
-                                                                    .all(
-                                                                  color: saleInfo
-                                                                      .color
+                                                                border:
+                                                                    Border.all(
+                                                                  color: const Color(
+                                                                          0xFF1989FA)
                                                                       .withValues(
                                                                           alpha:
                                                                               0.3),
@@ -1018,24 +902,24 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                                         .min,
                                                                 children: [
                                                                   Icon(
-                                                                    saleInfo
-                                                                        .icon,
+                                                                    Icons
+                                                                        .meeting_room_rounded,
                                                                     size: 22.sp,
-                                                                    color: saleInfo
-                                                                        .color,
+                                                                    color: const Color(
+                                                                        0xFF1989FA),
                                                                   ),
                                                                   SizedBox(
                                                                       width:
                                                                           6.w),
                                                                   Text(
-                                                                    saleInfo
-                                                                        .text,
+                                                                    children.theaterHallName ??
+                                                                        '',
                                                                     style:
                                                                         TextStyle(
                                                                       fontSize:
-                                                                          22.sp,
-                                                                      color: saleInfo
-                                                                          .color,
+                                                                          24.sp,
+                                                                      color: const Color(
+                                                                          0xFF1989FA),
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w600,
@@ -1043,272 +927,704 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                                   ),
                                                                 ],
                                                               ),
-                                                            );
-                                                          }
-                                                          final seatInfo = _getSeatStatusInfo(children);
-                                                          return Container(
-                                                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                                                            decoration: BoxDecoration(
-                                                              color: (seatInfo['color'] as Color).withValues(alpha: 0.1),
-                                                              borderRadius: BorderRadius.circular(8.r),
-                                                              border: Border.all(
-                                                                color: (seatInfo['color'] as Color).withValues(alpha: 0.3),
-                                                                width: 1,
-                                                              ),
                                                             ),
-                                                            child: Row(
-                                                              mainAxisSize: MainAxisSize.min,
-                                                              children: [
-                                                                Icon(
-                                                                  seatInfo['icon'],
-                                                                  size: 22.sp,
-                                                                  color: seatInfo['color'],
-                                                                ),
-                                                                SizedBox(width: 6.w),
-                                                                Text(
-                                                                  seatInfo['text'],
-                                                                  style: TextStyle(
-                                                                    fontSize: 22.sp,
-                                                                    color: seatInfo['color'],
-                                                                    fontWeight: FontWeight.w600,
-                                                                  ),
-                                                                ),
-                                                                if (seatInfo['availableSeats'] > 0 && seatInfo['totalSeats'] > 0) ...[
-                                                                  SizedBox(width: 4.w),
-                                                                  Text(
-                                                                    '(${seatInfo['availableSeats']}/${seatInfo['totalSeats']})',
-                                                                    style: TextStyle(
-                                                                      fontSize: 20.sp,
-                                                                      color: (seatInfo['color'] as Color).withValues(alpha: 0.7),
-                                                                      fontWeight: FontWeight.w500,
+                                                            // 规格：specName 由后端用「、」拼接多个 cinema_spec.name（IMAX / Dolby / MX4D / TCX 等）。
+                                                            // 2D / 3D 已在 V21 迁移中从字典移除，spec_ids 不会再包含它们，
+                                                            // 因此这里直接 split 渲染即可，不再做客户端过滤。
+                                                            ...(() {
+                                                              final raw =
+                                                                  children
+                                                                      .specName;
+                                                              if (raw == null ||
+                                                                  raw.isEmpty)
+                                                                return <Widget>[];
+                                                              final items = raw
+                                                                  .split('、')
+                                                                  .map((e) =>
+                                                                      e.trim())
+                                                                  .where((e) =>
+                                                                      e.isNotEmpty)
+                                                                  .toList();
+                                                              return items
+                                                                  .map<Widget>(
+                                                                      (name) {
+                                                                return Container(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          12.w,
+                                                                      vertical:
+                                                                          6.h),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    gradient:
+                                                                        LinearGradient(
+                                                                      colors: [
+                                                                        const Color(0xFFFFD700).withValues(
+                                                                            alpha:
+                                                                                0.2),
+                                                                        const Color(0xFFFFA500).withValues(
+                                                                            alpha:
+                                                                                0.2),
+                                                                      ],
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8.r),
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: const Color(
+                                                                              0xFFFFA500)
+                                                                          .withValues(
+                                                                              alpha: 0.5),
+                                                                      width: 1,
                                                                     ),
                                                                   ),
-                                                                ],
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: [
+                                                                      Icon(
+                                                                        Icons
+                                                                            .high_quality_rounded,
+                                                                        size: 22
+                                                                            .sp,
+                                                                        color: const Color(
+                                                                            0xFFFFA500),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              6.w),
+                                                                      Text(
+                                                                        name,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              22.sp,
+                                                                          color:
+                                                                              const Color(0xFFFFA500),
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                        maxLines:
+                                                                            1,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              }).toList();
+                                                            })(),
+                                                            // 放映类型：2D / 3D（dimensionType 字典）。列表页已有，这里详情页补齐。
+                                                            if (children
+                                                                    .dimensionType !=
+                                                                null)
+                                                              Container(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal: 12
+                                                                            .w,
+                                                                        vertical:
+                                                                            6.h),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: const Color(
+                                                                          0xFF7232DD)
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              0.12),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.r),
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: const Color(
+                                                                            0xFF7232DD)
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                0.3),
+                                                                    width: 1,
+                                                                  ),
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .visibility_rounded,
+                                                                      size:
+                                                                          22.sp,
+                                                                      color: const Color(
+                                                                          0xFF7232DD),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: 6
+                                                                            .w),
+                                                                    Flexible(
+                                                                      child:
+                                                                          Dict(
+                                                                        code: children
+                                                                            .dimensionType,
+                                                                        name:
+                                                                            'dimensionType',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              22.sp,
+                                                                          color:
+                                                                              const Color(0xFF7232DD),
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            // 原版 / 配音版：dubbingVersion 字典（1=オリジナル版, 2=吹き替え版）。
+                                                            // 源数据没有 dub 标记时 versionCode 为空，不强行猜。
+                                                            if (children
+                                                                    .versionCode !=
+                                                                null)
+                                                              Container(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal: 12
+                                                                            .w,
+                                                                        vertical:
+                                                                            6.h),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .orange
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              0.12),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              8.r),
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .orange
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                0.3),
+                                                                    width: 1,
+                                                                  ),
+                                                                ),
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    Icon(
+                                                                      Icons
+                                                                          .language_rounded,
+                                                                      size:
+                                                                          22.sp,
+                                                                      color: Colors
+                                                                          .orange,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: 6
+                                                                            .w),
+                                                                    Flexible(
+                                                                      child:
+                                                                          Dict(
+                                                                        code: children
+                                                                            .versionCode,
+                                                                        name:
+                                                                            'dubbingVersion',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              22.sp,
+                                                                          color:
+                                                                              Colors.orange,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            // 座位/售票状态：
+                                                            //   - 优先：爬虫透传的 saleStatus（覆盖 TOHO/T-JOY 这类无自家 seat 表的场次）；
+                                                            //   - 回落：自家选座流程的 seatStatus（0/1/2）。
+                                                            Builder(
+                                                              builder:
+                                                                  (context) {
+                                                                if (saleInfo
+                                                                    .showBadge) {
+                                                                  return Container(
+                                                                    padding: EdgeInsets.symmetric(
+                                                                        horizontal: 12
+                                                                            .w,
+                                                                        vertical:
+                                                                            6.h),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: saleInfo
+                                                                          .color
+                                                                          .withValues(
+                                                                              alpha: 0.1),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              8.r),
+                                                                      border:
+                                                                          Border
+                                                                              .all(
+                                                                        color: saleInfo
+                                                                            .color
+                                                                            .withValues(alpha: 0.3),
+                                                                        width:
+                                                                            1,
+                                                                      ),
+                                                                    ),
+                                                                    child: Row(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize
+                                                                              .min,
+                                                                      children: [
+                                                                        Icon(
+                                                                          saleInfo
+                                                                              .icon,
+                                                                          size:
+                                                                              22.sp,
+                                                                          color:
+                                                                              saleInfo.color,
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width:
+                                                                                6.w),
+                                                                        Text(
+                                                                          saleInfo
+                                                                              .text,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                22.sp,
+                                                                            color:
+                                                                                saleInfo.color,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  );
+                                                                }
+                                                                final seatInfo =
+                                                                    _getSeatStatusInfo(
+                                                                        children);
+                                                                return Container(
+                                                                  padding: EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          12.w,
+                                                                      vertical:
+                                                                          6.h),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: (seatInfo['color']
+                                                                            as Color)
+                                                                        .withValues(
+                                                                            alpha:
+                                                                                0.1),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8.r),
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color: (seatInfo['color']
+                                                                              as Color)
+                                                                          .withValues(
+                                                                              alpha: 0.3),
+                                                                      width: 1,
+                                                                    ),
+                                                                  ),
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    children: [
+                                                                      Icon(
+                                                                        seatInfo[
+                                                                            'icon'],
+                                                                        size: 22
+                                                                            .sp,
+                                                                        color: seatInfo[
+                                                                            'color'],
+                                                                      ),
+                                                                      SizedBox(
+                                                                          width:
+                                                                              6.w),
+                                                                      Text(
+                                                                        seatInfo[
+                                                                            'text'],
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              22.sp,
+                                                                          color:
+                                                                              seatInfo['color'],
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                        ),
+                                                                      ),
+                                                                      if (seatInfo['availableSeats'] >
+                                                                              0 &&
+                                                                          seatInfo['totalSeats'] >
+                                                                              0) ...[
+                                                                        SizedBox(
+                                                                            width:
+                                                                                4.w),
+                                                                        Text(
+                                                                          '(${seatInfo['availableSeats']}/${seatInfo['totalSeats']})',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                20.sp,
+                                                                            color:
+                                                                                (seatInfo['color'] as Color).withValues(alpha: 0.7),
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        // 特殊标签和字幕（如果有）
+                                                        if ((children.showTimeTags !=
+                                                                    null &&
+                                                                children
+                                                                    .showTimeTags!
+                                                                    .isNotEmpty) ||
+                                                            (children.subtitle !=
+                                                                    null &&
+                                                                children
+                                                                    .subtitle!
+                                                                    .isNotEmpty))
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    top: 16.h),
+                                                            child: Wrap(
+                                                              spacing: 8.w,
+                                                              runSpacing: 8.h,
+                                                              children: [
+                                                                // 特殊标签
+                                                                if (children
+                                                                        .showTimeTags !=
+                                                                    null)
+                                                                  ...children
+                                                                      .showTimeTags!
+                                                                      .map(
+                                                                          (tag) {
+                                                                    return Container(
+                                                                      height:
+                                                                          32.h,
+                                                                      padding: EdgeInsets.symmetric(
+                                                                          horizontal: 10
+                                                                              .w,
+                                                                          vertical:
+                                                                              6.h),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        gradient:
+                                                                            const LinearGradient(
+                                                                          colors: [
+                                                                            Color(0xFFFF6B6B),
+                                                                            Color(0xFFEE5A6F)
+                                                                          ],
+                                                                        ),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(6.r),
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color:
+                                                                                const Color(0xFFFF6B6B).withValues(alpha: 0.2),
+                                                                            blurRadius:
+                                                                                4,
+                                                                            offset:
+                                                                                const Offset(0, 2),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.min,
+                                                                        children: [
+                                                                          Icon(
+                                                                            Icons.local_activity,
+                                                                            color:
+                                                                                Colors.white,
+                                                                            size:
+                                                                                22.sp,
+                                                                          ),
+                                                                          SizedBox(
+                                                                              width: 4.w),
+                                                                          Text(
+                                                                            tag.name ??
+                                                                                '',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 20.sp,
+                                                                              color: Colors.white,
+                                                                              fontWeight: FontWeight.w600,
+                                                                              height: 1,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  }).toList(),
+                                                                // 字幕信息：原音 +「该语种字幕」的字幕版上映；点击 chip 弹出说明 Tooltip。
+                                                                if (children
+                                                                        .subtitle !=
+                                                                    null)
+                                                                  ...children
+                                                                      .subtitle!
+                                                                      .map(
+                                                                          (sub) {
+                                                                    final subName =
+                                                                        sub.name ??
+                                                                            '';
+                                                                    return Tooltip(
+                                                                      message: S
+                                                                          .of(
+                                                                              context)
+                                                                          .about_components_showTimeList_subtitleHint(
+                                                                              subName),
+                                                                      triggerMode:
+                                                                          TooltipTriggerMode
+                                                                              .tap,
+                                                                      preferBelow:
+                                                                          true,
+                                                                      child:
+                                                                          Container(
+                                                                        height:
+                                                                            32.h,
+                                                                        padding: EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                10.w,
+                                                                            vertical: 6.h),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              const Color(0xFFE91E63).withValues(alpha: 0.10),
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(6.r),
+                                                                          border:
+                                                                              Border.all(
+                                                                            color:
+                                                                                const Color(0xFFE91E63),
+                                                                            width:
+                                                                                1,
+                                                                          ),
+                                                                        ),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.min,
+                                                                          children: [
+                                                                            Icon(
+                                                                              Icons.subtitles_outlined,
+                                                                              color: const Color(0xFFE91E63),
+                                                                              size: 22.sp,
+                                                                            ),
+                                                                            SizedBox(width: 4.w),
+                                                                            Text(
+                                                                              S.of(context).about_components_showTimeList_subtitleChipWith(subName),
+                                                                              style: TextStyle(
+                                                                                fontSize: 20.sp,
+                                                                                color: const Color(0xFFE91E63),
+                                                                                fontWeight: FontWeight.w600,
+                                                                                height: 1,
+                                                                              ),
+                                                                            ),
+                                                                            SizedBox(width: 4.w),
+                                                                            Icon(
+                                                                              Icons.info_outline,
+                                                                              size: 18.sp,
+                                                                              color: const Color(0xFFE91E63).withValues(alpha: 0.6),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }).toList(),
                                                               ],
                                                             ),
-                                                          );
-                                                        },
+                                                          ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  // 右侧：购票按钮
+                                                  // 当前阶段不再走 app 内置选座流程，统一把购票动作 deeplink
+                                                  // 到影院官网。reservationUrl 来自爬虫
+                                                  // `crawl.movie_show_time.reservation_params_json.reservation_url`。
+                                                  // 覆盖率：aeon/movix/grandCinemaSunshine ≈100%，c109/humax/tjoy/united ≈45%，
+                                                  // toho 当前为 0%（源站无可直链场次 URL）。缺失时仅提示用户去现场或官网。
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      final reserveUrl = children
+                                                              .reservationUrl
+                                                              ?.trim() ??
+                                                          '';
+                                                      final String clickResult =
+                                                          !isPurchasable
+                                                              ? 'not_purchasable'
+                                                              : (reserveUrl
+                                                                      .isNotEmpty
+                                                                  ? 'open_url'
+                                                                  : 'no_url');
+                                                      Analytics.instance
+                                                          .logFunnel(
+                                                              Ev.showtimeClick,
+                                                              {
+                                                            P.showtimeId:
+                                                                children.id,
+                                                            P.saleStatus:
+                                                                children
+                                                                    .saleStatus,
+                                                            P.type: clickResult,
+                                                          });
+                                                      // 不可购买（pre_sale / sale_ended / closed / unknown）：
+                                                      // 不外跳，提示用户当前状态，避免遇到 ERR-2002 之类的官网错误页
+                                                      if (!isPurchasable) {
+                                                        ToastService.showToast(
+                                                          '${S.of(context).about_components_showTimeList_notPurchasableHint}（${saleInfo.text}）',
+                                                          type:
+                                                              ToastType.warning,
+                                                        );
+                                                        return;
+                                                      }
+                                                      // 旧实现：跳转 app 内置选座页（暂保留以便回滚）
+                                                      // context.pushNamed(
+                                                      //   'selectSeat',
+                                                      //   queryParameters: {
+                                                      //     "id": '${children.id}',
+                                                      //     "theaterHallId": '${children.theaterHallId}'
+                                                      //   },
+                                                      // );
+                                                      final url = children
+                                                              .reservationUrl
+                                                              ?.trim() ??
+                                                          '';
+                                                      if (url.isNotEmpty) {
+                                                        launchURL(url);
+                                                        return;
+                                                      }
+                                                      ToastService.showToast(
+                                                        S
+                                                            .of(context)
+                                                            .showTimeDetail_noOnlineTicket,
+                                                        type: ToastType.warning,
+                                                      );
+                                                    },
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 24.w,
+                                                              vertical: 12.h),
+                                                      decoration: BoxDecoration(
+                                                        // 可购买：蓝色渐变 + 投影；不可购买：纯灰底、无投影
+                                                        gradient: isPurchasable
+                                                            ? const LinearGradient(
+                                                                colors: [
+                                                                  Color(
+                                                                      0xFF1989FA),
+                                                                  Color(
+                                                                      0xFF0E6FD8),
+                                                                ],
+                                                              )
+                                                            : null,
+                                                        color: isPurchasable
+                                                            ? null
+                                                            : const Color(
+                                                                0xFFCED2D8),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25.r),
+                                                        boxShadow: isPurchasable
+                                                            ? [
+                                                                BoxShadow(
+                                                                  color: const Color(
+                                                                          0xFF1989FA)
+                                                                      .withValues(
+                                                                          alpha:
+                                                                              0.3),
+                                                                  blurRadius: 8,
+                                                                  offset:
+                                                                      const Offset(
+                                                                          0, 4),
+                                                                ),
+                                                              ]
+                                                            : null,
                                                       ),
-                                                    ],
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          Icon(
+                                                            isPurchasable
+                                                                ? Icons
+                                                                    .event_seat
+                                                                : Icons
+                                                                    .lock_outline,
+                                                            color: Colors.white,
+                                                            size: 40.sp,
+                                                          ),
+                                                          SizedBox(height: 4.h),
+                                                          Text(
+                                                            isPurchasable
+                                                                ? S
+                                                                    .of(context)
+                                                                    .showTimeDetail_buy
+                                                                : saleInfo.text,
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 24.sp,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                            // 右侧：购票按钮
-                                            // 当前阶段不再走 app 内置选座流程，统一把购票动作 deeplink
-                                            // 到影院官网。reservationUrl 来自爬虫
-                                            // `crawl.movie_show_time.reservation_params_json.reservation_url`。
-                                            // 覆盖率：aeon/movix/grandCinemaSunshine ≈100%，c109/humax/tjoy/united ≈45%，
-                                            // toho 当前为 0%（源站无可直链场次 URL）。缺失时仅提示用户去现场或官网。
-                                            GestureDetector(
-                                              onTap: () {
-                                                final reserveUrl = children.reservationUrl?.trim() ?? '';
-                                                final String clickResult = !isPurchasable
-                                                    ? 'not_purchasable'
-                                                    : (reserveUrl.isNotEmpty ? 'open_url' : 'no_url');
-                                                Analytics.instance.logFunnel(Ev.showtimeClick, {
-                                                  P.showtimeId: children.id,
-                                                  P.saleStatus: children.saleStatus,
-                                                  P.type: clickResult,
-                                                });
-                                                // 不可购买（pre_sale / sale_ended / closed / unknown）：
-                                                // 不外跳，提示用户当前状态，避免遇到 ERR-2002 之类的官网错误页
-                                                if (!isPurchasable) {
-                                                  ToastService.showToast(
-                                                    '${S.of(context).about_components_showTimeList_notPurchasableHint}（${saleInfo.text}）',
-                                                    type: ToastType.warning,
-                                                  );
-                                                  return;
-                                                }
-                                                // 旧实现：跳转 app 内置选座页（暂保留以便回滚）
-                                                // context.pushNamed(
-                                                //   'selectSeat',
-                                                //   queryParameters: {
-                                                //     "id": '${children.id}',
-                                                //     "theaterHallId": '${children.theaterHallId}'
-                                                //   },
-                                                // );
-                                                final url = children.reservationUrl?.trim() ?? '';
-                                                if (url.isNotEmpty) {
-                                                  launchURL(url);
-                                                  return;
-                                                }
-                                                ToastService.showToast(
-                                                  S.of(context).showTimeDetail_noOnlineTicket,
-                                                  type: ToastType.warning,
-                                                );
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-                                                decoration: BoxDecoration(
-                                                  // 可购买：蓝色渐变 + 投影；不可购买：纯灰底、无投影
-                                                  gradient: isPurchasable
-                                                      ? const LinearGradient(
-                                                          colors: [
-                                                            Color(0xFF1989FA),
-                                                            Color(0xFF0E6FD8),
-                                                          ],
-                                                        )
-                                                      : null,
-                                                  color: isPurchasable
-                                                      ? null
-                                                      : const Color(0xFFCED2D8),
-                                                  borderRadius: BorderRadius.circular(25.r),
-                                                  boxShadow: isPurchasable
-                                                      ? [
-                                                          BoxShadow(
-                                                            color: const Color(0xFF1989FA).withValues(alpha: 0.3),
-                                                            blurRadius: 8,
-                                                            offset: const Offset(0, 4),
-                                                          ),
-                                                        ]
-                                                      : null,
-                                                ),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Icon(
-                                                      isPurchasable
-                                                          ? Icons.event_seat
-                                                          : Icons.lock_outline,
-                                                      color: Colors.white,
-                                                      size: 28.sp,
-                                                    ),
-                                                    SizedBox(height: 4.h),
-                                                    Text(
-                                                      isPurchasable
-                                                          ? S.of(context).showTimeDetail_buy
-                                                          : saleInfo.text,
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 24.sp,
-                                                        fontWeight: FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // 特殊标签和字幕（如果有）
-                                        if ((children.showTimeTags != null && children.showTimeTags!.isNotEmpty) ||
-                                            (children.subtitle != null && children.subtitle!.isNotEmpty))
-                                          Padding(
-                                            padding: EdgeInsets.only(top: 16.h),
-                                            child: Wrap(
-                                              spacing: 8.w,
-                                              runSpacing: 8.h,
-                                              children: [
-                                                // 特殊标签
-                                                if (children.showTimeTags != null)
-                                                  ...children.showTimeTags!.map((tag) {
-                                                    return Container(
-                                                      height: 32.h,
-                                                      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                                                      decoration: BoxDecoration(
-                                                        gradient: const LinearGradient(
-                                                          colors: [Color(0xFFFF6B6B), Color(0xFFEE5A6F)],
-                                                        ),
-                                                        borderRadius: BorderRadius.circular(6.r),
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            color: const Color(0xFFFF6B6B).withValues(alpha: 0.2),
-                                                            blurRadius: 4,
-                                                            offset: const Offset(0, 2),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: [
-                                                          Icon(
-                                                            Icons.local_activity,
-                                                            color: Colors.white,
-                                                            size: 22.sp,
-                                                          ),
-                                                          SizedBox(width: 4.w),
-                                                          Text(
-                                                            tag.name ?? '',
-                                                            style: TextStyle(
-                                                              fontSize: 20.sp,
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.w600,
-                                                              height: 1,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                                // 字幕信息：原音 +「该语种字幕」的"字幕版"上映；点击 chip 弹出说明 Tooltip，
-                                                // 提示用户这是字幕版而非吹替版，避免误以为是日语配音。
-                                                if (children.subtitle != null)
-                                                  ...children.subtitle!.map((sub) {
-                                                    final subName = sub.name ?? '';
-                                                    return Tooltip(
-                                                      message: S
-                                                          .of(context)
-                                                          .about_components_showTimeList_subtitleHint(subName),
-                                                      triggerMode: TooltipTriggerMode.tap,
-                                                      preferBelow: true,
-                                                      child: Container(
-                                                        height: 32.h,
-                                                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                                                        decoration: BoxDecoration(
-                                                          color: const Color(0xFFE91E63).withValues(alpha: 0.10),
-                                                          borderRadius: BorderRadius.circular(6.r),
-                                                          border: Border.all(
-                                                            color: const Color(0xFFE91E63),
-                                                            width: 1,
-                                                          ),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Icon(
-                                                              Icons.subtitles_outlined,
-                                                              color: const Color(0xFFE91E63),
-                                                              size: 22.sp,
-                                                            ),
-                                                            SizedBox(width: 4.w),
-                                                            Text(
-                                                              S.of(context).about_components_showTimeList_subtitleChipWith(subName),
-                                                              style: TextStyle(
-                                                                fontSize: 20.sp,
-                                                                color: const Color(0xFFE91E63),
-                                                                fontWeight: FontWeight.w600,
-                                                                height: 1,
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 4.w),
-                                                            Icon(
-                                                              Icons.info_outline,
-                                                              size: 18.sp,
-                                                              color: const Color(0xFFE91E63).withValues(alpha: 0.6),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }).toList(),
-                                              ],
-                                            ),
+                                            ],
                                           ),
-                                      ],
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }).toList(),
-              )),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }).toList(),
+                    )),
     );
   }
 }
-

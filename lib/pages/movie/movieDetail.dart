@@ -50,6 +50,42 @@ class _PageState extends State<MovieDetail> {
   bool loading = false;
   bool error = false;
 
+  // Basic Info 标签列宽度缓存：按语言测量「最宽标签」一次，避免每帧重复计算。
+  double? _cachedBasicLabelWidth;
+  Locale? _cachedBasicLabelLocale;
+
+  /// 计算 Basic Info 各行标签列应使用的统一宽度（= 当前语言下最宽标签的实际宽度）。
+  /// 用固定宽度替代原先的 minWidth，保证不同语言下右侧的值都能纵向对齐。
+  double _basicInfoLabelWidth(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    if (_cachedBasicLabelWidth != null && _cachedBasicLabelLocale == locale) {
+      return _cachedBasicLabelWidth!;
+    }
+    final s = S.of(context);
+    final labels = <String>[
+      s.movieDetail_detail_originalName,
+      s.movieDetail_detail_time,
+      s.movieDetail_detail_spec,
+      s.movieDetail_detail_tags,
+      s.movieDetail_detail_homepage,
+      s.movieDetail_detail_state,
+      s.movieDetail_detail_level,
+    ];
+    final style = TextStyle(fontSize: 28.sp, height: 1.4);
+    double maxWidth = 0;
+    for (final label in labels) {
+      final painter = TextPainter(
+        text: TextSpan(text: '$label：', style: style),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+      )..layout();
+      if (painter.width > maxWidth) maxWidth = painter.width;
+    }
+    _cachedBasicLabelWidth = maxWidth;
+    _cachedBasicLabelLocale = locale;
+    return maxWidth;
+  }
+
 
   getData () {
     // 开始加载时设置loading状态
@@ -575,20 +611,26 @@ List<Widget> generateComment() {
 
   Widget _buildInfoRow(String label, String value, {Widget? customValue}) {
     return Padding(
-      padding: EdgeInsets.only(top: 8.h),
+      padding: EdgeInsets.only(top: 10.h),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // 标签列固定为「当前语言最宽标签」的宽度，保证各行右侧的值纵向对齐。
           SizedBox(
-            width: 160.w,
+            width: _basicInfoLabelWidth(context),
             child: Text(
               '$label：',
+              maxLines: 1,
+              softWrap: false,
+              overflow: TextOverflow.visible,
               style: TextStyle(
                 fontSize: 28.sp,
+                height: 1.4,
                 color: Colors.grey.shade600,
               ),
             ),
           ),
+          SizedBox(width: 8.w),
           if (customValue != null)
             customValue
           else
@@ -597,10 +639,117 @@ List<Widget> generateComment() {
                 value,
                 style: TextStyle(
                   fontSize: 28.sp,
+                  height: 1.4,
                   color: Colors.grey.shade800,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
+        ],
+      ),
+    );
+  }
+
+  /// 计算一组人物名称在卡片宽度下所需的名称区高度（用于整行统一高度，保证对齐）。
+  /// 按最多两行测量每个名字，取最大值：全部单行时返回一行高，存在换行时返回两行高。
+  double _personNameAreaHeight(List<String> names) {
+    final style = TextStyle(
+      fontSize: 28.sp,
+      fontWeight: FontWeight.w600,
+      height: 1.3,
+    );
+    final maxWidth = 200.w;
+    double maxHeight = 0;
+    for (final name in names) {
+      if (name.isEmpty) continue;
+      final painter = TextPainter(
+        text: TextSpan(text: name, style: style),
+        textDirection: TextDirection.ltr,
+        maxLines: 2,
+      )..layout(maxWidth: maxWidth);
+      if (painter.height > maxHeight) maxHeight = painter.height;
+    }
+    if (maxHeight == 0) {
+      // 名字全为空时兜底为一行高度，避免高度为 0。
+      final painter = TextPainter(
+        text: TextSpan(text: ' ', style: style),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+      )..layout();
+      maxHeight = painter.height;
+    }
+    return maxHeight.ceilToDouble();
+  }
+
+  /// 人物卡片（工作人员 / 角色 / 配音通用）。
+  /// 名称区高度由 [nameAreaHeight] 统一指定（同一横向列表内取所有名字测量后的最大高度），
+  /// 这样单行名字整行只占一行高、不留空白，存在两行名字时整行对齐到两行高。
+  /// 副标题区固定两行高度。卡片在横向列表中顶部对齐。
+  Widget _buildPersonCard({
+    required String imageUrl,
+    required String name,
+    required String subtitle,
+    double? nameAreaHeight,
+  }) {
+    return Container(
+      width: 200.w,
+      margin: EdgeInsets.only(right: 20.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 200.w,
+            height: 240.h,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.08),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: CustomExtendedImage(
+              imageUrl,
+              fit: BoxFit.cover,
+              width: 200.w,
+              height: 240.h,
+            ),
+          ),
+          SizedBox(height: 12.h),
+          // 名称：高度由整行统一测量得出（最多两行）。单行名字整行只占一行高、不留空白。
+          SizedBox(
+            height: nameAreaHeight ?? 60.h,
+            child: Text(
+              name,
+              style: TextStyle(
+                fontSize: 28.sp,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF323233),
+                height: 1.3,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          SizedBox(height: 6.h),
+          // 副标题（职位 / 配音）：固定两行高度
+          SizedBox(
+            height: 62.h,
+            child: Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 24.sp,
+                color: Colors.grey.shade600,
+                height: 1.3,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );
@@ -1181,44 +1330,55 @@ List<Widget> generateComment() {
                       
                       Container(
                         margin: EdgeInsets.only(bottom: 20.h, top: 20.h),
-                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
                         decoration: BoxDecoration(
-                          // color: const Color(0xFFF7F8FA),
+                          color: const Color(0xFFF7F8FA),
                           borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
-                            color: const Color(0xFF1989FA).withValues(alpha: 0.6),
+                            color: const Color(0xFF1989FA).withValues(alpha: 0.15),
                             width: 1,
                           ),
                         ),
-                        child: Row(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              padding: EdgeInsets.all(8.w),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1989FA).withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                              child: Icon(
-                                Icons.info_outline,
-                                color: const Color(0xFF1989FA),
-                                size: 24.sp,
+                            // 标题
+                            Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(8.w),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF1989FA).withValues(alpha: 0.12),
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                  child: Icon(
+                                    Icons.info_outline,
+                                    color: const Color(0xFF1989FA),
+                                    size: 24.sp,
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  S.of(context).movieDetail_detail_basicMessage,
+                                  style: TextStyle(
+                                    fontSize: 32.sp,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFF323233),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 14.h),
+                              child: Divider(
+                                height: 1,
+                                color: const Color(0xFF1989FA).withValues(alpha: 0.12),
                               ),
                             ),
-                            SizedBox(width: 12.w),
-                            Text(
-                              S.of(context).movieDetail_detail_basicMessage,
-                              style: TextStyle(
-                                fontSize: 32.sp,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFF323233),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                            // 详细信息
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                           // 原名
                           _buildInfoRow(
                             S.of(context).movieDetail_detail_originalName,
@@ -1257,15 +1417,19 @@ List<Widget> generateComment() {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    width: 160.w,
+                                    width: _basicInfoLabelWidth(context),
                                     child: Text(
                                       '${S.of(context).movieDetail_detail_spec}：',
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      overflow: TextOverflow.visible,
                                       style: TextStyle(
                                         fontSize: 28.sp,
                                         color: Colors.grey.shade600,
                                       ),
                                     ),
                                   ),
+                                  SizedBox(width: 8.w),
                                   Expanded(
                                     child: SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
@@ -1304,15 +1468,19 @@ List<Widget> generateComment() {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    width: 160.w,
+                                    width: _basicInfoLabelWidth(context),
                                     child: Text(
                                       '${S.of(context).movieDetail_detail_tags}：',
+                                      maxLines: 1,
+                                      softWrap: false,
+                                      overflow: TextOverflow.visible,
                                       style: TextStyle(
                                         fontSize: 28.sp,
                                         color: Colors.grey.shade600,
                                       ),
                                     ),
                                   ),
+                                  SizedBox(width: 8.w),
                                   Expanded(
                                     child: SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
@@ -1363,15 +1531,19 @@ List<Widget> generateComment() {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SizedBox(
-                                      width: 160.w,
+                                      width: _basicInfoLabelWidth(context),
                                       child: Text(
                                         '${S.of(context).movieDetail_detail_homepage}：',
+                                        maxLines: 1,
+                                        softWrap: false,
+                                        overflow: TextOverflow.visible,
                                         style: TextStyle(
                                           fontSize: 28.sp,
                                           color: Colors.grey.shade600,
                                         ),
                                       ),
                                     ),
+                                    SizedBox(width: 8.w),
                                     Expanded(
                                       child: Text(
                                         data.homePage ?? '',
@@ -1408,7 +1580,10 @@ List<Widget> generateComment() {
                               S.of(context).movieDetail_detail_level,
                               '${data.levelName}${data.levelDescription != null && data.levelDescription!.isNotEmpty ? '（${data.levelDescription}）' : ''}',
                             ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                       ...staffListData.isEmpty ? [] : [
                         Padding(
@@ -1427,71 +1602,25 @@ List<Widget> generateComment() {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(vertical: 8.h),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: staffListData.map((item) {
-                              return Container(
-                                width: 180.w,
-                                margin: EdgeInsets.only(right: 20.w),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // 工作人员头像卡片
-                                    Container(
-                                      width: 180.w,
-                                      height: 240.h,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade200,
-                                        borderRadius: BorderRadius.circular(12.r),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withValues(alpha: 0.08),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      clipBehavior: Clip.antiAlias,
-                                      child: CustomExtendedImage(
-                                        item.avatar ?? '',
-                                        fit: BoxFit.cover,
-                                        width: 180.w,
-                                        height: 240.h,
-                                      ),
-                                    ),
-                                    SizedBox(height: 12.h),
-                                    // 工作人员名称
-                                    Text(
-                                      item.name ?? '',
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF323233),
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    // 职位信息（固定两行高度，避免有无副标题时卡片高度不一导致横向错位）
-                                    SizedBox(height: 6.h),
-                                    SizedBox(
-                                      height: 62.h,
-                                      child: Text(
-                                        (item.position != null && item.position!.isNotEmpty)
-                                            ? item.position!.map((children) => children.name ?? '').join('、')
-                                            : '',
-                                        style: TextStyle(
-                                          fontSize: 24.sp,
-                                          color: Colors.grey.shade600,
-                                          height: 1.3,
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          child: Builder(
+                            builder: (context) {
+                              final nameAreaHeight = _personNameAreaHeight(
+                                staffListData.map((e) => e.name ?? '').toList(),
                               );
-                            }).toList(),
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: staffListData.map((item) {
+                                  return _buildPersonCard(
+                                    imageUrl: item.avatar ?? '',
+                                    name: item.name ?? '',
+                                    subtitle: (item.position != null && item.position!.isNotEmpty)
+                                        ? item.position!.map((children) => children.name ?? '').join('、')
+                                        : '',
+                                    nameAreaHeight: nameAreaHeight,
+                                  );
+                                }).toList(),
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -1635,71 +1764,25 @@ List<Widget> generateComment() {
                                 SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   padding: EdgeInsets.symmetric(vertical: 8.h),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: versionCharacters.map((item) {
-                                      return Container(
-                                        width: 180.w,
-                                        margin: EdgeInsets.only(right: 20.w),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // 角色头像卡片
-                                            Container(
-                                              width: 180.w,
-                                              height: 240.h,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey.shade200,
-                                                borderRadius: BorderRadius.circular(12.r),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.black.withValues(alpha: 0.08),
-                                                    blurRadius: 8,
-                                                    offset: const Offset(0, 2),
-                                                  ),
-                                                ],
-                                              ),
-                                              clipBehavior: Clip.antiAlias,
-                                              child: CustomExtendedImage(
-                                                item.cover ?? '',
-                                                fit: BoxFit.cover,
-                                                width: 180.w,
-                                                height: 240.h,
-                                              ),
-                                            ),
-                                            SizedBox(height: 12.h),
-                                            // 角色名称
-                                            Text(
-                                              item.name ?? '',
-                                              style: TextStyle(
-                                                fontSize: 28.sp,
-                                                fontWeight: FontWeight.w600,
-                                                color: const Color(0xFF323233),
-                                              ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            // 配音演员（固定两行高度，避免有无配音时卡片高度不一导致横向错位）
-                                            SizedBox(height: 6.h),
-                                            SizedBox(
-                                              height: 62.h,
-                                              child: Text(
-                                                (item.staff != null && item.staff!.isNotEmpty)
-                                                    ? item.staff!.map((children) => children.name ?? '').join('、')
-                                                    : '',
-                                                style: TextStyle(
-                                                  fontSize: 24.sp,
-                                                  color: Colors.grey.shade600,
-                                                  height: 1.3,
-                                                ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                  child: Builder(
+                                    builder: (context) {
+                                      final nameAreaHeight = _personNameAreaHeight(
+                                        versionCharacters.map((e) => e.name ?? '').toList(),
                                       );
-                                    }).toList(),
+                                      return Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: versionCharacters.map((item) {
+                                          return _buildPersonCard(
+                                            imageUrl: item.cover ?? '',
+                                            name: item.name ?? '',
+                                            subtitle: (item.staff != null && item.staff!.isNotEmpty)
+                                                ? item.staff!.map((children) => children.name ?? '').join('、')
+                                                : '',
+                                            nameAreaHeight: nameAreaHeight,
+                                          );
+                                        }).toList(),
+                                      );
+                                    },
                                   ),
                                 ),
                               ],
@@ -1728,71 +1811,25 @@ List<Widget> generateComment() {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           padding: EdgeInsets.symmetric(vertical: 8.h),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: characterData.map((item) {
-                              return Container(
-                                width: 180.w,
-                                margin: EdgeInsets.only(right: 20.w),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // 角色头像卡片
-                                    Container(
-                                      width: 180.w,
-                                      height: 240.h,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade200,
-                                        borderRadius: BorderRadius.circular(12.r),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.black.withValues(alpha: 0.08),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 2),
-                                          ),
-                                        ],
-                                      ),
-                                      clipBehavior: Clip.antiAlias,
-                                      child: CustomExtendedImage(
-                                        item.cover ?? '',
-                                        fit: BoxFit.cover,
-                                        width: 180.w,
-                                        height: 240.h,
-                                      ),
-                                    ),
-                                    SizedBox(height: 12.h),
-                                    // 角色名称
-                                    Text(
-                                      item.name ?? '',
-                                      style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.w600,
-                                        color: const Color(0xFF323233),
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    // 配音演员（固定两行高度，避免有无配音时卡片高度不一导致横向错位）
-                                    SizedBox(height: 6.h),
-                                    SizedBox(
-                                      height: 62.h,
-                                      child: Text(
-                                        (item.staff != null && item.staff!.isNotEmpty)
-                                            ? item.staff!.map((children) => children.name ?? '').join('、')
-                                            : '',
-                                        style: TextStyle(
-                                          fontSize: 24.sp,
-                                          color: Colors.grey.shade600,
-                                          height: 1.3,
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          child: Builder(
+                            builder: (context) {
+                              final nameAreaHeight = _personNameAreaHeight(
+                                characterData.map((e) => e.name ?? '').toList(),
                               );
-                            }).toList(),
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: characterData.map((item) {
+                                  return _buildPersonCard(
+                                    imageUrl: item.cover ?? '',
+                                    name: item.name ?? '',
+                                    subtitle: (item.staff != null && item.staff!.isNotEmpty)
+                                        ? item.staff!.map((children) => children.name ?? '').join('、')
+                                        : '',
+                                    nameAreaHeight: nameAreaHeight,
+                                  );
+                                }).toList(),
+                              );
+                            },
                           ),
                         ),
                       ],

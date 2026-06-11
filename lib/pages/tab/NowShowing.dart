@@ -793,7 +793,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                       : S.of(context).movieList_buy,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28.sp,
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -1194,7 +1194,7 @@ class _PageState extends State<NowShowing> with AutomaticKeepAliveClientMixin {
                     : S.of(context).movieList_buy,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28.sp,
+                    fontSize: 22.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

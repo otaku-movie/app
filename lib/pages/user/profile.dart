@@ -280,7 +280,7 @@ class _UserProfilePageState extends State<UserProfile> {
                     Text(
                       S.of(context).userProfile_avatar,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 24.sp,
                         color: Colors.grey.shade600,
                         fontWeight: FontWeight.w500,
                       ),
@@ -320,7 +320,7 @@ class _UserProfilePageState extends State<UserProfile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              height: 50.h,
+                              height: 60.h,
                               decoration: BoxDecoration(
                                 color: const Color(0xFF1989FA).withValues(alpha: 0.05),
                                 borderRadius: BorderRadius.circular(12.r),
@@ -350,9 +350,9 @@ class _UserProfilePageState extends State<UserProfile> {
                                   }),
                                 ),
                                 textStyle: TextStyle(
-                                  fontSize: 18.sp,
+                                  fontSize: 26.sp,
                                   color: const Color(0xFF323233),
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                 ),
                                 onChange: (val) => setState(() {
                                   usernameController.text = val;
@@ -449,18 +449,18 @@ class _UserProfilePageState extends State<UserProfile> {
                 Text(
                   label,
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: 22.sp,
                     color: Colors.grey.shade600,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 4.h),
+                SizedBox(height: 6.h),
                 child ?? Text(
                   value,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 26.sp,
                     color: const Color(0xFF323233),
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
