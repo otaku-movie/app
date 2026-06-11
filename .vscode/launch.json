@@ -5,39 +5,46 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Flutter: Debug (Dev Environment)",
+      "name": "Flutter: Debug (Dev)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
-      "args": ["--flavor","dev","--dart-define=ENV=dev"]
+      "args": ["--flavor", "dev", "--dart-define-from-file=env/dev.json"]
     },
     {
-      "name": "Flutter: Debug (Test Environment)",
+      "name": "Flutter: Debug (Test)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
-      "args": ["--flavor","qa","--dart-define=ENV=test"]
+      "args": ["--flavor", "qa", "--dart-define-from-file=env/test.json"]
     },
     {
-      "name": "Flutter: Debug (Prod Environment)",
+      "name": "Flutter: Debug (Preprod)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "debug",
-      "args": ["--flavor","prod", "--dart-define=ENV=prod"]
+      "args": ["--flavor", "prepord", "--dart-define-from-file=env/preprod.json"]
     },
     {
-      "name": "Flutter: Profile",
+      "name": "Flutter: Debug (Prod)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "args": ["--flavor", "prod", "--dart-define-from-file=env/prod.json"]
+    },
+    {
+      "name": "Flutter: Profile (Prod)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile",
-      "args": ["--dart-define=ENV=prod"]
+      "args": ["--flavor", "prod", "--dart-define-from-file=env/prod.json"]
     },
     {
-      "name": "Flutter: Release",
+      "name": "Flutter: Release (Prod)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release",
-      "args": ["--dart-define=ENV=prod"]
+      "args": ["--flavor", "prod", "--dart-define-from-file=env/prod.json"]
     },
     {
       "name": "Debug Node.js",

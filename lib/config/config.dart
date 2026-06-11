@@ -15,48 +15,50 @@ class EnvironmentConfig {
     required this.appTitle,
   });
 
+  // 各环境的取值统一来自 dart-define（推荐用 --dart-define-from-file=env/<env>.json 注入）：
+  //   - API_URL / IMAGE_BASE_URL 等地址都放在 env/*.json 里，启动命令只切环境文件。
+  //   - 源码里的 defaultValue 仅作兜底，正常都被环境文件覆盖。
+  static const String _apiUrlDefine =
+      String.fromEnvironment('API_URL', defaultValue: '');
+  static const String _imageBaseUrlDefine = String.fromEnvironment(
+    'IMAGE_BASE_URL',
+    defaultValue: 'https://static.otaku-movie.com',
+  );
+
   // 根据 EnvironmentType 生成对应配置
   factory EnvironmentConfig.fromType(EnvironmentType env, {String? localIp}) {
     switch (env) {
       case EnvironmentType.dev:
-        // 优先使用传入的 IP，其次使用 dart-define 中的 DEV_SERVER_IP，最后使用默认 IP
-        final devServerIp = const String.fromEnvironment('DEV_SERVER_IP', defaultValue: '192.168.3.47');
+        // dev：显式给了 API_URL 就用；否则按 DEV_SERVER_IP / 自动探测的局域网 IP 拼本地后端。
+        const devServerIp =
+            String.fromEnvironment('DEV_SERVER_IP', defaultValue: '192.168.3.47');
         final ip = localIp ?? (devServerIp.isNotEmpty ? devServerIp : '192.168.3.47');
         return EnvironmentConfig(
-          apiUrl: 'http://$ip:8080/api',
-          imageBaseUrl: const String.fromEnvironment(
-            'IMAGE_BASE_URL',
-            defaultValue: 'https://static.otaku-movie.com',
-          ),
+          apiUrl: _apiUrlDefine.isNotEmpty ? _apiUrlDefine : 'http://$ip:8080/api',
+          imageBaseUrl: _imageBaseUrlDefine,
           appTitle: 'Dev Otaku Movie',
         );
       case EnvironmentType.test:
-        return const EnvironmentConfig(
-          apiUrl: 'http://test-api.otaku-movie.com/api',
-          imageBaseUrl: String.fromEnvironment(
-            'IMAGE_BASE_URL',
-            defaultValue: 'https://static.otaku-movie.com',
-          ),
+        return EnvironmentConfig(
+          apiUrl: _apiUrlDefine.isNotEmpty
+              ? _apiUrlDefine
+              : 'https://test-api.otaku-movie.com/api',
+          imageBaseUrl: _imageBaseUrlDefine,
           appTitle: 'Test Otaku Movie',
         );
       case EnvironmentType.preprod:
-        return const EnvironmentConfig(
-          apiUrl: '',
-          imageBaseUrl: '',
+        return EnvironmentConfig(
+          apiUrl: _apiUrlDefine,
+          imageBaseUrl: _imageBaseUrlDefine,
           appTitle: 'Preprod Otaku Movie',
         );
       case EnvironmentType.prod:
-        return const EnvironmentConfig(
-          // 生产接口域名。必须是 https（iOS ATS / Android 默认均禁止明文 HTTP）。
-          // 可用 --dart-define=API_URL=... 覆盖；未传时用下面的默认生产域名。
-          apiUrl: String.fromEnvironment(
-            'API_URL',
-            defaultValue: 'https://api.otaku-movie.com/api',
-          ),
-          imageBaseUrl: String.fromEnvironment(
-            'IMAGE_BASE_URL',
-            defaultValue: 'https://static.otaku-movie.com',
-          ),
+        // 生产接口域名必须是 https（iOS ATS / Android 默认均禁止明文 HTTP）。
+        return EnvironmentConfig(
+          apiUrl: _apiUrlDefine.isNotEmpty
+              ? _apiUrlDefine
+              : 'https://api.otaku-movie.com/api',
+          imageBaseUrl: _imageBaseUrlDefine,
           appTitle: 'Prod Otaku Movie',
         );
     }

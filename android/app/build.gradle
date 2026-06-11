@@ -27,6 +27,16 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+// 正式签名配置：读取 android/key.properties（已在 .gitignore 忽略，切勿提交）。
+// 文件不存在时（如他人 clone）release 回退 debug 签名，保证 `flutter run --release` 可跑。
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader("UTF-8") { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+
 android {
     namespace = "com.example.otaku_movie"
     compileSdk = flutter.compileSdkVersion
@@ -59,11 +69,22 @@ android {
         manifestPlaceholders += [appAuthRedirectScheme: 'otakumovie']
     }
 
+    signingConfigs {
+        release {
+            // 仅当 key.properties 存在时才填充，避免缺密钥时配置报错。
+            if (keystorePropertiesFile.exists()) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword keystoreProperties['storePassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.debug
+            // 有正式密钥用正式签名上架；没有则回退 debug 签名（本地可跑，但不能上架 Play）。
+            signingConfig = keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
         }
         debug {
             // Debug 包只构建 arm64-v8a：APK 体积 ~3x → 1x，
@@ -136,10 +157,11 @@ android {
     applicationVariants.configureEach { variant ->
         if (variant.buildType.name == "release") {
             variant.outputs.configureEach { output ->
-                def env = project.hasProperty("ENV") ? project.getProperty("ENV") : "prod"
+                // 用真实 flavor 名区分 dev/qa/prepord/prod，避免都被命名成 prod
+                def flavor = variant.flavorName ?: "prod"
                 def version = variant.versionName
                 def createTime = new Date().format('yyyy_MM_dd_HH_mm_ss')
-                def newFileName = "otaku_movie-${env}-${createTime}-${version}.apk"
+                def newFileName = "シネコ-${flavor}-${version}-${createTime}.apk"
                 println("Setting output file name to: $newFileName")
                 output.outputFileName = newFileName
             }

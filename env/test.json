@@ -1,0 +1,9 @@
+{
+  "ENV": "test",
+  "API_URL": "https://test-api.otaku-movie.com/api",
+  "IMAGE_BASE_URL": "https://static.otaku-movie.com",
+  "WEB_SHARE_BASE_URL": "https://otaku-movie.com",
+  "GOOGLE_WEB_CLIENT_ID": "807320750051-d8nkip913h8tgor8dnim1f3khlk9rsnf.apps.googleusercontent.com",
+  "GOOGLE_PLAY_APPLICATION_ID": "com.otakumovie.app.qa",
+  "APP_STORE_APP_ID": ""
+}

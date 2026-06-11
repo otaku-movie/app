@@ -45,3 +45,7 @@ app.*.map.json
 
 # translate 
 node_modules
+
+# 环境配置：env/*.json 入库（仅含非敏感的地址 / Client ID）；
+# 本地个人覆盖（如各自的 DEV_SERVER_IP）放 env/*.local.json，不入库。
+env/*.local.json

@@ -7,6 +7,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:807320750051:android:acb83886249baddf2842d6",
+        "android_client_info": {
+          "package_name": "com.otakumovie.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807320750051-a0kefjk1k5q5vaj2gon25hnngibuckm1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.otakumovie.app",
+            "certificate_hash": "9251dd6666f8f69217ccb6610b3315daa5e8d6bd"
+          }
+        },
+        {
+          "client_id": "807320750051-d8nkip913h8tgor8dnim1f3khlk9rsnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRTqgdyOz8_dIZmsJJfLDu-EdikCR9BBA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807320750051-d8nkip913h8tgor8dnim1f3khlk9rsnf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "807320750051-rphc8n4ubihlqjr5cvircbhp959jtfk7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.otakumovie.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:807320750051:android:5d4727e6651c62422842d6",
         "android_client_info": {
           "package_name": "com.otakumovie.app.dev"
