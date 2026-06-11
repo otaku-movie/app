@@ -17,6 +17,7 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/area_response.dart';
 import 'package:otaku_movie/response/benefit/benefit_cinema_availability_response.dart';
+import 'package:otaku_movie/utils/area_i18n_util.dart';
 import 'package:otaku_movie/utils/location_util.dart';
 import 'package:otaku_movie/utils/toast.dart';
 
@@ -389,7 +390,7 @@ class _BenefitCinemaAvailabilityState extends State<BenefitCinemaAvailability> {
   FilterValue _convertArea(AreaResponse item) {
     return FilterValue(
       id: item.id.toString(),
-      name: item.name ?? '',
+      name: AreaI18nUtil.displayNameOf(context, item),
       children: item.children?.map(_convertArea).toList(),
     );
   }

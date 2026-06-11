@@ -58,7 +58,10 @@ class ApiRequest {
           }
           final languageCode = locale.languageCode;
           final countryCode = locale.countryCode ?? '';
-          final acceptLanguage = '$languageCode-$countryCode';
+          // 没有国家码时只发语言码，避免发出 "zh-" 这种结尾带横杠的畸形值
+          // 导致后端解析失败、回退默认语言（切换语言后字典不变的根因之一）。
+          final acceptLanguage =
+              countryCode.isEmpty ? languageCode : '$languageCode-$countryCode';
 
           // 设置请求头：Accept-Language 和 token
           options.headers['Accept-Language'] = acceptLanguage;

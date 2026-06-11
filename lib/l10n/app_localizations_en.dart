@@ -820,7 +820,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get register_loginHere => 'Click Here';
 
   @override
-  String get movieList_tabBar_currentlyShowing => 'Currently Showing';
+  String get movieList_tabBar_currentlyShowing => 'Now Showing';
 
   @override
   String get movieList_tabBar_comingSoon => 'Coming Soon';

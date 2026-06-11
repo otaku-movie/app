@@ -2510,10 +2510,10 @@ class S {
     );
   }
 
-  /// `Currently Showing`
+  /// `Now Showing`
   String get movieList_tabBar_currentlyShowing {
     return Intl.message(
-      'Currently Showing',
+      'Now Showing',
       name: 'movieList_tabBar_currentlyShowing',
       desc: '',
       args: [],

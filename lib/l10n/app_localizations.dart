@@ -1579,7 +1579,7 @@ abstract class AppLocalizations {
   /// No description provided for @movieList_tabBar_currentlyShowing.
   ///
   /// In en, this message translates to:
-  /// **'Currently Showing'**
+  /// **'Now Showing'**
   String get movieList_tabBar_currentlyShowing;
 
   /// No description provided for @movieList_tabBar_comingSoon.

@@ -789,7 +789,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "movieList_tabBar_comingSoon":
             MessageLookupByLibrary.simpleMessage("Coming Soon"),
         "movieList_tabBar_currentlyShowing":
-            MessageLookupByLibrary.simpleMessage("Currently Showing"),
+            MessageLookupByLibrary.simpleMessage("Now Showing"),
         "movieList_tag_reRelease":
             MessageLookupByLibrary.simpleMessage("Re-release"),
         "movieList_view_grid":

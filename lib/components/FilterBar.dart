@@ -7,10 +7,25 @@ import 'DrawerFilterChip.dart';
 class FilterValue {
   final String id;
   final String name;
+  /// 次要名称（如地区的译名）：列表行里靠右两端对齐显示；为空时不显示。
+  final String? secondaryName;
   final List<FilterValue>? children;
   final int? count; // 数量
 
-  FilterValue({required this.id, required this.name, this.children, this.count});
+  FilterValue({
+    required this.id,
+    required this.name,
+    this.secondaryName,
+    this.children,
+    this.count,
+  });
+
+  /// 主名 + 次要名拼接（用于按钮/标签等需要单串展示的场景）。
+  String get combinedName {
+    final s = secondaryName;
+    if (s != null && s.isNotEmpty) return '$name $s';
+    return name;
+  }
 }
 
 /// 筛选类型枚举
@@ -296,6 +311,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
     }
     _drawerOverlayEntry?.remove();
     _drawerOverlayEntry = null;
+    _isDrawerOpen = false;
     super.dispose();
   }
 
@@ -545,6 +561,18 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                                                 fontSize: 28.sp,
                                                 color: isSelected ? const Color(0xFF1989FA) : Colors.black87)),
                                       ),
+                                      if (value.secondaryName != null && value.secondaryName!.isNotEmpty) ...[
+                                        SizedBox(width: 12.w),
+                                        Text(
+                                          value.secondaryName!,
+                                          style: TextStyle(
+                                            fontSize: 26.sp,
+                                            color: isSelected
+                                                ? const Color(0xFF1989FA)
+                                                : Colors.grey.shade500,
+                                          ),
+                                        ),
+                                      ],
                                       if (value.count != null) ...[
                                         SizedBox(width: 8.w),
                                         Container(
@@ -687,6 +715,17 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                         Expanded(
                           child: Text(item.name, style: TextStyle(color: isSelected ? const Color(0xFF1989FA) : Colors.black)),
                         ),
+                        if (item.secondaryName != null && item.secondaryName!.isNotEmpty) ...[
+                          SizedBox(width: 12.w),
+                          Text(
+                            item.secondaryName!,
+                            style: TextStyle(
+                              color: isSelected
+                                  ? const Color(0xFF1989FA)
+                                  : Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
                         if (item.count != null) ...[
                           SizedBox(width: 8.w),
                           Container(
@@ -745,6 +784,17 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                               Expanded(
                                 child: Text(item.name, style: TextStyle(color: isSelected ? const Color(0xFF1989FA) : Colors.black)),
                               ),
+                              if (item.secondaryName != null && item.secondaryName!.isNotEmpty) ...[
+                                SizedBox(width: 12.w),
+                                Text(
+                                  item.secondaryName!,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? const Color(0xFF1989FA)
+                                        : Colors.grey.shade500,
+                                  ),
+                                ),
+                              ],
                               if (item.count != null) ...[
                                 SizedBox(width: 8.w),
                                 Container(
@@ -794,6 +844,17 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
                               Expanded(
                                 child: Text(item.name, style: TextStyle(color: isSelected ? const Color(0xFF1989FA) : Colors.black)),
                               ),
+                              if (item.secondaryName != null && item.secondaryName!.isNotEmpty) ...[
+                                SizedBox(width: 12.w),
+                                Text(
+                                  item.secondaryName!,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? const Color(0xFF1989FA)
+                                        : Colors.grey.shade500,
+                                  ),
+                                ),
+                              ],
                               if (item.count != null) ...[
                                 SizedBox(width: 8.w),
                                 Container(
@@ -883,7 +944,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
 
   String? _getNameById(String id, List<FilterValue> list) {
     for (final item in list) {
-      if (item.id == id) return item.name;
+      if (item.id == id) return item.combinedName;
       if (item.children != null) {
         final name = _getNameById(id, item.children!);
         if (name != null) return name;
@@ -919,7 +980,7 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
     final names = filter.values
         .expand((v) => _flatten(v))
         .where((v) => ids.contains(v.id) && v.id != '') // 排除"全部"选项
-        .map((v) => v.name)
+        .map((v) => v.combinedName)
         .toList();
     return names.join(', ');
   }
@@ -1072,6 +1133,10 @@ class _FilterBarState extends State<FilterBar> with TickerProviderStateMixin {
     if (!_isDrawerOpen) return;
     _drawerOverlayEntry?.remove();
     _drawerOverlayEntry = null;
+    if (!mounted) {
+      _isDrawerOpen = false;
+      return;
+    }
     setState(() {
       _isDrawerOpen = false;
     });

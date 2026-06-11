@@ -11,6 +11,10 @@ class AreaResponse {
     String? name;
     @JsonKey(name: "nameKana")
     String? nameKana;
+    @JsonKey(name: "nameZh")
+    String? nameZh;
+    @JsonKey(name: "nameEn")
+    String? nameEn;
     @JsonKey(name: "parentId")
     int? parentId;
     @JsonKey(name: "children")
@@ -20,6 +24,8 @@ class AreaResponse {
         this.id,
         this.name,
         this.nameKana,
+        this.nameZh,
+        this.nameEn,
         this.parentId,
         this.children,
     });

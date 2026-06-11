@@ -10,6 +10,8 @@ AreaResponse _$AreaResponseFromJson(Map<String, dynamic> json) => AreaResponse(
       id: (json['id'] as num?)?.toInt(),
       name: json['name'] as String?,
       nameKana: json['nameKana'] as String?,
+      nameZh: json['nameZh'] as String?,
+      nameEn: json['nameEn'] as String?,
       parentId: (json['parentId'] as num?)?.toInt(),
       children: (json['children'] as List<dynamic>?)
           ?.map((e) => AreaResponse.fromJson(e as Map<String, dynamic>))
@@ -21,6 +23,8 @@ Map<String, dynamic> _$AreaResponseToJson(AreaResponse instance) =>
       'id': instance.id,
       'name': instance.name,
       'nameKana': instance.nameKana,
+      'nameZh': instance.nameZh,
+      'nameEn': instance.nameEn,
       'parentId': instance.parentId,
       'children': instance.children?.map((e) => e.toJson()).toList(),
     };

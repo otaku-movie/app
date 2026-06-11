@@ -15,6 +15,7 @@ import 'package:otaku_movie/response/cinema/cinemaList.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:otaku_movie/response/area_response.dart';
 import 'package:otaku_movie/service/share_service.dart';
+import 'package:otaku_movie/utils/area_i18n_util.dart';
 import 'package:otaku_movie/utils/toast.dart';
 
 /// 电影入场者特典页（C 端）- 展示该电影下所有特典阶段与物料
@@ -977,11 +978,13 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                                   Icon(Icons.place_outlined, size: 18.sp, color: const Color(0xFF1989FA)),
                                   SizedBox(width: 4.w),
                                   Text(
-                                    _allPrefectures().firstWhere(
-                                          (e) => e.id == selectedPrefectureId,
-                                          orElse: () => AreaResponse(),
-                                        ).name ??
-                                        '',
+                                    AreaI18nUtil.displayNameOf(
+                                      context,
+                                      _allPrefectures().firstWhere(
+                                        (e) => e.id == selectedPrefectureId,
+                                        orElse: () => AreaResponse(),
+                                      ),
+                                    ),
                                     style: TextStyle(fontSize: 22.sp, color: const Color(0xFF1989FA)),
                                   ),
                                 ],
@@ -1022,7 +1025,7 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(vertical: 6.h),
                                     child: Text(
-                                      item.name ?? '',
+                                      AreaI18nUtil.displayNameOf(context, item),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(fontSize: 28.sp, color: const Color(0xFF323233)),

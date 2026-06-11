@@ -15,6 +15,7 @@ import 'package:otaku_movie/response/area_response.dart';
 import 'package:otaku_movie/response/api_pagination_response.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:otaku_movie/utils/area_i18n_util.dart';
 import 'package:otaku_movie/utils/location_util.dart';
 import 'package:otaku_movie/service/favorite_cinema_service.dart';
 import 'package:easy_refresh/easy_refresh.dart';
@@ -588,7 +589,7 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   FilterValue convertToFilterValue(AreaResponse item) {
     return FilterValue(
       id: item.id.toString(),
-      name: item.name ?? '',
+      name: AreaI18nUtil.displayNameOf(context, item),
       children: item.children?.map((child) => convertToFilterValue(child)).toList(),
     );
   }

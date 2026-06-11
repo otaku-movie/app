@@ -27,8 +27,10 @@ import 'package:otaku_movie/generated/l10n.dart';
 import 'package:get/get.dart';
 import 'package:otaku_movie/components/dict.dart';
 import 'package:otaku_movie/controller/DictController.dart';
+import 'package:otaku_movie/controller/LanguageController.dart';
 import 'package:otaku_movie/controller/TimeFormatController.dart';
 import 'package:otaku_movie/response/dict_response.dart';
+import 'package:otaku_movie/utils/area_i18n_util.dart';
 import 'package:otaku_movie/utils/date_format_util.dart';
 import 'package:otaku_movie/utils/index.dart';
 import 'package:otaku_movie/utils/toast.dart';
@@ -64,6 +66,10 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
   late DictController dictController; // 字典控制器
   late TimeFormatController timeFormatController;
   Worker? _timeFormatWorker;
+  // 语言切换后，重新拉取「名称来自后端」的筛选项（tag/字幕等），使其跟随语言。
+  Worker? _localeWorker;
+  // 字典刷新后，同步本地的版本/维度列表（这两项的文案也跟随语言）。
+  Worker? _dictWorker;
   int tabLength = 0;
   // 初值 true：进入页面第一帧就显示 loading，避免「空白一闪 → 转圈」的视觉跳变。
   // _loadInitialData 完成后会把它置回 false。
@@ -108,12 +114,37 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         getData();
       },
     );
+    // 监听语言切换：tag/字幕/品牌等筛选项的名称由后端按 Accept-Language 返回，
+    // 页面只在 initState 拉过一次，切语言后需重新拉取才能跟随语言显示。
+    if (Get.isRegistered<LanguageController>()) {
+      _localeWorker = ever<Locale>(
+        Get.find<LanguageController>().locale,
+        (_) {
+          if (!mounted) return;
+          getCinemaSpec();
+          getBrandList();
+          getAreaTree();
+          getLanguageList();
+          getShowTimeTagList();
+        },
+      );
+    }
+    // 版本/维度来自字典：字典在语言切换后会重载，这里同步刷新本地副本。
+    _dictWorker = ever(
+      dictController.dict,
+      (_) {
+        if (!mounted) return;
+        getVersionList();
+      },
+    );
     _loadInitialData();
   }
 
   @override
   void dispose() {
     _timeFormatWorker?.dispose();
+    _localeWorker?.dispose();
+    _dictWorker?.dispose();
     _tabController?.removeListener(_onTabChanged);
     _tabController?.dispose();
     _tabController = null;
@@ -849,7 +880,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
   }
 
   List<Widget> generateTab() {
-    List<String> weekList = [
+    final currentYear = DateTime.now().year;
+    final List<String> weekList = [
       S.of(context).common_week_monday,
       S.of(context).common_week_tuesday,
       S.of(context).common_week_wednesday,
@@ -858,8 +890,6 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
       S.of(context).common_week_saturday,
       S.of(context).common_week_sunday,
     ];
-
-    final currentYear = DateTime.now().year;
 
     return data.map((item) {
       DateTime date = DateTime.parse(item.date!);
@@ -874,11 +904,28 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
             "${dateParts[0]}/${dateParts[1]}/${dateParts[2]}"; // 年/月/日
       }
 
+      // 日文「金曜日」去掉「曜日」只留单字（金/土/日…）；其他语言无此后缀，replaceAll 为空操作。
+      final String weekLabel =
+          weekList[date.weekday - 1].replaceAll('曜日', '');
+
       return Tab(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(weekList[date.weekday - 1]), // 星期
-            Text(formattedDate), // 日期
+            Text(
+              weekLabel, // 星期
+              style: TextStyle(fontSize: 30.sp, height: 1.1),
+            ),
+            SizedBox(height: 6.h),
+            Text(
+              formattedDate, // 日期格式为 "月/日"
+              style: TextStyle(
+                fontSize: 28.sp,
+                height: 1.1,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ],
         ),
       );
@@ -1285,9 +1332,21 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     FilterValue convertToFilterValue(dynamic item) {
+      // 地区按当前语言「日文 + 翻译」并列显示（日语时只显示日文）：日文放 name、
+      // 译名放 secondaryName，由 FilterBar 两端对齐渲染。name 仍为原始日文，不影响定位匹配。
+      final ja = (item.name as String?)?.trim() ?? '';
+      final translation = AreaI18nUtil.translation(
+        context,
+        name: item.name as String?,
+        nameZh: item.nameZh as String?,
+        nameEn: item.nameEn as String?,
+      );
       return FilterValue(
         id: item.id.toString(),
-        name: item.name ?? S.of(context).about_components_showTimeList_unnamed,
+        name: ja.isNotEmpty
+            ? ja
+            : S.of(context).about_components_showTimeList_unnamed,
+        secondaryName: translation.isEmpty ? null : translation,
         children: (item.children != null && (item.children as List).isNotEmpty)
             ? (item.children as List)
                 .where((child) =>
