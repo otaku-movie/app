@@ -23,13 +23,39 @@ bool isValidEmail(String email) {
   return emailRegExp.hasMatch(email);
 }
 
-// 密码格式验证
-bool isValidPassword(String password) {
-  RegExp passwordRegExp = RegExp(r'^[a-zA-Z0-9_]{6,16}$');
-  // 密码长度6-16位，且包含数字、字母和下划线
-  // RegExp passwordRegExp = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*_).{6,16}$');
+/// 密码强度等级
+enum PasswordStrength { weak, medium, strong }
 
-  return passwordRegExp.hasMatch(password);
+/// 注册/改密时的密码门槛：
+/// 8-32 位，必须同时包含字母和数字，允许以下特殊字符：
+/// ! @ # $ % ^ & * _ - + = . ?
+/// 注意：登录页不要用它做校验（老用户旧密码可能不满足新规则）。
+bool isValidPassword(String password) {
+  if (password.length < 8 || password.length > 32) return false;
+  if (!RegExp(r'^[A-Za-z0-9!@#$%^&*_\-+=.?]+$').hasMatch(password)) {
+    return false;
+  }
+  final hasLetter = RegExp(r'[A-Za-z]').hasMatch(password);
+  final hasDigit = RegExp(r'\d').hasMatch(password);
+  return hasLetter && hasDigit;
+}
+
+/// 计算密码强度（弱/中/高），用于注册页给用户实时反馈。
+/// 评分维度：长度、是否含小写、大写、数字、白名单特殊字符。
+PasswordStrength getPasswordStrength(String password) {
+  if (password.isEmpty) return PasswordStrength.weak;
+
+  int score = 0;
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (RegExp(r'[a-z]').hasMatch(password)) score++;
+  if (RegExp(r'[A-Z]').hasMatch(password)) score++;
+  if (RegExp(r'\d').hasMatch(password)) score++;
+  if (RegExp(r'[!@#$%^&*_\-+=.?]').hasMatch(password)) score++;
+
+  if (score <= 2) return PasswordStrength.weak;
+  if (score <= 4) return PasswordStrength.medium;
+  return PasswordStrength.strong;
 }
 
 bool isSixDigitNumber(String input) {

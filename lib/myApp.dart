@@ -82,6 +82,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 seedColor: Colors.red, // AppBar 蓝色
                 brightness: Brightness.light,
               ),
+              appBarTheme: const AppBarTheme(
+                backgroundColor: Colors.white,
+                foregroundColor: Color(0xFF323233),
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                surfaceTintColor: Colors.white,
+              ),
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               useMaterial3: true,

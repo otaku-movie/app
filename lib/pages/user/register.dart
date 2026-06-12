@@ -125,29 +125,6 @@ class _RegisterState extends State<Register> {
     return true;
   }
 
-  
-  void _showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false, // 点击外部不会关闭弹窗
-      builder: (BuildContext context) {
-        return const Dialog(
-          backgroundColor: Colors.transparent, // 透明背景
-          child: Center(
-            child: CircularProgressIndicator(
-              color: Colors.white,
-            ), // 显示加载动画
-          ),
-        );
-      },
-    );
-  }
-
-  // 关闭加载弹窗
-  void _hideLoadingDialog(BuildContext context) {
-    Navigator.of(context).pop(); // 关闭弹窗
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -341,8 +318,10 @@ class _RegisterState extends State<Register> {
                 fontSize: 24.sp,
               ),
               prefixIcon: Container(
-                margin: EdgeInsets.all(12.w),
-                padding: EdgeInsets.all(8.w),
+                margin: EdgeInsets.all(10.w),
+                width: 48.w,
+                height: 48.w,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: emailError != null 
                     ? Colors.red.withValues(alpha: 0.1)
@@ -352,9 +331,10 @@ class _RegisterState extends State<Register> {
                 child: Icon(
                   Icons.email_outlined,
                   color: emailError != null ? Colors.red : const Color(0xFF1989FA),
-                  size: 24.sp,
+                  size: 30.sp,
                 ),
               ),
+              prefixIconConstraints: BoxConstraints(minWidth: 68.w, minHeight: 68.w),
               filled: true,
               fillColor: emailError != null 
                 ? Colors.red.withValues(alpha: 0.05)
@@ -400,23 +380,7 @@ class _RegisterState extends State<Register> {
         ),
         if (emailError != null) ...[
           SizedBox(height: 8.h),
-          Row(
-            children: [
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 16.sp,
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                emailError!,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 20.sp,
-                ),
-              ),
-            ],
-          ),
+          _buildFieldError(emailError!),
         ],
       ],
     );
@@ -446,8 +410,10 @@ class _RegisterState extends State<Register> {
                 fontSize: 24.sp,
               ),
               prefixIcon: Container(
-                margin: EdgeInsets.all(12.w),
-                padding: EdgeInsets.all(8.w),
+                margin: EdgeInsets.all(10.w),
+                width: 48.w,
+                height: 48.w,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: usernameError != null 
                     ? Colors.red.withValues(alpha: 0.1)
@@ -457,9 +423,10 @@ class _RegisterState extends State<Register> {
                 child: Icon(
                   Icons.person_outline,
                   color: usernameError != null ? Colors.red : const Color(0xFF1989FA),
-                  size: 24.sp,
+                  size: 30.sp,
                 ),
               ),
+              prefixIconConstraints: BoxConstraints(minWidth: 68.w, minHeight: 68.w),
               filled: true,
               fillColor: usernameError != null 
                 ? Colors.red.withValues(alpha: 0.05)
@@ -495,25 +462,116 @@ class _RegisterState extends State<Register> {
         ),
         if (usernameError != null) ...[
           SizedBox(height: 8.h),
-          Row(
-            children: [
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 16.sp,
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                usernameError!,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 20.sp,
-                ),
-              ),
-            ],
-          ),
+          _buildFieldError(usernameError!),
         ],
       ],
+    );
+  }
+
+  Widget _buildVisibilityToggle() {
+    return IconButton(
+      padding: EdgeInsets.zero,
+      constraints: BoxConstraints(minWidth: 40.w, minHeight: 40.h),
+      visualDensity: VisualDensity.compact,
+      icon: Icon(
+        _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+        color: const Color(0xFF969799),
+        size: 30.sp,
+      ),
+      onPressed: () {
+        setState(() {
+          _obscureText = !_obscureText;
+        });
+      },
+    );
+  }
+
+  Widget _buildFieldError(String message) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.error_outline,
+          color: Colors.red,
+          size: 16.sp,
+        ),
+        SizedBox(width: 4.w),
+        Expanded(
+          child: Text(
+            message,
+            style: TextStyle(
+              color: Colors.red,
+              fontSize: 20.sp,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _strengthLabel(PasswordStrength s) {
+    switch (s) {
+      case PasswordStrength.weak:
+        return S.of(context).register_passwordStrength_weak;
+      case PasswordStrength.medium:
+        return S.of(context).register_passwordStrength_medium;
+      case PasswordStrength.strong:
+        return S.of(context).register_passwordStrength_strong;
+    }
+  }
+
+  // 密码强度指示条：密码非空时显示三段色条 + 弱/中/高文案
+  Widget _buildPasswordStrengthIndicator() {
+    final pwd = passwordController.text;
+    if (pwd.isEmpty) return const SizedBox.shrink();
+
+    final strength = getPasswordStrength(pwd);
+    late final Color color;
+    late final int activeBars;
+    switch (strength) {
+      case PasswordStrength.weak:
+        color = const Color(0xFFEE0A24);
+        activeBars = 1;
+        break;
+      case PasswordStrength.medium:
+        color = const Color(0xFFFF976A);
+        activeBars = 2;
+        break;
+      case PasswordStrength.strong:
+        color = const Color(0xFF07C160);
+        activeBars = 3;
+        break;
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(top: 12.h),
+      child: Row(
+        children: [
+          for (int i = 0; i < 3; i++) ...[
+            Expanded(
+              child: Container(
+                height: 8.h,
+                decoration: BoxDecoration(
+                  color: i < activeBars ? color : const Color(0xFFE5E5E5),
+                  borderRadius: BorderRadius.circular(4.r),
+                ),
+              ),
+            ),
+            if (i < 2) SizedBox(width: 8.w),
+          ],
+          SizedBox(width: 12.w),
+          Flexible(
+            child: Text(
+              _strengthLabel(strength),
+              style: TextStyle(
+                color: color,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -542,8 +600,10 @@ class _RegisterState extends State<Register> {
                 fontSize: 24.sp,
               ),
               prefixIcon: Container(
-                margin: EdgeInsets.all(12.w),
-                padding: EdgeInsets.all(8.w),
+                margin: EdgeInsets.all(10.w),
+                width: 48.w,
+                height: 48.w,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: passwordError != null 
                     ? Colors.red.withValues(alpha: 0.1)
@@ -553,24 +613,12 @@ class _RegisterState extends State<Register> {
                 child: Icon(
                   Icons.lock_outline,
                   color: passwordError != null ? Colors.red : const Color(0xFF1989FA),
-                  size: 24.sp,
+                  size: 30.sp,
                 ),
               ),
-              suffixIcon: Container(
-                margin: EdgeInsets.all(12.w),
-                child: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                    color: const Color(0xFF969799),
-                    size: 24.sp,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                ),
-              ),
+              suffixIcon: _buildVisibilityToggle(),
+              suffixIconConstraints: BoxConstraints(minWidth: 56.w, minHeight: 48.h),
+              prefixIconConstraints: BoxConstraints(minWidth: 68.w, minHeight: 68.w),
               filled: true,
               fillColor: passwordError != null 
                 ? Colors.red.withValues(alpha: 0.05)
@@ -605,25 +653,10 @@ class _RegisterState extends State<Register> {
             },
           ),
         ),
+        _buildPasswordStrengthIndicator(),
         if (passwordError != null) ...[
           SizedBox(height: 8.h),
-          Row(
-            children: [
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 16.sp,
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                passwordError!,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 20.sp,
-                ),
-              ),
-            ],
-          ),
+          _buildFieldError(passwordError!),
         ],
       ],
     );
@@ -654,8 +687,10 @@ class _RegisterState extends State<Register> {
                 fontSize: 24.sp,
               ),
               prefixIcon: Container(
-                margin: EdgeInsets.all(12.w),
-                padding: EdgeInsets.all(8.w),
+                margin: EdgeInsets.all(10.w),
+                width: 48.w,
+                height: 48.w,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: repeatPasswordError != null 
                     ? Colors.red.withValues(alpha: 0.1)
@@ -665,24 +700,12 @@ class _RegisterState extends State<Register> {
                 child: Icon(
                   Icons.lock_outline,
                   color: repeatPasswordError != null ? Colors.red : const Color(0xFF1989FA),
-                  size: 24.sp,
+                  size: 30.sp,
                 ),
               ),
-              suffixIcon: Container(
-                margin: EdgeInsets.all(12.w),
-                child: IconButton(
-                  icon: Icon(
-                    _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
-                    color: const Color(0xFF969799),
-                    size: 24.sp,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _obscureText = !_obscureText;
-                    });
-                  },
-                ),
-              ),
+              suffixIcon: _buildVisibilityToggle(),
+              suffixIconConstraints: BoxConstraints(minWidth: 56.w, minHeight: 48.h),
+              prefixIconConstraints: BoxConstraints(minWidth: 68.w, minHeight: 68.w),
               filled: true,
               fillColor: repeatPasswordError != null 
                 ? Colors.red.withValues(alpha: 0.05)
@@ -718,23 +741,7 @@ class _RegisterState extends State<Register> {
         ),
         if (repeatPasswordError != null) ...[
           SizedBox(height: 8.h),
-          Row(
-            children: [
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 16.sp,
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                repeatPasswordError!,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 20.sp,
-                ),
-              ),
-            ],
-          ),
+          _buildFieldError(repeatPasswordError!),
         ],
       ],
     );
@@ -771,23 +778,7 @@ class _RegisterState extends State<Register> {
         ),
         if (verifyCodeError != null) ...[
           SizedBox(height: 8.h),
-          Row(
-            children: [
-              Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 16.sp,
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                verifyCodeError!,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 20.sp,
-                ),
-              ),
-            ],
-          ),
+          _buildFieldError(verifyCodeError!),
         ],
       ],
     );

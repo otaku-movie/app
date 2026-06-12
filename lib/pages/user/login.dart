@@ -137,9 +137,6 @@ class _LoginPageState extends State<Login> {
     if (password.isEmpty) {
       return ToastService.showError(S.of(context).login_password_verify_notNull);
     }
-    if (!isValidPassword(password)) {
-      return ToastService.showError(S.of(context).login_password_verify_isValid);
-    }
     
     // 直接提交明文密码，由后端 BCrypt 加盐哈希存储（传输依赖 HTTPS 保护）
     String pwd = passwordController.text;

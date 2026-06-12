@@ -26,7 +26,7 @@ class SendVerifyCode extends StatefulWidget {
     this.onChange,
     this.onSubmit,
     this.onTap,
-    this.time = 15,
+    this.time = 60,
     
   });
 
@@ -132,8 +132,10 @@ class _PageState extends State<SendVerifyCode> {
                   fontSize: 24.sp,
                 ),
                 prefixIcon: Container(
-                  margin: EdgeInsets.all(12.w),
-                  padding: EdgeInsets.all(8.w),
+                  margin: EdgeInsets.all(10.w),
+                  width: 48.w,
+                  height: 48.w,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: const Color(0xFF1989FA).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8.r),
@@ -141,9 +143,10 @@ class _PageState extends State<SendVerifyCode> {
                   child: Icon(
                     Icons.security_outlined,
                     color: const Color(0xFF1989FA),
-                    size: 24.sp,
+                    size: 30.sp,
                   ),
                 ),
+                prefixIconConstraints: BoxConstraints(minWidth: 68.w, minHeight: 68.w),
                 filled: true,
                 fillColor: const Color(0xFFF7F8FA),
                 border: OutlineInputBorder(
@@ -208,14 +211,14 @@ class _PageState extends State<SendVerifyCode> {
                   Icon(
                     Icons.timer_outlined,
                     color: const Color(0xFF969799),
-                    size: 20.sp,
+                    size: 28.sp,
                   ),
                   SizedBox(width: 4.w),
                   Text(
                     '${_countdown}s',
                     style: TextStyle(
                       color: const Color(0xFF969799),
-                      fontSize: 24.sp,
+                      fontSize: 28.sp,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -225,8 +228,8 @@ class _PageState extends State<SendVerifyCode> {
                 children: [
                   if (loading) ...[
                     SizedBox(
-                      width: 20.sp,
-                      height: 20.sp,
+                      width: 28.sp,
+                      height: 28.sp,
                       child: CircularProgressIndicator(
                         color: Colors.white,
                         strokeWidth: 2,
@@ -237,14 +240,14 @@ class _PageState extends State<SendVerifyCode> {
                   Icon(
                     Icons.send_outlined,
                     color: Colors.white,
-                    size: 20.sp,
+                    size: 28.sp,
                   ),
                   SizedBox(width: 6.w),
                   Text(
                     widget.sendText,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24.sp,
+                      fontSize: 28.sp,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
