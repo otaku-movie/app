@@ -1062,6 +1062,13 @@ class _PageState extends State<OrderDetail> {
                               fromJsonT: (_) => null,
                             );
                             if (ctx.mounted) {
+                              Analytics.instance.logEvent(Ev.benefitFeedbackSubmit, {
+                                P.orderNumber: widget.orderNumber,
+                                P.movieId: data.movieId,
+                                P.benefitId: '${benefit.id}',
+                                P.cinemaId: '$cinemaId',
+                                P.source: 'order_detail',
+                              });
                               setState(() => _benefitFeedbackSubmitted = true);
                               ToastService.showToast(S.of(context).benefit_feedback_success, type: ToastType.success);
                               Navigator.of(ctx).pop();

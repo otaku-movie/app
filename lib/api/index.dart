@@ -46,8 +46,18 @@ class ApiRequest {
           // 确保 SharedPreferences 已经初始化
           _prefs ??= await SharedPreferences.getInstance();
 
-          // 从本地存储获取 token
-          String? token = await AuthStorage.instance.accessToken;
+          // 从本地存储获取 token。
+          // 注意：Dio 的 connectTimeout/receiveTimeout 只覆盖网络阶段，不覆盖拦截器里的 await。
+          // flutter_secure_storage 在部分机型（首次访问 Keystore 等）可能很慢甚至卡住，
+          // 若不加超时，请求会一直停在 onRequest、永不发出也永不超时（表现为页面无限 loading）。
+          String? token;
+          try {
+            token = await AuthStorage.instance.accessToken
+                .timeout(const Duration(seconds: 5));
+          } catch (e) {
+            log.e('读取 token 超时/失败，按未登录继续请求', error: e);
+            token = null;
+          }
           
           // 获取用户选择的语言环境（优先使用 LanguageController 中的语言，否则使用系统语言）
           Locale locale;

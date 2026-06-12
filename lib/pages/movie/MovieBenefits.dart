@@ -289,8 +289,14 @@ class _MovieBenefitsState extends State<MovieBenefits> {
     return null;
   }
 
-  void _openCinemaAvailability(AppBenefitDetailResponse phase) {
+  void _openCinemaAvailability(AppBenefitDetailResponse phase, {required String source}) {
     if (phase.id == null || widget.id == null) return;
+    Analytics.instance.logEvent(Ev.benefitViewCinemasClick, {
+      P.movieId: widget.id,
+      P.benefitId: '${phase.id}',
+      P.reReleaseId: widget.reReleaseId,
+      P.source: source,
+    });
     final benefitImg = _firstBenefitImageUrl(phase);
     context.pushNamed(
       'benefitCinemaAvailability',
@@ -411,8 +417,19 @@ class _MovieBenefitsState extends State<MovieBenefits> {
     return (label: S.of(context).benefit_status_sufficient, color: Colors.green);
   }
 
-  void _showFullImage(BuildContext context, String url) {
+  void _showFullImage(
+    BuildContext context,
+    String url, {
+    String? benefitId,
+    required String source,
+  }) {
     if (url.isEmpty) return;
+    Analytics.instance.logEvent(Ev.benefitImagePreview, {
+      P.movieId: widget.id,
+      P.benefitId: benefitId,
+      P.reReleaseId: widget.reReleaseId,
+      P.source: source,
+    });
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (ctx) => Scaffold(
@@ -461,6 +478,8 @@ class _MovieBenefitsState extends State<MovieBenefits> {
         backgroundColor: Colors.white,
         foregroundColor: const Color(0xFF323233),
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.white,
         actions: const [],
       ),
       body: EasyRefresh(
@@ -495,7 +514,7 @@ class _MovieBenefitsState extends State<MovieBenefits> {
     );
   }
 
-  Widget _buildImageGallery(List<String> images) {
+  Widget _buildImageGallery(List<String> images, AppBenefitDetailResponse phase) {
     if (images.isEmpty) return const SizedBox.shrink();
 
     // 1 张：1 列铺满；2 张：平分 2 列；3 张：平分 3 列；超过 3 张：横向滑动
@@ -512,7 +531,12 @@ class _MovieBenefitsState extends State<MovieBenefits> {
               return Padding(
                 padding: EdgeInsets.only(right: index == count - 1 ? 0 : spacing),
                 child: GestureDetector(
-                  onTap: () => _showFullImage(context, url),
+                  onTap: () => _showFullImage(
+                    context,
+                    url,
+                    benefitId: phase.id?.toString(),
+                    source: 'gallery',
+                  ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.r),
                     child: CustomExtendedImage(
@@ -539,7 +563,12 @@ class _MovieBenefitsState extends State<MovieBenefits> {
         itemBuilder: (context, index) {
           final url = _imageUrl(images[index]);
           return GestureDetector(
-            onTap: () => _showFullImage(context, url),
+            onTap: () => _showFullImage(
+              context,
+              url,
+              benefitId: phase.id?.toString(),
+              source: 'gallery',
+            ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8.r),
               child: CustomExtendedImage(
@@ -576,7 +605,9 @@ class _MovieBenefitsState extends State<MovieBenefits> {
         children: [
           InkWell(
             borderRadius: BorderRadius.vertical(top: Radius.circular(16.r), bottom: Radius.circular(16.r)),
-            onTap: phase.id == null ? null : () => _openCinemaAvailability(phase),
+            onTap: phase.id == null
+                ? null
+                : () => _openCinemaAvailability(phase, source: 'card'),
             child: Padding(
               padding: EdgeInsets.fromLTRB(20.w, 20.h, 20.w, 12.h),
               child: Column(
@@ -644,6 +675,11 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                   Builder(
                     builder: (btnContext) => InkWell(
                       onTap: () {
+                        Analytics.instance.logEvent(Ev.benefitShare, {
+                          P.movieId: widget.id,
+                          P.benefitId: '${phase.id}',
+                          P.reReleaseId: widget.reReleaseId,
+                        });
                         ShareService.instance.shareBenefit(
                           movieId: widget.id!,
                           benefitId: '${phase.id}',
@@ -707,7 +743,7 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerRight,
                       child: OutlinedButton(
-                        onPressed: () => _openCinemaAvailability(phase),
+                        onPressed: () => _openCinemaAvailability(phase, source: 'button'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: const Color(0xFF1989FA),
                           backgroundColor: Colors.white,
@@ -801,7 +837,7 @@ class _MovieBenefitsState extends State<MovieBenefits> {
             ],
             if (images.isNotEmpty) ...[
               SizedBox(height: 16.h),
-              _buildImageGallery(images),
+              _buildImageGallery(images, phase),
             ],
             if (items.isNotEmpty) ...[
               SizedBox(height: 16.h),
@@ -819,7 +855,12 @@ class _MovieBenefitsState extends State<MovieBenefits> {
                           Padding(
                             padding: EdgeInsets.only(right: 12.w),
                             child: GestureDetector(
-                              onTap: () => _showFullImage(context, _imageUrl(item.imageUrl)),
+                              onTap: () => _showFullImage(
+                                context,
+                                _imageUrl(item.imageUrl),
+                                benefitId: phase.id?.toString(),
+                                source: 'item',
+                              ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(6.r),
                                 child: CustomExtendedImage(
@@ -887,6 +928,13 @@ class _MovieBenefitsState extends State<MovieBenefits> {
       );
       if (!mounted) return;
       if (res.code == 200) {
+        Analytics.instance.logEvent(Ev.benefitFeedbackSubmit, {
+          P.movieId: widget.id,
+          P.benefitId: '${phase.id}',
+          P.cinemaId: '$cinemaId',
+          P.reReleaseId: widget.reReleaseId,
+          P.source: 'benefit_sheet',
+        });
         ToastService.showToast(S.of(context).benefit_feedback_success, type: ToastType.success);
       }
     } finally {

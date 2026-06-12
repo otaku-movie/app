@@ -388,9 +388,19 @@ class _BenefitCinemaAvailabilityState extends State<BenefitCinemaAvailability> {
   }
 
   FilterValue _convertArea(AreaResponse item) {
+    // 与场次列表/影院列表地区筛选保持一致：日文放 name、译名放 secondaryName，
+    // 由 FilterBar 两端对齐渲染（日语环境 secondaryName 为空，只显示日文）。
+    final ja = (item.name ?? '').trim();
+    final translation = AreaI18nUtil.translation(
+      context,
+      name: item.name,
+      nameZh: item.nameZh,
+      nameEn: item.nameEn,
+    );
     return FilterValue(
       id: item.id.toString(),
-      name: AreaI18nUtil.displayNameOf(context, item),
+      name: ja,
+      secondaryName: translation.isEmpty ? null : translation,
       children: item.children?.map(_convertArea).toList(),
     );
   }
@@ -419,6 +429,14 @@ class _BenefitCinemaAvailabilityState extends State<BenefitCinemaAvailability> {
       ToastService.showInfo(S.of(context).benefit_availability_sort_locationDenied);
       return;
     }
+    Analytics.instance.logEvent(Ev.benefitCinemaFilter, {
+      P.movieId: widget.movieId,
+      P.benefitId: widget.benefitId,
+      P.reReleaseId: widget.reReleaseId,
+      P.regionId: regionId,
+      P.prefectureId: prefectureId,
+      P.sort: sort,
+    });
     setState(() {
       _filterParams = Map<String, dynamic>.from(selected);
       _regionId = regionId;
@@ -445,6 +463,13 @@ class _BenefitCinemaAvailabilityState extends State<BenefitCinemaAvailability> {
       );
       if (!mounted) return;
       if (res.code == 200) {
+        Analytics.instance.logEvent(Ev.benefitFeedbackSubmit, {
+          P.movieId: widget.movieId,
+          P.benefitId: widget.benefitId,
+          P.cinemaId: '$cid',
+          P.reReleaseId: widget.reReleaseId,
+          P.source: 'cinema_availability',
+        });
         ToastService.showToast(S.of(context).benefit_feedback_success, type: ToastType.success);
         await _load(reset: true);
       } else {
@@ -469,6 +494,13 @@ class _BenefitCinemaAvailabilityState extends State<BenefitCinemaAvailability> {
     final cid = item.cinemaId;
     if (cid == null) return;
     if ((item.showTimeCount ?? 0) <= 0) return;
+    Analytics.instance.logEvent(Ev.benefitCinemaClick, {
+      P.movieId: mid,
+      P.benefitId: widget.benefitId,
+      P.cinemaId: '$cid',
+      P.reReleaseId: widget.reReleaseId,
+      P.source: 'buy_showtime',
+    });
     context.pushNamed(
       'showTimeDetail',
       pathParameters: {'id': mid},
@@ -819,7 +851,8 @@ class _BenefitCinemaAvailabilityState extends State<BenefitCinemaAvailability> {
   Widget _buildStockIndicator(BenefitCinemaAvailabilityItem item, Color pc) {
     final remaining = item.remaining;
     final quota = item.quota;
-    final unknown = remaining == null;
+    // stockStatus==5（未知）：库存未维护，remaining 可能是占位的 0，按「未知」展示而非「剩余 0」
+    final unknown = remaining == null || item.stockStatus == 5;
     final hasQuota = quota != null && quota > 0;
     double? ratio;
     if (!unknown && hasQuota) {

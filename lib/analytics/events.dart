@@ -54,6 +54,12 @@ class Ev {
   static const presaleDetailView = 'presale_detail_view';
   static const movieBenefitsView = 'movie_benefits_view';
   static const benefitCinemaView = 'benefit_cinema_view';
+  static const benefitViewCinemasClick = 'benefit_view_cinemas_click';
+  static const benefitShare = 'benefit_share';
+  static const benefitImagePreview = 'benefit_image_preview';
+  static const benefitFeedbackSubmit = 'benefit_feedback_submit';
+  static const benefitCinemaFilter = 'benefit_cinema_filter';
+  static const benefitCinemaClick = 'benefit_cinema_click';
 
   // —— 订单 / 票 ——
   static const orderListView = 'order_list_view';
@@ -92,6 +98,10 @@ class P {
   static const commentId = 'comment_id';
   static const score = 'score';
   static const orderState = 'order_state';
+  static const sort = 'sort';
+  static const regionId = 'region_id';
+  static const prefectureId = 'prefecture_id';
+  static const source = 'source';
 
   // 购票漏斗串联 id（进入漏斗时生成，贯穿到支付完成）
   static const flowId = 'flow_id';
