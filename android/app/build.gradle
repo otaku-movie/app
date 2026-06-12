@@ -60,7 +60,7 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         // Firebase（firebase_core/analytics/crashlytics）要求 Android minSdk 23，
         // 显式固定为 23，避免依赖 flutter 默认值变化导致构建/运行报错。
-        minSdk = 23
+        minSdkVersion = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
@@ -162,8 +162,9 @@ android {
                 // 用真实 flavor 名区分 dev/qa/prepord/prod，避免都被命名成 prod
                 def flavor = variant.flavorName ?: "prod"
                 def version = variant.versionName
-                def createTime = new Date().format('yyyy_MM_dd_HH_mm_ss')
-                def newFileName = "シネコ-${flavor}-${version}-${createTime}.apk"
+                // CDN / 后台版本管理使用固定命名：cineko-prod-1.0.0.apk。
+                // 不带时间戳，方便同版本覆盖上传；如需留档可另行保存构建产物。
+                def newFileName = "cineko-${flavor}-${version}.apk"
                 println("Setting output file name to: $newFileName")
                 output.outputFileName = newFileName
             }
