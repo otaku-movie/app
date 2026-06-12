@@ -1403,6 +1403,39 @@ List<Widget> generateComment() {
                                 ],
                               ),
                             ),
+                          // 入场者特典（有特典时显示，点击进入特典页）
+                          if (data.hasBenefit == true)
+                            Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.pushNamed(
+                                    'movieBenefits',
+                                    pathParameters: {'id': '${data.id}'},
+                                    queryParameters: {
+                                      if (data.name != null) 'movieName': data.name!,
+                                      if (data.cover != null) 'movieCoverUrl': data.cover!,
+                                    },
+                                  );
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.redeem, size: 28.sp, color: const Color(0xFFE91E63)),
+                                    SizedBox(width: 8.w),
+                                    Text(
+                                      S.of(context).benefit_pageTitle,
+                                      style: TextStyle(
+                                        fontSize: 28.sp,
+                                        color: const Color(0xFFC2185B),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    SizedBox(width: 4.w),
+                                    Icon(Icons.chevron_right, size: 28.sp, color: const Color(0xFFC2185B)),
+                                  ],
+                                ),
+                              ),
+                            ),
                           // 时长
                           _buildInfoRow(
                             S.of(context).movieDetail_detail_time,

@@ -176,7 +176,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
     //   - 没缓存（首次安装 / 拒权限 / 关定位）：position 仍为 null，按原流程走，
     //     后台精确定位完成后才会补一次 refresh（这种情况无法避免跳一次）。
     // 这里用快返回的 getLastKnownPosition，不弹权限框、不激活 GPS，几乎是即时的。
-    final cachedPosition = await LocationUtil.getLastKnownPosition();
+    // 定位插件在个别机型可能不返回；加超时兜底，避免卡在这里导致后续 getData 永不执行。
+    final cachedPosition = await LocationUtil.getLastKnownPosition()
+        .timeout(const Duration(seconds: 3), onTimeout: () => null);
     if (!mounted) return;
     if (cachedPosition != null) {
       // 仅写入 position，不做反向地理编码（地址那一栏可以等精确定位再填）。
@@ -195,17 +197,16 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
   }
 
   Future<void> getAreaTree() async {
-    ApiRequest()
-        .request(
-      path: '/areas/tree',
-      method: 'GET',
-      fromJsonT: (json) {
-        if (json is List<dynamic>) {
-          return json.map((item) => AreaResponse.fromJson(item)).toList();
-        }
-      },
-    )
-        .then((res) {
+    try {
+      final res = await ApiRequest().request(
+        path: '/areas/tree',
+        method: 'GET',
+        fromJsonT: (json) {
+          if (json is List<dynamic>) {
+            return json.map((item) => AreaResponse.fromJson(item)).toList();
+          }
+        },
+      );
       if (!mounted) return;
       if (res.data != null) {
         List<AreaResponse> list = res.data!;
@@ -217,26 +218,27 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         // 地区树就绪——若此时已经定位完成，尝试自动选中当前所在地区
         _tryAutoSelectArea();
       }
-    }).whenComplete(() {});
+    } catch (e) {
+      print('获取地区树失败: $e');
+    }
   }
 
   Future<void> getCinemaSpec() async {
-    ApiRequest()
-        .request(
-      path: '/cinema/spec/list',
-      method: 'POST',
-      data: {
-        'page': 1,
-        'pageSize': 30,
-      },
-      fromJsonT: (json) {
-        return ApiPaginationResponse<CinemaSpecResponse>.fromJson(
-          json,
-          (data) => CinemaSpecResponse.fromJson(data as Map<String, dynamic>),
-        );
-      },
-    )
-        .then((res) {
+    try {
+      final res = await ApiRequest().request(
+        path: '/cinema/spec/list',
+        method: 'POST',
+        data: {
+          'page': 1,
+          'pageSize': 30,
+        },
+        fromJsonT: (json) {
+          return ApiPaginationResponse<CinemaSpecResponse>.fromJson(
+            json,
+            (data) => CinemaSpecResponse.fromJson(data as Map<String, dynamic>),
+          );
+        },
+      );
       if (!mounted) return;
       if (res.data?.list != null) {
         List<CinemaSpecResponse> list = res.data!.list!;
@@ -246,7 +248,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         });
         print(cinemaSpec);
       }
-    }).whenComplete(() {});
+    } catch (e) {
+      print('获取影厅规格失败: $e');
+    }
   }
 
   Future<void> getBrandList() async {
@@ -276,22 +280,21 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
   }
 
   Future<void> getLanguageList() async {
-    ApiRequest()
-        .request(
-      path: '/language/list',
-      method: 'POST',
-      data: {
-        'page': 1,
-        'pageSize': 30,
-      },
-      fromJsonT: (json) {
-        return ApiPaginationResponse<LanguageResponse>.fromJson(
-          json,
-          (data) => LanguageResponse.fromJson(data as Map<String, dynamic>),
-        );
-      },
-    )
-        .then((res) {
+    try {
+      final res = await ApiRequest().request(
+        path: '/language/list',
+        method: 'POST',
+        data: {
+          'page': 1,
+          'pageSize': 30,
+        },
+        fromJsonT: (json) {
+          return ApiPaginationResponse<LanguageResponse>.fromJson(
+            json,
+            (data) => LanguageResponse.fromJson(data as Map<String, dynamic>),
+          );
+        },
+      );
       if (!mounted) return;
       if (res.data?.list != null) {
         List<LanguageResponse> list = res.data!.list!;
@@ -301,26 +304,27 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         });
         print('字幕列表: $languageList');
       }
-    }).whenComplete(() {});
+    } catch (e) {
+      print('获取字幕列表失败: $e');
+    }
   }
 
   Future<void> getShowTimeTagList() async {
-    ApiRequest()
-        .request(
-      path: '/showTimeTag/list',
-      method: 'POST',
-      data: {
-        'page': 1,
-        'pageSize': 30,
-      },
-      fromJsonT: (json) {
-        return ApiPaginationResponse<ShowTimeTag>.fromJson(
-          json,
-          (data) => ShowTimeTag.fromJson(data as Map<String, dynamic>),
-        );
-      },
-    )
-        .then((res) {
+    try {
+      final res = await ApiRequest().request(
+        path: '/showTimeTag/list',
+        method: 'POST',
+        data: {
+          'page': 1,
+          'pageSize': 30,
+        },
+        fromJsonT: (json) {
+          return ApiPaginationResponse<ShowTimeTag>.fromJson(
+            json,
+            (data) => ShowTimeTag.fromJson(data as Map<String, dynamic>),
+          );
+        },
+      );
       if (!mounted) return;
       if (res.data?.list != null) {
         List<ShowTimeTag> list = res.data!.list!;
@@ -330,9 +334,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         });
         print('上映标签列表: $showTimeTagList');
       }
-    }).catchError((error) {
+    } catch (error) {
       print('获取上映标签列表失败: $error');
-    }).whenComplete(() {});
+    }
   }
 
   /// 拉取该电影实际出现过的字幕语言 / 上映标签 id，用于把筛选项收敛到「真正有的」。
@@ -648,9 +652,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
       });
     }
 
-    final requestData = _buildRequestData(page: page);
-
     try {
+      // 放进 try：_buildRequestData 内有 int.parse(widget.id!) 等，
+      // 若 id 异常会抛错；放在 try 外会绕过下面的 catch，导致 loading 永不关闭。
+      final requestData = _buildRequestData(page: page);
+
       final res = await ApiRequest().request(
         path: '/app/movie/showTime',
         method: 'POST',

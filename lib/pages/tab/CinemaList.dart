@@ -587,9 +587,20 @@ class _CinemaListState extends State<CinemaList> with AutomaticKeepAliveClientMi
   }
 
   FilterValue convertToFilterValue(AreaResponse item) {
+    // 与场次列表（ShowTimeList）地区筛选保持一致：日文放 name、译名放 secondaryName，
+    // 由 FilterBar 两端对齐渲染（日语环境 secondaryName 为空，只显示日文）。
+    // name 保留原始日文，不影响按地区定位/匹配。
+    final ja = (item.name ?? '').trim();
+    final translation = AreaI18nUtil.translation(
+      context,
+      name: item.name,
+      nameZh: item.nameZh,
+      nameEn: item.nameEn,
+    );
     return FilterValue(
       id: item.id.toString(),
-      name: AreaI18nUtil.displayNameOf(context, item),
+      name: ja,
+      secondaryName: translation.isEmpty ? null : translation,
       children: item.children?.map((child) => convertToFilterValue(child)).toList(),
     );
   }

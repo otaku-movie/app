@@ -39,6 +39,9 @@ class MovieResponse {
   /// 该预售券是否含特典
   final bool? hasBonus;
 
+  /// 是否有入场者特典
+  final bool? hasBenefit;
+
   /// 是否来自重映计划（comingSoon 等列表会复用 MovieResponse）
   final bool? isReRelease;
   /// 关联重映计划ID（可空）
@@ -77,6 +80,7 @@ class MovieResponse {
     this.presaleId,
     this.hasPresaleTicket,
     this.hasBonus,
+    this.hasBenefit,
     this.isReRelease,
     this.reReleaseId,
     this.reReleaseVersionInfo
