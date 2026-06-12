@@ -137,10 +137,10 @@ class _AgreementPageState extends State<AgreementPage> {
       'COMPANY_NAME': localized.companyName,
       'COMPANY_ADDRESS': localized.companyAddress,
       'JURISDICTION_COURT': '東京地方裁判所',
-      'SUPPORT_EMAIL': 'diy4869@gmail.com',
+      'SUPPORT_EMAIL': 'support@otaku-movie.com',
       'SUPPORT_PHONE': '03-0000-0000',
       'SUPPORT_HOURS': localized.supportHours,
-      'DPO_EMAIL': 'diy4869@gmail.com',
+      'DPO_EMAIL': 'privacy@otaku-movie.com',
       'DPO_RESPONSE_DAYS': '15',
       'REFUND_HOURS': '1',
       'ACCOUNT_RETENTION_DAYS': '30',
@@ -179,7 +179,7 @@ class _AgreementPageState extends State<AgreementPage> {
       a: TextStyle(
         fontSize: 28.sp,
         color: const Color(0xFF1989FA),
-        decoration: TextDecoration.underline,
+        decoration: TextDecoration.none,
       ),
       blockquoteDecoration: BoxDecoration(
         color: const Color(0xFFE8F4FF),
@@ -374,7 +374,7 @@ class _AgreementPageState extends State<AgreementPage> {
         a: TextStyle(
           fontSize: 22.sp,
           color: const Color(0xFF1989FA),
-          decoration: TextDecoration.underline,
+          decoration: TextDecoration.none,
         ),
         blockSpacing: 0,
       ),

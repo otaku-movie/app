@@ -913,7 +913,7 @@ abstract class AppLocalizations {
   /// No description provided for @about_dataDisclaimer.
   ///
   /// In en, this message translates to:
-  /// **'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.'**
+  /// **'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at support@otaku-movie.com.'**
   String get about_dataDisclaimer;
 
   /// No description provided for @about_dataSource.
@@ -1333,7 +1333,7 @@ abstract class AppLocalizations {
   /// No description provided for @login_password_verify_isValid.
   ///
   /// In en, this message translates to:
-  /// **'Password must be 8-16 characters with letters, numbers, and underscores'**
+  /// **'Password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?'**
   String get login_password_verify_isValid;
 
   /// No description provided for @login_loginButton.
@@ -1519,7 +1519,7 @@ abstract class AppLocalizations {
   /// No description provided for @register_repeatPassword_verify_isValid.
   ///
   /// In en, this message translates to:
-  /// **'Repeat password must be 8-16 characters with letters, numbers, and underscores'**
+  /// **'Repeat password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?'**
   String get register_repeatPassword_verify_isValid;
 
   /// No description provided for @register_username_text.
@@ -1563,6 +1563,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send'**
   String get register_send;
+
+  /// No description provided for @register_passwordStrength_weak.
+  ///
+  /// In en, this message translates to:
+  /// **'Weak'**
+  String get register_passwordStrength_weak;
+
+  /// No description provided for @register_passwordStrength_medium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get register_passwordStrength_medium;
+
+  /// No description provided for @register_passwordStrength_strong.
+  ///
+  /// In en, this message translates to:
+  /// **'Strong'**
+  String get register_passwordStrength_strong;
 
   /// No description provided for @register_haveAccount.
   ///

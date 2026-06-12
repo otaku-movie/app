@@ -441,7 +441,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get about_dataDisclaimer =>
-      '本アプリに表示される映画のタイトル、ポスター、スチル、予告編などのコンテンツの著作権は、各映画製作会社・配給会社または権利者に帰属します。本アプリは情報提供およびチケット購入サービスのみを目的としており、これらのコンテンツに対する著作権を主張するものではありません。著作権に関するお問い合わせは diy4869@gmail.com までご連絡ください。';
+      '本アプリに表示される映画のタイトル、ポスター、スチル、予告編などのコンテンツの著作権は、各映画製作会社・配給会社または権利者に帰属します。本アプリは情報提供およびチケット購入サービスのみを目的としており、これらのコンテンツに対する著作権を主張するものではありません。著作権に関するお問い合わせは support@otaku-movie.com までご連絡ください。';
 
   @override
   String get about_dataSource =>
@@ -664,7 +664,8 @@ class AppLocalizationsJa extends AppLocalizations {
   String get login_password_verify_notNull => 'パスワードを入力してください';
 
   @override
-  String get login_password_verify_isValid => '8〜16文字の英数字とアンダースコアを含めてください';
+  String get login_password_verify_isValid =>
+      'パスワードは8〜32文字で、英字と数字を含めてください。使用可能な記号: !@#\$%^&*_-+=.?';
 
   @override
   String get login_loginButton => 'ログイン';
@@ -758,7 +759,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get register_repeatPassword_verify_isValid =>
-      '8〜16文字の英数字とアンダースコアを含めてください';
+      '確認用パスワードは8〜32文字で、英字と数字を含めてください。使用可能な記号: !@#\$%^&*_-+=.?';
 
   @override
   String get register_username_text => 'ユーザー名';
@@ -780,6 +781,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get register_send => '送信';
+
+  @override
+  String get register_passwordStrength_weak => '弱い';
+
+  @override
+  String get register_passwordStrength_medium => '普通';
+
+  @override
+  String get register_passwordStrength_strong => '強い';
 
   @override
   String get register_haveAccount => 'すでにアカウントをお持ちですか？';

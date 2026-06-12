@@ -1400,10 +1400,10 @@ class S {
     );
   }
 
-  /// `Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.`
+  /// `Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at support@otaku-movie.com.`
   String get about_dataDisclaimer {
     return Intl.message(
-      'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.',
+      'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at support@otaku-movie.com.',
       name: 'about_dataDisclaimer',
       desc: '',
       args: [],
@@ -2100,10 +2100,10 @@ class S {
     );
   }
 
-  /// `Password must be 8-16 characters with letters, numbers, and underscores`
+  /// `Password must be 8-32 characters with letters and numbers; allowed special characters: !@#$%^&*_-+=.?`
   String get login_password_verify_isValid {
     return Intl.message(
-      'Password must be 8-16 characters with letters, numbers, and underscores',
+      'Password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?',
       name: 'login_password_verify_isValid',
       desc: '',
       args: [],
@@ -2410,10 +2410,10 @@ class S {
     );
   }
 
-  /// `Repeat password must be 8-16 characters with letters, numbers, and underscores`
+  /// `Repeat password must be 8-32 characters with letters and numbers; allowed special characters: !@#$%^&*_-+=.?`
   String get register_repeatPassword_verify_isValid {
     return Intl.message(
-      'Repeat password must be 8-16 characters with letters, numbers, and underscores',
+      'Repeat password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?',
       name: 'register_repeatPassword_verify_isValid',
       desc: '',
       args: [],
@@ -2485,6 +2485,36 @@ class S {
     return Intl.message(
       'Send',
       name: 'register_send',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Weak`
+  String get register_passwordStrength_weak {
+    return Intl.message(
+      'Weak',
+      name: 'register_passwordStrength_weak',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Medium`
+  String get register_passwordStrength_medium {
+    return Intl.message(
+      'Medium',
+      name: 'register_passwordStrength_medium',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Strong`
+  String get register_passwordStrength_strong {
+    return Intl.message(
+      'Strong',
+      name: 'register_passwordStrength_strong',
       desc: '',
       args: [],
     );

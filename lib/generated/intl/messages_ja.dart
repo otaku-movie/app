@@ -139,7 +139,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_copyright":
             MessageLookupByLibrary.simpleMessage("© 2025-2026 シネコ 全著作権所有"),
         "about_dataDisclaimer": MessageLookupByLibrary.simpleMessage(
-            "本アプリに表示される映画のタイトル、ポスター、スチル、予告編などのコンテンツの著作権は、各映画製作会社・配給会社または権利者に帰属します。本アプリは情報提供およびチケット購入サービスのみを目的としており、これらのコンテンツに対する著作権を主張するものではありません。著作権に関するお問い合わせは diy4869@gmail.com までご連絡ください。"),
+            "本アプリに表示される映画のタイトル、ポスター、スチル、予告編などのコンテンツの著作権は、各映画製作会社・配給会社または権利者に帰属します。本アプリは情報提供およびチケット購入サービスのみを目的としており、これらのコンテンツに対する著作権を主張するものではありません。著作権に関するお問い合わせは support@otaku-movie.com までご連絡ください。"),
         "about_dataSource": MessageLookupByLibrary.simpleMessage(
             "本アプリに表示される映画情報・上映スケジュール・劇場データは、各劇場の公式サイトおよび公開情報に基づくものであり、閲覧・参考目的で提供されます。上映スケジュール・価格・残席等は随時変動する可能性があり、最終的には劇場または実際の購入チャネルの表示が優先されます。"),
         "about_description": MessageLookupByLibrary.simpleMessage(
@@ -648,8 +648,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "login_passwordTooShort":
             MessageLookupByLibrary.simpleMessage("パスワードは6文字以上である必要があります"),
         "login_password_text": MessageLookupByLibrary.simpleMessage("パスワード"),
-        "login_password_verify_isValid":
-            MessageLookupByLibrary.simpleMessage("8〜16文字の英数字とアンダースコアを含めてください"),
+        "login_password_verify_isValid": MessageLookupByLibrary.simpleMessage(
+            "パスワードは8〜32文字で、英字と数字を含めてください。使用可能な記号: !@#\$%^&*_-+=.?"),
         "login_password_verify_notNull":
             MessageLookupByLibrary.simpleMessage("パスワードを入力してください"),
         "login_rememberPassword":
@@ -983,12 +983,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_loginHere": MessageLookupByLibrary.simpleMessage("こちらからログイン"),
         "register_passwordNotMatchRepeatPassword":
             MessageLookupByLibrary.simpleMessage("2回入力したパスワードは一致しません"),
+        "register_passwordStrength_medium":
+            MessageLookupByLibrary.simpleMessage("普通"),
+        "register_passwordStrength_strong":
+            MessageLookupByLibrary.simpleMessage("強い"),
+        "register_passwordStrength_weak":
+            MessageLookupByLibrary.simpleMessage("弱い"),
         "register_registerButton":
             MessageLookupByLibrary.simpleMessage("登録してログイン"),
         "register_repeatPassword_text":
             MessageLookupByLibrary.simpleMessage("パスワード（確認）"),
         "register_repeatPassword_verify_isValid":
-            MessageLookupByLibrary.simpleMessage("8〜16文字の英数字とアンダースコアを含めてください"),
+            MessageLookupByLibrary.simpleMessage(
+                "確認用パスワードは8〜32文字で、英字と数字を含めてください。使用可能な記号: !@#\$%^&*_-+=.?"),
         "register_repeatPassword_verify_notNull":
             MessageLookupByLibrary.simpleMessage("確認用パスワードを入力してください"),
         "register_send": MessageLookupByLibrary.simpleMessage("送信"),

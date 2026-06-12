@@ -427,7 +427,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get about_dataDisclaimer =>
-      '本应用展示的电影名称、海报、剧照、预告片等相关内容，其版权均归原电影制作公司、发行方或相应权利人所有，本应用仅用于信息展示与购票服务，不主张对上述内容的任何版权。如涉及版权问题，请通过 diy4869@gmail.com 联系我们及时处理。';
+      '本应用展示的电影名称、海报、剧照、预告片等相关内容，其版权均归原电影制作公司、发行方或相应权利人所有，本应用仅用于信息展示与购票服务，不主张对上述内容的任何版权。如涉及版权问题，请通过 support@otaku-movie.com 联系我们及时处理。';
 
   @override
   String get about_dataSource =>
@@ -650,7 +650,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get login_password_verify_notNull => '密码不能为空';
 
   @override
-  String get login_password_verify_isValid => '密码必须为8-16位，包含数字、字母和下划线';
+  String get login_password_verify_isValid =>
+      '密码必须为8-32位，包含字母和数字，可使用 !@#\$%^&*_-+=.? 特殊字符';
 
   @override
   String get login_loginButton => '登录';
@@ -744,7 +745,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get register_repeatPassword_verify_isValid =>
-      '重复密码必须为8-16位，包含数字、字母和下划线';
+      '重复密码必须为8-32位，包含字母和数字，可使用 !@#\$%^&*_-+=.? 特殊字符';
 
   @override
   String get register_username_text => '用户名称';
@@ -766,6 +767,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get register_send => '发送';
+
+  @override
+  String get register_passwordStrength_weak => '弱';
+
+  @override
+  String get register_passwordStrength_medium => '中';
+
+  @override
+  String get register_passwordStrength_strong => '高';
 
   @override
   String get register_haveAccount => '已经有账号了？';
@@ -1869,7 +1879,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get benefit_status_unknown => '未知';
 
   @override
-  String get benefit_phaseStatus_before => '之前';
+  String get benefit_phaseStatus_before => '未开始';
 
   @override
   String get benefit_phaseStatus_ongoing => '进行中';

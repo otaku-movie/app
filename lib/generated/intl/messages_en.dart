@@ -144,7 +144,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_copyright": MessageLookupByLibrary.simpleMessage(
             "© 2025-2026 シネコ All Rights Reserved"),
         "about_dataDisclaimer": MessageLookupByLibrary.simpleMessage(
-            "Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com."),
+            "Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at support@otaku-movie.com."),
         "about_dataSource": MessageLookupByLibrary.simpleMessage(
             "Movie information, showtimes and cinema data shown in this app are sourced from cinemas\' official websites and publicly available information, for browsing and reference only. Showtimes, prices and seat availability may change at any time; the cinema or the actual purchase channel shall prevail."),
         "about_description": MessageLookupByLibrary.simpleMessage(
@@ -694,7 +694,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Password must be at least 6 characters"),
         "login_password_text": MessageLookupByLibrary.simpleMessage("Password"),
         "login_password_verify_isValid": MessageLookupByLibrary.simpleMessage(
-            "Password must be 8-16 characters with letters, numbers, and underscores"),
+            "Password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?"),
         "login_password_verify_notNull":
             MessageLookupByLibrary.simpleMessage("Password cannot be empty"),
         "login_rememberPassword":
@@ -1064,13 +1064,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_passwordNotMatchRepeatPassword":
             MessageLookupByLibrary.simpleMessage(
                 "The passwords you entered twice do not match"),
+        "register_passwordStrength_medium":
+            MessageLookupByLibrary.simpleMessage("Medium"),
+        "register_passwordStrength_strong":
+            MessageLookupByLibrary.simpleMessage("Strong"),
+        "register_passwordStrength_weak":
+            MessageLookupByLibrary.simpleMessage("Weak"),
         "register_registerButton":
             MessageLookupByLibrary.simpleMessage("Register"),
         "register_repeatPassword_text":
             MessageLookupByLibrary.simpleMessage("Repeat Password"),
         "register_repeatPassword_verify_isValid":
             MessageLookupByLibrary.simpleMessage(
-                "Repeat password must be 8-16 characters with letters, numbers, and underscores"),
+                "Repeat password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?"),
         "register_repeatPassword_verify_notNull":
             MessageLookupByLibrary.simpleMessage(
                 "Repeat password cannot be empty"),

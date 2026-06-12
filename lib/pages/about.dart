@@ -29,7 +29,7 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Widget _buildDataDisclaimer(BuildContext context) {
-    const email = 'diy4869@gmail.com';
+    const email = 'support@otaku-movie.com';
     final text = S.of(context).about_dataDisclaimer;
     final emailIndex = text.indexOf(email);
     final baseStyle = TextStyle(

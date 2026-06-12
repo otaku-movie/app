@@ -457,7 +457,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get about_dataDisclaimer =>
-      'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at diy4869@gmail.com.';
+      'Movie titles, posters, stills, trailers and related content shown in this app are copyrighted by their respective production companies, distributors, or rights holders. They are used solely for informational and ticketing purposes, and this app claims no copyright over such content. For any copyright concerns, please contact us at support@otaku-movie.com.';
 
   @override
   String get about_dataSource =>
@@ -688,7 +688,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get login_password_verify_isValid =>
-      'Password must be 8-16 characters with letters, numbers, and underscores';
+      'Password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?';
 
   @override
   String get login_loginButton => 'Login';
@@ -787,7 +787,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get register_repeatPassword_verify_isValid =>
-      'Repeat password must be 8-16 characters with letters, numbers, and underscores';
+      'Repeat password must be 8-32 characters with letters and numbers; allowed special characters: !@#\$%^&*_-+=.?';
 
   @override
   String get register_username_text => 'UserName';
@@ -812,6 +812,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get register_send => 'Send';
+
+  @override
+  String get register_passwordStrength_weak => 'Weak';
+
+  @override
+  String get register_passwordStrength_medium => 'Medium';
+
+  @override
+  String get register_passwordStrength_strong => 'Strong';
 
   @override
   String get register_haveAccount => 'Already have an account?';

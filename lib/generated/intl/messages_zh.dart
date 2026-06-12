@@ -139,7 +139,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "about_copyright":
             MessageLookupByLibrary.simpleMessage("© 2025-2026 シネコ 版权所有"),
         "about_dataDisclaimer": MessageLookupByLibrary.simpleMessage(
-            "本应用展示的电影名称、海报、剧照、预告片等相关内容，其版权均归原电影制作公司、发行方或相应权利人所有，本应用仅用于信息展示与购票服务，不主张对上述内容的任何版权。如涉及版权问题，请通过 diy4869@gmail.com 联系我们及时处理。"),
+            "本应用展示的电影名称、海报、剧照、预告片等相关内容，其版权均归原电影制作公司、发行方或相应权利人所有，本应用仅用于信息展示与购票服务，不主张对上述内容的任何版权。如涉及版权问题，请通过 support@otaku-movie.com 联系我们及时处理。"),
         "about_dataSource": MessageLookupByLibrary.simpleMessage(
             "本应用展示的电影信息、排片及影院数据来源于各影院官方网站及公开信息，仅供查询与参考。排片、价格、余票等可能随时变化，最终以影院或实际购票渠道为准。"),
         "about_description":
@@ -305,7 +305,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "benefit_period": MessageLookupByLibrary.simpleMessage("期间"),
         "benefit_phase": MessageLookupByLibrary.simpleMessage("阶段"),
         "benefit_phaseStatus_before":
-            MessageLookupByLibrary.simpleMessage("之前"),
+            MessageLookupByLibrary.simpleMessage("未开始"),
         "benefit_phaseStatus_ended":
             MessageLookupByLibrary.simpleMessage("已结束"),
         "benefit_phaseStatus_ongoing":
@@ -618,8 +618,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "login_passwordTooShort":
             MessageLookupByLibrary.simpleMessage("密码至少需要6位"),
         "login_password_text": MessageLookupByLibrary.simpleMessage("密码"),
-        "login_password_verify_isValid":
-            MessageLookupByLibrary.simpleMessage("密码必须为8-16位，包含数字、字母和下划线"),
+        "login_password_verify_isValid": MessageLookupByLibrary.simpleMessage(
+            "密码必须为8-32位，包含字母和数字，可使用 !@#\$%^&*_-+=.? 特殊字符"),
         "login_password_verify_notNull":
             MessageLookupByLibrary.simpleMessage("密码不能为空"),
         "login_rememberPassword":
@@ -945,12 +945,19 @@ class MessageLookup extends MessageLookupByLibrary {
         "register_loginHere": MessageLookupByLibrary.simpleMessage("点击登录"),
         "register_passwordNotMatchRepeatPassword":
             MessageLookupByLibrary.simpleMessage("两次输入的密码不一致"),
+        "register_passwordStrength_medium":
+            MessageLookupByLibrary.simpleMessage("中"),
+        "register_passwordStrength_strong":
+            MessageLookupByLibrary.simpleMessage("高"),
+        "register_passwordStrength_weak":
+            MessageLookupByLibrary.simpleMessage("弱"),
         "register_registerButton":
             MessageLookupByLibrary.simpleMessage("注册并登录"),
         "register_repeatPassword_text":
             MessageLookupByLibrary.simpleMessage("重复密码"),
         "register_repeatPassword_verify_isValid":
-            MessageLookupByLibrary.simpleMessage("重复密码必须为8-16位，包含数字、字母和下划线"),
+            MessageLookupByLibrary.simpleMessage(
+                "重复密码必须为8-32位，包含字母和数字，可使用 !@#\$%^&*_-+=.? 特殊字符"),
         "register_repeatPassword_verify_notNull":
             MessageLookupByLibrary.simpleMessage("重复密码不能为空"),
         "register_send": MessageLookupByLibrary.simpleMessage("发送"),
