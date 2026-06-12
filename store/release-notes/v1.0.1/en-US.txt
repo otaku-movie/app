@@ -1,0 +1,5 @@
+What's New
+· Richer movie, cinema and showtime details for easier browsing
+· Improved benefit experience: view eligible cinemas, share and send feedback more easily
+· Cleaner, easier sign-up and login screens
+· Various bug fixes and stability improvements
