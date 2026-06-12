@@ -49,15 +49,21 @@ class VersionCheckService {
     }
   }
 
-  /// 按平台打开商店：Android → Google Play，iOS → App Store；其余平台用接口 [downloadUrl]。
+  /// 解析「立即更新」要打开的地址。
+  /// - Android：优先用后台返回的 [downloadUrl]（未上架 Google Play 期间直连 APK 分发地址，
+  ///   由系统浏览器/下载器下载后用户手动安装）；为空时回退 Google Play 详情页（上架后把
+  ///   downloadUrl 留空即可自动切回商店）。
+  /// - iOS：优先 App Store 详情页，未配置 App ID 时回退 [downloadUrl]。
+  /// - 其余平台：直接用 [downloadUrl]。
   static String _resolveUpdateLaunchUrl(AppVersionCheckResponse result) {
+    final downloadUrl = (result.downloadUrl ?? '').trim();
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return Config.googlePlayStoreUrl;
+        return downloadUrl.isNotEmpty ? downloadUrl : Config.googlePlayStoreUrl;
       case TargetPlatform.iOS:
-        return Config.appStoreListingUrl ?? (result.downloadUrl ?? '').trim();
+        return Config.appStoreListingUrl ?? downloadUrl;
       default:
-        return (result.downloadUrl ?? '').trim();
+        return downloadUrl;
     }
   }
 
