@@ -83,12 +83,6 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
   Position? position;
   String? currentAddressFull;
   bool locationLoading = false;
-  /// FilterBar 的版本号：默认地区从定位自动写入 filterParams 时 +1，
-  /// 用 ValueKey 强制 FilterBar 重建一次，让它的 selected 同步 initialSelected。
-  /// 用户后续手动改筛选时不再递增，避免 dropdown 状态被打断。
-  int _filterBarVersion = 0;
-  /// 是否已经基于当前定位尝试过自动选中地区——只跑一次，避免反复覆盖用户手动选择。
-  bool _autoAreaApplied = false;
   TextEditingController searchController = TextEditingController(); // 搜索关键词控制器
   EasyRefreshController easyRefreshController = EasyRefreshController(
     controlFinishRefresh: true,
@@ -215,8 +209,6 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
           areaTreeList = list;
         });
         print(areaTreeList);
-        // 地区树就绪——若此时已经定位完成，尝试自动选中当前所在地区
-        _tryAutoSelectArea();
       }
     } catch (e) {
       print('获取地区树失败: $e');
@@ -410,13 +402,9 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         position = current;
         currentAddressFull = full;
       });
-      // 定位就绪——若此时地区树已经加载完毕，尝试自动选中当前所在地区
-      // （注意 _tryAutoSelectArea 内部已经会调一次 getData(refresh: true)）
-      _tryAutoSelectArea();
-      if (!_autoAreaApplied || filterParams['areaId'] == null) {
-        // 没自动选地区时也要刷新，以便距离展示
-        getData(refresh: true);
-      }
+      // 定位就绪：不再自动选中所在地区。用户若手动选了地区，filterParams 已生效；
+      // 这里只用更精确的位置刷新一次，让后端按距离重新排序（无地区筛选时即“按距离排序”）。
+      getData(refresh: true);
     } catch (e) {
       print('Error getting location: $e');
       // 获取位置失败，不阻止数据加载
@@ -427,85 +415,6 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
         });
       }
     }
-  }
-
-  /// 规范化地区名以便跨语种 / 带后缀匹配：
-  ///   - 去掉空白、转小写
-  ///   - 去掉日文行政区划后缀（都/府/県/道/市/区/町/村）
-  ///   - 去掉英文 "prefecture"、中文「县」「市」之类
-  ///
-  /// 用于 Placemark.administrativeArea / locality 与 areaTreeList[*].name 的模糊匹配。
-  String _normalizeAreaName(String? s) {
-    if (s == null) return '';
-    return s
-        .trim()
-        .toLowerCase()
-        .replaceAll(RegExp(r'都|府|県|道|州|市|区|町|村|县'), '')
-        .replaceAll('prefecture', '')
-        .replaceAll(RegExp(r'\s+'), '');
-  }
-
-  bool _areaMatches(AreaResponse area, String? raw) {
-    if (raw == null) return false;
-    final r = _normalizeAreaName(raw);
-    if (r.isEmpty) return false;
-    for (final cand in [area.name, area.nameKana]) {
-      final c = _normalizeAreaName(cand);
-      if (c.isEmpty) continue;
-      if (c == r || c.contains(r) || r.contains(c)) return true;
-    }
-    return false;
-  }
-
-  /// 仅在 `filterParams['areaId']` 还没有值时（即用户未手动选过），
-  /// 用当前 Placemark 在 areaTreeList 里逐级模糊匹配出 [regionId, prefectureId, cityId?]
-  /// 并写入 filterParams，触发一次刷新。
-  void _tryAutoSelectArea() {
-    if (_autoAreaApplied) return;
-    if (!mounted) return;
-    if (location == null) return;
-    if (areaTreeList.isEmpty) return;
-    final existing = filterParams['areaId'];
-    final hasUserSelection = existing is List
-        ? existing.where((e) => (e?.toString() ?? '').isNotEmpty).isNotEmpty
-        : (existing?.toString().isNotEmpty ?? false);
-    if (hasUserSelection) {
-      _autoAreaApplied = true;
-      return;
-    }
-
-    final p = location!;
-    AreaResponse? regionMatch;
-    AreaResponse? prefectureMatch;
-    for (final region in areaTreeList) {
-      for (final pref in region.children ?? <AreaResponse>[]) {
-        if (_areaMatches(pref, p.administrativeArea)) {
-          regionMatch = region;
-          prefectureMatch = pref;
-          break;
-        }
-      }
-      if (prefectureMatch != null) break;
-    }
-    if (regionMatch == null || prefectureMatch == null) {
-      // 拿不到精确匹配时不强行预选，避免误导
-      _autoAreaApplied = true;
-      return;
-    }
-
-    // 自动选区只到 2 级（地区 + 都道府県）即可，不再下钻到市区町村，
-    // 避免定位到具体区后把范围收得太窄、漏掉同都府县其他区的场次。
-    final ids = <String>[
-      '${regionMatch.id}',
-      '${prefectureMatch.id}',
-    ];
-    _autoAreaApplied = true;
-    setState(() {
-      filterParams['areaId'] = ids;
-      // 让 FilterBar 重建一次，吸收新的 initialSelected
-      _filterBarVersion++;
-    });
-    getData(refresh: true);
   }
 
   /// 从 filterParams 中获取第一个值并转换为整数
@@ -1420,9 +1329,7 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
             padding: EdgeInsets.only(
                 top: 12.h, left: 16.w, right: 16.w, bottom: 12.h),
             child: FilterBar(
-              // 当 _filterBarVersion 因为「定位自动选中地区」递增时，强制重建 FilterBar
-              // 让它的内部 selected 重新读取最新 filterParams。
-              key: ValueKey('filterBar_$_filterBarVersion'),
+              key: const ValueKey('filterBar'),
               style: FilterBarStyle(
                 dropdownGap: 10.h,
                 drawerWidth: 600.w, // 设置 drawer 宽度为 600.w（使用 screenutil 适配）
