@@ -1985,6 +1985,8 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
       showStatusBadge = true;
       if (availableSeats == 0) {
         seatStatusColor = Colors.red;
+        // 已售罄：不允许跳转/选座，点击仅 toast 提示
+        isPurchasable = false;
         seatStatusText =
             S.of(context).about_components_showTimeList_seatStatus_soldOut;
       } else if (availableSeats <= totalSeats * 0.2) {
@@ -2014,10 +2016,11 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
           break;
         case 'sold_out':
           showStatusBadge = true;
+          // 已售罄：不允许跳官网/选座，点击仅 toast 提示
+          isPurchasable = false;
           seatStatusColor = Colors.red;
           seatStatusText =
               S.of(context).about_components_showTimeList_seatStatus_soldOut;
-          // 已售罄，仍允许跳官网（用户可能想确认）
           break;
         case 'pre_sale':
           showStatusBadge = true;
@@ -2295,6 +2298,20 @@ class _PageState extends State<ShowTimeList> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // 特殊场次名/活动名（如「最後のファンサだ！ 卒業記念舞台挨拶」），普通场次为空。
+                  if (showTime.eventTitle != null &&
+                      showTime.eventTitle!.trim().isNotEmpty) ...[
+                    Text(
+                      showTime.eventTitle!.trim(),
+                      style: TextStyle(
+                        fontSize: 22.sp,
+                        fontWeight: FontWeight.w600,
+                        color: const Color(0xFF7232DD),
+                        height: 1.35,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                  ],
                   // 规格+2D/3D、版本、字幕信息（合并到同一行 Wrap）
                   if (filteredSpecNames.isNotEmpty ||
                       showTime.dimensionType != null ||

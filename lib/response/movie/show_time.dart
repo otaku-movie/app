@@ -158,6 +158,10 @@ class ShowTime {
   @JsonKey(name: "subtitleNames")
   List<String>? subtitleNames;
 
+  /// 特殊场次名/活动名（来自标题装饰，普通场次为空）。
+  @JsonKey(name: "eventTitle")
+  String? eventTitle;
+
   ShowTime({
     this.id,
     this.theaterHallId,
@@ -183,6 +187,7 @@ class ShowTime {
     this.reservationUrl,
     this.saleStatus,
     this.subtitleNames,
+    this.eventTitle,
   });
 
   factory ShowTime.fromJson(Map<String, dynamic> json) =>

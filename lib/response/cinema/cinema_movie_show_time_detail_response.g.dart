@@ -76,6 +76,7 @@ TheaterHallShowTime _$TheaterHallShowTimeFromJson(Map<String, dynamic> json) =>
       open: json['open'] as bool?,
       reservationUrl: json['reservationUrl'] as String?,
       saleStatus: json['saleStatus'] as String?,
+      eventTitle: json['eventTitle'] as String?,
     );
 
 Map<String, dynamic> _$TheaterHallShowTimeToJson(
@@ -99,6 +100,7 @@ Map<String, dynamic> _$TheaterHallShowTimeToJson(
       'open': instance.open,
       'reservationUrl': instance.reservationUrl,
       'saleStatus': instance.saleStatus,
+      'eventTitle': instance.eventTitle,
     };
 
 ShowTimeTag _$ShowTimeTagFromJson(Map<String, dynamic> json) => ShowTimeTag(

@@ -77,6 +77,7 @@ ShowTime _$ShowTimeFromJson(Map<String, dynamic> json) => ShowTime(
       subtitleNames: (json['subtitleNames'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
+      eventTitle: json['eventTitle'] as String?,
     );
 
 Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
@@ -104,4 +105,5 @@ Map<String, dynamic> _$ShowTimeToJson(ShowTime instance) => <String, dynamic>{
       'reservationUrl': instance.reservationUrl,
       'saleStatus': instance.saleStatus,
       'subtitleNames': instance.subtitleNames,
+      'eventTitle': instance.eventTitle,
     };

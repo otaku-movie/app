@@ -171,7 +171,8 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
         );
       case 'sold_out':
         return (
-          isPurchasable: true,
+          // 已售罄：不允许跳官网/选座
+          isPurchasable: false,
           showBadge: true,
           text: S.of(context).about_components_showTimeList_seatStatus_soldOut,
           color: Colors.red,
@@ -210,6 +211,126 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
           text: S.of(context).about_components_showTimeList_seatStatus_unknown,
           color: Colors.grey,
           icon: Icons.help_outline_rounded,
+        );
+    }
+  }
+
+  /// 计算详情页右侧购票按钮的状态：
+  ///   - [isPurchasable]：是否可购（售罄/预售/停售/已关闭/未知 均为 false，点击仅 toast）；
+  ///   - [gradient]/[color]：按座位状态区分按钮配色——充足=蓝、紧张=橙、售罄=红、其他不可售=灰；
+  ///   - [text]：可购显示「购票」，售罄显示「售罄」，其余显示对应状态文案；
+  ///   - [icon]：按钮图标。
+  ///
+  /// 判定优先级：外部爬虫透传的 [saleStatus] 优先；无 saleStatus 时回落到自家选座流程的
+  /// [seatStatus]（0 充足 / 1 紧张 / 2 售罄）。
+  ({
+    bool isPurchasable,
+    String text,
+    IconData icon,
+    Gradient? gradient,
+    Color? color,
+  }) _resolveBuyButtonState(TheaterHallShowTime showTime) {
+    const blueGradient =
+        LinearGradient(colors: [Color(0xFF1989FA), Color(0xFF0E6FD8)]);
+    const orangeGradient =
+        LinearGradient(colors: [Color(0xFFFF9A3D), Color(0xFFFF7A45)]);
+    const soldOutColor = Color(0xFFE57373); // 售罄：柔和红
+    const blockedColor = Color(0xFFCED2D8); // 预售/停售/关闭/未知：灰
+    final buyText = S.of(context).showTimeDetail_buy;
+    final soldOutText = S.of(context).showTimeDetail_seatStatus_soldOut;
+
+    final String? saleStatus = showTime.saleStatus;
+    if (saleStatus != null && saleStatus.isNotEmpty) {
+      switch (saleStatus) {
+        case 'on_sale':
+          return (
+            isPurchasable: true,
+            text: buyText,
+            icon: Icons.event_seat,
+            gradient: blueGradient,
+            color: null,
+          );
+        case 'few':
+          return (
+            isPurchasable: true,
+            text: buyText,
+            icon: Icons.event_seat,
+            gradient: orangeGradient,
+            color: null,
+          );
+        case 'sold_out':
+          return (
+            isPurchasable: false,
+            text: soldOutText,
+            icon: Icons.event_busy_outlined,
+            gradient: null,
+            color: soldOutColor,
+          );
+        case 'pre_sale':
+          return (
+            isPurchasable: false,
+            text:
+                S.of(context).about_components_showTimeList_seatStatus_preSale,
+            icon: Icons.schedule_outlined,
+            gradient: null,
+            color: blockedColor,
+          );
+        case 'sale_ended':
+          return (
+            isPurchasable: false,
+            text: S
+                .of(context)
+                .about_components_showTimeList_seatStatus_saleEnded,
+            icon: Icons.do_not_disturb_alt_outlined,
+            gradient: null,
+            color: blockedColor,
+          );
+        case 'closed':
+          return (
+            isPurchasable: false,
+            text: S.of(context).about_components_showTimeList_seatStatus_closed,
+            icon: Icons.block_outlined,
+            gradient: null,
+            color: blockedColor,
+          );
+        case 'unknown':
+        default:
+          return (
+            isPurchasable: false,
+            text: S.of(context).about_components_showTimeList_seatStatus_unknown,
+            icon: Icons.help_outline_rounded,
+            gradient: null,
+            color: blockedColor,
+          );
+      }
+    }
+
+    // 无 saleStatus：自家选座流程，按座位状态判定。
+    final int seatStatus = showTime.seatStatus ?? 0;
+    switch (seatStatus) {
+      case 2: // 售罄
+        return (
+          isPurchasable: false,
+          text: soldOutText,
+          icon: Icons.event_busy_outlined,
+          gradient: null,
+          color: soldOutColor,
+        );
+      case 1: // 紧张
+        return (
+          isPurchasable: true,
+          text: buyText,
+          icon: Icons.event_seat,
+          gradient: orangeGradient,
+          color: null,
+        );
+      default: // 充足
+        return (
+          isPurchasable: true,
+          text: buyText,
+          icon: Icons.event_seat,
+          gradient: blueGradient,
+          color: null,
         );
     }
   }
@@ -732,8 +853,11 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                             showTimes[index];
                                         final saleInfo =
                                             _resolveSaleStatusInfo(children);
+                                        // 购票按钮状态（含自家 seatStatus 售罄判定 + 按座位状态配色）
+                                        final buyState =
+                                            _resolveBuyButtonState(children);
                                         final bool isPurchasable =
-                                            saleInfo.isPurchasable;
+                                            buyState.isPurchasable;
 
                                         return Container(
                                           margin: EdgeInsets.symmetric(
@@ -859,6 +983,26 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                               ],
                                                             )),
                                                         SizedBox(height: 16.h),
+                                                        // 特殊场次名/活动名（来自标题装饰，普通场次为空）。
+                                                        if (children.eventTitle !=
+                                                                null &&
+                                                            children.eventTitle!
+                                                                .trim()
+                                                                .isNotEmpty) ...[
+                                                          Text(
+                                                            children.eventTitle!
+                                                                .trim(),
+                                                            style: TextStyle(
+                                                              fontSize: 26.sp,
+                                                              fontWeight:
+                                                                  FontWeight.w600,
+                                                              color: const Color(
+                                                                  0xFF7232DD),
+                                                              height: 1.35,
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 12.h),
+                                                        ],
                                                         // 影厅和规格信息
                                                         Wrap(
                                                           spacing: 8.w,
@@ -1508,7 +1652,7 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                       // 不外跳，提示用户当前状态，避免遇到 ERR-2002 之类的官网错误页
                                                       if (!isPurchasable) {
                                                         ToastService.showToast(
-                                                          '${S.of(context).about_components_showTimeList_notPurchasableHint}（${saleInfo.text}）',
+                                                          '${S.of(context).about_components_showTimeList_notPurchasableHint}（${buyState.text}）',
                                                           type:
                                                               ToastType.warning,
                                                         );
@@ -1543,29 +1687,24 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                               horizontal: 24.w,
                                                               vertical: 12.h),
                                                       decoration: BoxDecoration(
-                                                        // 可购买：蓝色渐变 + 投影；不可购买：纯灰底、无投影
-                                                        gradient: isPurchasable
-                                                            ? const LinearGradient(
-                                                                colors: [
-                                                                  Color(
-                                                                      0xFF1989FA),
-                                                                  Color(
-                                                                      0xFF0E6FD8),
-                                                                ],
-                                                              )
-                                                            : null,
-                                                        color: isPurchasable
-                                                            ? null
-                                                            : const Color(
-                                                                0xFFCED2D8),
+                                                        // 按座位状态配色：充足=蓝、紧张=橙、售罄=红、其他不可售=灰。
+                                                        // 可购买用渐变 + 投影；不可购买用纯色、无投影。
+                                                        gradient:
+                                                            buyState.gradient,
+                                                        color: buyState.color,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(25.r),
-                                                        boxShadow: isPurchasable
+                                                        boxShadow: isPurchasable &&
+                                                                buyState.gradient
+                                                                    is LinearGradient
                                                             ? [
                                                                 BoxShadow(
-                                                                  color: const Color(
-                                                                          0xFF1989FA)
+                                                                  color: (buyState
+                                                                              .gradient
+                                                                          as LinearGradient)
+                                                                      .colors
+                                                                      .first
                                                                       .withValues(
                                                                           alpha:
                                                                               0.3),
@@ -1582,21 +1721,13 @@ class _PageState extends State<ShowTimeDetail> with TickerProviderStateMixin {
                                                             MainAxisSize.min,
                                                         children: [
                                                           Icon(
-                                                            isPurchasable
-                                                                ? Icons
-                                                                    .event_seat
-                                                                : Icons
-                                                                    .lock_outline,
+                                                            buyState.icon,
                                                             color: Colors.white,
                                                             size: 40.sp,
                                                           ),
                                                           SizedBox(height: 4.h),
                                                           Text(
-                                                            isPurchasable
-                                                                ? S
-                                                                    .of(context)
-                                                                    .showTimeDetail_buy
-                                                                : saleInfo.text,
+                                                            buyState.text,
                                                             style: TextStyle(
                                                               color:
                                                                   Colors.white,

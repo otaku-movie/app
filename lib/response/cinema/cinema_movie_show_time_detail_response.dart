@@ -100,6 +100,9 @@ class TheaterHallShowTime {
   /// 点击仅 toast 提示，避免跳到官网遇到 ERR-2002 之类错误页。
   final String? saleStatus;
 
+  /// 特殊场次名/活动名（来自标题装饰，普通场次为空）。
+  final String? eventTitle;
+
   TheaterHallShowTime({
     this.id,
     this.theaterHallId,
@@ -118,6 +121,7 @@ class TheaterHallShowTime {
     this.open,
     this.reservationUrl,
     this.saleStatus,
+    this.eventTitle,
   });
 
   factory TheaterHallShowTime.fromJson(Map<String, dynamic> json) =>
