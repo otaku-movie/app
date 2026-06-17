@@ -4,6 +4,19 @@ Languages: **English** | [简体中文](CHANGELOG.zh-CN.md) | [日本語](CHANGE
 
 This file records the notable changes of the シネコ (otaku_movie) app.
 
+## [1.0.2+3] - 2026-06-15
+
+### Added
+- Showtime list and detail now display the special-screening / event name (e.g. stage greetings) for decorated showtimes.
+
+### Changed
+- Sold-out showtimes are now non-purchasable: tapping shows a toast hint instead of opening the official ticketing site.
+- Redesigned the "Select Seat" button on the showtime detail page by seat status — blue when available, orange when limited, red when sold out, and gray for other non-purchasable states (pre-sale / sale ended / closed / unknown); the button icon and label switch with the state, and the seat icon is enlarged.
+- The showtime list no longer auto-selects your current area after locating; it only refreshes to sort cinemas by distance and keeps any area filter you chose manually.
+
+### Other
+- Bumped the version to `1.0.2+3`.
+
 ## [1.0.1+2] - 2026-06-12
 
 ### Added
